@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <df root="." name="0">
+      <in>Corr2MapGMT.c</in>
+      <in>DDcc2MapGMT.c</in>
+      <in>FindEquivPhases.c</in>
+      <in>Green3dFUNC.c</in>
+      <in>Grid2Stat.c</in>
+      <in>GridLift.c</in>
+      <in>GridProc.c</in>
+      <in>GridReplaceValue.c</in>
+      <in>GridRotate.c</in>
+      <in>GridXY2XYZ.c</in>
+      <in>HypDiff.c</in>
+      <in>Loc2Mod.c</in>
+      <in>Loc2coul.c</in>
+      <in>Loc2ddct.c</in>
+      <in>MergeFmamp.c</in>
+      <in>MergeFpfit.c</in>
+      <in>NLDiffLoc.c</in>
+      <in>NLLocLib_20130325.c</in>
+      <in>Pun2GMT.c</in>
+      <in>Resid2GMT.c</in>
+      <in>Resid2MapGMT.c</in>
+      <in>Sec2Grid.c</in>
+      <in>Vel2Grid3D_STEPHAN.c</in>
+      <in>alberto2hyp.c</in>
+      <in>asc2grid.c</in>
+      <in>calcpd.c</in>
+      <in>diffTime.c</in>
+      <in>do_spline.c</in>
+      <in>geo_test.c</in>
+      <in>grad2layer.c</in>
+      <in>grid2asc.c</in>
+      <in>hyp2bull.c</in>
+      <in>hypoinv2hyp.c</in>
+      <in>ingv_list2hyp.c</in>
+      <in>isc_isf2hyp.c</in>
+      <in>nll2qml.c</in>
+      <in>temp.c</in>
+    </df>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+      <itemPath>nbproject/private/launcher.properties</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
+  <sourceRootList>
+    <Elem>.</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Default" type="0">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>false</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <flagsDictionary>
+        <element flagsID="0" commonFlags="-O3"/>
+      </flagsDictionary>
+      <codeAssistance>
+      </codeAssistance>
+      <makefileType>
+        <makeTool>
+          <buildCommandWorkingDir>.</buildCommandWorkingDir>
+          <buildCommand>${MAKE} -f Makefile</buildCommand>
+          <cleanCommand>${MAKE} -f Makefile clean</cleanCommand>
+          <executablePath></executablePath>
+        </makeTool>
+        <preBuild>
+          <preBuildCommandWorkingDir>.</preBuildCommandWorkingDir>
+          <preBuildCommand></preBuildCommand>
+        </preBuild>
+      </makefileType>
+      <item path="Corr2MapGMT.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="DDcc2MapGMT.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="FindEquivPhases.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="Green3dFUNC.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="Grid2Stat.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="GridLift.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="GridProc.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="GridReplaceValue.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="GridRotate.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="GridXY2XYZ.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="HypDiff.c" ex="false" tool="0" flavor2="2">
+        <cTool flags="0">
+          <incDir>
+            <pElem>../src</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="Loc2Mod.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="Loc2coul.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="Loc2ddct.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="MergeFmamp.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="MergeFpfit.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="NLDiffLoc.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="NLLocLib_20130325.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="Pun2GMT.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="Resid2GMT.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="Resid2MapGMT.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="Sec2Grid.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="Vel2Grid3D_STEPHAN.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="alberto2hyp.c" ex="false" tool="0" flavor2="2">
+        <cTool flags="0">
+          <incDir>
+            <pElem>../src</pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="asc2grid.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="calcpd.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="diffTime.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="do_spline.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="geo_test.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="grad2layer.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="grid2asc.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="hyp2bull.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="hypoinv2hyp.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="ingv_list2hyp.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="isc_isf2hyp.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="nll2qml.c" ex="false" tool="0" flavor2="2">
+      </item>
+      <item path="temp.c" ex="false" tool="0" flavor2="2">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>

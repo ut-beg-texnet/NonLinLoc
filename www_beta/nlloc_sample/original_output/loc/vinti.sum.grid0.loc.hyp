@@ -1,0 +1,90 @@
+NLLOC "./loc/vinti.19950421.080259.grid0" "LOCATED" "Location completed."
+SIGNATURE "Anthony Lomax - ALomax Scientific   obs:./obs/vinti.obs   NLLoc:v6.04.00(26Mar2015)  run:04Jun2015 13h51m31"
+COMMENT "1995 Vintimiglia Sequence (NonLinLoc Sample Location)"
+GRID  101 101 21  -50 -50 0  1 1 1 PROB_DENSITY
+SEARCH OCTREE nInitial 400 nEvaluated 20016 smallestNodeSide 0.156250/0.156250/0.082031 oct_tree_integral 1.059607e+01 scatter_volume 1.056773e+01
+HYPOCENTER  x 4.76562 y 6.01562 z 8.49023  OT 57.0903  ix -1 iy -1 iz -1
+GEOGRAPHIC  OT 1995 04 21  08 02 57.090251  Lat 43.804133 Long 7.559227 Depth 8.49023
+QUALITY  Pmax 2.5502e+28 MFmin 17.7259 MFmax 17.8636 RMS 0.0904332 Nphs 12 Gap 177.917 Dist 9.13028 Mamp -9.90 0 Mdur -9.90 0
+VPVSRATIO  VpVsRatio 0.5  Npair 2  Diff 1
+STATISTICS  ExpectX 4.91035 Y 5.92252 Z 8.51681  CovXX 0.385857 XY -0.191734 XZ 1.04506 YY 1.0013 YZ -0.537028 ZZ 9.97732 EllAz1  79.4953 Dip1  -5.45845 Len1  0.937044 Az2  349.929 Dip2  4.52761 Len2  1.87145 Len3  5.977978e+00
+STAT_GEOG  ExpectLat 43.803294 Long 7.561024 Depth 8.516814
+TRANSFORM  LAMBERT RefEllipsoid Clarke-1880  LatOrig 43.750000  LongOrig 7.500000  FirstStdParal 43.199300  SecondStdParal 44.996100  RotCW 0.000000
+QML_OriginQuality  assocPhCt 12  usedPhCt 12  assocStaCt -1  usedStaCt 10  depthPhCt -1  stdErr 0.0904332  azGap 177.917  secAzGap 220.191  gtLevel -  minDist 9.13028 maxDist 34.2738 medDist 20.1723
+QML_OriginUncertainty  horUnc -1  minHorUnc 0.872541  maxHorUnc 1.55857  azMaxHorUnc 164.037
+QML_ConfidenceEllipsoid  semiMajorAxisLength 5.97798  semiMinorAxisLength 0.937044  semiIntermediateAxisLength 1.87145  majorAxisPlunge 82.8994  majorAxisAzimuth 119.4  majorAxisRotation 128.817
+FOCALMECH  Hyp  43.804133 7.559227 8.490234 Mech  0 0 0 mf  0 nObs 0
+END_NLLOC
+
+NLLOC "./loc/vinti.19950422.151153.grid0" "LOCATED" "Location completed."
+SIGNATURE "Anthony Lomax - ALomax Scientific   obs:./obs/vinti.obs   NLLoc:v6.04.00(26Mar2015)  run:04Jun2015 13h51m31"
+COMMENT "1995 Vintimiglia Sequence (NonLinLoc Sample Location)"
+GRID  101 101 21  -50 -50 0  1 1 1 PROB_DENSITY
+SEARCH OCTREE nInitial 400 nEvaluated 20000 smallestNodeSide 0.156250/0.156250/0.082031 oct_tree_integral 7.906848e+00 scatter_volume 7.906848e+00
+HYPOCENTER  x 4.60938 y 4.92188 z 10.7051  OT 51.049  ix -1 iy -1 iz -1
+GEOGRAPHIC  OT 1995 04 22  15 11 51.048967  Lat 43.794289 Long 7.557275 Depth 10.7051
+QUALITY  Pmax 2.41849e+38 MFmin 24.0434 MFmax 24.2763 RMS 0.0956408 Nphs 15 Gap 184.194 Dist 10.214 Mamp -9.90 0 Mdur -9.90 0
+VPVSRATIO  VpVsRatio -1  Npair 1  Diff 0
+STATISTICS  ExpectX 4.50475 Y 4.24226 Z 9.51702  CovXX 0.242797 XY 0.165038 XZ 0.418135 YY 3.39056 YZ 3.2067 ZZ 6.58015 EllAz1  88.3278 Dip1  -4.59397 Len1  0.869154 Az2  355.509 Dip2  -31.4632 Len2  2.23045 Len3  5.506663e+00
+STAT_GEOG  ExpectLat 43.788172 Long 7.555969 Depth 9.517022
+TRANSFORM  LAMBERT RefEllipsoid Clarke-1880  LatOrig 43.750000  LongOrig 7.500000  FirstStdParal 43.199300  SecondStdParal 44.996100  RotCW 0.000000
+QML_OriginQuality  assocPhCt 31  usedPhCt 15  assocStaCt -1  usedStaCt 9  depthPhCt -1  stdErr 0.0956408  azGap 184.194  secAzGap 225.042  gtLevel -  minDist 10.214 maxDist 34.4713 medDist 20.378
+QML_OriginUncertainty  horUnc -1  minHorUnc 0.733883  maxHorUnc 2.79609  azMaxHorUnc 2.9931
+QML_ConfidenceEllipsoid  semiMajorAxisLength 5.50666  semiMinorAxisLength 0.869154  semiIntermediateAxisLength 2.23045  majorAxisPlunge 58.1255  majorAxisAzimuth 5.75227  majorAxisRotation 19.1335
+FOCALMECH  Hyp  43.794289 7.557275 10.705078 Mech  0 0 0 mf  0 nObs 0
+END_NLLOC
+
+NLLOC "./loc/vinti.19950422.151958.grid0" "LOCATED" "Location completed."
+SIGNATURE "Anthony Lomax - ALomax Scientific   obs:./obs/vinti.obs   NLLoc:v6.04.00(26Mar2015)  run:04Jun2015 13h51m31"
+COMMENT "1995 Vintimiglia Sequence (NonLinLoc Sample Location)"
+GRID  101 101 21  -50 -50 0  1 1 1 PROB_DENSITY
+SEARCH OCTREE nInitial 400 nEvaluated 20000 smallestNodeSide 0.078125/0.078125/0.041016 oct_tree_integral 7.473829e+00 scatter_volume 7.444013e+00
+HYPOCENTER  x 4.88281 y 4.64844 z 9.82324  OT 56.672  ix -1 iy -1 iz -1
+GEOGRAPHIC  OT 1995 04 22  15 19 56.672035  Lat 43.791826 Long 7.560670 Depth 9.82324
+QUALITY  Pmax 3.18604e+29 MFmin 20.0649 MFmax 20.2466 RMS 0.0861908 Nphs 12 Gap 188.113 Dist 10.391 Mamp -9.90 0 Mdur -9.90 0
+VPVSRATIO  VpVsRatio -1  Npair 1  Diff 0
+STATISTICS  ExpectX 4.96598 Y 4.98628 Z 9.92275  CovXX 0.196435 XY -0.14169 XZ 0.261475 YY 1.75891 YZ 0.958554 ZZ 3.28101 EllAz1  260.539 Dip1  7.52983 Len1  0.697411 Az2  347.108 Dip2  -24.3594 Len2  2.17986 Len3  3.639527e+00
+STAT_GEOG  ExpectLat 43.794866 Long 7.561707 Depth 9.922753
+TRANSFORM  LAMBERT RefEllipsoid Clarke-1880  LatOrig 43.750000  LongOrig 7.500000  FirstStdParal 43.199300  SecondStdParal 44.996100  RotCW 0.000000
+QML_OriginQuality  assocPhCt 21  usedPhCt 12  assocStaCt -1  usedStaCt 9  depthPhCt -1  stdErr 0.0861908  azGap 188.113  secAzGap 228.012  gtLevel -  minDist 10.391 maxDist 35.1571 medDist 20.3602
+QML_OriginUncertainty  horUnc -1  minHorUnc 0.64999  maxHorUnc 2.01861  azMaxHorUnc 174.86
+QML_ConfidenceEllipsoid  semiMajorAxisLength 3.63953  semiMinorAxisLength 0.697411  semiIntermediateAxisLength 2.17986  majorAxisPlunge 64.3562  majorAxisAzimuth 6.52185  majorAxisRotation 206.931
+FOCALMECH  Hyp  43.791826 7.560670 9.823242 Mech  0 0 0 mf  0 nObs 0
+END_NLLOC
+
+NLLOC "./loc/vinti.19950422.154718.grid0" "LOCATED" "Location completed."
+SIGNATURE "Anthony Lomax - ALomax Scientific   obs:./obs/vinti.obs   NLLoc:v6.04.00(26Mar2015)  run:04Jun2015 13h51m32"
+COMMENT "1995 Vintimiglia Sequence (NonLinLoc Sample Location)"
+GRID  101 101 21  -50 -50 0  1 1 1 PROB_DENSITY
+SEARCH OCTREE nInitial 400 nEvaluated 20000 smallestNodeSide 0.156250/0.156250/0.082031 oct_tree_integral 9.446037e+00 scatter_volume 9.446037e+00
+HYPOCENTER  x 3.51562 y 3.20312 z 7.58789  OT 16.4941  ix -1 iy -1 iz -1
+GEOGRAPHIC  OT 1995 04 22  15 47 16.494069  Lat 43.778824 Long 7.543673 Depth 7.58789
+QUALITY  Pmax 8.19221e+31 MFmin 21.6074 MFmax 21.9266 RMS 0.0629132 Nphs 13 Gap 230.323 Dist 12.2026 Mamp -9.90 0 Mdur -9.90 0
+VPVSRATIO  VpVsRatio 1.78102  Npair 3  Diff 2.35
+STATISTICS  ExpectX 3.62348 Y 3.17467 Z 7.00736  CovXX 0.251629 XY 0.365841 XZ 0.721219 YY 1.83277 YZ 2.32105 ZZ 6.16801 EllAz1  96.3839 Dip1  -4.36231 Len1  0.740498 Az2  4.44372 Dip2  -23.9321 Len2  1.70962 Len3  5.065556e+00
+STAT_GEOG  ExpectLat 43.778567 Long 7.545013 Depth 7.007363
+TRANSFORM  LAMBERT RefEllipsoid Clarke-1880  LatOrig 43.750000  LongOrig 7.500000  FirstStdParal 43.199300  SecondStdParal 44.996100  RotCW 0.000000
+QML_OriginQuality  assocPhCt 27  usedPhCt 13  assocStaCt -1  usedStaCt 9  depthPhCt -1  stdErr 0.0629132  azGap 230.323  secAzGap 242.432  gtLevel -  minDist 12.2026 maxDist 35.2523 medDist 22.3459
+QML_OriginUncertainty  horUnc -1  minHorUnc 0.627291  maxHorUnc 2.09777  azMaxHorUnc 12.4163
+QML_ConfidenceEllipsoid  semiMajorAxisLength 5.06556  semiMinorAxisLength 0.740498  semiIntermediateAxisLength 1.70962  majorAxisPlunge 65.6239  majorAxisAzimuth 16.076  majorAxisRotation 15.8755
+FOCALMECH  Hyp  43.778824 7.543673 7.587891 Mech  0 0 0 mf  0 nObs 0
+END_NLLOC
+
+NLLOC "./loc/vinti.19950423.012763.grid0" "LOCATED" "Location completed."
+SIGNATURE "Anthony Lomax - ALomax Scientific   obs:./obs/vinti.obs   NLLoc:v6.04.00(26Mar2015)  run:04Jun2015 13h51m32"
+COMMENT "1995 Vintimiglia Sequence (NonLinLoc Sample Location)"
+GRID  101 101 21  -50 -50 0  1 1 1 PROB_DENSITY
+SEARCH OCTREE nInitial 400 nEvaluated 20008 smallestNodeSide 0.156250/0.156250/0.082031 oct_tree_integral 1.093497e+01 scatter_volume 1.085768e+01
+HYPOCENTER  x 4.60938 y 6.32812 z 11.7715  OT 6.76515  ix -1 iy -1 iz -1
+GEOGRAPHIC  OT 1995 04 23  01 28 6.765147  Lat 43.806947 Long 7.557287 Depth 11.7715
+QUALITY  Pmax 2.32508e+16 MFmin 12.9746 MFmax 13.1795 RMS 0.0553527 Nphs 8 Gap 233.626 Dist 8.8937 Mamp -9.90 0 Mdur -9.90 0
+VPVSRATIO  VpVsRatio 0.5  Npair 2  Diff 1.07
+STATISTICS  ExpectX 4.5419 Y 6.03179 Z 11.4506  CovXX 0.504451 XY -0.140193 XZ -0.252848 YY 2.6242 YZ 1.99305 ZZ 3.94595 EllAz1  90.3155 Dip1  4.36028 Len1  1.30973 Az2  183.443 Dip2  35.5869 Len2  2.04697 Len3  4.366677e+00
+STAT_GEOG  ExpectLat 43.804280 Long 7.556446 Depth 11.450575
+TRANSFORM  LAMBERT RefEllipsoid Clarke-1880  LatOrig 43.750000  LongOrig 7.500000  FirstStdParal 43.199300  SecondStdParal 44.996100  RotCW 0.000000
+QML_OriginQuality  assocPhCt 21  usedPhCt 8  assocStaCt -1  usedStaCt 5  depthPhCt -1  stdErr 0.0553527  azGap 233.626  secAzGap 243.914  gtLevel -  minDist 8.8937 maxDist 19.4686 medDist 12.6254
+QML_OriginUncertainty  horUnc -1  minHorUnc 1.06724  maxHorUnc 2.46108  azMaxHorUnc 176.233
+QML_ConfidenceEllipsoid  semiMajorAxisLength 4.36668  semiMinorAxisLength 1.30973  semiIntermediateAxisLength 2.04697  majorAxisPlunge -54.0639  majorAxisAzimuth 174.277  majorAxisRotation 202.777
+FOCALMECH  Hyp  43.806947 7.557287 11.771484 Mech  0 0 0 mf  0 nObs 0
+END_NLLOC
+

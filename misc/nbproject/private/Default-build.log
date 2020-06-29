@@ -1,0 +1,1 @@
+Makefile:48: *** Recursive variable `CCFLAGS' references itself (eventually).  Stop.

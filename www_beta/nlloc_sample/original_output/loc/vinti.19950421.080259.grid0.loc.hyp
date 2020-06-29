@@ -1,0 +1,32 @@
+NLLOC "./loc/vinti.19950421.080259.grid0" "LOCATED" "Location completed."
+SIGNATURE "Anthony Lomax - ALomax Scientific   obs:./obs/vinti.obs   NLLoc:v6.04.00(26Mar2015)  run:04Jun2015 13h51m31"
+COMMENT "1995 Vintimiglia Sequence (NonLinLoc Sample Location)"
+GRID  101 101 21  -50 -50 0  1 1 1 PROB_DENSITY
+SEARCH OCTREE nInitial 400 nEvaluated 20016 smallestNodeSide 0.156250/0.156250/0.082031 oct_tree_integral 1.059607e+01 scatter_volume 1.056773e+01
+HYPOCENTER  x 4.76562 y 6.01562 z 8.49023  OT 57.0903  ix -1 iy -1 iz -1
+GEOGRAPHIC  OT 1995 04 21  08 02 57.090251  Lat 43.804133 Long 7.559227 Depth 8.49023
+QUALITY  Pmax 2.5502e+28 MFmin 17.7259 MFmax 17.8636 RMS 0.0904332 Nphs 12 Gap 177.917 Dist 9.13028 Mamp -9.90 0 Mdur -9.90 0
+VPVSRATIO  VpVsRatio 0.5  Npair 2  Diff 1
+STATISTICS  ExpectX 4.91035 Y 5.92252 Z 8.51681  CovXX 0.385857 XY -0.191734 XZ 1.04506 YY 1.0013 YZ -0.537028 ZZ 9.97732 EllAz1  79.4953 Dip1  -5.45845 Len1  0.937044 Az2  349.929 Dip2  4.52761 Len2  1.87145 Len3  5.977978e+00
+STAT_GEOG  ExpectLat 43.803294 Long 7.561024 Depth 8.516814
+TRANSFORM  LAMBERT RefEllipsoid Clarke-1880  LatOrig 43.750000  LongOrig 7.500000  FirstStdParal 43.199300  SecondStdParal 44.996100  RotCW 0.000000
+QML_OriginQuality  assocPhCt 12  usedPhCt 12  assocStaCt -1  usedStaCt 10  depthPhCt -1  stdErr 0.0904332  azGap 177.917  secAzGap 220.191  gtLevel -  minDist 9.13028 maxDist 34.2738 medDist 20.1723
+QML_OriginUncertainty  horUnc -1  minHorUnc 0.872541  maxHorUnc 1.55857  azMaxHorUnc 164.037
+QML_ConfidenceEllipsoid  semiMajorAxisLength 5.97798  semiMinorAxisLength 0.937044  semiIntermediateAxisLength 1.87145  majorAxisPlunge 82.8994  majorAxisAzimuth 119.4  majorAxisRotation 128.817
+FOCALMECH  Hyp  43.804133 7.559227 8.490234 Mech  0 0 0 mf  0 nObs 0
+PHASE ID Ins Cmp On Pha  FM Date     HrMn   Sec     Err  ErrMag    Coda      Amp       Per  >   TTpred    Res       Weight    StaLoc(X  Y         Z)        SDist    SAzim  RAz  RDip RQual    Tcorr 
+RONE   ?    ?    ? P      U 19950421 0802   59.4400 GAU  1.00e-01 -1.00e+00 -1.00e+00 -1.00e+00 >    2.3659 -1.6133e-02    1.2811    7.8887   14.5952   -0.3000    9.1303  20.00  20.0 128.2  9     0.0000
+SBF    ?    ?    ? P      ? 19950421 0803    0.2600 GAU  1.00e-01 -1.00e+00 -1.00e+00 -1.00e+00 >    2.8730 2.9676e-01    0.3387   -5.2384   12.6113   -0.8470   11.9826 303.40 303.4 121.2  9     0.0000
+NEGI   ?    ?    ? P      U 19950421 0803    0.0200 GAU  1.00e-01 -1.00e+00 -1.00e+00 -1.00e+00 >    2.9200 -3.0242e-02    1.2617   16.3893   10.8705   -0.6400   12.5968  67.33  67.3 119.6  9     0.0400
+REVF   ?    ?    ? P      ? 19950421 0803    0.6700 GAU  1.00e-01 -1.00e+00 -1.00e+00 -1.00e+00 >    3.5937 -1.3998e-02    1.2832  -10.6730   -1.1024   -0.7000   17.0005 245.25 245.2 113.1  9     0.0000
+CEPP   ?    ?    ? P      U 19950421 0803    1.1400 GAU  1.00e-01 -1.00e+00 -1.00e+00 -1.00e+00 >    4.0639 -1.4112e-02    1.2831   19.7971   18.5085   -1.0800   19.5452  50.27  50.3 110.7  9     0.0000
+AURF   ?    ?    ? P      ? 19950421 0803    1.3900 GAU  1.00e-01 -1.00e+00 -1.00e+00 -1.00e+00 >    4.2532 4.6549e-02    1.2573  -13.8607   15.2716   -1.0400   20.7994 296.42 296.4 109.6  9     0.0000
+AUTN   ?    ?    ? P      ? 19950421 0803    2.0400 GAU  1.00e-01 -1.00e+00 -1.00e+00 -1.00e+00 >    4.9189 3.0852e-02    1.2798   -5.8149   27.2765   -2.0690   23.7481 333.54 333.5 108.0  9     0.0000
+IMI    ?    ?    ? P      ? 19950421 0803    2.7700 GAU  1.00e-01 -1.00e+00 -1.00e+00 -1.00e+00 >    5.5799 9.9882e-02    1.1089   31.5793   17.9062   -0.8400   29.3319  66.09  66.1 104.3  9     0.0000
+TOUF   ?    ?    ? P      ? 19950421 0803    3.5500 GAU  1.00e-01 -1.00e+00 -1.00e+00 -1.00e+00 >    6.5503 -9.0547e-02    1.0723  -20.1791   29.3046   -1.8500   34.1264 313.03 313.0 102.2  9     0.0000
+TOUF   ?    ?    ? S      ? 19950421 0803    7.6500 GAU  5.00e-01 -1.00e+00 -1.00e+00 -1.00e+00 >   11.0045 -4.4475e-01    0.3332  -20.1791   29.3046   -1.8500   34.1264 313.03 313.0 102.2  9     0.0000
+MVIF   ?    ?    ? P      ? 19950421 0803    3.5800 GAU  1.00e-01 -1.00e+00 -1.00e+00 -1.00e+00 >    6.5043 -1.4544e-02    1.2548  -27.9180   16.3343   -1.4800   34.2738 287.52 287.5 102.0  9     0.0000
+MVIF   ?    ?    ? S      ? 19950421 0803    8.6800 GAU  5.00e-01 -1.00e+00 -1.00e+00 -1.00e+00 >   10.9272 6.6254e-01    0.2459  -27.9180   16.3343   -1.4800   34.2738 287.52 287.5 102.0  9     0.0000
+END_PHASE
+END_NLLOC
+

@@ -1,0 +1,24 @@
+#
+# property defaults file for Seismicity Viewer
+#
+
+#
+
+seismicity.read.stations=NO
+
+seismicity.show.axis.p=NO
+seismicity.show.axis.t=NO
+seismicity.show.ellipsoid=NO
+seismicity.show.expectation=NO
+seismicity.show.faultplane=NO
+seismicity.show.firstmotion=NO
+seismicity.show.magnitude=YES
+seismicity.show.maxlikelihood=YES
+seismicity.show.probability=YES
+seismicity.show.residual.all=YES
+seismicity.show.residual.p=YES
+seismicity.show.residual.s=YES
+seismicity.show.station=NO
+
+seismicity.info.limit.residual=2.0
+seismicity.info.limit.residual.P=1.0

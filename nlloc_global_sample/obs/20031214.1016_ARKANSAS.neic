@@ -1,0 +1,42 @@
+     14 DEC 2003  (348)
+
+     ot  = 10:16:39.82   +/-   0.67              ARKANSAS
+     lat =      35.234   +/-    7.1
+     lon =     -92.238   +/-    6.8              MAGNITUDE 2.8 (GS)
+     dep =         5.0  (geophysicist)
+
+     25 km (15 miles) NE of Conway, Arkansas (pop 43,000)
+     45 km (30 miles) W of Searcy, Arkansas (pop 18,000)
+     55 km (35 miles) N of LITTLE ROCK, Arkansas (pop 183,000)
+     70 km (45 miles) S of Mountain View, Arkansas (pop 2,800)
+
+     nph =   11 of  17    se = 0.77    FE=502                            A
+
+     error ellipse = (136.6,  0.0, 11.5; 46.6,  0.0,  6.1;  0.0,  0.0,  0.0)
+
+ mb = 0.0 (  0)  ML = 0.0 (  0)  mblg = 2.8 (  9)  md = 3.5 (  4)  MS = 0.0 (  0)
+
+ sta  phase     arrival     res   dist azm    amp  per mag     amp  per mag  sta
+ UALR eP      10:16:49.03  -0.1    0.5 191 d:1.3+2     3.6                   UALR
+ MIAR eP      10:17:04.59   0.3    1.3 238 d:1.7+2     4.1  g:7.0-2 1.1 2.7  MIAR
+ HBAR eP      10:17:05.87   1.0    1.3  76 d:8.7+1     3.5                   HBAR
+ GNAR eP      10:17:15.05   1.1    2.0  67 d:4.0+1     3.1                   GNAR
+ OXF  eP      10:17:20.63  -0.3    2.4 106 d:1.1+2     4.2X g:3.6-2 .70 2.8  OXF
+ HALT eP      10:17:21.36   0.2    2.5  73                                   HALT
+ GLAT qP      10:17:23.45   0.0    2.6  66                                   GLAT
+ CCM  eP      10:17:27.31  -0.6    2.9  16 d:1.6+2     4.7X g:2.3-2 .75 2.6  CCM
+ PLAL ePn     10:17:34.37  -0.5    3.4  93 d:3.4+1     3.5X                  PLAL
+ SIUC ePn     10:17:35.59   0.0    3.5  44 d:2.8+1     3.4X g:5.2-2 .65 3.1  SIUC
+ WVT  eP      10:17:37.62  -1.2    3.7  75 d:2.0+1     3.2X g:3.0-2 1.4 2.6  WVT
+ SLM  qPn     10:17:41.94   2.3X   3.8  25 d:1.8+1     3.1X g:4.4-2 .75 3.0  SLM
+ LRAL ePn     10:17:53.14  -2.3X   4.9 115 d:2.2+1     3.7X g:2.1-2 1.0 2.7  LRAL
+ SWET qPn     10:18:00.63   1.0X   5.2  88 d:2.3+1     3.9X                  SWET
+ WMOK ePn     10:18:02.41  -0.5X   5.4 267 d:3.0+1     4.2X g:1.1-2 .75 2.7  WMOK
+ BLO  ePn     10:18:12.29   0.6X   6.0  48 d:2.5+1     4.3X g:2.9-2 .65 3.2  BLO
+ CPCT ePn     10:18:13.69  -2.2X   6.3  86 d:1.3+1     3.8X                  CPCT
+
+
+
+ Generated 2003 DEC 14 at 15:51 UTC
+
+ 

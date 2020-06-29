@@ -1,0 +1,47 @@
+/Smooth3d/
+/NLL_cov_test/
+/archive/
+/distributions/
+/nbproject/
+/nll_func_NEIC/
+/nlloc_global_sample_BAK/
+/nlloc_global_sample_TEST/
+/build_distribution.bash
+/Time3d/
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+/src/CMakeCache.txt
+/src/bin/
+/src/CMakeLists-OLD.txt
+/src/CMakeFiles/
+/src_OLD/

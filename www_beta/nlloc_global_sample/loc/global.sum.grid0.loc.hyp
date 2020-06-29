@@ -1,0 +1,90 @@
+NLLOC "./loc/global.20031203.073729.grid0" "LOCATED" "Location completed."
+SIGNATURE "Anthony Lomax (www.alomax.net)   obs:./obs/20031203.0737_FIJI.neic   NLLoc:v6.04.00(26Mar2015)  run:04Jun2015 13h52m04"
+COMMENT "NEIC events"
+GRID  361 181 601  -180 -90 0  1 1 1 PROB_DENSITY
+SEARCH OCTREE nInitial 27648 nEvaluated 50008 smallestNodeSide 3.255208/3.255208/0.782552 oct_tree_integral 6.355755e+04 scatter_volume 6.355755e+04
+HYPOCENTER  x -178.682 y -20.5371 z 586.132  OT 56.4983  ix -1 iy -1 iz -1
+GEOGRAPHIC  OT 2003 12 03  07 33 56.498334  Lat -20.537109 Long -178.681641 Depth 586.132
+QUALITY  Pmax 1.12801e+130 MFmin 20.3514 MFmax 20.4085 RMS 0.631891 Nphs 50 Gap 84.4394 Dist 17.683 Mamp -9.90 0 Mdur -9.90 0
+VPVSRATIO  VpVsRatio -1  Npair 0  Diff -2e+30
+STATISTICS  ExpectX -178.597 Y -20.4571 Z 542.633  CovXX 293.377 XY -14.8012 XZ -57.4497 YY 393.506 YZ -512.769 ZZ 2908.43 EllAz1  46.0118 Dip1  8.55736 Len1  30.7046 Az2  314.941 Dip2  7.07646 Len2  33.5161 Len3  1.030794e+02
+STAT_GEOG  ExpectLat -20.457141 Long -178.597302 Depth 542.632914
+TRANSFORM  GLOBAL
+QML_OriginQuality  assocPhCt 119  usedPhCt 50  assocStaCt -1  usedStaCt 50  depthPhCt -1  stdErr 0.631891  azGap 84.4394  secAzGap 128.018  gtLevel -  minDist 1964.78 maxDist 9578.24 medDist 9040.27
+QML_OriginUncertainty  horUnc -1  minHorUnc 25.8813  maxHorUnc 30.166  azMaxHorUnc 171.765
+QML_ConfidenceEllipsoid  semiMajorAxisLength 103.079  semiMinorAxisLength 30.7046  semiIntermediateAxisLength 33.5161  majorAxisPlunge -78.8617  majorAxisAzimuth 5.85368  majorAxisRotation 307.457
+FOCALMECH  Hyp  -20.537109 -178.681641 586.131510 Mech  0 0 0 mf  0 nObs 0
+END_NLLOC
+
+NLLOC "./loc/global.20031210.094953.grid0" "LOCATED" "Location completed."
+SIGNATURE "Anthony Lomax (www.alomax.net)   obs:./obs/20031210.0944_S_EAST_PACIFIC_RISE.neic   NLLoc:v6.04.00(26Mar2015)  run:04Jun2015 13h52m05"
+COMMENT "NEIC events"
+GRID  361 181 601  -180 -90 0  1 1 1 PROB_DENSITY
+SEARCH OCTREE nInitial 27648 nEvaluated 50008 smallestNodeSide 6.510417/6.510417/1.565104 oct_tree_integral 3.811918e+05 scatter_volume 3.811918e+05
+HYPOCENTER  x -114.932 y -49.7168 z 2.34766  OT 25.2151  ix -1 iy -1 iz -1
+GEOGRAPHIC  OT 2003 12 10  09 42 25.215100  Lat -49.716797 Long -114.931641 Depth 2.34766
+QUALITY  Pmax 9.02226e+23 MFmin 6.10427 MFmax 6.35202 RMS 1.33693 Nphs 16 Gap 158.144 Dist 39.0441 Mamp -9.90 0 Mdur -9.90 0
+VPVSRATIO  VpVsRatio -1  Npair 0  Diff -2e+30
+STATISTICS  ExpectX -111.629 Y -50.4194 Z 158.669  CovXX 52644.1 XY 5003.43 XZ 2924.03 YY 594700 YZ -17384 ZZ 16651.4 EllAz1  290.176 Dip1  84.9042 Len1  236.702 Az2  270.375 Dip2  -4.79598 Len2  431.954 Len3  1.449583e+03
+STAT_GEOG  ExpectLat -50.419382 Long -111.628899 Depth 158.669330
+TRANSFORM  GLOBAL
+QML_OriginQuality  assocPhCt 173  usedPhCt 16  assocStaCt -1  usedStaCt 16  depthPhCt -1  stdErr 1.33693  azGap 158.144  secAzGap 178.418  gtLevel -  minDist 4338.24 maxDist 10518.7 medDist 9197.96
+QML_OriginUncertainty  horUnc -1  minHorUnc 347.815  maxHorUnc 1169.58  azMaxHorUnc 0.528807
+QML_ConfidenceEllipsoid  semiMajorAxisLength 1449.58  semiMinorAxisLength 236.702  semiIntermediateAxisLength 431.954  majorAxisPlunge -1.7182  majorAxisAzimuth 0.519039  majorAxisRotation 94.7896
+FOCALMECH  Hyp  -49.716797 -114.931641 2.347656 Mech  0 0 0 mf  0 nObs 0
+END_NLLOC
+
+NLLOC "./loc/global.20031214.101649.grid0" "LOCATED" "Location completed."
+SIGNATURE "Anthony Lomax (www.alomax.net)   obs:./obs/20031214.1016_ARKANSAS.neic   NLLoc:v6.04.00(26Mar2015)  run:04Jun2015 13h52m05"
+COMMENT "NEIC events"
+GRID  361 181 601  -180 -90 0  1 1 1 PROB_DENSITY
+SEARCH OCTREE nInitial 27648 nEvaluated 50000 smallestNodeSide 1.627604/1.627604/0.391276 oct_tree_integral 3.223103e+03 scatter_volume 3.223103e+03
+HYPOCENTER  x -92.2705 y 35.2295 z 5.08659  OT 40.2132  ix -1 iy -1 iz -1
+GEOGRAPHIC  OT 2003 12 14  10 16 40.213152  Lat 35.229492 Long -92.270508 Depth 5.08659
+QUALITY  Pmax 3.46818e+13 MFmin 5.89806 MFmax 6.46196 RMS 0.328717 Nphs 9 Gap 138.121 Dist 0.458467 Mamp -9.90 0 Mdur -9.90 0
+VPVSRATIO  VpVsRatio -1  Npair 0  Diff -2e+30
+STATISTICS  ExpectX -92.916 Y 35.0164 Z 57.8725  CovXX 11902.1 XY 2445.96 XZ -2710.18 YY 2724.53 YZ -997.783 ZZ 2262.48 EllAz1  17.0107 Dip1  63.4116 Len1  69.9999 Az2  339.593 Dip2  -21.6788 Len2  88.8778 Len3  2.163777e+02
+STAT_GEOG  ExpectLat 35.016433 Long -92.915971 Depth 57.872520
+TRANSFORM  GLOBAL
+QML_OriginQuality  assocPhCt 17  usedPhCt 9  assocStaCt -1  usedStaCt 9  depthPhCt -1  stdErr 0.328717  azGap 138.121  secAzGap 188.404  gtLevel -  minDist 50.9408 maxDist 413.345 medDist 272.949
+QML_OriginUncertainty  horUnc -1  minHorUnc 69.7187  maxHorUnc 169.648  azMaxHorUnc 75.9705
+QML_ConfidenceEllipsoid  semiMajorAxisLength 216.378  semiMinorAxisLength 69.9999  semiIntermediateAxisLength 88.8778  majorAxisPlunge -14.6386  majorAxisAzimuth 75.5531  majorAxisRotation 109.815
+FOCALMECH  Hyp  35.229492 -92.270508 5.086589 Mech  0 0 0 mf  0 nObs 0
+END_NLLOC
+
+NLLOC "./loc/global.20040224.022824.grid0" "LOCATED" "Location completed."
+SIGNATURE "Anthony Lomax (www.alomax.net)   obs:./obs/20040224.0227_MOROCCO.neic   NLLoc:v6.04.00(26Mar2015)  run:04Jun2015 13h52m08"
+COMMENT "NEIC events"
+GRID  361 181 601  -180 -90 0  1 1 1 PROB_DENSITY
+SEARCH OCTREE nInitial 27648 nEvaluated 50008 smallestNodeSide 1.627604/1.627604/0.391276 oct_tree_integral 1.018418e+04 scatter_volume 1.013931e+04
+HYPOCENTER  x -3.87451 y 35.2954 z 0.195638  OT 47.0218  ix -1 iy -1 iz -1
+GEOGRAPHIC  OT 2004 02 24  02 27 47.021827  Lat 35.295410 Long -3.874512 Depth 0.195638
+QUALITY  Pmax 3.55565e+127 MFmin 20.206 MFmax 20.5691 RMS 0.949238 Nphs 50 Gap 180.874 Dist 2.22337 Mamp -9.90 0 Mdur -9.90 0
+VPVSRATIO  VpVsRatio -1  Npair 0  Diff -2e+30
+STATISTICS  ExpectX -3.86495 Y 35.352 Z 16.3924  CovXX 41.1659 XY -27.4032 XZ 8.82402 YY 165.18 YZ 52.9148 ZZ 138.286 EllAz1  73.6076 Dip1  -12.3141 Len1  10.4772 Az2  328.036 Dip2  -50.8826 Len2  19.3053 Len3  2.709401e+01
+STAT_GEOG  ExpectLat 35.352021 Long -3.864946 Depth 16.392408
+TRANSFORM  GLOBAL
+QML_OriginQuality  assocPhCt 318  usedPhCt 50  assocStaCt -1  usedStaCt 50  depthPhCt -1  stdErr 0.949238  azGap 180.874  secAzGap 190.762  gtLevel -  minDist 247.041 maxDist 7167.01 medDist 5843.93
+QML_OriginUncertainty  horUnc -1  minHorUnc 9.02083  maxHorUnc 19.8298  azMaxHorUnc 168.079
+QML_ConfidenceEllipsoid  semiMajorAxisLength 27.094  semiMinorAxisLength 10.4772  semiIntermediateAxisLength 19.3053  majorAxisPlunge -36.4251  majorAxisAzimuth 172.878  majorAxisRotation 222.991
+FOCALMECH  Hyp  35.295410 -3.874512 0.195638 Mech  0 0 0 mf  0 nObs 0
+END_NLLOC
+
+NLLOC "./loc/global.20060717.082155.grid0" "LOCATED" "Location completed."
+SIGNATURE "Anthony Lomax (www.alomax.net)   obs:./obs/20060717.0819_S_JAVA_INDONESIA.neic   NLLoc:v6.04.00(26Mar2015)  run:04Jun2015 13h52m09"
+COMMENT "NEIC events"
+GRID  361 181 601  -180 -90 0  1 1 1 PROB_DENSITY
+SEARCH OCTREE nInitial 27648 nEvaluated 50000 smallestNodeSide 3.255208/3.255208/0.782552 oct_tree_integral 1.121949e+05 scatter_volume 1.121949e+05
+HYPOCENTER  x 107.432 y -9.16992 z 0.782552  OT 22.7093  ix -1 iy -1 iz -1
+GEOGRAPHIC  OT 2006 07 17  08 19 22.709315  Lat -9.169922 Long 107.431641 Depth 0.782552
+QUALITY  Pmax 2.87737e+65 MFmin 12.4347 MFmax 12.5364 RMS 1.17086 Nphs 31 Gap 81.8589 Dist 16.8648 Mamp -9.90 0 Mdur -9.90 0
+VPVSRATIO  VpVsRatio -1  Npair 0  Diff -2e+30
+STATISTICS  ExpectX 107.47 Y -9.15544 Z 75.5716  CovXX 174.576 XY 45.419 XZ 237.266 YY 161.951 YZ 65.172 ZZ 2987.12 EllAz1  133.031 Dip1  -2.57333 Len1  20.3738 Az2  222.838 Dip2  4.28676 Len2  26.3976 Len3  1.030561e+02
+STAT_GEOG  ExpectLat -9.155435 Long 107.469984 Depth 75.571580
+TRANSFORM  GLOBAL
+QML_OriginQuality  assocPhCt 111  usedPhCt 31  assocStaCt -1  usedStaCt 31  depthPhCt -1  stdErr 1.17086  azGap 81.8589  secAzGap 90.4905  gtLevel -  minDist 1873.87 maxDist 10776.8 medDist 7443.41
+QML_OriginUncertainty  horUnc -1  minHorUnc 16.7791  maxHorUnc 22.1918  azMaxHorUnc 48.9564
+QML_ConfidenceEllipsoid  semiMajorAxisLength 103.056  semiMinorAxisLength 20.3738  semiIntermediateAxisLength 26.3976  majorAxisPlunge 84.9977  majorAxisAzimuth 73.9255  majorAxisRotation 31.3803
+FOCALMECH  Hyp  -9.169922 107.431641 0.782552 Mech  0 0 0 mf  0 nObs 0
+END_NLLOC
+

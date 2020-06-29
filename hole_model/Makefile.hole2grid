@@ -1,0 +1,18 @@
+BINDIR=${MYBIN}
+INCLUDE_DIR=../
+
+
+# --------------------------------------------------------------------------
+# hole2grid
+#
+OBJS2 = ${INCLUDE_DIR}GridLib.o ${INCLUDE_DIR}util.o ${INCLUDE_DIR}nrutil.o ${INCLUDE_DIR}nrmatrix.o ${INCLUDE_DIR}map_project.o ${INCLUDE_DIR}geo.o ${INCLUDE_DIR}octtree.o ${INCLUDE_DIR}ran1.o
+#PVER = 1
+hole2grid : $(BINDIR)/hole2grid
+$(BINDIR)/hole2grid : hole2grid.o $(OBJS2)
+	gcc hole2grid.o  $(OBJS2) $(CCFLAGS) -o $(BINDIR)/hole2grid -lm -I${INCLUDE_DIR}
+hole2grid.o : hole2grid.c ${INCLUDE_DIR}GridLib.h
+	gcc $(CCFLAGS) -c hole2grid.c -I${INCLUDE_DIR}
+#velmod.o : ${INCLUDE_DIR}velmod.c
+#	gcc -c $(CCFLAGS) ${INCLUDE_DIR}velmod.c -I${INCLUDE_DIR}
+# --------------------------------------------------------------------------
+

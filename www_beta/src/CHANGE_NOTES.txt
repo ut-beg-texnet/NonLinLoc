@@ -1,0 +1,399 @@
+
+09OCT2000 NLLoc - added grid memory management, program keeps and re-uses grids in memory while there is space.
+
+02OCT2000 Grid2GMT - added mechanism plotting.
+
+16OCT2000 Grid2GMT - added residual plotting.
+
+16OCT2000 NLLoc - added max difference of S-P to VpVs output.
+
+17OCT2000 NLLoc - bug fix in HuttonBoore mag calculation - epicentral and not hypocentral distance was used for r in K(r-100) term; changed to hypocentral distance.
+
+NOV2000 NLLOc - added Octtree importance sampling
+
+11JAN2001 NLLoc - added temporary fix (if yr < 20, yr += 100) to HYPO71 Y2K problem
+
+11JAN2001 NLLoc - added STAT_GEOG line to summary hyp output
+
+FEB2001 NLLoc - Added copying of last event location files to last.hyp and last.hdr
+
+11JUL2002 NLLoc - Removed copy of aliased station label to original station label (IRSN)
+
+18JUL2002 NLLoc - Added SAVE_ALBERTO_3D_4 format output
+
+18JUL2002 Time2EQ - Added station active probability
+
+18OCT2002 NLLoc - Fixed bug in OctTree scatter sample: sample truncated at requested number of points.
+
+19FEB2003 Grid2GMT - extended plot height to 27.9 cm.
+
+20FEB2003 Grid2GMT - fixed bug in MAPTRANS: transformation was not initialized or applied correctly
+
+19MAR2003 NLLoc - ML Hutton Boore, added optional Ro and Mo parameters: #	ML_HB  amp_fact n K [Ro [Mo]]
+
+20MAR2003 Grid2GMT - added magnitude to hypocenter info line in plot title
+
+21MAR2003 Grid2GMT - Fixed bug with magnitude assignments when only 1 mag type present
+
+21MAR2003 Grid2GMT - Fixed bug hypoinverse format (magnitudes), removed error ellipse values to prevent column shifting
+
+15APR2003 Grid2GMT - Fixed bug in ETH_LOC: format of arrival->sec
+
+26AUG2003 NLLoc - HYPO71, HYPO71_OV, HYPOELLIPSE phase input format: added coda_dur reading
+
+02Dec2003 NLL - TRANS GLOBAL transform mode added.
+
+02Dec2003 NLL - LOCSRCE/GTSRCE added added.
+
+02Dec2003 NLL - smallestNodeSide is now x/y/z.
+
+15Dec2003 NLL - LOCFILES: added optional iSwapBytes flag
+
+18Dec2003 NLL - rejected arrivals are written to output location files
+
+18Dec2004 NLL - Added LOCMETH = EDT
+
+05Jan2004 NLL - Fixed bug in identifying maximum likelihood point when PDF is everywhere near 0
+
+02Feb2004 NLL - Activated LOCSEARCH OCT min_node_size (always in km).
+
+04Feb2004 NLL - Added support for arrivals without absolute timing (indicated by '*' as first character of INST, used for misfit with EDT only)
+
+11Feb2004 NLL - Added copying of control file to output directory
+
+10Mar2004 NLL - Fixed bug in station azimut in NLL Phase output, was not corrected for coord system rotation angle
+
+New version 3.03 posted to web =================================
+
+
+01Jul2004 NLL - Added output of total station corrections to file *.stat_totcorr
+
+01Jul2004 MergeFpfit - Added new utility to merge fpfit summary file into NLL hypo-phase file
+
+02Jul2004 Grid2GMT - Fixed bug in Focal Mech plotting, was rotated 90 to far CW
+
+02Jul2004 NLL - Fixed bug: some files were "closed" with close() instead of fclose()
+
+09Jul2004 NLL - Added boundary indexing in "max prob location on grid boundary" message (10,11,20,21,30,31 -> x,y,z orig/end boundary)
+
+03Aug2004 NLL - Added LOCMETH minimum_dist_sta_to_grid
+
+13Sep2004 NLL - Fixed bug: gap was calculated using 0 weight readings, now uses only readings with weight > 0.001
+
+09Nov2004 NLL - Added LOCELEVCORR:  Flag  VelP   VelS
+
+12Nov2004 NLL - When 2D DEFAULT grids are used and multiple stations use same grid, only one copy of each grid file is kept in memory.
+
+01Dec2004 NLL - Added output of station delay to PHASE list in NLL Hypo-Phase format
+
+01Dec2004 NLL - NLL will first try to open travel-time file with name corresponding to raw phase name,
+			if this fails, it will then try using phase name mapping from LOCPHASEID
+			(previously, NLL always used phase name mapping from LOCPHASEID, if present)
+
+01Dec2004 NLL - Checking for duplicate phases limited to checking for duplication of station name (after
+			aliasing) and duplication of original phase name
+13Dec2004 NLL - Added Obs Formats: ISC_IMS1.0, CSEM_GSE2.0
+
+20Jan2005 NLL - Fixed bug: ERH and ERZ values in hypo17 output were reversed
+
+
+	Anthony:
+
+	Under "Utilities" when discussing parameters for fpfit2hyp, you have a
+	parameter "GapMax" which has a default of 360. Your statement explaining
+	it is "maximum RMS misfit for event selection."  It seems to me more likely
+	that this parameter is intended to define maximum azimuthal station gap
+	(in degrees) instead. Si?
+
+	thanks,
+	Charlotte
+
+Apr2005 NLL - Added LOCSTAWT, LOCDELAY_SURFACE
+
+New version 4.00 posted to web =================================
+
+
+14Sep2005 NLL - bug?  In function ConstWeightMatrix added ncol == nrow case so error is non-zero
+			(previously, if CorrLen == 0, travel time error was zero instead of sigmaT2)
+
+26Sep2005 NLL - bug?  In function NLLocLib.c:StdDateTime() : arrivals with no predicted travel-time
+			(travel-time = 0) were used to calculate rms - gave very large rms
+
+10Oct2005 NLL -  Added parameters to LOCPHSTAT to allow filtering on ellipsoid max len axis and on hypo depth.
+		   (float)   Ell_Len3_Max : max ellipsoid major semi-axis length to include in ave res
+		   (float)   Hypo_Depth_Min : min hypo depth to include in ave res
+		   (float)   Hypo_Depth_Max : max hypo depth to include in ave res
+
+
+24Oct2005 NLL -  Added LOCMETH EDT_OT_WT - Weights EDT-sum probabilities by the variance of OT estimates over all pairs of readings.  This reduces the probability (PDF values) at points with inconsistent OT estimates, and leads to more compact location PDF's.
+
+08Nov2005 NLL -  Added SAVE_NLLOC_OCTREE to LOCHYPOUT parameters to allow saving of oct-tree structure to disk when LOCSEARCH  OCT used.
+
+15Nov2005 NLL -  Change: normalized sum of edt probs now not-normalized - favors solutions with more readings
+
+23Nov2005 NLL -  Added use_stations_density flag to LOCSEARCH OCT params.  Weights oct-tree cell prob values used for subdivide decision in proportion to number of stations in oct-tree cell.  Gives higher search priority to cells containing stations, stablises convergence to local events when global search used with dense cluster of local stations.
+
+25Nov2005 NLL -  Fixed bug: addition to and counting of stations in station list was incorrect, may have affected .stations files and LOCSTAWT
+
+03Mar2006 NLL -  Added stop_on_min_node_size flag to LOCSEARCH OCT params- if 1, stop search when first min_node_size reached, if 0 stop subdividing a given cell when min_node_size reached.  Gives ?.
+
+
+New version 4.10 posted to web =================================
+
+
+Apr2005 NLL - LOCDELAY_SURFACE (not added to 4.10 doc)
+
+15Jun2006 NLL - now allow crossing of year boundary by readings (requires that first reading is earlier year, etc...)
+
+15Jun2006 NLL -  Fixed bug: hypocenter file name now has integer count index added only if identical to previous file name
+
+19Jun2006 NLL  - SAVE_HYPOINVERSE_Y2000_ARC Hypoinverse Y2000 archive format added.  Default changed from SAVE_HYPOINV_SUM to SAVE_HYPOINVERSE_Y2000_ARC
+
+29Jun2006 NLL - Added: ArrivalDesc -> double apriori_weight, a priori weight of datum
+
+29Jun2006 NLL - Added: LOCHYPOUT->NLL_FORMAT_VER_2: fields apriori_weight, delay
+
+30Jun2006 NLL - Added: apriori_weight in location: if 0 ignore, if 1 use arrival
+
+12Jul2006 GridLib.h - ARRIVAL_LABEL_LEN changed from 7 to 21.  NLL Phase format output (WriteArrival()) unchanged at 6 chars max.
+
+19Jul2006 NLL -  Fixed bug: LOCSEARCH GRID : travel times did not include eleveation correction LOCELEVCORR
+
+28Aug2006 NLL -  Utility grid2asc created (add to distribution?)
+
+20Oct2006 NLL - Added: LOCSEARCH mean_cell_velocity
+
+20Oct2006 NLL - Added: With LOCMETH EDT_OT_WT, hypo.rms is set to sqrt( ottime maximum likelihood variance ) - rms is thus weighted the same as ot weighting used for location pdf.
+
+23Oct2006 NLL -  Fixed bug: prtree value may not be same as pnode value * volume, corrected value in OctTree integral (integrateResultTree) and scatter generation (getScatterSampleResultTree) (may not affect final results)
+
+28Oct2006 NLL - Change: With all LOCMETH EDT*, final otime, residuals, etc. always calcualted with ET_OT_WT_ML - maximum likelihood otime.
+
+01Mar2007 NLL - Added: TRANS SDC transform mode added.  (Short Distance Coversion projection)
+
+24Mar2007 NLL - Added: LOCGAU2 travel-time dependent error
+
+	LOCGAU2 sets the travel time error in proportion to the travel time, thus giving effectively a station-distance weighting, which was not included in the standard Tarantola and Valette formulation used by LOCGAU.   This is important with velocity model errors, because nearby stations would usually have less absolute error than very far stations, and in general it is probably more correct that travel time error is a percentage of the travel time.  I have only used this a few times, since I just added it a couple of months ago, but the results indicate that this way of setting travel time errors gives visible improvement in hypocenter clustering.  Currently, this option only works with EDT.
+
+	The parameter is as follows:
+
+	travel-time dependent gaussian model error parameters
+	(LOCGAU2 SigmaTfraction (s),  SigmaTmin (s),  SigmaTmax (s))
+	travel time error is travel_time*SigmaTfraction, with max/min value = SigmaTmin/SigmaTmax
+	LOCGAU2 0.05 0.01 2.0
+
+	The above example sets the travel time error to 5% of travel time, with hard limits at 0.01 and 2.0 sec.
+
+	LOCGAU is only used for scaling of the pdf values when LOCGAU2 is set.
+
+
+24Mar2007 NLL - Change: EDT weight is now a-posteriori weight = prior weight (with possible LOCGAU2 error) * EDT probability
+
+24Mar2007 NLL - Added: LOCHYPOUT->NLL_FORMAT_VER_2: fields tt_error
+
+May2007
+> Hi Anthony,
+>
+> Might want to check your documentation on the scat file format -
+> specifically the header.
+>
+> 4 floats, first float is the of points (strange choice - float)
+>
+> in reality, the header fills the space reserved for 4 floats, but its
+> an int and a float.  as you know.
+Yes, the first write to the header (and read assumed) is an int and the second (undocumented!) is a float.  Looks like I modified the scat file i/o long after I wrote the doc.  I will write myself a note to correct this when I next update the web pages...
+-Paul
+
+18May2007
+On a related note, I am wondering if the documentation is describing SAzim
+correctly! There it says: "SAzim (float*6.2) --> Maximum likelihood hypocenter
+to station epicentral azimuth in degrees CCW from North". Is it really
+measuring the angle CCW (counter-clock wise), or CW (clock wise)? To me it
+seems that it is measuring the AZIMUTH (clockwise from North) of the line from
+the event to the station (in that direction)....
+-Sudipta.
+
+30Jul2007 NLLoc - Added: LOCTOPO_SURFACE topo surface file in GMT ascii GRD format used to mask prior search volume to space below topography
+
+31Jul2007 Time2EQ - Fixed bug: new function AddNoise treats S with VpVs correctly
+
+xxxxxxxxxxxxxxxxxx 20080902 stopped
+
+17Dec2007 NLLoc - Added: NLLoc main() converted to function NLLoc().  Returns list of Location's in LocNodes's (see NLLoc1.c and phaseloclist.h)
+
+19Dec2007 NLLoc - Added: Test likelihood method ML_OT
+
+08Jan2008 NLL - Added: LOCHYPOUT->NONE
+
+28Apr2008 NLLoc - Added parameter to LOCPHSTAT to allow filtering hypo distance from each station.
+		   (float)   Hypo_Dist_Max : max hypocenter (expectation) distance from each station to include in ave res
+
+10Jul2008 NLL - Added: message_flag = -1 -> completely silent
+
+18Jul2008 NLL - Added: TRANS NONE transform mode added.  (no projection, XYZ<->XYZ)
+
+
+New version 5.00 posted to web =================================
+
+
+Following  not added to 5.00 doc :
+Apr2005 NLLoc - LOCDELAY_SURFACE
+28Aug2006 NLL -  Utility grid2asc created (add to distribution?)
+20Oct2006 NLLoc - Added: LOCSEARCH mean_cell_velocity
+19Dec2007 NLLoc - Added: Test likelihood method ML_OT
+
+
+
+29Oct2008 NLLoc -  Fixed bug: WriteHypoInverseArchive for Y2000 : Uninitalized site, network, and component codes were written as "?" instead of " " (blank).
+
+01Jan2009 NLLoc -  Fixed bug: Reading HYPO71 and HYPOINVERSE type phase files : Failed to correctly distinguish ineger and floating point phase seconds fields correctly if seconds < 1.00.
+
+12Aug2009 NLLoc -  Fixed bug: Inconsistent treatment of zero weight, ignored and large error (>9998sec) phases in location and output.  Now: 1) Phases with phase name starting with "*", PriorWt = 0, ErrMag > 9998.0 or excluded (LOCEXCLUDE) are not used for location, their Weight will be 0. 2) Phases with Weight = 0 are not used to compute the QUALITY measures: Nphs, Gap or Dist.
+
+15Jun2006 NLLoc - Added: LOCHYPOUT->FILENAME_DEC_SEC format added.
+
+10Sep2009 Vel2Grid - Add to doc: The 2D grids represent the travel times from each station, with the source at the position 0,0,z_station in the grid; thus the Velocity grid (which serves as a template for the travel time grid) must have orig_grid_x/y = 0.  For 2D grid (1D models) the position in geographic space is controlled by the xy location of the grid in LOCGRID and by the TRANS control statements.  For 3D grids, the position is also controlled by the VGGRID statement.
+
+04Feb2010 Time_3d.c - Corrected 2 statements with no effect: Time_3d.c:1701, Time_3d.c:1713.
+
+04Feb2010 NLLoc - Fixed bug: ERH and ERZ values in hypo71 output were not correctly calculated: were squared distance, corrected to be distance
+
+18Feb2010 NLLoc - Fixed bug: Global mode ellipsoid did not correct for reduction of length of degree of longitude away from equator (see GridLib.c - CalcCovarianceSamplesGlobal())
+
+12May2010 NLLoc - Added: Replaced old matrix libraries with open source matrix libraries.  Used for SVD (singular-value decomposition for error ellipsoid calculation) and Gauss-Jordan elimination (matrix inversion).
+
+18May2010 NLLoc - Added: Hypocenter->gap_secondary
+
+21May2010 NLLoc - Added: QML_OriginQuality, QML_OriginUncertainty in NLL Hypocenter-Phase format.
+
+21May2010 NLLoc - Fixed bug: Free StaStatNode's in station statistics tables when all locations completed - prevents memory leak problems when NLLoc run as a function call.
+
+16Jun2010 NLL - Added compiler option GRID_FLOAT_TYPE_DOUBLE to set the floating point size (float or double) for NLL grids - modify with care! Normal NonLinLoc usage currenlty require float type; take-off angle and byte-swapping support requires float type.
+
+17Jun2010 NLLoc - Added:     // SED-ETH fields added for compatibility with legacy SED location quality indicators.  SED_Origin added to NLL-Hypocenter output format if LOCHYPOUT->CALC_SED_ORIGIN flag specified.
+
+13Sep2010 NLL - Fixed bug: NLLocLib.c->ReadNLLoc_Input()  fixed segmentation fault when NLLoc run as a function call and INCLUDE statements present in control lines.
+
+04Oct2010 NLLoc - Fixed bug: Oct-tree search was not intitialized to bottome of LOCSEARCH grid, bottom LOCSEARCH grid layer was lost.
+
+05Oct2010 NLLoc - Added: LOCMETH OT_STACK
+
+05Oct2010 Grid2Time - Added: Slowness model grids saved to output time grid directory.  Used for LOCMETH OT_STACK, etc.
+
+21Oct2010 NLLoc - Fixed bug: Station distribution weights may be incorrectly calculated when multiple events located.
+
+29112010 NLLoc - Fixed bug: fixed various problems with not freeing memory pointers in station statistics table
+
+09Dec2010 NLLoc - Fixed bug: addToStationList returned zero stations when station list reached maximum size.
+
+27Dec2010 NLLoc - Fixed bug: corrected irregular node spacing for OctTree initialization in GLOBAL mode.
+
+13Jan2011 NLLoc - Fixed bug: matrix cleanup was done in incorrectly inside the Locate loop, caused LOCSEARCH GRID to fail with multiple grids.
+
+15Feb2011 NLLoc - Fixed bug: covariance calculation with LOCSEARCH GRID could fail due to precision problem if x, y, or z coordinated of location were large.
+
+
+New version 6.00 posted to web =================================
+
+
+Following  not added to 6.00 doc :
+05Oct2010 NLLoc - Added: LOCMETH OT_STACK
+
+
+
+20110511 NLLoc - Added to doc: in LOCMETH:    (int)   flag indicating if duplicate arrivals used for location (1=reject, 0=use if time diff < sigma / 2)    ;      duplicate arrivals have same station label and phase name
+
+20110601 NLLoc - Take-off angle default/unset values for dip and azimuth set to -1.0 so unset angles can be more easily identified in later processing (e.g. in SeisComp3).
+
+20120521 NLL - Added utilities Vel2Grid3D, interface2fmm, fmm2grid to support creating NLL travel time grids using  ANU-FMM multi-stage 3D fast marching code (http://rses.anu.edu.au/seismology/soft/fmmcode/).
+
+20120724 Time2Angles - Added new utility Time2Angles to convert NLL travel time grids to NLL angles grids.
+
+20120724 NLLoc - Fixed bug: LOCMETH GAU_ANALYTIC: adde a check and reject hypocenter location points where there are no valid travel-times available.
+
+20130108 scat2latlon - Added new utility scat2latlon to convert binary PDF scatter sample files *.scat to ascii files with lines containing lat/lon/depth/0/non-normalized_likelihood for each sample.
+
+20130228 NLLoc - Fixed bug: Hypocenter-Phase outputs in HypoEllipse and Hypo71 format: all phases used for location were not printed, changed so that all phases are printed, regardless of location weight.
+
+20130314 NLLoc - Fixed bug: Changed HypoDesc->probmax from double to long double, to help avoid overrange in probmax value.
+
+20130326 NLLoc - Fixed bug: ArrivalDesc->original_obs_index was not set properly to mirror arrival index in observation file when duplicate arrivals are rejected.
+
+20130327 NLLoc - Fixed bug: Calculated hypocenter to station azimuth in GLOBAL mode was incorrect for some azimuth quadrants.
+
+20130413 NLLoc - Fixed bug: Memory for 3D travel-time grids read into memory (see LOCMETH) was not properly freed.
+
+20130627 NLLoc - Fixed bug: Bugs in station distribution weighting, changed cross-arrival weighing from sum to product (see LOCSTAWT).
+
+20130627 NLLoc - Added support for non-zero and non-unity arrival a-priori weighting (NLL_FORMAT_VER_2).  Before, arrivals with zero a-priori weights were rejected, otherwise a-priori weight = 1.0 was used.  Now, a-priori weights are used in proportion to their values.
+
+20130628 NLLoc - Added observation file name and program version date to SIGNATURE line in NLL hypocenter-phase file.
+
+20131015 Add to doc: On 2013/10/15 15:29, Jana Doubravova wrote:
+	> Dear Anthony Lomax,
+	> I am writing to inform you that we managed to compile and run NLLoc on Windows system.
+	> I don't know how much valuable information is it for you, but I think it might be interesting for
+	> potential NLLoc users on Windows. We did it using NetBeans and Cygwin. It is working for win32
+	> (tested on windows xp) and win64 (tested on windows 7) systems. Attached you can find the .exe
+	> files. It requires Cygwin installed (32bit version) and the cygwin1.dll (part of Cygwin usualy found
+	> in cygwin\bin directory) manually copied to \system32 (for 32bit) or \sysWOW64 (for 64bit)
+	> - there is possibly better way to do it but my "add-to-system-path" attempts failed.
+	> Then NLLoc could be run using standard command line. If the argument
+	> includes path it must be in the linux way (like D:\NLLoc>src\nlloc nll/nll.in).  Paths in .in file must be
+	> in cygwin format (like  /cygdrive/d/...).  I hope this could help someone searching for a good
+	> location software for windows.
+	> Best regards
+	> Jana Doubravova
+	>
+	> Institute of Geophysics ASCR
+	> Bocni II/1401
+	> 141 31 Prague 4
+	> Czech Republic
+
+
+20131024 Added to doc: 
+ 	VGGRID: Doc is correct for a 3D grid, but for a 2D grid xNum=2 and xOrig=yOrig=0.0 since a 2D grid represents a 1D model and is invariant with respect to translations in x or y.
+ 	LOCGRID: Doc is correct when using 3D and 2D models and travel time grids, for 2D velocity and travel-time grids LOCGRID should be 3D and positioned absolutely in space, thus xNum >> 2 and xOrig and zOrig are in general != 0.0
+ 
+
+20140220 OctTree - Fixed bug: calculation of integrals and scatter sample for value_type == VALUE_IS_PROBABILITY_IN_NODE.  (NLLoc does NOT use this mode, it uses value_type == VALUE_IS_LOG_PROB_DENSITY_IN_NODE.)
+
+201401-04 Grid2GMT - Minor bug fixes.
+
+201405 NLDiffLoc - Added L1 norm (LocMethod == METH_L1_NORM).
+
+20140530 NLLoc - Fixed bug: HYPO71 phase format S phases were not correctly read (60sec error) when there was no decimal point in the time field.
+
+20141030 NLLoc - Bug fix: matrix_statistics/matrix_statistics.c: CalcCovarianceSamples*(): 
+	Implemented new algorithm which subtracts the expectation from each data value before squaring and summing,
+	instead of correcting for expectation after summing and dividing by nSamples.
+	Should prevent precision errors in covariances when expectation is far from coordinates origin.
+
+	Applies to: LOCSEARCH MET and LOCSEARCH OCT
+    The algorithm for calculating the covariance of the PDF scatter sample used in NLLoc
+    was subject to precision errors when the expectation of the scatter sample (e.g. the event location)
+    was far from the origin of the NLL coordinates system relative to the extent of the PDF scatter sample. 
+    Several tests indicate that "Far from the origin" is of the order of 1000 times the extent of the PDF scatter sample.
+
+    Errors in covariance will affect the ellipsoid and ellipse, standard-errors (erh, erz, etc.). 
+
+    For teleseismic locations (NLL GLOBAL mode) errors with the old algorithm occur primarily in
+    longitude (X), increasing with expectation longitude and occasionally becoming large towards longitude +/-180deg.
+    For local studies in rectangular coordinates where the NLL coordinates origin is far from the network
+    and target sources, the errors may be large.  This may be the case, for example, for a micro-seismic study
+    using a regional, metric-based cartesian grid coordinate system with origin far from the study area.
+    For local studies in rectangular coordinates where the NLL coordinates origin is within or near the network
+    and target sources, the errors should be very small or negligible.
+    
+	The algorithm for calculating the covariance of the PDF scatter sample used in NLLoc v.6.03.00 and later does not 
+	have these precision errors and is valid for locations far from the origin of the coordinate system.
+
+20141107 NLLoc - New version of matrix_statistics/matrix_statistics.c: CalcCovarianceSamplesGlobal() which calculates x and y coords using distance and azimuth of each sample from expectation x,y.  Centers x,y and avoids problems near poles.
+
+20150324 NLLoc - Added: LOCMETH L1_NORM
+
+20150602 NLLoc - Added: QML_ConfidenceEllipsoid in NLL Hypocenter-Phase format, and supporting conversion nllEllipsiod2QMLConfidenceEllipsoid() in matrix_statistics.c.
+
+
+
+

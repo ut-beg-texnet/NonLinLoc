@@ -1,0 +1,30 @@
+
+#Total Phase Corrections (CalcResidual + InputDelay)  RMS_Max: 9999.000000  NRdgs_Min: -1  Gap_Max: 9999.000000  P_Res_Max: 1.000000  S_Res_Max: 1.000000  Ell_Len3_Max: 9999.900000  Hypo_Depth_Min: -9999.900000  Hypo_Depth_Max: 9999.900000  Hypo_Dist_Max: 1000000000000000019884624838656.000000
+#         ID      Phase   Nres      TotCorr      StdDev
+LOCDELAY  AURF                                                             G                                                                3        -0.000433    0.089060    
+LOCDELAY  AURF                                                             P                                                                1        0.046549     -1.000000   
+LOCDELAY  AURF                                                             p                                                                2        0.496645     0.411019    
+LOCDELAY  AUTN                                                             G                                                                2        -0.082405    0.110125    
+LOCDELAY  AUTN                                                             P                                                                1        0.030852     -1.000000   
+LOCDELAY  AUTN                                                             p                                                                2        -0.114104    0.071574    
+LOCDELAY  CEPP                                                             P                                                                5        -0.022350    0.019775    
+LOCDELAY  CEPP                                                             S                                                                4        0.008329     0.034076    
+LOCDELAY  IMI                                                              P                                                                3        0.023917     0.083091    
+LOCDELAY  IMI                                                              S                                                                2        0.043001     0.085503    
+LOCDELAY  MVIF                                                             G                                                                2        -0.494858    0.488003    
+LOCDELAY  MVIF                                                             P                                                                1        -0.014544    -1.000000   
+LOCDELAY  MVIF                                                             S                                                                1        0.662537     -1.000000   
+LOCDELAY  MVIF                                                             p                                                                1        0.061896     -1.000000   
+LOCDELAY  NEGI                                                             P                                                                5        0.004768     0.068681    
+LOCDELAY  NEGI                                                             S                                                                4        0.097652     0.081744    
+LOCDELAY  REVF                                                             G                                                                2        -0.483834    0.356441    
+LOCDELAY  REVF                                                             P                                                                1        -0.013998    -1.000000   
+LOCDELAY  RONE                                                             P                                                                5        -0.045863    0.074956    
+LOCDELAY  RONE                                                             S                                                                4        -0.014099    0.040006    
+LOCDELAY  SBF                                                              G                                                                2        0.297756     0.170211    
+LOCDELAY  SBF                                                              P                                                                1        0.296760     -1.000000   
+LOCDELAY  SBF                                                              p                                                                2        0.080587     0.008459    
+LOCDELAY  TOUF                                                             G                                                                2        0.489060     0.435889    
+LOCDELAY  TOUF                                                             P                                                                1        -0.090547    -1.000000   
+LOCDELAY  TOUF                                                             S                                                                1        -0.444749    -1.000000   
+LOCDELAY  TOUF                                                             p                                                                1        0.057120     -1.000000   

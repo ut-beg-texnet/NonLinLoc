@@ -1,0 +1,287 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<!-- #BeginEditable  --> 
+<TITLE>USGS Earthquake Hazards Program: Phase Data: SOUTH OF JAVA, INDONESIA                                        </TITLE>
+<!-- #EndEditable -->
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="expires" content="-1">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Language" content="en-us" />
+  <meta http-equiv="Imagetoolbar" content="no" />
+  <meta name="robots" content="all" />
+  <meta name="keywords" content="earthquake, epicenter, hypocenter, fault, seismicity, seismic, foreshock, aftershock, magnitude, magnitude scale, intensity, intensity scale, richter, mercalli, plate, tectonics, seismogram, seismograph, seismologist, seismology, geophysics, geologist, subduction, tsunami, quake, hazard" />
+  <meta name="description" content="USGS Earthquake Hazards Program, responsible for monitoring, reporting, and researching earthquakes and earthquake hazards" />
+  <script type="text/javascript" src="/js/easytoggle.js"></script>
+  <script type="text/javascript" src="/js/minmax.js"></script>
+  <link rel="stylesheet" href="/css/reqs-summary.css" type="text/css" media="screen,projection" />
+  <link rel="stylesheet" href="/css/master.css" type="text/css" media="screen,projection" />
+  <link rel="stylesheet" href="/css/print.css" type="text/css" media="print" />
+
+</head>
+<body class="two-column">
+<!-- BEGIN Current USGS Header Template -->
+
+<table width="100%"  border="0" cellpadding="0" cellspacing="0" class="usgs_table"> 
+  <tr> 
+    <td>
+      <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="178" align="left"><a href="http://www.usgs.gov"><img src="/images/header_graphic_usgsIdentifier_white.jpg" alt="Link to USGS home page." width="178" height="72" border="0"></a></td>
+          <td width="100%" class="banner">
+              <table width="150" border="0" align="right" cellpadding="0" cellspacing="0" class="ccsa">
+                <tr>
+                  <td><img src="/images/header_graphic_spacer.gif" width="1" height="72" alt=""></td>
+                  <td><a href="http://www.usgs.gov" class="ccsa">USGS Home</a><br>
+                      <a href="http://www.usgs.gov/ask/index.html" class="ccsa">Contact USGS</a><br>
+                  <a href="http://www.usgs.gov/search" class="ccsa">Search USGS</a> </td>
+                </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+
+    <img src="/images/header_graphic_spacer.gif" width="1" height="1" alt=""></td> 
+  </tr> 
+  <tr> 
+    <td class="siteTitle">Earthquake Hazards Program</td> 
+  </tr> 
+</table>
+
+<!-- END Current USGS Header Template -->
+
+
+
+<div id="nav-site">
+<ul><li><a href="http://earthquake.usgs.gov/">Home</a></li><li><strong><a href="http://earthquake.usgs.gov/eqcenter/">Earthquake Center</a></strong></li><li><a href="http://earthquake.usgs.gov/regional/">Regional Information</a></li><li><a href="http://earthquake.usgs.gov/learning/">Learning &amp; Education</a></li><li><a href="http://earthquake.usgs.gov/research/">Research &amp; Monitoring</a></li><li><a href="http://earthquake.usgs.gov/resources/">Additional Resources</a></li></ul>
+</div>
+<div id="nav-bcrumb">
+<hr />
+<p><a href="http://earthquake.usgs.gov/">Home</a> &raquo; <a href="http://earthquake.usgs.gov/eqcenter/">Earthquake Center</a></p>
+</div>
+<div id="content">
+<div id="wrapper1">
+<div id="wrapper2">
+<div id="wrapper3">
+<div id="nav-main">
+<hr />
+<ul><li><strong><a href="http://earthquake.usgs.gov/eqcenter/index.php">Latest Earthquakes</a></strong></li><ul><li><a href="http://earthquake.usgs.gov/eqcenter/recenteqsus/">- USA</a></li><li><a href="http://earthquake.usgs.gov/eqcenter/recenteqsww/">- World</a></li><li><a href="http://earthquake.usgs.gov/eqcenter/ens/">- EQ Notification Service</a></li><li><a href="http://earthquake.usgs.gov/eqcenter/recenteqsww/catalogs/">- Feeds &amp; Data</a></li><li><a href="http://earthquake.usgs.gov/eqcenter/recenteqsanim/">- Animations</a></li></ul><li><a href="http://neic.usgs.gov/neis/qed/">Recent Earthquakes</a></li><li><a href="http://earthquake.usgs.gov/eqcenter/historic_eqs.php">Historic Earthquakes</a></li><ul><li><a href="http://earthquake.usgs.gov/eqcenter/top10.php">- "Top 10" Lists &amp; Maps</a></li><li><a href="http://earthquake.usgs.gov/regional/world/historical.php">- Significant EQs</a></li><li><a href="http://neic.usgs.gov/neis/epic/epic.html">- Earthquake Search</a></li><li><a href="http://earthquake.usgs.gov/eqcenter/eqarchives/poster/">- EQ Summary Posters</a></li><li><a href="http://earthquake.usgs.gov/research/index.php?areaID=13">- Scientific Data</a></li></ul><li><a href="http://earthquake.usgs.gov/eqcenter/aboutmaps.php">About EQ Maps</a></li><li><a href="http://earthquake.usgs.gov/eqcenter/dyfi.php">Did You Feel It?</a></li><li><a href="http://neic.usgs.gov/neis/nrg/">Energy &amp; Broadband Solutions</a></li><li><a href="http://neic.usgs.gov/neis/FM/">Fast Moment Tensors</a></li><li><a href="http://earthquake.usgs.gov/contactus/mediaContacts.php">Media Info</a></li><li><a href="http://earthquake.usgs.gov/eqcenter/pager">PAGER</a></li><li><a href="http://earthquake.usgs.gov/eqcenter/helicorders.php">Seismogram Displays</a></li><li><a href="http://earthquake.usgs.gov/eqcenter/shakemap">ShakeMaps</a></li></ul>
+<hr />
+</div>
+<!-- #BeginEditable "column" -->
+<!-- #EndEditable -->
+<a name="startcontent" id="startcontent"></a>
+<div id="main">
+<!-- insert start -->
+<h1>Phase Data</h1>
+<P>
+<a href="/neis/phase_data/phase_data.html"> Explanation of Parameters</a>
+<P>
+<font face="monospace">
+<PRE>
+
+     17 JUL 2006  (198)
+
+     ot  = 08:19:25.03   +/-   0.24              SOUTH OF JAVA, INDONESIA        
+     lat =      -9.334   +/-    7.7
+     lon =     107.263   +/-    7.4              MAGNITUDE 7.7 (HRV)      
+     dep =        10.0  (geophysicist)
+
+     215 km (135 miles) NE of Christmas Island
+     245 km (155 miles) SSW of Tasikmalaya, Java, Indonesia
+     265 km (165 miles) S of Bandung, Java, Indonesia
+     360 km (220 miles) S of JAKARTA, Java, Indonesia
+ 
+     At least 100 people killed, 150 injured and many buildings
+     destroyed by a tsunami with wave heights of at least two meters in
+     the Pangandaran area. Felt as far as Jakarta. A tsunami with wave
+     heights of 60 cm reported at Christmas Island.
+
+     nph =   96 of 111    se = 1.11    FE=282                            A   
+
+     error ellipse = (214.0,  0.0, 10.4;124.0,  0.0,  9.3;  0.0,  0.0,  0.0)
+
+ mb = 6.3 ( 15)  ML = 0.0 (  0)  mblg = 0.0 (  0)  md = 0.0 (  0)  MS = 0.0 (  0)
+
+ sta  phase     arrival     res   dist azm    amp  per mag     amp  per mag  sta
+ COCO ePn     08:21:55.58  -1.9   10.6 254                                   COCO
+ MBWA eP      08:23:14.55  -6.1X  16.8 136                                   MBWA
+ DAV  eP      08:24:45.81   1.4   24.5  49                                   DAV 
+ NWAO eP      08:24:49.76  -1.4   25.2 160                                   NWAO
+ WRAB eP      08:25:16.39  -1.8   28.2 115 b:7.1+2 1.2 6.3                   WRAB
+ PALK eP      08:25:45.84   1.1   31.2 301 b:1.0+3 1.9 6.4                   PALK
+ TATO eP      08:26:31.83  -1.5   36.8  22 b:5.2+2 1.0 6.3                   TATO
+      epP     08:26:44.09  depth =  44.9X
+ CTAO eP      08:26:52.63  -0.3   39.1 110 b:6.3+2 1.5 6.1                   CTAO
+      epP     08:27:05.33  depth =  47.3X
+ PMG  eP      08:26:54.64  -0.3   39.3  93                                   PMG 
+      epP     08:27:09.62  depth =  58.5X
+ TAU  eP      08:28:08.05   0.9   48.4 141 b:2.4+2 1.2 6.1                   TAU 
+ INCN eP      08:28:20.05   0.6   50.0  20 b:6.0+2 1.7 6.3                   INCN
+      epP     08:28:32.20  depth =  43.6X
+ MAJO eP      08:28:47.40  -2.9   54.1  31 b:4.8+2 1.4 6.3                   MAJO
+ ULN  eP      08:29:10.29  -0.4   56.9 360 b:1.6+2 .75 6.1                   ULN 
+ AAK  eP      08:29:29.05  -1.4   59.8 332                                   AAK 
+ YSS  eP      08:29:59.34  -1.5   64.3  26                                   YSS 
+ KURK eP      08:30:03.69   0.1   64.8 340                                   KURK
+ SNZO eP      08:30:16.71  -1.4   67.0 131                                   SNZO
+ YAK  eP      08:30:54.92  -1.2   73.3  11                                   YAK 
+ SBA  eP      08:31:04.55   0.0   74.7 169                                   SBA 
+ PET  eP      08:31:10.89  -0.8   75.9  29 b:3.7+2 1.1 6.4                   PET 
+ GNI  eP      08:31:11.52  -0.1   75.8 315 b:3.3+2 1.4 6.2                   GNI 
+ ARU  eP      08:31:16.64  -0.3   76.8 335 b:6.5+2 1.4 6.5                   ARU 
+ MA2  eP      08:31:16.96  -0.6   77.0  21                                   MA2 
+ LSZ  eP      08:31:20.06   0.4   77.1 256                                   LSZ 
+ KIV  eP      08:31:28.54   0.3   78.8 318 b:3.4+2 1.3 6.2                   KIV 
+ EIL  eP      08:31:32.38  -0.2   79.5 303                                   EIL 
+ TIXI eP      08:31:43.81  -1.4   82.1   7                                   TIXI
+ SMY  eP      08:31:53.59  -0.9   83.8  34 b:1.4+2 1.0 6.1                   SMY 
+ OBN  eP      08:32:09.53   0.0   86.8 327 b:2.3+2 .75 6.5                   OBN 
+      epP     08:32:16.38  depth =  21.4X
+ TSUM eP      08:32:10.06   0.1   86.7 251                                   TSUM
+ PSZ  eP      08:32:47.84  -0.7   95.1 318 b:1.3+2 1.8 6.1                   PSZ 
+ MORC eP      08:32:56.85   0.3   96.9 319                                   MORC
+ IMA2 ePdif   08:33:23.24   3.4X 102.1  24                                   IMA2
+ GNW  ePKPdf  08:38:23.42   1.2  123.2  38                                   GNW 
+ EDM  ePKPdf  08:38:25.96  -0.4  125.4  29                                   EDM 
+ HUMO ePKPdf  08:38:27.21   1.2  125.1  44                                   HUMO
+ HAWA ePKPdf  08:38:28.11   1.0  125.7  38                                   HAWA
+ NEW  ePKPdf  08:38:28.29   0.2  126.2  35                                   NEW 
+ OHCM ePKPdf  08:38:29.78  -0.6  127.3  47                                   OHCM
+ WALA ePKPdf  08:38:30.73  -0.1  127.6  33                                   WALA
+ BSMT ePKPdf  08:38:30.97  -0.3  127.8  35                                   BSMT
+ FFC  ePKPdf  08:38:31.44  -1.9  129.1  21                                   FFC 
+ BMO  ePKPdf  08:38:32.13   0.8  127.8  39                                   BMO 
+ MSO  ePKPdf  08:38:33.01  -0.2  128.8  35                                   MSO 
+ CHMT ePKPdf  08:38:33.58  -0.4  129.2  35                                   CHMT
+ HRY  ePKPdf  08:38:36.27   0.6  130.1  35                                   HRY 
+ LRM  ePKPdf  08:38:36.61   0.5  130.2  36                                   LRM 
+ EGMT ePKPdf  08:38:36.61   0.5  130.4  32                                   EGMT
+ DLMT ePKPdf  08:38:36.86   0.5  130.4  36                                   DLMT
+ HLID ePKPdf  08:38:37.03   0.9  130.3  39                                   HLID
+ QLMT ePKPdf  08:38:37.60  -0.7  131.4  36                                   QLMT
+ BOZ  ePKPdf  08:38:37.61   0.5  130.8  36                                   BOZ 
+ YFT  ePKPdf  08:38:37.90  -1.5  132.0  36                                   YFT 
+ LKWY ePKPdf  08:38:39.14  -0.6  132.2  36                                   LKWY
+ WAKR ePKPdf  08:38:41.10   7.0X 129.1  47                                   WAKR
+ MWC  ePKPdf  08:38:41.28   2.1  131.7  52                                   MWC 
+ FLWY ePKPdf  08:38:41.40   1.5  132.3  37                                   FLWY
+ LAO  ePKPdf  08:38:41.63   0.4  133.1  31                                   LAO 
+ DUG  ePKPdf  08:38:41.66   0.3  133.0  42                                   DUG 
+ HWUT ePKPdf  08:38:42.20   0.7  133.1  40                                   HWUT
+ GSC  ePKPdf  08:38:42.49   2.4  132.3  50                                   GSC 
+ DAU  ePKPdf  08:38:42.50  -0.8  133.9  41                                   DAU 
+ BW06 ePKPdf  08:38:43.80   1.1  133.7  38                                   BW06
+ SHPR ePKPdf  08:38:43.99   2.4  133.0  48                                   SHPR
+ MSU  ePKPdf  08:38:44.57   0.7  134.3  44                                   MSU 
+ PFO  ePKPdf  08:38:45.46   3.6X 133.2  52                                   PFO 
+ SRU  ePKPdf  08:38:46.14   0.8  135.1  42                                   SRU 
+ RWWY ePKPdf  08:38:46.87   0.3  135.7  37                                   RWWY
+ BNM  ePKPdf  08:38:52.61  -2.6  140.3  46                                   BNM 
+ LPM  ePKPdf  08:38:55.64   0.7  140.2  46                                   LPM 
+ EMMW ePKPdf  08:38:59.40  -2.5  144.5 354                                   EMMW
+ AMTX ePKPdf  08:39:00.83   0.5  143.3  42                                   AMTX
+ LBNH ePKPdf  08:39:02.55  -0.7  145.2 359                                   LBNH
+ MIV  ePKPdf  08:39:02.66  -0.9  145.4   1                                   MIV 
+ NCB  ePKPdf  08:39:02.96  -0.8  145.5   2                                   NCB 
+ ACCN ePKPdf  08:39:04.81   0.1  146.1   1                                   ACCN
+ WVL  ePKPdf  08:39:05.92   3.4X 144.8 356                                   WVL 
+ FVM  ePKPdf  08:39:06.51  -0.5  147.3  26                                   FVM 
+ BINY ePKPdf  08:39:06.53  -0.1  147.1   4                                   BINY
+ SLM  ePKPdf  08:39:07.07   0.9  146.9  26                                   SLM 
+ HRV  ePKPdf  08:39:07.15   0.9  146.9 358                                   HRV 
+ ERPA ePKPbc  08:39:07.66   0.1  146.7  10                                   ERPA
+ WES  ePKPbc  08:39:08.25  -0.2  147.1 358                                   WES 
+ SDMD ePKPdf  08:39:09.01  -2.0  149.8   6                                   SDMD
+ MIAR ePKPbc  08:39:11.95  -0.6  148.5  34                                   MIAR
+      ePKPab  08:39:15.63  -0.2X
+ PAL  ePKPbc  08:39:12.18  -0.1  148.4   2                                   PAL 
+      ePKPab  08:39:16.90   1.5X
+ OXF  ePKPdf  08:39:12.82   0.4  150.6  29                                   OXF 
+ LVC  ePKPbc  08:39:13.16   1.1  148.0 187                                   LVC 
+ UTMT ePKPdf  08:39:13.61   3.2X 149.4  26                                   UTMT
+ TZTN ePKPdf  08:39:14.05   0.8  151.2  18                                   TZTN
+ CPCT ePKPdf  08:39:15.26   0.9  151.9  21                                   CPCT
+ LRAL ePKPdf  08:39:15.96  -0.1  153.0  27                                   LRAL
+ BRNJ ePKPab  08:39:17.56   1.0  148.7   3                                   BRNJ
+ GLAT ePKPab  08:39:18.08  -0.8  149.3  27                                   GLAT
+ USIN ePKPab  08:39:18.24   2.5  148.5  23                                   USIN
+ CPNY ePKPab  08:39:18.52   2.3  148.7   2                                   CPNY
+ UALR ePKPab  08:39:18.60   0.8  149.0  32                                   UALR
+ MCWV ePKPab  08:39:19.02   0.7  149.1  11                                   MCWV
+ CBN  ePKPab  08:39:19.25  -6.5X 151.0   8                                   CBN 
+ MVL  ePKPab  08:39:19.36   0.5  149.3   5                                   MVL 
+ MYNC ePKPbc  08:39:22.08   0.2  152.3  20                                   MYNC
+      ePKPab  08:39:26.76  -5.0X
+ HKT  ePKPab  08:39:22.33  -0.7  150.2  43                                   HKT 
+ NATX ePKPab  08:39:22.55   1.3  149.8  39                                   NATX
+
+
+
+ Generated 2006 JUL 17 at 21:39 UTC
+</PRE>
+</font>
+<P>
+<P>
+<P>
+<strong>
+Preliminary Earthquake Report
+</strong>
+<br>U.S. Geological Survey, National Earthquake Information Center
+<br>World Data Center for Seismology, Denver
+<P>
+<P>
+<!-- insert end -->
+<P>&nbsp;</P>
+</div>
+</div>
+</div>
+<div id="sidebar">
+</div>
+</div>
+</div>
+<div id="nav-sub">
+  <hr />
+  <div id="nav-sub-right">
+  <ul>
+    <li><a href="http://earthquake.usgs.gov/aboutus/">About Us</a></li>
+    <li><a href="http://earthquake.usgs.gov/contactus/">Contact Us</a></li>
+	<li><a href="http://earthquake.usgs.gov/gen/siteMap.php">Site Map</a></li>
+	<li><a href="http://earthquake.usgs.gov/gen/search.php">Site Search</a></li>
+  </ul>
+  </div>
+  <hr />
+</div>
+<br clear="all" />
+<!-- USGS Footer Template -->
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="usgs_table">
+  <tr>
+    <td colspan="2" class="footer">
+    <a href="http://www.usgs.gov/accessibility.html" class="footer">Accessibility</a>
+    <a href="http://www.usgs.gov/foia/" class="footer">FOIA</a>
+    <a href="http://www.usgs.gov/privacy.html" class="footer">Privacy</a>
+    <a href="http://www.usgs.gov/policies_notices.html" class="footer">Policies and Notices</a> </td>
+  </tr>
+  <tr>
+    <td>
+    <p class="footer">
+    <a href="http://www.doi.gov">U.S. Department of the Interior</a> | <a href="http://www.usgs.gov">U.S. Geological Survey</a><br>
+URL: http://neic.usgs.gov/neis/bulletin/neic_qgaf_p.html
+<br>
+Contact: <A HREF="http://eqint.cr.usgs.gov/neic/cgi-bin/sitemail1.cgi?docname=WEB_Team`/neis/bulletin/neic_qgaf_p.html`">NEIC Web Team</A>
+ <br>
+Last modification:
+<!-- #BeginEditable "updated" -->
+<!-- #BeginDate -->  Monday, 2006 July 17 03:25:53 MDT <!-- #EndDate-->
+	</td>
+    <td colspan="1" align="right"> 
+    <a href="http://firstgov.gov/"><img src="/images/footer_graphic_firstGov.jpg" alt="FirstGov button" width="90" height="26" border="0" align="top"></a>&nbsp; <a href="http://www.takepride.gov/"><img src="/images/footer_graphic_takePride.jpg" alt="Take Pride in America button" width="60" height="58" border="0"></a></td>
+  </tr>
+</table>
+<hr>
+
+<!-- END Current USGS Footer Template -->
+</body>
+</html>

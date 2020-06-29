@@ -1,0 +1,71 @@
+#!/bin/csh
+#
+#
+
+gmtset  PAGE_ORIENTATION portrait  X_ORIGIN 0.5  Y_ORIGIN 0.5 
+
+gmtset  ANNOT_FONT_SIZE_PRIMARY 18  ANNOT_FONT_SIZE_SECONDARY 18  HEADER_FONT_SIZE 18 LABEL_FONT_SIZE 18
+
+gmtset  ANNOT_FONT_PRIMARY 4  ANNOT_FONT_SECONDARY 4  HEADER_FONT 4 LABEL_FONT 4
+
+gmtset  LABEL_OFFSET 0.1c  ANNOT_OFFSET_PRIMARY 0.1c ANNOT_OFFSET_SECONDARY 0.1c
+
+set POSTSCRIPT_NAME = gmt/layer.P.mod.VG
+
+unalias rm
+
+rm -f $POSTSCRIPT_NAME.ps
+
+# ========================================================
+# Optional X/Y or LAT/LONG plotting
+# NOTE: LAT/LONG plotting works only for unrotated, Horizontal section (H) plots
+#     for X/Y plot, uncomment the folowing line:
+set PLOT_LAT_LONG = 0
+#     for LAT/LONG plot, uncomment the folowing line:
+#set PLOT_LAT_LONG = 1
+# ========================================================
+
+psbasemap -R0.5/1.0/0.5/1.0 -Bf10 -JX20.000000/28.700000 -K > $POSTSCRIPT_NAME.ps
+
+# Rect x/y in km
+set RVAL = '-R0.000000/400.000000/-5.000000/100.000000/-9999/9999'
+# Rect x/y in km
+set BVAL = '-B100.000000:Y(km):/20.000000:Z(km)::.gmt/layer.P.mod.VG__(1_0_->_1_401):WESN'
+# Rect x/y in km
+set JVAL = '-Jx0.040625/-0.040625 -Jz0.040625'
+
+psbasemap $JVAL $RVAL $BVAL -X1.750000 -Y3.750000 -K -O >> $POSTSCRIPT_NAME.ps
+
+# Rect x/y in km
+xyz2grd gmt/layer.P.mod.VG.X.grd -Ggmt/layer.P.mod.VG.X.grdgmt -I1.000000/1.000000 $RVAL -Dkm/km/=/0.0/0.0/gmt/layer.P.mod.VG/remark -V -Zf
+set SCALE_FLAG = 
+
+if (-e Grid2GMT.cpt) then
+   unalias cp
+   cp  Grid2GMT.cpt gmt/layer.P.mod.VG.cpt
+   set SCALE_FLAG = 
+else
+   makecpt -Z -Crainbow -T0.12/0.19/0.005 > gmt/layer.P.mod.VG.cpt
+   set SCALE_FLAG = -L
+endif
+
+grdimage -S-n gmt/layer.P.mod.VG.X.grdgmt -Cgmt/layer.P.mod.VG.cpt $JVAL $RVAL $BVAL -K -O >> $POSTSCRIPT_NAME.ps
+
+grdcontour gmt/layer.P.mod.VG.X.grdgmt  -A-  -Cgmt/layer.P.mod.VG.cpt $JVAL $RVAL $BVAL -K -O >> $POSTSCRIPT_NAME.ps
+
+if (-e Grid2GMT.X.gmt) then
+   echo  'Running auxilliary GMT script: Grid2GMT.X.gmt'
+   source  Grid2GMT.X.gmt
+endif
+
+psbasemap $JVAL $RVAL $BVAL -K -O >> $POSTSCRIPT_NAME.ps
+
+
+psscale -Cgmt/layer.P.mod.VG.cpt -D10.000000/0.750000/14.0/0.5h -B:"Cell Transit Time (sec)": -X-1.750000 -Y-2.250000 $SCALE_FLAG -K -O >> $POSTSCRIPT_NAME.ps
+
+pstext -R0.5/1.0/0.5/1.0 -Bf10 -JX20.000000/28.700000 -X-0.000000 -Y-1.500000 -O << END >> $POSTSCRIPT_NAME.ps
+0.501000 0.501000 10 0 4 1    Grid2GMT:v7.00.09 29Jun2020 12h37m09
+END
+
+echo "Finished!  View output:"
+echo "   ${PS_VIEWER} $POSTSCRIPT_NAME.ps"

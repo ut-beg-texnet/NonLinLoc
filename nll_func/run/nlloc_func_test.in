@@ -1,0 +1,493 @@
+
+# =============================================================================
+#  Sample NonLinLoc programs control file
+#
+#  NonLinLoc Version 2.3 - APR2001
+#
+#  Anthony Lomax <anthony@alomax.net>
+#
+#  See "Control File" and "Running the Sample Location" pages
+#     in the NonLicLoc on-line documentation:
+#     http://www.alomax.net/nlloc
+# =============================================================================
+
+
+# = comment
+
+# non-nested include files allowed, use:
+# INCLUDE <include_file_name>
+
+
+# =============================================================================
+# =============================================================================
+# Generic control file statements
+# =============================================================================
+#
+#
+
+# control (CONTROL message_flag (0:silent,1:few messages,2:verbose,...),
+#		RandomNumSeed)
+CONTROL 1 54321
+
+# -----------------------------------------------------------------------------
+# lat/long to rect grid transformation
+# -----------------------------------------------------------------------------
+
+# map projection / transformation
+# (TRANS type <params>)
+#    (char[])   search_type (SIMPLE, LAMBERT)
+#    <params>:
+#	SIMPLE LatOrig  LongOrig  RotCW
+#	LAMBERT  RefEllipsoid LatOrig  LongOrig
+#                   FirstStdParal  SecondStdParal   RotCW
+#
+#    RefEllipsoid choices:
+#                   WGS-84, GRS-80, WGS-72, Australian, Krasovsky,
+#                   International, Hayford-1909, Clarke-1880, Clarke-1866,
+#                   Airy, Bessel, Hayford-1830, Sphere
+#
+#
+# Lambert III France - IGN (except that origin is arbitrary)
+TRANS  LAMBERT  Clarke-1880  43.75 7.5  43.1993 44.9961  0.0
+
+# maplines (MAPLINE id_num, name, red, green, blue,
+#	linestyle (SOLID, DASHED, DOTTED, DASHDOT))
+MAPLINE  GMT_LONLAT ./data_geog/map.prov.line  0.0 0.0 0.0  SOLID
+#MAPLINE  XY_LONLAT /u/cayman/1/users/lomax/data_geog/maps/france/prov.line  0.0 0.0 0.0  SOLID
+
+#
+#
+# =============================================================================
+# END of Generic control file statements
+# =============================================================================
+# =============================================================================
+
+
+
+
+
+# =============================================================================
+# =============================================================================
+# Vel2Grid control file statements
+# =============================================================================
+#
+#
+
+# output filename root
+# (VGOUT <output file root>)
+# Layer 2DGrid
+VGOUT  ./model/layer
+
+# wave type
+# (VGTYPE wave_type (P, S))
+VGTYPE P
+
+# grid description
+# (GRID  num_grid_x  num_grid_y  num_grid_z
+#	orig_grid_x  orig_grid_y  orig_grid_z
+#	d_grid_x d_grid_y d_grid_z
+#       type
+#    (float) num_grid_x/y/z : number of nodes along x/y/z axis
+#    (float)    orig_grid_x : x location of grid origin (0,0,0) in km pos east
+#    (float)    orig_grid_y : y location of grid origin (0,0,0) in km pos north
+#    (float)    orig_grid_z : z location of grid origin (0,0,0) in km pos down
+#    (float)   d_grid_x/y/x : grid spacing along  x/y/z axis
+#    (char[])  type : (VELOCITY = km/s, VELOCITY_METERS = m/s,
+#		SLOWNESS = s/km,
+#		VEL2 = vel**2,
+#		SLOW2 = slow**2, SLOW_2_METERS = slow**2 ((s/m)**2),
+#		SLOW_LEN = slow*d_grid)
+#
+#
+# Layer 2DGrid (NOTE: num_grid_x must be = 2 for 2D grids)
+VGGRID  2 301 44  0.0 0.0 -3.0  1.0 1.0 1.0  SLOW_LEN
+
+# -----------------------------------------------------------------------------
+# velocity model description
+# -----------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
+#
+# Vinitimiglia layer model 2 - P/S ratio of 1.68 used
+# model layers (LAYER depth, Vp_top, Vp_grad, Vs_top, Vs_grad, p_top, p_grad)
+LAYER   0.0  4.0 0.00    2.38  0.00  2.7 0.0
+LAYER   2.0  6.0 0.00    3.57  0.00  2.7 0.0
+LAYER  10.0  6.3 0.00    3.75  0.00  2.7 0.0
+LAYER  18.0  7.0 0.00    4.17  0.00  2.7 0.0
+LAYER  25.0  8.0 0.00    4.76  0.00  2.7 0.0
+# -----------------------------------------------------------------------------
+
+#
+#
+# =============================================================================
+# END of Vel2Grid control file statements
+# =============================================================================
+# =============================================================================
+
+
+
+
+# =============================================================================
+# =============================================================================
+# Grid2Time control file statements
+# =============================================================================
+#
+#
+
+# input, output filename root
+# (GTFILES <input file root> <output file root> wave_type (P, S))
+#
+GTFILES  ./model/layer  ./time/layer P
+
+# time grid modes
+# (GTMODE grid_mode, angle_mode)
+#    (char[])   grid_mode (GRID3D, GRID2D)
+#    (char[])   angle_mode (ANGLES_YES, ANGLES_NO)
+#
+GTMODE GRID2D ANGLES_YES
+
+# source description (multiple sources can be specified)
+# (GTSRCE  label  x_srce  y_srce   z_srce   elev)
+#
+#    (char[])   label
+#
+#    (char[])   loc type (XYZ, LATLON (+/-dec deg), LATLONDM (deg, dec min))
+#  XYZ---------------      LATLON/LATLONDM--------
+#  x_srce : km pos E   or  lat   : pos N
+#  y_srce : km pos N   or  long  : pos E
+#  z_srce : km pos DN  or  depth : pos DN
+#
+#    elev : km pos UP
+#
+# Examples:
+#
+#GTSRCE  STA   XYZ  	27.25  -67.78  0.0  1.242
+#GTSRCE  CALF  LATLON  	43.753  6.922  0.0  1.242
+#GTSRCE  JOU  LATLONDM  43 38.00 N  05 39.52 E   0.0   0.300
+#
+#
+GTSRCE RONE   LATLONDM  43 52.88 N   7 35.89 E   0.0   0.300
+GTSRCE SBF    LATLONDM  43 51.81 N   7 26.09 E   0.0   0.847
+GTSRCE NEGI   LATLONDM  43 50.86 N   7 42.23 E   0.0   0.640
+GTSRCE REVF   LATLONDM  43 44.40 N   7 22.05 E   0.0   0.700
+GTSRCE AURF   LATLONDM  43 53.24 N   7 19.65 E   0.0   1.040
+GTSRCE AUTN   LATLONDM  43 59.73 N   7 25.65 E   0.0   2.069
+GTSRCE CEPP   LATLONDM  43 54.98 N   7 44.79 E   0.0   1.080
+GTSRCE TOUF   LATLONDM  44 00.81 N   7 14.90 E   0.0   1.850
+GTSRCE MVIF   LATLONDM  43 53.79 N   7 09.15 E   0.0   1.480
+GTSRCE  IMI   LATLONDM  43 54.63 N   7 53.59 E   0.0   0.840
+
+# Podvin & Lecomte FD params
+# Podvin and Lemcomte, 1991, GJI, 105, 271-284.
+# (PLFD  hs_eps_init  message_flag)
+#    (float) hs_eps_init : fraction (typically 1.0E-3) defining the toler-
+#                          ated model inhomogeneity for exact initialization.
+#                          A tolerance larger than 0.01 will potentially
+#                          create errors larger than those involved by the
+#                          F.D. scheme without any exact initialization.
+#    (int)  message_flag : Message flag (0:silent,1:few messages,2:verbose)
+#                          A negative value inhibits "clever"
+#                          initialization.
+#
+GT_PLFD  1.0e-3  0
+
+#
+#
+# =============================================================================
+# END of Grid2Time control file statements
+# =============================================================================
+# =============================================================================
+
+
+
+
+
+# =============================================================================
+# =============================================================================
+# Time2EQ control file statements
+# =============================================================================
+#
+#
+
+# input  grid filenames root, output filename
+# (EQFILES <input file root> <output file>)
+EQFILES ./time/layer ./obs/synth.obs
+
+# mechanism (MECH  mech_type (DOUBLE, NONE), strike(E of N), dip, rake)
+EQMECH  DOUBLE 0.0 90.0 0.0
+
+# mode
+# (EQMODE str_mode)
+#   SRCE_TO_STA  calc time for single source to multiple stations
+#   STA_TO_SRCE  calc time for multiple sources to single station
+EQMODE SRCE_TO_STA
+
+# event description
+# (EQEVENT  label  x_event  y_event  z_event  otime
+#    (char[])   label
+#    (float)   x_event : km pos east
+#    (float)   y_event : km pos north
+#    (float)   z_event : km pos down
+#    (float)   otime   : sec
+EQEVENT  EQ001   0.0 0.0 10.0  0.0
+/home/anthony/soft/NLLoc/nll_func
+# source description (multiple sources can be specified)
+# (EQSRCE (see GTSRCE)
+#
+#EQSRCE  VentiSynth  LATLON   43.805321 7.562109 9.722238  0.0
+
+# station description (multiple stations can be specified)
+# (EQSTA  label phase  error_type error)
+#    (char[])   label
+#    (char[])   phase
+#    (char[])   calc_error_type
+#    (float)   calc_error
+#    (char[])   report_error_type
+#    (float)   report__error
+EQSTA RONE  P      GAU  0.1    GAU  0.1
+EQSTA RONE  S      GAU  0.2    GAU  0.2
+EQSTA SBF   P      GAU  -0.1    GAU  0.1
+EQSTA NEGI  P      GAU  0.1    GAU  0.1
+EQSTA AURF  P      GAU  -0.1    GAU  0.1
+EQSTA AUTN  P      GAU  0.1    GAU  0.1
+EQSTA CEPP  P      GAU  -0.1    GAU  0.1
+EQSTA TOUF  P      GAU  0.1    GAU  0.1
+EQSTA MVIF  P      GAU  0.1    GAU  0.1
+
+# Vp / Vs ratio (overrides any S travel-time grids)
+# (EQVPVS VpVs_ratio)
+EQVPVS  1.68
+
+# quality to error mapping (for HYPO71, etc)
+# (EQQUAL2ERR Err0 Err1 Err2 ... )
+EQQUAL2ERR 0.1 0.2 0.4 0.8 99999.9
+
+#
+#
+# =============================================================================
+# END of Time2EQ control file statements
+# =============================================================================
+# =============================================================================
+
+
+
+
+
+# =============================================================================
+# =============================================================================
+# NLLoc control file statements
+# =============================================================================
+#
+#
+
+# signature
+# (LOCSIG signature)
+LOCSIG Anthony Lomax - ALomax Scientific
+
+# comment
+# (LOCCOM comment)
+LOCCOM 1995 Vintimiglia Sequence (NonLinLoc Sample Location)
+
+# input  grid filenames root, output filename
+# (LOCFILES <obs file> obs_type  <travel-time grid files path/root> <output file path/root>)
+#    (char[])  obs_type : (NLLOC_OBS, HYPO71, HYPOELLIPSE, RENASS_DEP, SEISAN)
+#
+#
+#LOCFILES ./obs/vinti.obs HYPOELLIPSE  ./time/layer  ./loc/vinti
+LOCFILES ./obs/*.obs HYPOELLIPSE  ./time/layer  ./loc/vinti
+
+# output hypocenter file types
+# (LOCHYPOUT type1, type2, ...)
+#    (char[])   typeN (SAVE_NLLOC_ALL, SAVE_NLLOC_SUM,
+#		SAVE_HYPO71_ALL, SAVE_HYPO71_SUM, SAVE_HYPOELL_ALL, SAVE_HYPOELL_SUM,
+#		SAVE_HYPOINV_SUM, SAVE_NLLOC_OCTREE)
+#LOCHYPOUT SAVE_NLLOC_ALL SAVE_HYPOINV_SUM NLL_FORMAT_VER_2
+#LOCHYPOUT NONE
+LOCHYPOUT NONE NLL_FORMAT_VER_2
+
+# search type
+# (LOCSEARCH search_type <params>)
+#    (char[])   search_type (GRID, MET (Metropolis), SA (Simulated Annealing))
+#    <params>:
+#	GRID NumScatterSamples
+#	MET  NumSamples NumLearn NumEquil BeginSave NumSkip
+#               StepInit StepMin StepFact ProbMin
+#	OCT init_num_cells_x, init_num_cells_y, init_num_cells_z,
+#		min_node_size, max_num_nodes, num_scatter,
+#		use_stations_density (1 = Weights oct-tree cell prob values used for subdivide decision
+#				in proportion to number of stations in oct-tree cell.
+#				Gives higher search priority to cells containing stations,
+#				stablises convergence to local events when global search used
+#				with dense cluster of local stations.),
+#		stop_on_min_node_size (1 = stop search when first min_node_size reached,
+#				0 = stop subdividing a given cell when min_node_size reached.)
+LOCSEARCH  OCT 10 10 4 0.01 10000 5000 0 1
+#GridSearch#LOCSEARCH GRID 500
+#LOCSEARCH MET 10000 1000 4000 5000 5 -1 0.01 8.0 1.0e-10
+
+# location grids description
+# (LOCGRID  num_grid_x  num_grid_y  num_grid_z
+#	orig_grid_x  orig_grid_y  orig_grid_z
+#	d_grid_x d_grid_y d_grid_z
+#       type save_flag
+#    (float) num_grid_x/y/z : number of nodes along x/y/z axis
+#    (float)    orig_grid_x : x location of grid origin (0,0,0) in km pos east
+#    (float)    orig_grid_y : y location of grid origin (0,0,0) in km pos north
+#    (float)    orig_grid_z : z location of grid origin (0,0,0) in km pos down
+#    (float)   d_grid_x/y/x : grid spacing along  x/y/z axis
+#    (char[])  type : (PROB_DENSITY, MISFIT)
+#    (char[])  save_flag : (SAVE, NO_SAVE)
+# For Grid search, first grid is used for initial search.  Subsequent grids are
+# shifted in x/y/z so that they are centered on the minimum misfit hypocenter
+# x/y/z of the previous grid if x/y/z < -1.0e20.
+#
+LOCGRID  101 101 21  -50.0 -50.0 0.0  1.0 1.0 1.0   PROB_DENSITY  SAVE
+#
+#GridSearch#LOCGRID  51 51 21  -100.0 -100.0 0.0  4.0 4.0 1.0   MISFIT  NO_SAVE
+#GridSearch#LOCGRID  51 51 21  -1.0e30 -1.0e30 0.0  0.5 0.5 1.0   MISFIT  NO_SAVE
+#GridSearch#LOCGRID  81 81 81  -1.0e30 -1.0e30 0.0  0.25 0.25 0.25  PROB_DENSITY  SAVE
+
+# method
+# (LOCMETH method)
+#    (char[])   method (GAU_ANALYTIC, EDT, EDT_OT_WT)
+#          GAU_ANALYTIC - L2 norm following Tarantola and Valette (1982)
+#          EDT - Equal Differential Time (see )
+#          EDT_OT_WT - Weights EDT sum prob by variance of OT estimated over all pairs of readings.
+#                              Downweights locations with inconsistent OT estimates.
+#    (float)   maximum_dist_sta_to_grid (use very large value for no max)
+#    (int)   minimum_number_phases for location
+#    (int)   maximum_number_phases for location (-1 for no max)
+#    (int)   minimum_number_S_phases for location (-1 for no min)
+#    (float)   Vp/Vs ratio (< 0.0 to use S travel time grids)
+#    (int)   maximum_number_3D_grids to attempt to read into memory (-1 for no max)
+#    (float)   minimum_dist_sta_to_grid (-1 for no min)
+#    (int)   flag indicating if duplicate arrivals used for location (1=reject, 0=use if time diff < sigma / 2)
+#            duplicate arrivals have same station label and phase name
+#LOCMETH GAU_ANALYTIC 9999.0 4 -1 -1 1.68 6
+LOCMETH EDT_OT_WT 9999.0 4 -1 -1 1.68 6 -1.0 1
+
+# fixed origin time
+# (LOCFIXOTIME year month day hour min sec)
+#    (int)   year month day hour min
+#    (float)   sec
+#LOCFIXOTIME 1995 04 21 08 02 57.09
+
+# gaussian model error parameters
+# (LOCGAU Sigma_T (s), CorrLen (km))
+LOCGAU 0.2 0.0
+
+
+# travel-time dependent gaussian model error parameters
+# (LOCGAU2 SigmaTfraction,  SigmaTmin (s),  SigmaTmax (s))
+# travel time error is travel_time*SigmaTfraction, with max/min value = SigmaTmin/SigmaTmax
+LOCGAU2 0.01 0.05 2.0
+
+
+# phase identifier mapping
+# (LOCPHASEID phase  phase_id0 phase_id1 ...)
+#
+# examples for P and S
+#LOCPHASEID  P   P p
+#LOCPHASEID  S   S s
+#
+LOCPHASEID  P   P p G PN PG
+LOCPHASEID  S   S s G SN SG
+#ToIgnoreS#LOCPHASEID  S   $
+
+# quality to error mapping (for HYPO71, etc)
+# (LOCQUAL2ERR Err0 Err1 Err2 ... )
+#
+# the following quality mapping is default from Hypoellipse documentation
+LOCQUAL2ERR 0.1 0.5 1.0 2.0 99999.9
+
+# phase statistics parameters
+# (LOCPHSTAT RMS_Max, NRdgs_Min, Gap_Max, P_ResMax, S_ResMax)
+#    (float)   RMS_Max : max hypocenter RMS to include in ave res
+#    (float)   NRdgs_Min : min hypocenter num readings to include in ave res
+#    (float)   Gap_Max : max hypocenter gap (deg) to include in ave res
+#    (float)   P_ResMax : max abs(P res) to include in ave res
+#    (float)   S_ResMax : max abs(S res) to include in ave res
+#    (float)   S_ResMax : max abs(S res) to include in ave res
+#    (float)   Ell_Len3_Max : max ellipsoid major semi-axis length to include in ave res
+#    (float)   Hypo_Depth_Min : min hypo depth to include in ave res
+#    (float)   Hypo_Depth_Max : max hypo depth to include in ave res
+LOCPHSTAT 9999.0 -1 9999.0 1.0 1.0 9999.9 -9999.9 9999.9
+
+
+# take-off angles mode & minimum quality
+# (LOCANGLES angles_mode, min_quality)
+#    (char[])   angles_mode (ANGLES_YES, ANGLES_NO)
+#    (integer)   min_quality : minimum quality to use take-off angles
+LOCANGLES ANGLES_YES 5
+
+
+# magnitude calculation method
+# (LOCMAG magnitude_type <params>)
+#    (char[])   magnitude_type (ML_HB (ML, Hutton Boore))
+#    <params>:
+#	ML_HB  amp_fact n K
+LOCMAG ML_HB 1.0 1.110 0.00189
+
+# station/inst/comp parameters (for specifying component specific parameters, i.e. constants for magnitude calculation)
+# (LOCCMP name inst comp amp_fact sta_corr)
+#    (char[])   name  : station identifier (after alias evaluation, without trailing underscore "_")
+#    (char[])   name  : inst identifier (use '?' for don't care)
+#    (char[])   name  : comp identifier (use '?' for don't care)
+#    (float)    amp_fact: amplitude factor, will be multiplied by amplitude
+#    (float)    sta_corr: mganitude correction
+#
+# example:
+#
+#LOCCMP CDR ? ? 1.0 0.0
+#
+
+# station name alias (for aliasing sta names, for date validation and for
+#    phase time delays)
+# (LOCALIAS name alias year mo day year mo day)
+#    (char[])   name  : station identifier on input
+#    (char[])   alias : station identifier for travel time grid on output
+#                    NOTE: a trailing underscore "_" in aliases will only be
+#                          used for time grid identification, not for output
+#    (ints)    year mo day : start date of validity (0 0 0 = no start date)
+#    (ints)    year mo day : end date of validity  (9999 99 99 = no end date)
+#
+#   Note:
+#       Alias evaluation is applied recursively, beware of infinite recursion!
+# 	P and S delays from last alias only are used!
+#
+# example:
+#
+#LOCALIAS ART ART_	1996 05 29	1996 09 18   0.03  0.08
+#
+LOCALIAS SBFX SBF	0 0 0	9999 99 99
+
+# phase exclude
+# (LOCEXCLUDE name phase)
+#    (char[])   name  : station identifier after any alias
+#    (char[])   phase : phase identifier on input
+#LOCEXCLUDE NEGI S
+
+# time delays
+# (LOCDELAY name phase n_readings p_delay s_delay)
+#    (char[])   name  : station identifier on control file statements
+#    (char[])   phase : phase identifier
+#    (int)  n_readings : number of residuals used to calc delay
+#    (float)     delay : delay in seconds, subtracted from obs time
+# 	station identifiers are evaluated after aliases has been evaluated!
+#
+# example:
+#
+#LOCDELAY NEGI P	 1  0.04
+#
+# time corrections
+LOCDELAY NEGI P	 1  0.04
+LOCDELAY NEGI S	 1  0.04
+LOCDELAY MONE P	 1  0.04
+LOCDELAY MONE S	 1  0.04
+
+#
+#
+# =============================================================================
+# END of NLLoc control file statements
+# =============================================================================
+# =============================================================================

@@ -1,0 +1,126 @@
+NLLOC "./loc/alaska.20181130.172935.grid0" "LOCATED" "Location completed."
+SIGNATURE "NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.02(17Oct2018)   run:06Dec2018 13h26m12"
+COMMENT "2018-11-30 Mww7.0 Southern Alaska (NonLinLoc Sample Location)"
+GRID  201 201 106  -100 -100 -5  1 1 1 PROB_DENSITY
+SEARCH OCTREE nInitial 400 nEvaluated 20016 smallestNodeSide 0.156250/0.156250/0.207031 oct_tree_integral 4.808800e+01 scatter_volume 4.808800e+01
+HYPOCENTER  x 2.73438 y 37.4219 z 44.998  OT 29.0691  ix -1 iy -1 iz -1 MAXIMUM_LIKELIHOOD
+GEOGRAPHIC  OT 2018 11 30  17 29 29.069079  Lat 61.335856 Long -149.948920 Depth 44.998047
+QUALITY  Pmax 1.80771e+100 MFmin 30.6335 MFmax 30.9161 RMS 0.246112 Nphs 35 Gap 36.9179 Dist 29.7385 Mamp -9.90 0 Mdur -9.90 0
+VPVSRATIO  VpVsRatio -1  Npair 0  Diff -2e+30
+STATISTICS  ExpectX 2.74425 Y 37.3071 Z 44.3237  CovXX 0.979772 XY -0.281712 XZ 0.103413 YY 1.36697 YZ 0.202394 ZZ 10.4409 EllAz1  242.037 Dip1  1.10991 Len1  1.70958 Az2  332.021 Dip2  -0.835686 Len2  2.31125 Len3  6.072541e+00
+STAT_GEOG  ExpectLat 61.334826 Long -149.948737 Depth 44.323726
+TRANSFORM  LAMBERT RefEllipsoid Clarke-1880  LatOrig 61.000000  LongOrig -150.000000  FirstStdParal 60.000000  SecondStdParal 62.000000  RotCW 0.000000
+QML_OriginQuality  assocPhCt 57  usedPhCt 35  assocStaCt -1  usedStaCt 35  depthPhCt -1  stdErr 0.246112  azGap 36.9179  secAzGap 47.9189  gtLevel -  minDist 29.7385 maxDist 243.845 medDist 162.014
+QML_OriginUncertainty  horUnc -1  minHorUnc 1.38295  maxHorUnc 1.8668  azMaxHorUnc 152.249
+QML_ConfidenceEllipsoid  semiMajorAxisLength 6.07254  semiMinorAxisLength 1.70958  semiIntermediateAxisLength 2.31125  majorAxisPlunge 88.6106  majorAxisAzimuth 25.0512  majorAxisRotation 233.055
+FOCALMECH  Hyp  61.335856 -149.948920 44.998047 Mech  0 0 0 mf  0 nObs 0
+END_NLLOC
+
+NLLOC "./loc/alaska.20181130.173543.grid0" "LOCATED" "Location completed."
+SIGNATURE "NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.02(17Oct2018)   run:06Dec2018 13h26m12"
+COMMENT "2018-11-30 Mww7.0 Southern Alaska (NonLinLoc Sample Location)"
+GRID  201 201 106  -100 -100 -5  1 1 1 PROB_DENSITY
+SEARCH OCTREE nInitial 400 nEvaluated 20000 smallestNodeSide 0.156250/0.156250/0.207031 oct_tree_integral 1.018053e+02 scatter_volume 1.010323e+02
+HYPOCENTER  x -0.546875 y 28.9844 z -4.89648  OT 35.1973  ix -1 iy -1 iz -1 MAXIMUM_LIKELIHOOD
+GEOGRAPHIC  OT 2018 11 30  17 35 35.197325  Lat 61.260139 Long -150.010191 Depth -4.896484
+QUALITY  Pmax 5.3917e+70 MFmin 22.9886 MFmax 24.5223 RMS 0.947007 Nphs 30 Gap 45.5132 Dist 24.0194 Mamp -9.90 0 Mdur -9.90 0
+VPVSRATIO  VpVsRatio -1  Npair 0  Diff -2e+30
+STATISTICS  ExpectX -5.25727 Y 27.2947 Z 12.6917  CovXX 14.8815 XY 2.32928 XZ -43.7072 YY 7.33386 YZ -16.0305 ZZ 179.536 EllAz1  59.5174 Dip1  14.5504 Len1  3.30197 Az2  330.191 Dip2  -2.59198 Len2  4.91224 Len3  2.602209e+01
+STAT_GEOG  ExpectLat 61.244940 Long -150.097927 Depth 12.691673
+TRANSFORM  LAMBERT RefEllipsoid Clarke-1880  LatOrig 61.000000  LongOrig -150.000000  FirstStdParal 60.000000  SecondStdParal 62.000000  RotCW 0.000000
+QML_OriginQuality  assocPhCt 34  usedPhCt 30  assocStaCt -1  usedStaCt 30  depthPhCt -1  stdErr 0.947007  azGap 45.5132  secAzGap 72.416  gtLevel -  minDist 24.0194 maxDist 244.339 medDist 139.64
+QML_OriginUncertainty  horUnc -1  minHorUnc 3.91761  maxHorUnc 5.97894  azMaxHorUnc 74.1582
+QML_ConfidenceEllipsoid  semiMajorAxisLength 26.0221  semiMinorAxisLength 3.30197  semiIntermediateAxisLength 4.91224  majorAxisPlunge -75.2105  majorAxisAzimuth 70.0637  majorAxisRotation 261.103
+FOCALMECH  Hyp  61.260139 -150.010191 -4.896484 Mech  0 0 0 mf  0 nObs 0
+END_NLLOC
+
+NLLOC "./loc/alaska.20181130.175512.grid0" "LOCATED" "Location completed."
+SIGNATURE "NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.02(17Oct2018)   run:06Dec2018 13h26m12"
+COMMENT "2018-11-30 Mww7.0 Southern Alaska (NonLinLoc Sample Location)"
+GRID  201 201 106  -100 -100 -5  1 1 1 PROB_DENSITY
+SEARCH OCTREE nInitial 400 nEvaluated 20008 smallestNodeSide 0.156250/0.156250/0.207031 oct_tree_integral 9.701647e+01 scatter_volume 9.685554e+01
+HYPOCENTER  x 2.26562 y 46.4844 z -4.89648  OT 3.41004  ix -1 iy -1 iz -1 MAXIMUM_LIKELIHOOD
+GEOGRAPHIC  OT 2018 11 30  17 55 3.410039  Lat 61.417192 Long -149.957567 Depth -4.896484
+QUALITY  Pmax 1.28031e+53 MFmin 18.7007 MFmax 20.1264 RMS 1.13689 Nphs 25 Gap 62.0896 Dist 38.4135 Mamp -9.90 0 Mdur -9.90 0
+VPVSRATIO  VpVsRatio -1  Npair 0  Diff -2e+30
+STATISTICS  ExpectX 2.06531 Y 46.197 Z 4.37717  CovXX 3.39121 XY -2.56666 XZ 4.64997 YY 15.8938 YZ -27.3523 ZZ 236.657 EllAz1  78.3521 Dip1  0.237275 Len1  3.18947 Az2  348.323 Dip2  7.06587 Len2  6.76437 Len3  2.911264e+01
+STAT_GEOG  ExpectLat 61.414614 Long -149.961322 Depth 4.377172
+TRANSFORM  LAMBERT RefEllipsoid Clarke-1880  LatOrig 61.000000  LongOrig -150.000000  FirstStdParal 60.000000  SecondStdParal 62.000000  RotCW 0.000000
+QML_OriginQuality  assocPhCt 32  usedPhCt 25  assocStaCt -1  usedStaCt 25  depthPhCt -1  stdErr 1.13689  azGap 62.0896  secAzGap 116.003  gtLevel -  minDist 38.4135 maxDist 247.409 medDist 162.556
+QML_OriginUncertainty  horUnc -1  minHorUnc 2.57586  maxHorUnc 6.14169  azMaxHorUnc 168.839
+QML_ConfidenceEllipsoid  semiMajorAxisLength 29.1126  semiMinorAxisLength 3.18947  semiIntermediateAxisLength 6.76437  majorAxisPlunge 82.9301  majorAxisAzimuth 170.266  majorAxisRotation 181.988
+FOCALMECH  Hyp  61.417192 -149.957567 -4.896484 Mech  0 0 0 mf  0 nObs 0
+END_NLLOC
+
+NLLOC "./loc/alaska.20181130.180013.grid0" "LOCATED" "Location completed."
+SIGNATURE "NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.02(17Oct2018)   run:06Dec2018 13h26m13"
+COMMENT "2018-11-30 Mww7.0 Southern Alaska (NonLinLoc Sample Location)"
+GRID  201 201 106  -100 -100 -5  1 1 1 PROB_DENSITY
+SEARCH OCTREE nInitial 400 nEvaluated 20008 smallestNodeSide 0.156250/0.156250/0.207031 oct_tree_integral 8.180770e+01 scatter_volume 8.180770e+01
+HYPOCENTER  x 2.57812 y 51.9531 z 36.7168  OT 6.5489  ix -1 iy -1 iz -1 MAXIMUM_LIKELIHOOD
+GEOGRAPHIC  OT 2018 11 30  18 00 6.548904  Lat 61.466269 Long -149.951638 Depth 36.716797
+QUALITY  Pmax 1.9647e+113 MFmin 33.2444 MFmax 33.4316 RMS 0.286938 Nphs 39 Gap 37.574 Dist 43.566 Mamp -9.90 0 Mdur -9.90 0
+VPVSRATIO  VpVsRatio -1  Npair 0  Diff -2e+30
+STATISTICS  ExpectX 2.55393 Y 51.891 Z 37.2948  CovXX 1.21598 XY -0.410769 XZ 1.6919 YY 1.44179 YZ -0.33901 ZZ 20.0806 EllAz1  237.905 Dip1  3.72439 Len1  1.71 Az2  328.145 Dip2  3.67034 Len2  2.42902 Len3  8.452341e+00
+STAT_GEOG  ExpectLat 61.465711 Long -149.952093 Depth 37.294847
+TRANSFORM  LAMBERT RefEllipsoid Clarke-1880  LatOrig 61.000000  LongOrig -150.000000  FirstStdParal 60.000000  SecondStdParal 62.000000  RotCW 0.000000
+QML_OriginQuality  assocPhCt 63  usedPhCt 39  assocStaCt -1  usedStaCt 39  depthPhCt -1  stdErr 0.286938  azGap 37.574  secAzGap 51.9404  gtLevel -  minDist 43.566 maxDist 249.144 medDist 166.989
+QML_OriginUncertainty  horUnc -1  minHorUnc 1.44105  maxHorUnc 2.00904  azMaxHorUnc 142.684
+QML_ConfidenceEllipsoid  semiMajorAxisLength 8.45234  semiMinorAxisLength 1.71  semiIntermediateAxisLength 2.42902  majorAxisPlunge 84.7674  majorAxisAzimuth 102.607  majorAxisRotation 314.101
+FOCALMECH  Hyp  61.466269 -149.951638 36.716797 Mech  0 0 0 mf  0 nObs 0
+END_NLLOC
+
+NLLOC "./loc/alaska.20181130.181045.grid0" "LOCATED" "Location completed."
+SIGNATURE "NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.02(17Oct2018)   run:06Dec2018 13h26m13"
+COMMENT "2018-11-30 Mww7.0 Southern Alaska (NonLinLoc Sample Location)"
+GRID  201 201 106  -100 -100 -5  1 1 1 PROB_DENSITY
+SEARCH OCTREE nInitial 400 nEvaluated 20016 smallestNodeSide 0.156250/0.156250/0.207031 oct_tree_integral 8.192446e+01 scatter_volume 8.192446e+01
+HYPOCENTER  x 7.89062 y 63.5156 z -4.06836  OT 34.8556  ix -1 iy -1 iz -1 MAXIMUM_LIKELIHOOD
+GEOGRAPHIC  OT 2018 11 30  18 10 34.855609  Lat 61.569963 Long -149.851493 Depth -4.068359
+QUALITY  Pmax 7.7808e+58 MFmin 19.5059 MFmax 20.7208 RMS 0.849768 Nphs 26 Gap 49.1646 Dist 38.359 Mamp -9.90 0 Mdur -9.90 0
+VPVSRATIO  VpVsRatio -1  Npair 0  Diff -2e+30
+STATISTICS  ExpectX 7.06338 Y 63.4419 Z 1.57755  CovXX 3.58555 XY -0.00839767 XZ -4.53065 YY 4.16991 YZ 1.1993 ZZ 50.0095 EllAz1  96.1182 Dip1  5.64442 Len1  3.32723 Az2  186.205 Dip2  0.877733 Len2  3.8277 Len3  1.334873e+01
+STAT_GEOG  ExpectLat 61.569317 Long -149.867065 Depth 1.577553
+TRANSFORM  LAMBERT RefEllipsoid Clarke-1880  LatOrig 61.000000  LongOrig -150.000000  FirstStdParal 60.000000  SecondStdParal 62.000000  RotCW 0.000000
+QML_OriginQuality  assocPhCt 28  usedPhCt 26  assocStaCt -1  usedStaCt 26  depthPhCt -1  stdErr 0.849768  azGap 49.1646  secAzGap 81.9337  gtLevel -  minDist 38.359 maxDist 248.949 medDist 130.068
+QML_OriginUncertainty  horUnc -1  minHorUnc 2.87167  maxHorUnc 3.09694  azMaxHorUnc 179.177
+QML_ConfidenceEllipsoid  semiMajorAxisLength 13.3487  semiMinorAxisLength 3.32723  semiIntermediateAxisLength 3.8277  majorAxisPlunge -84.2873  majorAxisAzimuth 105.014  majorAxisRotation 261.32
+FOCALMECH  Hyp  61.569963 -149.851493 -4.068359 Mech  0 0 0 mf  0 nObs 0
+END_NLLOC
+
+NLLOC "./loc/alaska.20181130.182011.grid0" "LOCATED" "Location completed."
+SIGNATURE "NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.02(17Oct2018)   run:06Dec2018 13h26m13"
+COMMENT "2018-11-30 Mww7.0 Southern Alaska (NonLinLoc Sample Location)"
+GRID  201 201 106  -100 -100 -5  1 1 1 PROB_DENSITY
+SEARCH OCTREE nInitial 400 nEvaluated 20008 smallestNodeSide 0.312500/0.312500/0.414062 oct_tree_integral 1.324097e+02 scatter_volume 1.321752e+02
+HYPOCENTER  x -42.0312 y 62.3438 z -3.96484  OT 1.36628  ix -1 iy -1 iz -1 MAXIMUM_LIKELIHOOD
+GEOGRAPHIC  OT 2018 11 30  18 20 1.366281  Lat 61.557250 Long -150.790755 Depth -3.964844
+QUALITY  Pmax 1.08972e+23 MFmin 13.4643 MFmax 14.4948 RMS 0.940362 Nphs 16 Gap 56.9178 Dist 55.9413 Mamp -9.90 0 Mdur -9.90 0
+VPVSRATIO  VpVsRatio -1  Npair 0  Diff -2e+30
+STATISTICS  ExpectX -35.3136 Y 62.9412 Z 10.925  CovXX 82.2499 XY -25.816 XZ 17.1032 YY 54.2834 YZ 48.7336 ZZ 390.115 EllAz1  209.515 Dip1  8.07314 Len1  10.5825 Az2  299.268 Dip2  -1.74221 Len2  18.5343 Len3  3.746410e+01
+STAT_GEOG  ExpectLat 61.563281 Long -150.664495 Depth 10.924957
+TRANSFORM  LAMBERT RefEllipsoid Clarke-1880  LatOrig 61.000000  LongOrig -150.000000  FirstStdParal 60.000000  SecondStdParal 62.000000  RotCW 0.000000
+QML_OriginQuality  assocPhCt 23  usedPhCt 16  assocStaCt -1  usedStaCt 16  depthPhCt -1  stdErr 0.940362  azGap 56.9178  secAzGap 103.063  gtLevel -  minDist 55.9413 maxDist 265.675 medDist 163.789
+QML_OriginUncertainty  horUnc -1  minHorUnc 9.4597  maxHorUnc 14.9847  azMaxHorUnc 120.779
+QML_ConfidenceEllipsoid  semiMajorAxisLength 37.4641  semiMinorAxisLength 10.5825  semiIntermediateAxisLength 18.5343  majorAxisPlunge 81.7386  majorAxisAzimuth 17.176  majorAxisRotation 258.275
+FOCALMECH  Hyp  61.557250 -150.790755 -3.964844 Mech  0 0 0 mf  0 nObs 0
+END_NLLOC
+
+NLLOC "./loc/alaska.20181130.182148.grid0" "LOCATED" "Location completed."
+SIGNATURE "NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.02(17Oct2018)   run:06Dec2018 13h26m13"
+COMMENT "2018-11-30 Mww7.0 Southern Alaska (NonLinLoc Sample Location)"
+GRID  201 201 106  -100 -100 -5  1 1 1 PROB_DENSITY
+SEARCH OCTREE nInitial 400 nEvaluated 20000 smallestNodeSide 0.156250/0.156250/0.207031 oct_tree_integral 9.498040e+01 scatter_volume 9.498040e+01
+HYPOCENTER  x -7.10938 y 51.1719 z -4.48242  OT 40.8671  ix -1 iy -1 iz -1 MAXIMUM_LIKELIHOOD
+GEOGRAPHIC  OT 2018 11 30  18 21 40.867065  Lat 61.459201 Long -150.133331 Depth -4.482422
+QUALITY  Pmax 1.39069e+70 MFmin 21.4336 MFmax 22.7678 RMS 1.13949 Nphs 30 Gap 47.6394 Dist 46.3646 Mamp -9.90 0 Mdur -9.90 0
+VPVSRATIO  VpVsRatio -1  Npair 0  Diff -2e+30
+STATISTICS  ExpectX -5.96021 Y 49.4555 Z -2.12752  CovXX 2.98855 XY -2.32371 XZ 0.428186 YY 6.12334 YZ -0.584766 ZZ 5.34409 EllAz1  62.2169 Dip1  -1.69327 Len1  2.48543 Az2  337.492 Dip2  72.175 Len2  4.25034 Len3  5.175601e+00
+STAT_GEOG  ExpectLat 61.443817 Long -150.111724 Depth -2.127525
+TRANSFORM  LAMBERT RefEllipsoid Clarke-1880  LatOrig 61.000000  LongOrig -150.000000  FirstStdParal 60.000000  SecondStdParal 62.000000  RotCW 0.000000
+QML_OriginQuality  assocPhCt 37  usedPhCt 30  assocStaCt -1  usedStaCt 30  depthPhCt -1  stdErr 1.13949  azGap 47.6394  secAzGap 82.8897  gtLevel -  minDist 46.3646 maxDist 257.846 medDist 154.884
+QML_OriginUncertainty  horUnc -1  minHorUnc 2.00797  maxHorUnc 4.11405  azMaxHorUnc 152
+QML_ConfidenceEllipsoid  semiMajorAxisLength 5.1756  semiMinorAxisLength 2.48543  semiIntermediateAxisLength 4.25034  majorAxisPlunge 17.739  majorAxisAzimuth 151.675  majorAxisRotation 182.183
+FOCALMECH  Hyp  61.459201 -150.133331 -4.482422 Mech  0 0 0 mf  0 nObs 0
+END_NLLOC
+
