@@ -126,8 +126,8 @@ int main(int argc, char *argv[])
 		char fn_grid_root[MAXLINE];
 
 		if (fgets(in_line, 4*MAXLINE, fp_input) == NULL) {
-			nll_puterr("ERROR: reading grid file parameters.");
-			return(EXIT_ERROR_FILEIO);
+                    // end of file
+                    break;
 		}
 		//printf("in_line 2: <%s>\n", in_line);
 		if (sscanf(in_line, "%s %s %s", fn_grid_root, station, phase) < 3)
