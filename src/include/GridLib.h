@@ -799,7 +799,7 @@ int OpenGrid3dFile(char *, FILE **, FILE **, GridDesc*,
 // 20170207 AJL - GridDesc needed for cleaning up cascading grid header data
 //void CloseGrid3dFile(FILE **, FILE **);
 void CloseGrid3dFile(GridDesc* pgrid, FILE **fp_grid, FILE **fp_hdr); // 20170207 AJL - added
-GRID_FLOAT_TYPE* ReadGridFile(GRID_FLOAT_TYPE* values, char *fname, char* file_type, double* xloc, double* yloc, double* zloc, int nvalues, int iSwapBytes);
+GRID_FLOAT_TYPE* ReadGridFile(GRID_FLOAT_TYPE* values, char *fname, char* file_type, double* xloc, double* yloc, double* zloc, int nvalues, int iSwapBytes, SourceDesc* psrceIn);
 GRID_FLOAT_TYPE ReadGrid3dValue(FILE *fpgrid, int ix, int iy, int iz, GridDesc * pgrid, int clean_casc_allocs);
 DOUBLE InterpCubeLagrange(DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE,
         DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE, DOUBLE);

@@ -1,0 +1,188 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>1.1.2. Vel2Grid3D - velocity model description to 3D model grid &#8212; NonLinLoc Doc 7.00 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1.1.3. Grid2Time - 3D model grid to travel-time and angles grids" href="core.Grid2Time.html" />
+    <link rel="prev" title="1.1.1. Vel2Grid - velocity model description to 3D model grid" href="core.Vel2Grid.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="core.Grid2Time.html" title="1.1.3. Grid2Time - 3D model grid to travel-time and angles grids"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="core.Vel2Grid.html" title="1.1.1. Vel2Grid - velocity model description to 3D model grid"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">NonLinLoc Doc 7.00 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../programs.html" accesskey="U">1. NonLinLoc Programs</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="section" id="vel2grid3d-velocity-model-description-to-3d-model-grid">
+<h1>1.1.2. Vel2Grid3D - velocity model description to 3D model grid<a class="headerlink" href="#vel2grid3d-velocity-model-description-to-3d-model-grid" title="Permalink to this headline">¶</a></h1>
+<p>Given an existing 3D velocity model defined by interpolation between
+control point nodes and created by velocity inversion programs such as
+SimulPS, Simul2000 and FDTomo to a 3D model grid. (outputs a 3D Grid) ,
+<strong>Vel2Grid3D</strong> generates a 3D model Grid header and buffer files
+containing velocities, slownesses or other model specification.</p>
+<p><a href="#id1"><span class="problematic" id="id2">`Overview &lt;#_overview_&gt;`__</span></a> - <a href="#id3"><span class="problematic" id="id4">`Running the
+program-Input &lt;#_running_&gt;`__</span></a> - <a href="#id5"><span class="problematic" id="id6">`Output &lt;#_output_&gt;`__</span></a> - <a href="#id7"><span class="problematic" id="id8">`Processing and
+Display of results &lt;#_processing_&gt;`__</span></a> - <a class="reference external" href="index.html">[NonLinLoc
+Home]</a></p>
+<div class="section" id="overview">
+<h2>1.1.2.1. Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The Vel2Grid3D program converts an existing 3D velocity model defined by
+interpolation between control point nodes and created by velocity
+inversion programs such as SimulPS, Simul2000 and FDTomo into a <a href="#id9"><span class="problematic" id="id10">`3D
+Grid &lt;formats.html#_grid_&gt;`__</span></a> file containing velocity or slowness
+values.</p>
+<p>The Vel2Grid3D program uses a “flat earth”, rectangular, left-handed,
+<em>x,y,z,t</em> coordinate system (positive X = East, positive Y = North,
+positive Z = down). Distance units are kilometers.</p>
+<p><strong>Important note:</strong></p>
+<div class="line-block">
+<div class="line">Because of there are many variations of the SimulPS, Simul2000 and
+FDTomo type model formats, it is necessary to edit the Vel2Grid3D.c
+source code to select a specific sub-format using C <code class="docutils literal notranslate"><span class="pre">#define</span></code>
+statements.</div>
+<div class="line">The current options are:</div>
+</div>
+<p>1. default, early SimulPs format with %5f (fixed width) format for
+reading velocity values and right-handed, East-negative coordinate
+system</p>
+<p>2. Zhang %7f (fixed width) format for reading velocity values and
+left-handed, East-positive coordinate system</p>
+<p>3. ETH format (*f variable width, space delimited) for reading velocity
+values</p>
+<ol class="arabic simple" start="4">
+<li>A left-handed, East-positive coordinate system</li>
+</ol>
+</div>
+<div class="section" id="running-the-program-input">
+<h2>1.1.2.2. Running the program - Input<a class="headerlink" href="#running-the-program-input" title="Permalink to this headline">¶</a></h2>
+<p>Synopsis: <code class="docutils literal notranslate"><span class="pre">Vel2Grid3D3D</span></code><code class="docutils literal notranslate"><span class="pre">InputControlFile</span></code></p>
+<p>The Vel2Grid3D program takes a single argument <code class="docutils literal notranslate"><span class="pre">InputControlFile</span></code>which specifies the complete path and filename for an <a class="reference external" href="control.html">Input Control
+File</a> with certain required and optional statements
+specifying program parameters and input/output file names and locations.
+See the <a href="#id11"><span class="problematic" id="id12">`Vel2Grid3D Statements section &lt;control.html#_Vel2Grid3D_&gt;`__</span></a> of
+the Input Control File for more details. Note that to run Vel2Grid3D the
+<a href="#id13"><span class="problematic" id="id14">`Generic Statements section &lt;control.html#_generic_&gt;`__</span></a> of the Input
+Control File must contain the <code class="docutils literal notranslate"><span class="pre">CONTROL</span></code> and <code class="docutils literal notranslate"><span class="pre">TRANS</span></code>(Geographic Transformation) statements.</p>
+<p>In addition, the Vel2Grid3D program requires a set of <a href="#id15"><span class="problematic" id="id16">`Vel2Grid
+Statements &lt;control.html#_Vel2Grid_&gt;`__</span></a> and <a href="#id17"><span class="problematic" id="id18">`Vel2Grid3D
+Statements &lt;control.html#_Vel2Grid3D_&gt;`__</span></a> in the Input Control File:</p>
+<p>#.
+#.</p>
+</div>
+<div class="section" id="output">
+<h2>1.1.2.3. Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h2>
+<p>The velocity or slowness values throughout the requested grid are
+written to a new <a href="#id19"><span class="problematic" id="id20">`3D Grid File &lt;formats.html#_grid_&gt;`__</span></a>. For a
+description of the naming convention for these grid files, see the
+<code class="docutils literal notranslate"><span class="pre">VGOUT</span></code> statement in the Vel2Grid Statements section of the Input
+Control File.</p>
+</div>
+<div class="section" id="processing-and-display-of-results">
+<h2>1.1.2.4. Processing and Display of results<a class="headerlink" href="#processing-and-display-of-results" title="Permalink to this headline">¶</a></h2>
+<p>The 3D model grids can be post-processed with the program
+<a class="reference external" href="Grid2GMT.html">Grid2GMT</a> to produce a GMT command script for
+plotting with the <a class="reference external" href="http://gmt.soest.hawaii.edu/">GMT plotting
+package</a>.</p>
+<p>Back to <a class="reference external" href="index.html">the NonLinLoc site Home page</a>.</p>
+<p><em>Anthony Lomax</em></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1.1.2. Vel2Grid3D - velocity model description to 3D model grid</a><ul>
+<li><a class="reference internal" href="#overview">1.1.2.1. Overview</a></li>
+<li><a class="reference internal" href="#running-the-program-input">1.1.2.2. Running the program - Input</a></li>
+<li><a class="reference internal" href="#output">1.1.2.3. Output</a></li>
+<li><a class="reference internal" href="#processing-and-display-of-results">1.1.2.4. Processing and Display of results</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="core.Vel2Grid.html"
+                        title="previous chapter">1.1.1. Vel2Grid - velocity model description to 3D model grid</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="core.Grid2Time.html"
+                        title="next chapter">1.1.3. Grid2Time - 3D model grid to travel-time and angles grids</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/programs/core.Vel2Grid3D.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="core.Grid2Time.html" title="1.1.3. Grid2Time - 3D model grid to travel-time and angles grids"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="core.Vel2Grid.html" title="1.1.1. Vel2Grid - velocity model description to 3D model grid"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">NonLinLoc Doc 7.00 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../programs.html" >1. NonLinLoc Programs</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Anthony Lomax.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,707 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>1.1.5. NLLoc - Non-linear, earthquake location program &#8212; NonLinLoc Doc 7.00 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1.1.6. LocSum - combine location results" href="core.LocSum.html" />
+    <link rel="prev" title="1.1.4. Time2EQ - travel-time grid to synthetic observations" href="core.Time2EQ.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="core.LocSum.html" title="1.1.6. LocSum - combine location results"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="core.Time2EQ.html" title="1.1.4. Time2EQ - travel-time grid to synthetic observations"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">NonLinLoc Doc 7.00 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../programs.html" accesskey="U">1. NonLinLoc Programs</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="section" id="nlloc-non-linear-earthquake-location-program">
+<h1>1.1.5. NLLoc - Non-linear, earthquake location program<a class="headerlink" href="#nlloc-non-linear-earthquake-location-program" title="Permalink to this headline">¶</a></h1>
+<p><strong>NLLoc</strong> performs earthquake locations in 3D models using non-linear
+search techniques.</p>
+<div class="color"></div><p><a href="#id2"><span class="problematic" id="id3">`Overview &lt;#_overview_&gt;`__</span></a> - <a href="#id4"><span class="problematic" id="id5">`Inversion Approach &lt;#_inversion_&gt;`__</span></a> -
+<a href="#id6"><span class="problematic" id="id7">`EDT likelihood function &lt;NLLoc.html#_edt_&gt;`__</span></a> - <a href="#id8"><span class="problematic" id="id9">`Oct-Tree
+Sampling &lt;NLLoc.html#_octtree_&gt;`__</span></a> - <a href="#id10"><span class="problematic" id="id11">`Grid-Search &lt;#_grid_search_&gt;`__</span></a> -
+<a href="#id12"><span class="problematic" id="id13">`Metropolis-Gibbs Sampling &lt;#_metropolis_&gt;`__</span></a> - <a href="#id14"><span class="problematic" id="id15">`Running the
+program-Input &lt;#_running_&gt;`__</span></a> - <a href="#id16"><span class="problematic" id="id17">`Output &lt;#_output_&gt;`__</span></a> - <a href="#id18"><span class="problematic" id="id19">`Processing and
+Display of results &lt;#_processing_&gt;`__</span></a> - <a class="reference external" href="index.html">[NonLinLoc
+Home]</a></p>
+<div class="color"></div><div class="section" id="overview">
+<h2>1.1.5.1. Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The NLLoc program produces a <strong>misfit function</strong>, <strong>“optimal”
+hypocenters</strong>, an estimate of the <strong>posterior probability density
+function</strong> (PDF) for the spatial, <em>x,y,z</em> hypocenter location, and other
+results using either a systematic <strong>Grid-Search</strong> or a stochastic,
+<strong>Metropolis-Gibbs sampling</strong> approach.</p>
+<p>The location algorithm used in NLLoc <a class="reference external" href="./references.html">(Lomax, et al.,
+2000)</a> follows the inversion approach of
+<a class="reference external" href="references.html">Tarantola and Valette (1982)</a>, and the earthquake
+location methods of <a class="reference external" href="references.html">Tarantola and Valette (1982)</a>,
+<a class="reference external" href="references.html">Moser, van Eck and Nolet (1992)</a> and
+<a class="reference external" href="references.html">Wittlinger</a>et al. (1993). The errors in the
+observations (phase time picks) and in the forward problem (travel-time
+calculation) are assumed to be Gaussian. This assumption allows the
+direct, analytic calculation of a maximum likelihood origin time given
+the observed arrival times and the calculated travel times between the
+observing stations and a point in xyz space. Thus the 4D problem of
+hypocenter location reduces to a 3D search over <em>x,y,z</em> space.</p>
+<p>To make the location program efficient for complicated, 3D models, the
+travel-times between each station and all nodes of an <em>x,y,z</em> spatial
+grid are calculated once using a 3D version (<a class="reference external" href="references.html">Le Meur,
+1994</a>; <a class="reference external" href="references.html">Le Meur, Virieux and Podvin,
+1997</a>) of the Eikonal finite-difference scheme of
+<a class="reference external" href="references.html">Podvin and Lecomte (1991)</a> and then stored on disk
+as travel-time grid files. This storage technique has been used by
+<a class="reference external" href="references.html">Wittlinger</a>et al. (1993), and in related
+approaches by <a class="reference external" href="references.html">Nelson and Vidale (1990)</a> and
+<a class="reference external" href="references.html">Shearer (1997)</a>. The forward calculation during
+location reduces to retrieving the travel-times from the grid files and
+forming the misfit function <em>g</em>(<strong>x</strong>) in, equation (3).</p>
+<p>In addition, to save disk space and for faster calculation, a constant
+Vp/Vs ratio can be specified, and then only P travel-time grids are
+required for each station.</p>
+<p>The <a class="reference external" href="references.html">Podvin and Lecomte (1991)</a> algorithm and
+related methods use a finite-differences approximation of Huygen’s
+principle to find the first arriving, infinite frequency travel times at
+all nodes of the grid. The algorithm of <a class="reference external" href="references.html">Podvin and Lecomte
+(1991)</a> gives stable recovery of diffracted waves
+near surfaces of strong velocity contrast and thus it accurately
+produces travel times for diffracted and head waves. A limitation of the
+current 3D version of the method is a restriction to cubic grids. This
+may lead to excessively large travel-time grids if a relatively fine
+cell spacing is required along one dimension since the same spacing must
+be used for the other dimensions. This can be a problem for regional
+studies where a fine node spacing in depth is necessary, but the
+horizontal extent of the study volume can be much greater than the depth
+extent. Thus a modification of the travel times calculation to allow use
+of an irregular grid would be very useful.</p>
+<p>After the travel times are calculated throughout the grid, the NonLinLoc
+program uses the gradients of travel-time at the node to estimate the
+take-off angles at each node. Two gradients are estimated for each axis
+direction <em>x, y,</em> and <em>z</em> - one <em>G:sub:`low`</em> between the node and its
+preceding neighbour along the axis, and a second <em>G:sub:`high`</em>
+between the following neighbour and the node. The total gradient
+<em>G:sub:`axis`</em> along an axis is the mean of these two gradients; the
+total gradient along the three axes determines the vector gradient of
+travel-time. The direction opposite to the vector gradient of
+travel-time gives the ray take-off angles for ** dip and azimuth. An
+estimate of the quality of the angle determination is given by a
+comparison of the magnitudes and signs of <em>G:sub:`low`</em> and
+<em>G:sub:`high`</em>. If these two values are not similar, then there may be
+two rays which arrive nearly simultaneously at the station, and the
+take-off angle determination at the node may be unstable.</p>
+<p>The <em>x,y,z</em> volume used for grid-search or Metropolis-Gibbs location
+must be fully contained within the 3D travel-time grids. This limits the
+largest station distance that can be used for location since the 3D
+travel-time computation and the size of the output time-grid files grow
+rapidly with grid dimension. However, for location in flat-layered
+media, the travel times can be stored on very compact 2D grids, and
+readings for “regional” stations far from the search volume can be used.</p>
+<p>Except for TRANS GLOBAL mode, the NLLoc program uses a “flat earth”,
+rectangular, left-handed, <em>x,y,z</em> coordinate system (positive X = East,
+positive Y = North, positive Z = down). Distance units are kilometers,
+and many input/output distance quantities can be expressed in
+rectangular or geographic (latitude and longitude) coordinates.</p>
+<div class="line-block">
+<div class="line">In TRANS GLOBAL mode, the NLLoc program uses a “spherical earth”,
+<em>longitude,latitude,depth</em> coordinate system (positive X = East,
+positive Y = North, positive Z = down). Longitude and latitude units
+are degrees, depth is in kilometers, and most input/output distance
+quantities are expressed in geographic (latitude and longitude)
+coordinates.</div>
+</div>
+<p>See the book chapters <strong>Probabilistic earthquake location in 3D and
+layered models: Introduction of a Metropolis-Gibbs method and comparison
+with linear locations `(Lomax,et al., 2000) &lt;./references.html&gt;`__</strong> and
+<strong>Earthquake Location, Direct, Global-Search Methods, in Complexity In
+Encyclopedia of Complexity and System Science `(Lomax, et al.,
+2009) &lt;./references.html&gt;`__</strong> for further information on the NonLinLoc
+location algorithms.</p>
+<div class="color"></div></div>
+<div class="section" id="inversion-approach">
+<h2>1.1.5.2. Inversion Approach<a class="headerlink" href="#inversion-approach" title="Permalink to this headline">¶</a></h2>
+<p>The earthquake location algorithm implemented in the program NLLoc
+<a class="reference external" href="./references.html">(Lomax, et al., 2000)</a> follows the probabilistic
+formulation of inversion presented in <a class="reference external" href="references.html">Tarantola and Valette
+(1982)</a> and <a class="reference external" href="references.html">Tarantola (1987)</a>.
+This formulation relies on the use of normalised and unnormalised
+probability density functions to express our knowledge about the values
+of parameters. Thus, given the normalised density function <em>f</em>(<em>x</em>)
+for value of a parameter <em>x</em>, the probability that <em>x</em> has a value
+between <em>X</em> and <em>X</em>+D<em>X</em> is</p>
+<p><a class="reference internal" href="programs/Image5.gif"><img alt="image0" src="programs/Image5.gif" style="width: 212px; height: 44px;" /></a>. (1)</p>
+<p>In geophysical inversion we wish to constrain the values of a vector of
+unknown parameters <strong>p</strong>, given a vector of observed data <strong>d</strong> and a
+theoretical relationship q (<strong>d</strong>,<strong>p</strong>) relating <strong>d</strong> and <strong>p</strong>.
+When the density functions giving the prior information on the model
+parameters r<sub>p</sub>(<strong>p</strong>) and on the observations
+<em>r</em><strong>:sub:`d`</strong>(<strong>d</strong>) are independent, and the theoretical
+relationship can be expressed as a conditional density function q
+(<strong>d</strong>|<strong>p</strong>)m<sub>p</sub>(<strong>p</strong>), a complete, probabilistic
+solution can be expressed as a <strong>posterior density function (PDF)</strong>
+<em>s</em><sub>p</sub>(<strong>p</strong>) (<a class="reference external" href="references.html">Tarantola and Valette,
+1982</a>; <a class="reference external" href="references.html">Tarantola, 1987</a>)</p>
+<p><a class="reference internal" href="programs/Image6.gif"><img alt="image1" src="programs/Image6.gif" style="width: 206px; height: 42px;" /></a>, (2)</p>
+<p>where m<sub>p</sub>(<strong>p</strong>) and m<sub>d</sub>(<strong>d</strong>) are null information
+density functions specifying the state of total ignorance.</p>
+<div class="section" id="gaussian-error-assumption-l2-rms-likelihood-function">
+<h3>1.1.5.2.1. Gaussian Error Assumption - L2-RMS likelihood function<a class="headerlink" href="#gaussian-error-assumption-l2-rms-likelihood-function" title="Permalink to this headline">¶</a></h3>
+<p>For the case of earthquake location, the unknown parameters are the
+hypocentral coordinates x = (<em>x</em>, <em>y</em>, <em>z</em>) and the origin time <em>T</em>, the
+observed data is a set of arrival times t, and the theoretical relation
+gives predicted travel times h. <a class="reference external" href="references.html">Tarantola and Valette
+(1982)</a> show that, if the theoretical relationship
+and the observed arrival times are assumed to have gaussian
+uncertainties with covariance matrices C<em>:sub:`T`</em> and C<em>:sub:`t`</em>,
+respectively, and if the prior information on <em>T</em> is taken as uniform,
+then it is possible to evaluate analytically the integral over d in (2)
+and an integral over origin time <em>T</em> to obtain the marginal PDF for the
+spatial location, <em>s</em>(<strong>x</strong>). This marginal PDF reduces to (<a class="reference external" href="references.html">Tarantola
+and Valette, 1982</a>; <a class="reference external" href="references.html">Moser, van Eck and Nolet,
+1992</a>)</p>
+<p><a class="reference internal" href="programs/Image7.gif"><img alt="image2" src="programs/Image7.gif" style="width: 258px; height: 49px;" /></a> (3)</p>
+<p>In this expression <em>K</em> is a normalisation factor, <em>r</em>(<strong>x</strong>) is a
+density function of prior information on the model parameters, and
+<em>g</em>(<strong>x</strong>) is an L2 misfit function.&nbsp;<a class="reference internal" href="programs/Image8.gif"><img alt="image3" src="programs/Image8.gif" style="width: 16px; height: 26px;" /></a> is the vector of
+observed arrival times <strong>t</strong> minus their weighted mean,&nbsp;<a class="reference internal" href="programs/Image9.gif"><img alt="image4" src="programs/Image9.gif" style="width: 13px; height: 21px;" /></a>is
+the vector of theoretical travel times <strong>h</strong> minus their weighted mean,
+where the weights <em>w:sub:`i`</em> are given by</p>
+<p><a class="reference internal" href="programs/Image10.gif"><img alt="image5" src="programs/Image10.gif" style="width: 221px; height: 34px;" /></a> (4)</p>
+<p>Furthermore, <a class="reference external" href="references.html">Moser, van Eck and Nolet, 1992</a> show
+that the maximum likelihood origin time corresponding to a hypocentre at
+(<em>x</em>, <em>y</em>, <em>z</em>) is given by</p>
+<p><a class="reference internal" href="programs/Image11.gif"><img alt="image6" src="programs/Image11.gif" style="width: 182px; height: 65px;" /></a> (5)</p>
+<p>The posterior density function (PDF) <em>s</em>(<strong>x</strong>) given by equation (3)
+represents a complete, probabilistic solution to the location problem,
+including information on uncertainty and resolution. This solution does
+not require a linearised theory, and the resulting PDF may be irregular
+and multi-modal because the forward calculation involves a non-linear
+relationship between hypocentre location and travel-times.</p>
+<p>This solution includes location uncertainties due to the spatial
+relation between the network and the event, measurement uncertainty in
+the observed arrival times, and errors in the calculation of theoretical
+travel times. However, realistic estimates of uncertainties in the
+observed and theoretical times must be available and specified in a
+gaussian form through <strong>C</strong><em>:sub:`t`</em> and <strong>C</strong><em>:sub:`T`</em>,
+respectively. Absolute location errors due to incorrect velocity
+structure could be included through <strong>C</strong><em>:sub:`T`</em> if the resulting
+travel time errors can be estimated and described with a gaussian
+structure. Estimating these travel time errors is difficult and often
+not attempted. When the model used for location is a poor approximation
+to the “true” structure (as is often the case with layered model
+approximations), the absolute location uncertainties can be very large.</p>
+</div>
+<div class="section" id="complete-non-linear-location-pdf">
+<h3>1.1.5.2.2. Complete, Non-linear Location - PDF<a class="headerlink" href="#complete-non-linear-location-pdf" title="Permalink to this headline">¶</a></h3>
+<p>The NLLoc grid-search algotithm systematically determines the posterior
+probability density function <em>s</em>(<strong>x</strong>) or the “misfit” function
+<em>g</em>(<strong>x</strong>) over a 3D, <em>x,y,z</em> spacial grid. The NLLoc Metropolis-Gibbs
+sampling algorithm attempts to obtain a set of samples distributied
+according to the posterior probability density function <em>s</em>(<strong>x</strong>).</p>
+<p>The grid-search <em>s</em>(<strong>x</strong>) grid, samples drawn from this function, or
+the samples obtained by the Metropolis-Gibbs sampling, form the full,
+non-linear spatial solution to the earthquake location problem. This
+solution indicates the uncertainty in the spatial location due to
+picking errors, a simple estimate of travel-time calculation errors, the
+geometry of the observing stations and the incompatibility of the picks.
+The location uncertainty will in general be non-ellipsoidal
+(non-Gaussian) because the forward calculation involves a non-linear
+relationship between hypocenter location and travel-times.</p>
+<p>Because it is difficult or impossible to obtain, a more complete
+estimate of the travel-time errors (or, equivalently, a robust estimate
+of the errors in the velocity model) is not used. This is a serious
+limitation of this and most location algorithms, particularly for the
+study of absolute event locations.</p>
+<p>The PDF may be output to a <a href="#id20"><span class="problematic" id="id21">`3D Grid &lt;formats.html#_grid_&gt;`__</span></a> and a
+<a href="#id22"><span class="problematic" id="id23">`binary Scatter file &lt;formats.html#_location_scat_&gt;`__</span></a> (see
+<a href="#id24"><span class="problematic" id="id25">`Output &lt;#_output_&gt;`__</span></a> below). PDF values are also used for the
+determination of weighted average phase residuals (output to a <a href="#id26"><span class="problematic" id="id27">`Phase
+Statistics &lt;formats.html#_location_phsstat_&gt;`__</span></a> file), and for
+calculating location confidence contour levels (see
+<a href="#id28"><span class="problematic" id="id29">`Output &lt;#_output_&gt;`__</span></a> below), and “Traditional” Gaussian estimators
+(see below).</p>
+</div>
+<div class="section" id="maximum-likelihood-hypocentre">
+<h3>1.1.5.2.3. Maximum likelihood hypocentre<a class="headerlink" href="#maximum-likelihood-hypocentre" title="Permalink to this headline">¶</a></h3>
+<p>The maximum likelihood (or minimum misfit) point of the complete,
+non-linear location PDF is selected as an “optimal” hypocentre. The
+significance and uncertainty of this maximum likelihood hypocentre
+cannot be assessed independently of the complete solution PDF. The
+maximum likelihood hypocenter parameters are output to the NNLoc, ASCII
+<a href="#id30"><span class="problematic" id="id31">`Hypocenter-Phase File &lt;formats.html#_location_hypphs_&gt;`__</span></a>
+(<code class="docutils literal notranslate"><span class="pre">HYPOCENTER</span></code>, <code class="docutils literal notranslate"><span class="pre">GEOGRAPHIC</span></code> and <code class="docutils literal notranslate"><span class="pre">QUALITY</span></code> lines), and to the
+<a href="#id32"><span class="problematic" id="id33">`quasi-HYPOELLIPSE format &lt;formats.html#_location_qhypell_&gt;`__</span></a> and
+<a href="#id34"><span class="problematic" id="id35">`HYPO71 format &lt;formats.html#_location_hypo71_&gt;`__</span></a> files. The maximum
+likelihood hypocenter is also used for the determination of ray take-off
+angles (output to a <a href="#id36"><span class="problematic" id="id37">`HypoInverse
+Archive &lt;formats.html#_location_hypinv_&gt;`__</span></a> file), for the determination
+of average phase residuals (output to a <a href="#id38"><span class="problematic" id="id39">`Phase
+Statistics &lt;formats.html#_location_phsstat_&gt;`__</span></a> file), and for magnitude
+calculation. The ray take-off angles can be used for a first-motion
+fault plane determination.</p>
+</div>
+<div class="section" id="gaussian-estimators">
+<h3>1.1.5.2.4. Gaussian estimators<a class="headerlink" href="#gaussian-estimators" title="Permalink to this headline">¶</a></h3>
+<div class="line-block">
+<div class="line">“Traditional” gaussian or normal estimators, such as the expectation
+<em>E</em>(<strong>x</strong>) and covariance matrix <strong>C</strong> may be obtained from the
+gridded values of the normalised location PDF or from samples of this
+function (e.g. <a class="reference external" href="references.html">Tarantola and Valette, 1982</a>; <a class="reference external" href="references.html">Sen
+and Stoffa,1995</a>). For the grid case with nodes at
+<strong>x</strong><em>:sub:`i,j,k`</em>,</div>
+<div class="line"><a class="reference internal" href="programs/Image12.gif"><img alt="image7" src="programs/Image12.gif" style="width: 186px; height: 37px;" /></a>, (6)</div>
+</div>
+<div class="line-block">
+<div class="line">where D<em>V</em> <em>is the volume of a grid cell. For N samples drawn from
+the PDF with locations **x*</em><sub>n</sub>,*</div>
+<div class="line"><a class="reference internal" href="programs/Image13.gif"><img alt="image8" src="programs/Image13.gif" style="width: 120px; height: 44px;" /></a>, (7)</div>
+</div>
+<div class="line-block">
+<div class="line"><em>where the PDF values</em> s(<strong>x</strong><em>:sub:`n`</em>) are not required since
+the samples are assumed distributed according to the PDF. For both
+cases, the covariance matrix is then given by</div>
+<div class="line"><a class="reference internal" href="programs/Image14.gif"><img alt="image9" src="programs/Image14.gif" style="width: 209px; height: 24px;" /></a>. (8)</div>
+</div>
+<p>The Gaussian estimators are output to the NNLoc, ASCII <a href="#id40"><span class="problematic" id="id41">`Hypocenter-Phase
+File &lt;formats.html#_location_hypphs_&gt;`__</span></a> (<code class="docutils literal notranslate"><span class="pre">STATISTICS</span></code> line).</p>
+</div>
+<div class="section" id="confidence-ellipsoid">
+<h3>1.1.5.2.5. Confidence Ellipsoid<a class="headerlink" href="#confidence-ellipsoid" title="Permalink to this headline">¶</a></h3>
+<div class="line-block">
+<div class="line">The 68% confidence ellipsoid can be obtained from singular value
+decomposition (SVD) of the covariance matrix <strong>C</strong>, following Press
+<em>et al</em>. (1992; their sec. 15.6 and eqs. 2.6.1 and 15.6.10). The SVD
+gives:</div>
+<div class="line"><a class="reference internal" href="programs/Image15.gif"><img alt="image10" src="programs/Image15.gif" style="width: 132px; height: 25px;" /></a>, (9)</div>
+</div>
+<p>where <strong>U</strong> = <strong>V</strong> are square, symmetric matrices and <em>w:sub:`i`</em> are
+singular values. The columns <strong>V</strong><em>:sub:`i`</em> of <strong>V</strong> give the
+principle axes of the confidence ellipsoid. The corresponding
+semi-diameters for a 68% confidence ellipsoid are Ö (3.53*w<sub>i`*),
+where 3.53 is the Dc:sup:`2</sub> value for 68.3% confidence and 3 degrees
+of freedom.</p>
+<p>The gaussian estimators and resulting confidence ellipsoid will be good
+indicators of the uncertainties in the location only in the case where
+the complete, non-linear PDF has a single maximum and has an ellipsoidal
+form.</p>
+<div class="color"></div></div>
+</div>
+<div class="section" id="the-equal-differential-time-edt-likelihood-function">
+<h2>1.1.5.3. The Equal Differential Time (EDT) likelihood function<a class="headerlink" href="#the-equal-differential-time-edt-likelihood-function" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="../edt/edt.html">EDT description page</a></p>
+<div class="color"></div></div>
+<div class="section" id="oct-tree-importance-sampling-algorithm">
+<h2>1.1.5.4. Oct-Tree Importance Sampling Algorithm<a class="headerlink" href="#oct-tree-importance-sampling-algorithm" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="../octtree/OctTree.html">Oct-Tree description page</a></p>
+<div class="color"></div></div>
+<div class="section" id="grid-search-algorithm">
+<h2>1.1.5.5. Grid-Search Algorithm<a class="headerlink" href="#grid-search-algorithm" title="Permalink to this headline">¶</a></h2>
+<p>The grid-search algorithm performs successively finer, systematic
+grid-searches within a spatial, <em>x,y,z</em> volume to obtain a misfit
+function, an optimal hypocenter and an estimate of the posterior
+probability density function (<a href="#id42"><span class="problematic" id="id43">`PDF &lt;NLLoc.html#_inversion_&gt;`__</span></a>) for
+hypocenter location.</p>
+<p>Advantages:</p>
+<ol class="arabic simple">
+<li>Does not require partial derivatives, thus can be used with
+complicated, 3D velocity structures</li>
+<li>Systematic, deterministic coverage of search region</li>
+<li>Accurate recovery of very irregular (non-ellipsoidal) PDF’s with
+multiple minima</li>
+<li>Efficiently reads into memory 2D planes of 3D travel-time grid files,
+thus can be used with large number of observations and large 3D
+travel-time grids</li>
+<li>Results can be used to obtain confidence contours</li>
+</ol>
+<p>Drawbacks:</p>
+<ol class="arabic simple">
+<li>Very time consuming relative to stochastic and linear location
+techniques</li>
+<li>Relative to the size of the most significant region of the PDF, the
+final search grids may be too large (giving low resolution) or too
+small (giving truncation of the PDF)</li>
+<li>Requires careful selection of grid size and node spacing</li>
+</ol>
+<div class="section" id="procedure">
+<h3>1.1.5.5.1. Procedure<a class="headerlink" href="#procedure" title="Permalink to this headline">¶</a></h3>
+<p>The Grid-Search location is based on a nested grid search using one or
+more location grids as specified by
+<a href="#id44"><span class="problematic" id="id45">`LOCGRID &lt;control.html#_NLLoc_locgrid_&gt;`__</span></a> statements in the Input
+Control File. The first LOCGRID statement specifies a specific initial
+search grid with fixed size, number of nodes and location. Subsequent
+LOCGRID statements specify the size and number of nodes for subsequent,
+nested grids; the location of these nested grids is usually set
+automatically in one or more of the <em>x,y,z</em> directions.</p>
+<p><img alt="image11" src="programs/GridNest.gif" /></p>
+<p>For each location grid, the location quality (misfit or PDF value) at
+every node is obtained. For each node, the travel-times for each
+observation are obtained from the corresponding travel-time grid file
+and the PDF <em>s</em>(<strong>x</strong>), or misfit value <em>g</em>(<strong>x</strong>) is calculated
+using the equations given above in the <a href="#id46"><span class="problematic" id="id47">`Inversion
+Approach &lt;#_inversion_&gt;`__</span></a> section. These location quality values are
+saved to a 3D grid file if requested. If there is a subsequent nested
+grid, its position (for the directions with automatic positioning) is
+set so that it is centered on the maximum PDF node (or, equivalently,
+the minimum misfit node) of the current grid.</p>
+<p>The initial location grid must be fully contained within the travel-time
+grid files corresponding to a given observation for that observatoin to
+be used in the location. Subsequent location grids, even if their
+position is set automatically, must be fully contained within the
+initial grid. The NLLoc program will attempt to translate a nested grid
+that intersects a boundary of the initial grid so that it is contained
+inside of the initial grid; if this is not possible the location will be
+terminated prematurely.</p>
+<p>For every node of each location grid, the grid-search algorithm must
+obtain travel-times for every observation. These times are stored on
+disk in 3D travel-time grid files which may be very large. It would be
+extremely time consuming to read these times one by one directly from
+the disk files, but there is also not enough space in general to fully
+read all the relevant 3D grid files into memory. However, the grid
+search is performed systematically throughout each location grid with
+the <em>x</em> index varying last. Thus, it is adequate to have 2D planes or
+“sheets” corressponding to the current <em>x</em> index available in memory at
+any one time. This approach is used by the grid-search algorithm. Sheets
+of data with a given <em>x</em> index are read from the 3D travel-time grid
+files as large blocks of bytes, which is very fast in comparison to
+reading the same number of data values individually.</p>
+<div class="color"></div></div>
+</div>
+<div class="section" id="metropolis-gibbs-sampling-algorithm">
+<h2>1.1.5.6. Metropolis-Gibbs Sampling Algorithm<a class="headerlink" href="#metropolis-gibbs-sampling-algorithm" title="Permalink to this headline">¶</a></h2>
+<p>The Metropolis-Gibbs algorithm performs a directed random walk within a
+spatial, <em>x,y,z</em> volume to obtain a set of samples that follow the 3D
+<a href="#id48"><span class="problematic" id="id49">`PDF &lt;NLLoc.html#_inversion_&gt;`__</span></a> for the earthquake location. The
+samples give and estimate of the optimal hypocenter and an image of the
+posterior probability density function (PDF) for hypocenter location.</p>
+<p>Advantages:</p>
+<ol class="arabic simple">
+<li>Does not require partial derivatives, thus can be used with
+complicated, 3D velocity structures</li>
+<li>Accurate recovery of moderately irregular (non-ellipsoidal) PDF’s
+with a single minimum</li>
+<li>Only only moderately slower (about 10 times slower) than linearised,
+iterative location techniques, and is much faster (about 100 times
+faster) than the grid-search</li>
+<li>Results can be used to obtain confidence contours</li>
+</ol>
+<p>Drawbacks:</p>
+<ol class="arabic simple">
+<li>Stochastic coverage of search region - may miss important features</li>
+<li>Inconsistent recovery of very irregular (non-ellipsoidal) PDF’s with
+multiple minima</li>
+<li>Requires careful selection of sampling parameters</li>
+<li>Attempts to read full 3D travel-time grid files into memory, thus may
+run very slowly with large number of observations and large 3D
+travel-time grids</li>
+</ol>
+<div class="section" id="id1">
+<h3>1.1.5.6.1. Procedure<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>The Metropolis-Gibbs search proceedure to obtain samples of a PDF is
+based on the algorithm of <a class="reference external" href="references.html">Metropolis et al. (1953)</a>
+for the simulation of the distribution of a set of atoms at a given
+temperature. The Metropolis-Gibbs algorithm used here is similar to the
+“Metropolis” algorithm described in <a class="reference external" href="references.html">Mosegaard and Tarantola
+(1995)</a> and the “Gibbs sampler” with temperature
+<em>T</em>=1 described in <a class="reference external" href="references.html">Sen and Stoffa (1995; sec
+7.2)</a>. It may be considered as a version of
+Metropolis simulated annealing <a class="reference external" href="references.html">Kirkpatrick et al.
+(1983)</a> where the temperature parameter is a
+constant determined by the covariance matrix for the observational and
+forward problem uncertainties. Thus the algorithm does not “anneal” or
+converge to an optimal solution, but instead produces a set of samples
+which follow the posterior PDF for the inverse problem.</p>
+<p>The Metropolis-Gibbs sampler used in the program NonLinLoc for
+earthquake location consists of a directed walk in the solution space
+(<em>x</em>, <em>y</em>, <em>z</em>) which tends towards regions of high likelihood for the
+location PDF, <em>s</em>(<strong>x</strong>) given by equation (3). At each step, the
+current walk location <strong>x</strong><em>:sub:`curr`</em> is perturbed by a vector
+<em>d</em><strong>x</strong> of arbitrary direction and given length <em>l</em> to give a new
+location <strong>x</strong><em>:sub:`new`</em>. The likelihood <em>s</em>(<strong>x</strong><em>:sub:`new`</em>)
+is calculated for the new location and compared to the likelihood
+<em>s</em>(<strong>x</strong><em>:sub:`curr`</em>) at the current location. If
+<em>s</em>(<strong>x</strong><em>:sub:`new`</em>) ³<em>s</em>(<strong>x</strong><em>:sub:`curr`</em>), then the new
+location is accepted. If <em>s</em>(<strong>x</strong><em>:sub:`new`</em>) &lt;
+<em>s</em>(<strong>x</strong><em>:sub:`curr`</em>), then the new location is accepted with
+probability <em>P</em> = <em>s</em>(<strong>x</strong><em>:sub:`new`</em>) /
+<em>s</em>(<strong>x</strong><em>:sub:`curr`</em>). When a new location is accepted it becomes
+the current location and may be saved as a sample of the location PDF.</p>
+<p>In earthquake location, the dimensions of the significant regions of the
+location PDF can vary enormously and are not known a priori. It is
+important to choose an initial step size large enough to allow global
+exploration of the search volume, and to obtain a final step size that
+gives good coverage of the location PDF while resolving details and
+irregular structure of the PDF. The NonLinLoc Metropolis-Gibbs sampler
+uses three distinct sampling stages to determine adaptively an optimal
+step size <em>l</em> for the walk:</p>
+<ol class="arabic simple">
+<li>A <strong>learning</strong> stage where the step size is fixed and relatively
+large. The walk can explore globally the search volume and migrate
+towards regions of high likelihood. “Accepted” samples are not saved.</li>
+<li>An <strong>equilibration</strong> stage where the step size <em>l</em> is adjusted in
+proportion to the standard deviations (<em>s:sub:`x`</em>, <em>s:sub:`y`</em>,
+<em>s:sub:`z`</em>) of the spatial distribution of all previously
+“accepted” samples obtained after the middle of the learning stage.
+After each new accepted sample, the standard deviations are updated
+and the step size <em>l</em> is set equal to <em>f:sub:`s`</em>
+(<em>s:sub:`x`s:sub:`y`s:sub:`z`/N:sub:`s`</em>)<sup>1/3</sup>,
+where <em>N:sub:`s`</em> is the number of previously “accepted” samples,
+and <em>f:sub:`s`</em>=8 is a step size scaling factor. This formula
+sets <em>l</em> in proportion to the cell size required to tile with
+<em>N:sub:`s`</em> cells the rectangular volume with sides <em>s:sub:`x`</em>,
+<em>s:sub:`y`</em> and <em>s:sub:`z`</em>. The walk can continue to migrate
+towards or may begin to explore regions of high likelihood.
+“Accepted” samples are not saved.</li>
+<li>A <strong>saving</strong> stage where the step size <em>l</em> is fixed at its final
+value from the equilibration stage. The walk can continue to explore
+regions of high likelihood. “Accepted” samples are assumed to follow
+the location PDF and can be saved, but there may be a waiting time of
+several samples between saves to insure the independence of saved
+samples.</li>
+</ol>
+<p><img alt="image12" src="programs/MetStages.gif" /></p>
+<p>It is important to set the parameters for the directed walk so that (1)
+during the <strong>learning</strong> and <strong>equilibration</strong> stages the walk approaches
+and reaches the high likelihood regions of the location PDF, and so that
+(2) by the <strong>saving</strong> stage a suitable, relatively small, fixed step
+size has been obtained to accurately explore and image the PDF.</p>
+<p><img alt="image13" src="programs/MetStepSize.gif" /></p>
+<p>The NonLinLoc Metropolis-Gibbs sampling algorithm is initialised as
+follows:</p>
+<ol class="arabic simple">
+<li>The walk location is set at the <em>x</em>,<em>y</em> position of the station
+with the earliest arrival time and non-zero weight, at the mean depth
+of the search region.</li>
+<li>If the initial step <em>l</em> size is not specified, it is set to the cell
+size required to tile with <em>N:sub:`s`</em> cells the plane formed by
+the two longest sides of the initial search region. <em>N:sub:`s`</em> is
+the total number of samples to be accepted during the saving stage,
+including samples that are skipped between saves.</li>
+</ol>
+<p>The rejection by the algorithm of new walk locations for a large number
+of consecutive tries (the order of 1000 tries) may indicate that the
+last “accepted” sample falls on a sharp likelihood maxima that is
+narrower than the current step size. To allow the search to continue in
+this case, the new location is accepted unconditionally and the step
+size is reduced by a factor of two.</p>
+<p>In the case that the size of the location PDF is very small relative to
+the search region, the algorithm may fail to locate the region of high
+likelihood or obtain an optimal step size. In this case the size of the
+search region must be reduced or the size of the initial step size
+adjusted. A more robust solution to this problem may be to add a
+temperature parameter to the likelihood function, as with simulated
+annealing. This variable parameter could be set to increase the
+effective size of the PDF during the learning and equilibration stages
+so that the region of high likelihood is located efficiently, and then
+set to 1 during the saving stage so that the true PDF is imaged.</p>
+<div class="color"></div></div>
+</div>
+<div class="section" id="running-the-program-input">
+<h2>1.1.5.7. Running the program - Input<a class="headerlink" href="#running-the-program-input" title="Permalink to this headline">¶</a></h2>
+<p>Synopsis: <code class="docutils literal notranslate"><span class="pre">NLLoc</span> <span class="pre">InputControlFile</span></code></p>
+<p>The NLLoc program takes a single argument <em>``InputControlFile``</em> which
+specifies the complete path and filename for an <a class="reference external" href="control.html">Input Control
+File</a> with certain required and optional statements
+specifying program parameters and input/output file names and locations.
+See the <a href="#id50"><span class="problematic" id="id51">`NLLoc Statements section &lt;control.html#_NLLoc_&gt;`__</span></a> of the Input
+Control File for more details. Note that to run NLLoc the <a href="#id52"><span class="problematic" id="id53">`Generic
+Statements section &lt;control.html#_generic_&gt;`__</span></a> of the Input Control File
+must contain the <code class="docutils literal notranslate"><span class="pre">CONTROL</span></code> and <code class="docutils literal notranslate"><span class="pre">TRANS</span></code> (Geographic Transformation)
+statements.</p>
+<p>In addition, the NLLoc program requires:</p>
+<ol class="arabic simple">
+<li>A file or files containing sets of seismic phase arrival times for
+each event. These arrival times can be can be specified in a number
+of <a href="#id54"><span class="problematic" id="id55">`Phase formats &lt;formats.html#_phase_&gt;`__</span></a>, including those of the
+HYPO71/HYPOELLIPSE and SEISAN software, and the RéNaSS DEP format.</li>
+<li>Files containing a 2D or a 3D <strong>Travel-time grid</strong> created by the
+program <a class="reference external" href="Grid2Time.html">Grid2Time</a> for each phase type at each
+station. If a constant Vp/Vs ratio is used, then only P travel-time
+grids are required for each station.</li>
+</ol>
+<p>The names, locations and other information for these files is specified
+in the <a href="#id56"><span class="problematic" id="id57">`NLLoc Statements section &lt;control.html#_NLLoc_&gt;`__</span></a> of the Input
+Control File.</p>
+<div class="color"></div></div>
+<div class="section" id="output">
+<h2>1.1.5.8. Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h2>
+<p>The location results can be output for <strong>single event</strong> and <strong>summary</strong>
+(all events) as:</p>
+<ol class="arabic simple">
+<li>A <a href="#id58"><span class="problematic" id="id59">`3D Grid &lt;formats.html#_grid_&gt;`__</span></a> containing <strong>misfit values</strong> or
+<strong>PDF:sup:`*` (probability dentsity function)</strong> values throughout
+the search volume (Grid-search only).</li>
+<li>An ASCII <a href="#id60"><span class="problematic" id="id61">`Hypocenter-Phase File &lt;formats.html#_location_hypphs_&gt;`__</span></a>
+containing <strong>hypocentral coordinates and origin time</strong> for the best
+<strong>(minimum misfit / maximum likelihood)</strong> point in the the search
+volume and an associated <strong>phase list</strong><sup>!</sup> containing station
+and phase identifiers, phase times, residuals, take-off angles and
+other station/phase information. This file contains other
+information, including the <strong>hypocentral coordinates and
+uncertainty</strong><sup>*</sup> given by the traditional (Gaussian/Normal)
+<strong>expectation</strong> and <strong>covariance matrix</strong> measures of the PDF.</li>
+<li>A <a href="#id62"><span class="problematic" id="id63">`binary Scatter file &lt;formats.html#_location_scat_&gt;`__</span></a><sup>*!</sup>
+containing samples drawn from the PDF</li>
+<li>An ASCII <a href="#id64"><span class="problematic" id="id65">`Confidence
+Levels &lt;formats.html#_location_conf_&gt;`__</span></a><sup>*!</sup> giving the value
+of the PDF corresponding to confidence levels from 0.1 to 1.0</li>
+</ol>
+<div class="line-block">
+<div class="line"><sup>*</sup> these output types are only generated for grids where the
+PDF is calculated.</div>
+<div class="line"><sup>!</sup> these output types are only written to single event files</div>
+</div>
+<p>The location results can also be output as <strong>summary</strong> (all events)
+files containing:</p>
+<ol class="arabic simple">
+<li>A <a href="#id66"><span class="problematic" id="id67">`3D Grid &lt;formats.html#_grid_&gt;`__</span></a> header file describing the search
+volume</li>
+<li>ASCII <a href="#id68"><span class="problematic" id="id69">`Phase Statistics &lt;formats.html#_location_phsstat_&gt;`__</span></a> giving
+the mean residuals for P and S phases at each station</li>
+<li>An expanded, <a href="#id70"><span class="problematic" id="id71">`quasi-HYPOELLIPSE
+format &lt;formats.html#_location_qhypell_&gt;`__</span></a></li>
+<li>The <a href="#id72"><span class="problematic" id="id73">`HypoInverse Archive &lt;formats.html#_location_hypinv_&gt;`__</span></a> format
+which serves as input to the program <a class="reference external" href="references.html">FPFIT (Reasenberg *et al.*,
+1985)</a> for grid-search determination of focal
+mechanism solutions.</li>
+</ol>
+<p>Single event and summary files are only saved for specific nested
+search-grids as specified in the
+<a href="#id74"><span class="problematic" id="id75">`LOCGRID &lt;control.html#_NLLoc_locgrid_&gt;`__</span></a> statement in the Input
+Control File.</p>
+<div class="color"></div></div>
+<div class="section" id="processing-and-display-of-results">
+<h2>1.1.5.9. Processing and Display of results<a class="headerlink" href="#processing-and-display-of-results" title="Permalink to this headline">¶</a></h2>
+<p>The location results for one or more events can be combined with the
+program <a class="reference external" href="LocSum.html">LocSum</a> to produce
+<a href="#id76"><span class="problematic" id="id77">`output &lt;LocSum.html#_output_&gt;`__</span></a> such as a comprehensive, summary
+<a href="#id78"><span class="problematic" id="id79">`Hypocenter-Phase File &lt;formats.html#_location_hypphs_&gt;`__</span></a>, a binary
+<a href="#id80"><span class="problematic" id="id81">`Scatter File &lt;formats.html#_location_&gt;`__</span></a>, and a set of simple ASCII
+format Scatter samples files.</p>
+<p>The a comprehensive, summary <a href="#id82"><span class="problematic" id="id83">`Hypocenter-Phase
+File &lt;formats.html#_location_hypphs_&gt;`__</span></a> forms the input for the Java
+applet <a class="reference external" href="SeismicityViewer.html">SeismicityViewer</a> for interactive, 3D
+display of event locations on an internet browser or appletviewer.</p>
+<p>The location results for a single event or the output files produced by
+the program <a class="reference external" href="LocSum.html">LocSum</a> can be post-processed with the
+program <a class="reference external" href="Grid2GMT.html">Grid2GMT</a> to produce a GMT command script for
+plotting misfit, PDF and location “cloud” results using the <a class="reference external" href="http://gmt.soest.hawaii.edu%20target=_top">GMT
+plotting package</a>.</p>
+<div class="color"></div><p>Back to <a class="reference external" href="index.html">the NonLinLoc site Home page</a>.</p>
+<p><em>Anthony Lomax</em></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1.1.5. NLLoc - Non-linear, earthquake location program</a><ul>
+<li><a class="reference internal" href="#overview">1.1.5.1. Overview</a></li>
+<li><a class="reference internal" href="#inversion-approach">1.1.5.2. Inversion Approach</a><ul>
+<li><a class="reference internal" href="#gaussian-error-assumption-l2-rms-likelihood-function">1.1.5.2.1. Gaussian Error Assumption - L2-RMS likelihood function</a></li>
+<li><a class="reference internal" href="#complete-non-linear-location-pdf">1.1.5.2.2. Complete, Non-linear Location - PDF</a></li>
+<li><a class="reference internal" href="#maximum-likelihood-hypocentre">1.1.5.2.3. Maximum likelihood hypocentre</a></li>
+<li><a class="reference internal" href="#gaussian-estimators">1.1.5.2.4. Gaussian estimators</a></li>
+<li><a class="reference internal" href="#confidence-ellipsoid">1.1.5.2.5. Confidence Ellipsoid</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-equal-differential-time-edt-likelihood-function">1.1.5.3. The Equal Differential Time (EDT) likelihood function</a></li>
+<li><a class="reference internal" href="#oct-tree-importance-sampling-algorithm">1.1.5.4. Oct-Tree Importance Sampling Algorithm</a></li>
+<li><a class="reference internal" href="#grid-search-algorithm">1.1.5.5. Grid-Search Algorithm</a><ul>
+<li><a class="reference internal" href="#procedure">1.1.5.5.1. Procedure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#metropolis-gibbs-sampling-algorithm">1.1.5.6. Metropolis-Gibbs Sampling Algorithm</a><ul>
+<li><a class="reference internal" href="#id1">1.1.5.6.1. Procedure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#running-the-program-input">1.1.5.7. Running the program - Input</a></li>
+<li><a class="reference internal" href="#output">1.1.5.8. Output</a></li>
+<li><a class="reference internal" href="#processing-and-display-of-results">1.1.5.9. Processing and Display of results</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="core.Time2EQ.html"
+                        title="previous chapter">1.1.4. Time2EQ - travel-time grid to synthetic observations</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="core.LocSum.html"
+                        title="next chapter">1.1.6. LocSum - combine location results</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/programs/core.NLLoc.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="core.LocSum.html" title="1.1.6. LocSum - combine location results"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="core.Time2EQ.html" title="1.1.4. Time2EQ - travel-time grid to synthetic observations"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">NonLinLoc Doc 7.00 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../programs.html" >1. NonLinLoc Programs</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Anthony Lomax.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

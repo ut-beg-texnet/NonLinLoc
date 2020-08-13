@@ -356,7 +356,9 @@ int SumLocations(int argc, char** argv) {
             if (strcmp(Hypo.locStat, "ABORTED") == 0) {
                 //nll_puterr("WARNING: location ABORTED, ignoring event");
                 continue;
-            } else if (strcmp(Hypo.locStat, "REJECTED") == 0) {
+            } else if (
+                    locgrid.numz != 2  // 20200812 AJL - Added so that location will be accepted when depth fixed (i.e. numz = 1)
+                    && strcmp(Hypo.locStat, "REJECTED") == 0) {
                 //nll_puterr("WARNING: location REJECTED, ignoring event");
                 continue;
             }

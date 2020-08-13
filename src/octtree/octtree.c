@@ -807,7 +807,7 @@ Tree3D* readTree3D(FILE *fpio) {
         for (iy = 0; iy < tree->numy; iy++) {
             for (iz = 0; iz < tree->numz; iz++) {
                 if (tree->nodeArray[ix][iy][iz] != NULL) {
-                    istat += readNode(fpio, tree->nodeArray[ix][iy][iz]);
+                    istat = readNode(fpio, tree->nodeArray[ix][iy][iz]);
                     if (istat < 0)
                         return (NULL);
                     istat_cum += istat;
@@ -816,11 +816,15 @@ Tree3D* readTree3D(FILE *fpio) {
         }
     }
 
+    //printf("DEBUG: istat_cum read: %d\n", istat_cum);
+
     return (tree);
 
 }
 
 /*** function to read an OctNode and all its child nodes ***/
+
+//static double maxvalue = -1.0;
 
 int readNode(FILE *fpio, OctNode* node) {
 
@@ -833,6 +837,10 @@ int readNode(FILE *fpio, OctNode* node) {
 
 
     istat = fread(&value, sizeof (float), 1, fpio); /* node value */
+    //    if (value > maxvalue) {
+    //        printf("read value: %f\n", value);
+    //        maxvalue = value;
+    //    }
     istat += fread(&isleaf, sizeof (char), 1, fpio); /* leaf flag, 1=leaf */
     if (istat < 2)
         return (-1);
@@ -874,6 +882,7 @@ int readNode(FILE *fpio, OctNode* node) {
             }
         }
     }
+    //printf("DEBUG: node istat_cum read: %d\n", istat_cum);
 
     return (istat_cum);
 
@@ -881,7 +890,6 @@ int readNode(FILE *fpio, OctNode* node) {
 
 /*** function to write a Tree3D ***/
 
-// TODO: modify to support spherical Tree3D!
 
 int writeTree3D(FILE *fpio, Tree3D * tree) {
 
@@ -948,13 +956,17 @@ int writeTree3D(FILE *fpio, Tree3D * tree) {
         }
     }
 
+    //printf("DEBUG: istat_cum written: %d\n", istat_cum);
+
     return (istat_cum);
 
 }
 
 /*** function to write an OctNode and all its child nodes ***/
 
-int writeNode(FILE *fpio, OctNode * node) {
+//static double maxvaluew = -1.0;
+
+int writeNode(FILE *fpio, OctNode *node) {
 
     int istat;
     int istat_cum;
@@ -970,10 +982,14 @@ int writeNode(FILE *fpio, OctNode * node) {
         istat += fwrite(&isleaf, sizeof (char), 1, fpio); // leaf flag, for read/write spherical: -1=NULL node
         if (istat < 2)
             return (-1);*/
-        return (1);
+        return (0);
     }
 
     value = (float) node->value;
+    //    if (value > maxvaluew) {
+    //        printf("write value: %f\n", value);
+    //        maxvaluew = value;
+    //    }
     istat = fwrite(&value, sizeof (float), 1, fpio); /* node value */
     istat += fwrite(&(node->isLeaf), sizeof (char), 1, fpio); /* leaf flag, 1=leaf */
 
@@ -991,7 +1007,6 @@ int writeNode(FILE *fpio, OctNode * node) {
                 if (node->child[ix][iy][iz] != NULL) {
                     istat = writeNode(fpio, node->child[ix][iy][iz]);
                     if (istat < 0)
-
                         return (-1);
                     istat_cum += istat;
                 }
@@ -1180,7 +1195,7 @@ double convertOcttreeValuesToProbabilityDensity(ResultTreeNode* prtree, int valu
 
 }
 
-/** function to convert value of all leafs in results tree to probability density */
+/** function to normalize value of all leafs in results tree */
 
 double normalizeProbabilityDensityOcttree(ResultTreeNode* prtree, double integral, double norm) {
 

@@ -1,0 +1,150 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>NonLinLoc &#8212; NonLinLoc Doc 7.00 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. NonLinLoc Programs" href="programs.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="programs.html" title="1. NonLinLoc Programs"
+             accesskey="N">next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">NonLinLoc Doc 7.00 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <a class="reference external image-reference" href="https://github.com/alomax/NonLinLoc"><img alt="NonLinLocLogo.gif" class="align-left" src="_images/NonLinLocLogo.gif" style="width: 100px;" /></a>
+<div class="section" id="nonlinloc">
+<h1>NonLinLoc<a class="headerlink" href="#nonlinloc" title="Permalink to this headline">¶</a></h1>
+<p>A software package for Probabilistic, Non-Linear, Global-Search Earthquake Location in 3D Media.</p>
+<p>Code is stored on <a href="https://github.com/alomax/NonLinLoc" target="_blank">github</a>, the development branches are <a href="https://github.com/alomax/NonLinLoc/tree/develop" target="_blank">here</a>, or the
+latest stable release can be found <a href="https://github.com/alomax/NonLinLoc/releases" target="_blank">here</a>.</p>
+<p>This package is written by Anthony Lomax and the NonLinLoc developers, and is distributed under the LGPL GNU Licence,
+Copyright (C) 1999-2020 Anthony Lomax and NonLinLoc developers.</p>
+<div class="section" id="citation">
+<h2>Citation<a class="headerlink" href="#citation" title="Permalink to this headline">¶</a></h2>
+<p>If you use this package in your work, please cite the following papers:</p>
+<ul class="simple">
+<li>Lomax, A., J. Virieux, P. Volant and C. Berge, (2000), Probabilistic earthquake location in 3D and layered models: Introduction of a Metropolis-Gibbs method and comparison with linear locations, in Advances in Seismic Event Location, Thurber, C.H., and N. Rabinowitz (eds.), Kluwer, Amsterdam, 101-134.  doi:10.1007/978-94-015-9536-0_5.</li>
+<li>Lomax, A., A. Michelini, A. Curtis (2014), Earthquake Location, Direct, Global-Search Methods, in Encyclopedia of Complexity and System Science, 2nd Edition, Meyers, R. A. (ed.), Springer, New York, pp. 1-33, doi:10.1007/978-3-642-27737-5_150-2.</li>
+</ul>
+</div>
+<div class="section" id="contents">
+<h2>Contents:<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="programs.html">1. NonLinLoc Programs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="programs.html#core">1.1. Core</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="programs/core.Vel2Grid.html">1.1.1. Vel2Grid - velocity model description to 3D model grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="programs/core.Vel2Grid3D.html">1.1.2. Vel2Grid3D - velocity model description to 3D model grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="programs/core.Grid2Time.html">1.1.3. Grid2Time - 3D model grid to travel-time and angles grids</a></li>
+<li class="toctree-l3"><a class="reference internal" href="programs/core.Time2EQ.html">1.1.4. Time2EQ - travel-time grid to synthetic observations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="programs/core.NLLoc.html">1.1.5. NLLoc - Non-linear, earthquake location program</a></li>
+<li class="toctree-l3"><a class="reference internal" href="programs/core.LocSum.html">1.1.6. LocSum - combine location results</a></li>
+<li class="toctree-l3"><a class="reference internal" href="programs/core.Grid2GMT.html">1.1.7. Grid2GMT - location results or 3D grid data to GMT command script</a></li>
+<li class="toctree-l3"><a class="reference internal" href="programs/core.Loc2ssst.html">1.1.8. Loc2ssst - generate SSST corrections on a  to 3D grid for NLLoc locations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="programs.html#utils">1.2. Utils</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="programs.html#control">1.3. Control</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="programs/control.ControlFile.html">1.3.1. NonLinLoc Software Package Control File</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">NonLinLoc</a><ul>
+<li><a class="reference internal" href="#citation">Citation</a></li>
+<li><a class="reference internal" href="#contents">Contents:</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="programs.html"
+                        title="next chapter">1. NonLinLoc Programs</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="programs.html" title="1. NonLinLoc Programs"
+             >next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">NonLinLoc Doc 7.00 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Anthony Lomax.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

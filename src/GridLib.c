@@ -2374,12 +2374,14 @@ GRID_FLOAT_TYPE * ReadGridFile
         char* file_type, // grid file type (e.g. "mod", "time" or "angle")
         double* xloc, double* yloc, double* zloc, // arrays of x, y, z coordinates in grid units of target point, arrays must be of size nvalues or larger
         int nvalues, // number of values to read
-        int iSwapBytes // flag to indicate if hi and low bytes of input velocity grid file should be swapped (1=swap, 0=no swap)
+        int iSwapBytes, // flag to indicate if hi and low bytes of input velocity grid file should be swapped (1=swap, 0=no swap)
+        SourceDesc* psrceIn // station source to use instead of srce in grid file (use only for station=DEFAULT 2D grids, use NULL otherwise)
         ) {
     int istat, i;
     FILE *fp_grid, *fp_hdr;
     GridDesc gdesc;
     SourceDesc srce;
+    SourceDesc* psrce_use;
     double yval_grid;
 
 
@@ -2399,9 +2401,21 @@ GRID_FLOAT_TYPE * ReadGridFile
 
     if (gdesc.type == GRID_TIME_2D || gdesc.type == GRID_ANGLE_2D) {
         // 2D grid (1D model)
+        psrce_use = &srce;
+        if (psrceIn != NULL) {
+            psrce_use = psrceIn;
+        }
+//        printf("DEBUG: SOURCE: Name: %s  Loc:  latlon: %d  X(east) %lg  Y(north) %lg  Z(pos DOWN) %lg  lat %lg lon %lg\n",
+//                psrce_use->label, psrce_use->is_coord_latlon,
+//                psrce_use->x, psrce_use->y, psrce_use->z,
+//                psrce_use->dlat, psrce_use->dlong
+//                );
         for (i = 0; i < nvalues; i++) {
-            yval_grid = GetEpiDist(&srce, xloc[i], yloc[i]);
+            yval_grid = GetEpiDist(psrce_use, xloc[i], yloc[i]);
+            if (GeometryMode == MODE_GLOBAL)
+                yval_grid *= KM2DEG;
             values[i] = ReadAbsInterpGrid2d(fp_grid, &gdesc, yval_grid, zloc[i]);
+//            printf("DEBUG: yval_grid=%f xloc[i]=%f yloc[i]=%f zloc[i]=%f values[i]=%f\n", yval_grid, xloc[i], yloc[i], zloc[i], values[i]);
         }
     } else {
         // 3D grid
@@ -2732,9 +2746,9 @@ GRID_FLOAT_TYPE ReadGrid3dValue(FILE *fpgrid, int ix, int iy, int iz, GridDesc *
         fseek(fpgrid, offset, SEEK_SET);
         /* read fvalue */
         if (fread(&fvalue, sizeof (GRID_FLOAT_TYPE), 1, fpgrid) != 1) {
-        sprintf(MsgStr,
-                "ERROR: reading grid value: %s: ix%d iy=%d iz=%d", pgrid->title, ix, iy, iz);
-        nll_puterr(MsgStr);
+            sprintf(MsgStr,
+                    "ERROR: reading grid value: %s: ix%d iy=%d iz=%d", pgrid->title, ix, iy, iz);
+            nll_puterr(MsgStr);
             return (-VERY_LARGE_FLOAT);
         }
         if (pgrid->iSwapBytes)
@@ -4607,14 +4621,14 @@ int ConvertASourceLocation(int n_proj, SourceDesc *srce_in, int toXY, int toLatL
     if (toXY && srce_in->is_coord_latlon && !srce_in->is_coord_xyz) {
         istat = latlon2rect(n_proj, srce_in->dlat, srce_in->dlong,
                 &(srce_in->x), &(srce_in->y));
-        srce_in->is_coord_xyz = 1;  // 20200206 AJL - Bug fix.
+        srce_in->is_coord_xyz = 1; // 20200206 AJL - Bug fix.
         srce_in->z = srce_in->depth;
     }
     if (toLatLon && srce_in->is_coord_xyz && !srce_in->is_coord_latlon) {
 
         istat = rect2latlon(n_proj, srce_in->x, srce_in->y,
                 &(srce_in->dlat), &(srce_in->dlong));
-        srce_in->is_coord_latlon = 1;  // 20200206 AJL - Bug fix.
+        srce_in->is_coord_latlon = 1; // 20200206 AJL - Bug fix.
         srce_in->depth = srce_in->z;
     }
 

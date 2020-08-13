@@ -1,0 +1,75 @@
+Vel2Grid - velocity model description to 3D model grid
+======================================================
+
+Given a velocity model description, **Vel2Grid** generates a 3D model
+Grid header and buffer files containing velocities, slownesses or other
+model specification.
+
+.. container:: color
+
+    
+
+`Overview`_ - `Running the program-Input`_ - `Output`_ - `Processing and
+Display of results`_ - `[NonLinLoc Home]`_
+
+.. container:: color
+
+    
+
+Overview
+--------
+
+The Vel2Grid program converts analytic or other velocity model
+specifications into a `3D Grid`_ file containing velocity or slowness
+values.
+
+The Vel2Grid program uses a "flat earth", rectangular, left-handed,
+*x,y,z,t* coordinate system (positive X = East, positive Y = North,
+positive Z = down). Distance units are kilometers.
+
+.. container:: color
+
+    
+
+Running the program - Input
+---------------------------
+
+Synopsis: ``Vel2Grid InputControlFile``
+
+The Vel2Grid program takes a single argument ``InputControlFile`` which
+specifies the complete path and filename for an `Input Control File`_
+with certain required and optional statements specifying program
+parameters and input/output file names and locations. See the `Vel2Grid
+Statements section`_ of the Input Control File for more details. Note
+that to run Vel2Grid the `Generic Statements section`_ of the Input
+Control File must contain the ``CONTROL`` and ``TRANS`` (Geographic
+Transformation) statements.
+
+In addition, the Vel2Grid program requires a set of `Vel2Grid
+Statements`_ in the Input Control File that specify a layered model or a
+3D velocity model. The velocity model can be specified in the control
+file by:
+
+A set of ```LAYER```_ statements defining a horizontally layered model
+with constant or constant-gradient velocity and density in each layer.
+
+A set of ```VERTEX```_, ```EDGE```_, and ```POLYGON2```_ statements
+defining a 2D polygon model and a ```2DTO3DTRANS```_ statement to
+convert this 2D model into a 3D model. Optionally, there may be a set of
+LAYER<
+
+.. _Overview: #_overview_
+.. _Running the program-Input: #_running_
+.. _Output: #_output_
+.. _Processing and Display of results: #_processing_
+.. _[NonLinLoc Home]: ./index.html
+.. _3D Grid: ./formats.html#_grid_
+.. _Input Control File: ./control.html
+.. _Vel2Grid Statements section: ./control.html#_Vel2Grid_
+.. _Generic Statements section: ./control.html#_generic_
+.. _Vel2Grid Statements: ./control.html#_Vel2Grid_
+.. _``LAYER``: ./control.html#_Vel2Grid_layer_
+.. _``VERTEX``: ./control.html#_Vel2Grid_vertex_
+.. _``EDGE``: ./control.html#_Vel2Grid_edge_
+.. _``POLYGON2``: ./control.html#_Vel2Grid_polygon2_
+.. _``2DTO3DTRANS``: ./control.html#_Vel2Grid_2d3dtrans_

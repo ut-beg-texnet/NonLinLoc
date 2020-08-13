@@ -1,0 +1,18 @@
+
+
+# To convert html to rst:
+
+cd ~/temp/pandoc_work/
+MODULE=ControlFile
+pandoc -f html -t rst /Users/anthony/www_impl/free/nlloc/soft7.00//control.html > control.${MODULE}.rst
+cp control.${MODULE}.rst ~/soft/NLLoc/docs/programs/control.${MODULE}.rst
+cd ~/soft/NLLoc/docs
+make html
+
+cd ~/temp/pandoc_work/
+for MODULE in Vel2Grid Vel2Grid3D Grid2Time Time2EQ NLLoc LocSum Grid2GMT  ; do
+	pandoc -f html -t rst /Users/anthony/www_impl/free/nlloc/soft7.00/${MODULE}.html > core.${MODULE}.rst
+	cp core.${MODULE}.rst ~/soft/NLLoc/docs/programs/core.${MODULE}.rst
+done
+cd ~/soft/NLLoc/docs
+make html
