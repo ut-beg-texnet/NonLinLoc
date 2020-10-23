@@ -34,8 +34,8 @@ www.alomax.net
 
 
 #define PACKAGE  "NonLinLoc"
-#define PVER  "7.00.09"
-#define PDATE "29Jun2020"
+#define PVER  "7.00.10"
+#define PDATE "30Aug2020"
 /*#define PCOPYRIGHT "\nCopyright (C) 1999-2019 Anthony Lomax\n"*/
 #define PCOPYRIGHT "\0"
 
@@ -304,6 +304,8 @@ typedef struct {
     char error_type[MAXLINE]; /* error type */
     double error_report; /* error in arrival time  to report*/
     char error_report_type[MAXLINE]; /* error type */
+    double prob_outlier; // probability reading is outlier, multiply error by outlier_err_factor
+    double outlier_err_factor;
 }
 PhaseDesc;
 
@@ -325,7 +327,7 @@ typedef struct {
 }
 SourceDesc;
 
-/* station */
+/* station-phase */
 
 typedef struct {
     char label[ARRIVAL_LABEL_LEN]; /* char label */
@@ -372,6 +374,7 @@ typedef struct {
     char phase[PHASE_LABEL_LEN]; /* char phase id */
     char onset[2]; /* char onset (ie E I) */
     char first_mot[2]; /* char first motion id */
+    double first_mot_quality; // first motion quality weight   // 20200829 AJL - added
     int quality; /* pick quality (ie weight 0 1 2 3 4) */
     int year, month, day; /* observed arrival date */
     int hour, min; /* observed arrival hour/min */
@@ -849,6 +852,7 @@ int ReadHypStatistics(FILE **, char*, Vect3D*, Vect3D*,
         Mtrx3D*, Ellipsoid3D*, ArrivalDesc*, int*);
 int ReadFocalMech(FILE **pfpio, char* fnroot_in, FocalMech* pfocalMech,
         ArrivalDesc* parrivals, int *pnarrivals);
+int ReadFirstMotionArrivals(FILE **pfpio, char* fnroot_in, ArrivalDesc* parrivals, int *pnarrivals);
 void Qual2Err(ArrivalDesc *);
 int Err2Qual(ArrivalDesc *);
 int GetQuality2Err(char*);

@@ -2405,17 +2405,17 @@ GRID_FLOAT_TYPE * ReadGridFile
         if (psrceIn != NULL) {
             psrce_use = psrceIn;
         }
-//        printf("DEBUG: SOURCE: Name: %s  Loc:  latlon: %d  X(east) %lg  Y(north) %lg  Z(pos DOWN) %lg  lat %lg lon %lg\n",
-//                psrce_use->label, psrce_use->is_coord_latlon,
-//                psrce_use->x, psrce_use->y, psrce_use->z,
-//                psrce_use->dlat, psrce_use->dlong
-//                );
+        //        printf("DEBUG: SOURCE: Name: %s  Loc:  latlon: %d  X(east) %lg  Y(north) %lg  Z(pos DOWN) %lg  lat %lg lon %lg\n",
+        //                psrce_use->label, psrce_use->is_coord_latlon,
+        //                psrce_use->x, psrce_use->y, psrce_use->z,
+        //                psrce_use->dlat, psrce_use->dlong
+        //                );
         for (i = 0; i < nvalues; i++) {
             yval_grid = GetEpiDist(psrce_use, xloc[i], yloc[i]);
             if (GeometryMode == MODE_GLOBAL)
                 yval_grid *= KM2DEG;
             values[i] = ReadAbsInterpGrid2d(fp_grid, &gdesc, yval_grid, zloc[i]);
-//            printf("DEBUG: yval_grid=%f xloc[i]=%f yloc[i]=%f zloc[i]=%f values[i]=%f\n", yval_grid, xloc[i], yloc[i], zloc[i], values[i]);
+            //            printf("DEBUG: yval_grid=%f xloc[i]=%f yloc[i]=%f zloc[i]=%f values[i]=%f\n", yval_grid, xloc[i], yloc[i], zloc[i], values[i]);
         }
     } else {
         // 3D grid
@@ -5023,11 +5023,14 @@ int ReadTakeOffAnglesFile(char *fname, double xloc, double yloc, double zloc,
     GridDesc gdesc;
     TakeOffAngles angles;
 
+    //printf("DEBUG: ReadTakeOffAnglesFile: fname %s\n", fname);
+
     /* open angle grid file */
     if ((istat = OpenGrid3dFile(fname, &fp_grid, &fp_hdr, &gdesc, "angle", NULL, iSwapBytes)) < 0) {
         if (message_flag >= 3) {
             sprintf(MsgStr, "WARNING: cannot open angle grid file, ignoring angles: %s", fname);
             nll_putmsg(3, MsgStr);
+            //printf("DEBUG: ReadTakeOffAnglesFile: WARNING: cannot open angle grid file, ignoring angles: %s", fname);
         }
         angles = SetTakeOffAngles(0.0, 0.0, 0);
         GetTakeOffAngles(&angles, pazim, pdip, piqual);
@@ -5040,7 +5043,7 @@ int ReadTakeOffAnglesFile(char *fname, double xloc, double yloc, double zloc,
     /* get angles */
     SetAnglesFloat(&angles, fvalue);
     GetTakeOffAngles(&angles, pazim, pdip, piqual);
-    //printf("x y z %f %f %f  raz %f  rdip %f rq  %d\n", xloc, yloc, zloc, *pazim, *pdip, *piqual);
+    //printf("DEBUG: ReadTakeOffAnglesFile: x y z %f %f %f  raz %f  rdip %f rq  %d\n", xloc, yloc, zloc, *pazim, *pdip, *piqual);
 
     /* determine azimuth (2D grids) */
     if (gdesc.type == GRID_ANGLE_2D) {
@@ -5317,7 +5320,7 @@ Mtrx3D CalcCovariance_OLD(GridDesc* pgrid, Vect3D* pexpect, FILE * fpgrid) {
 
     volume = pgrid->dx * pgrid->dy * pgrid->dz;
 
-    printf("DEBUG: cov.yy = cov.yy(%g) * volume(%g) (= %g) - pexpect->y(%g) * pexpect->y (= %g)\n", cov.yy, volume, cov.yy * volume, pexpect->y, pexpect->y * pexpect->y);
+    //printf("DEBUG: cov.yy = cov.yy(%g) * volume(%g) (= %g) - pexpect->y(%g) * pexpect->y (= %g)\n", cov.yy, volume, cov.yy * volume, pexpect->y, pexpect->y * pexpect->y);
     cov.xx = cov.xx * volume - pexpect->x * pexpect->x;
     cov.xy = cov.xy * volume - pexpect->x * pexpect->y;
     cov.xz = cov.xz * volume - pexpect->x * pexpect->z;
@@ -5330,7 +5333,7 @@ Mtrx3D CalcCovariance_OLD(GridDesc* pgrid, Vect3D* pexpect, FILE * fpgrid) {
     cov.zy = cov.yz;
     cov.zz = cov.zz * volume - pexpect->z * pexpect->z;
 
-    printf("DEBUG: CalcCovariance: volume= %g  cov.yy= %g\n", volume, cov.yy);
+    //printf("DEBUG: CalcCovariance: volume= %g  cov.yy= %g\n", volume, cov.yy);
 
     return (cov);
 }
@@ -5403,7 +5406,7 @@ Mtrx3D CalcCovariance(GridDesc* pgrid, Vect3D* pexpect, FILE * fpgrid) {
 
     volume = pgrid->dx * pgrid->dy * pgrid->dz;
 
-    printf("DEBUG: cov.yy = cov.yy(%g) * volume(%g) (= %g) - pexpect->y(%g) * pexpect->y (= %g)\n", cov.yy, volume, cov.yy * volume, pexpect->y, pexpect->y * pexpect->y);
+    //printf("DEBUG: cov.yy = cov.yy(%g) * volume(%g) (= %g) - pexpect->y(%g) * pexpect->y (= %g)\n", cov.yy, volume, cov.yy * volume, pexpect->y, pexpect->y * pexpect->y);
     cov.xx = cov.xx * volume;
     cov.xy = cov.xy * volume;
     cov.xz = cov.xz * volume;
@@ -5416,7 +5419,7 @@ Mtrx3D CalcCovariance(GridDesc* pgrid, Vect3D* pexpect, FILE * fpgrid) {
     cov.zy = cov.yz;
     cov.zz = cov.zz * volume;
 
-    printf("DEBUG: CalcCovariance: volume= %g  cov.yy= %g\n", volume, cov.yy);
+    //printf("DEBUG: CalcCovariance: volume= %g  cov.yy= %g\n", volume, cov.yy);
 
     return (cov);
 }
@@ -5510,6 +5513,63 @@ int ReadFocalMech(FILE **pfpio, char* fnroot_in,
 
 
     /* end of file */
+
+    fclose(*pfpio);
+    NumFilesOpen--;
+
+    return (EOF);
+
+}
+
+/** function to read arrivals with first-motions readings from a hyp file
+ *
+ * returns ArrivalDesc array containing only arrivals with first motion readings
+ * readings are converted to "+" or "-"
+ *
+ */
+
+int ReadFirstMotionArrivals(FILE **pfpio, char* fnroot_in, ArrivalDesc* parrivals, int *pnarrivals) {
+
+    char fn_in[FILENAME_MAX];
+    static HypoDesc hypo;
+
+    // open hypocenter file if necessary
+
+    if (*pfpio == NULL) {
+        sprintf(fn_in, "%s.hyp", fnroot_in);
+        if ((*pfpio = fopen(fn_in, "r")) == NULL) {
+            nll_puterr("ERROR: opening hypocenter file.");
+            return (EOF);
+        }
+        NumFilesOpen++;
+    }
+
+    // read next hypocenter
+
+    if (GetHypLoc(*pfpio, fnroot_in, &hypo, parrivals, pnarrivals, 1, NULL, 0) != EOF) {
+
+        // compact arrival array to contain only those with first-motion readings
+        int naccept = 0;
+        ArrivalDesc* parr = parrivals;
+        for (int narr = 0; narr < *pnarrivals; narr++) {
+            if (strstr("CcUu+", parr->first_mot)) { // follows fmamp conventions in fmamp/read_input.c
+                strcpy(parr->first_mot, "+");
+                parrivals[naccept] = *parr;
+                naccept++;
+            } else if (strstr("DdRr-", parr->first_mot)) { // follows fmamp conventions in fmamp/read_input.c
+                strcpy(parr->first_mot, "-");
+                parrivals[naccept] = *parr;
+                naccept++;
+            }
+            parr++;
+        }
+        *pnarrivals = naccept;
+
+        return (0);
+    }
+
+
+    // end of file
 
     fclose(*pfpio);
     NumFilesOpen--;

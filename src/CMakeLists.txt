@@ -6,6 +6,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.15)
 
 PROJECT(NonLinLoc)
 set(CMAKE_BUILD_TYPE Release)
+#set(CMAKE_BUILD_TYPE Debug)
 
 # If you want to build the library in ${CMAKE_CURRENT_SOURCE_DIR}/lib
 #set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
@@ -15,8 +16,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 # Bring the include directory with its headers into the project
 include_directories(
-	${CMAKE_CURRENT_SOURCE_DIR}/include 
-	${CMAKE_CURRENT_SOURCE_DIR}/alomax_matrix 
+	${CMAKE_CURRENT_SOURCE_DIR}/include
+	${CMAKE_CURRENT_SOURCE_DIR}/alomax_matrix
 	${CMAKE_CURRENT_SOURCE_DIR}/geometry
 	${CMAKE_CURRENT_SOURCE_DIR}/matrix_statistics
 	${CMAKE_CURRENT_SOURCE_DIR}/ran1
@@ -31,14 +32,14 @@ add_library(GRID_LIB_OBJS OBJECT GridLib.c util.c geo.c octtree/octtree.c alomax
 ### Simplify by just creating the NLLOC_LIB_OBJS .o object file
 add_library(NLLOC_LIB_OBJS OBJECT calc_crust_corr.c velmod.c NLLocLib.c GridMemLib.c phaselist.c loclist.c otime_limit.c)
 
-# Create NLLoc1.o 
+# Create NLLoc1.o
 add_library(NLLoc1 OBJECT NLLoc1.c)
 
 # Combine object .o files to OBJS0
 set(OBJS0 NLLoc1 GRID_LIB_OBJS NLLOC_LIB_OBJS)
 
 # --------------------------------------------------------------------------
-# NLLoc 
+# NLLoc
 # Important: set target_link_libraries after add_executable()
 # Also: add the math lib with: m
 add_executable(NLLoc NLLoc_main.c)

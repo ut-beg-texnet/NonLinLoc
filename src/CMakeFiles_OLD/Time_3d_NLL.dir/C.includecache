@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/anthony/soft/NLLoc/src/Time_3d_NLL.c
+stdio.h
+-
+math.h
+-
+sunmath.h
+-
+stdlib.h
+-
+malloc.h
+-
+

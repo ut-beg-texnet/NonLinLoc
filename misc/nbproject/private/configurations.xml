@@ -36,6 +36,8 @@
       <in>grad2layer.c</in>
       <in>grid2asc.c</in>
       <in>hyp2bull.c</in>
+      <in>hyp2pretty_phases_AlaskaHistorical.c</in>
+      <in>hyp_gt_2_corr.c</in>
       <in>hypoinv2hyp.c</in>
       <in>ingv_list2hyp.c</in>
       <in>isc_isf2hyp.c</in>

@@ -186,6 +186,9 @@ typedef struct {
     double coherence_min;  // minimum coherence to use grid
     double max_total_other_weight;  // maximum total of coherence weight for other events; if exceeded, other event coherences normalized to sum to this value
     double *weight;  // array of nGrids weights (function of coherence and coherence_min) for each corresponding tree3D
+    // arrivals storage
+    ArrivalDesc** first_motion_arrivals; // arrivals with first-motion readings
+    int *nfirst_motion_arrivals; // number of arrivals with first-motion readings
 }
 SearchPdfGridDesc;
 
@@ -524,6 +527,7 @@ int WriteHypoInverseArchive(FILE *fpio, HypoDesc *phypo, ArrivalDesc *parrivals,
         char *filename, int writeY2000, int write_arrivals, double arrivalWeightMax);
 int WriteHypoAlberto4(FILE *, HypoDesc*, ArrivalDesc*, int, char*);
 int WriteHypoFmamp(FILE *fpio, HypoDesc* phypo, ArrivalDesc* parrivals, int narrivals, char* filename, int write_header);
+int WriteHypoFmampSearchPosterior(SearchPdfGridDesc *searchPdfGrid, FILE *fpio, HypoDesc* phypo, char* filename, int write_header);
 int OpenSummaryFiles(char *, char *);
 int CloseSummaryFiles();
 

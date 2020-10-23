@@ -486,9 +486,41 @@ New version 7.00 posted to web =================================
 
 20191210 NLLoc - Bug fix: re-introduced phase mapping using LOCPHASEID before applying time delays specified in LOCDELAY
 
+20190510 NLLoc - Added LOCPRIOR/LOCPOSTERIOR control statements. Allows loading of grid or octtree pdf grids to be used for prior or posterior in construction of location pdf.
+
 2020 05 13 Add to doc: On 12/05/2020 20:20, Wayne Crawford wrote:
 	> I don't know how to make it clearer in the documentation, maybe just saying "depth is relative to sealevel/geographic origin, not zOrig".
 	Depth is (or should be) always used in NLL documentation as absolute geographic depth, and never to refer to position in the grid relative to the top of the grid.  I do see that it is never specified in TRANS that the geographic origin is taken as being at zero depth, nor emphasized in LAYER that depth is geographic depth.
 
 20200605 NLLoc - Added LOCINCLUDE control statement.  Only specified stations and phases will be used for location with non-zero prior.
+
+20200724 - ttime_func_test.c - Added support for DEFAULT 2D travel-time grids.
+
+20200727 NLLoc - Modified LOCEXCLUDE so only prefix (e.g. network) of excluded stations can be provided
+
+20200812 NLLoc - Bug fix: if locgrid.numz == 2 location will be not be REJECTED or ABORTED, this is case when depth fixed (i.e. numz = 2)
+
+20200812 NLLoc - Added NLLOC_OBS_LOCPHASEID LOCFILES->obs_type to force conversion of phase name using LOCPHASEID when reading phases (homogenizes names for correct LOCDELAY accumulation)
+
+20201015 Time2EQ1 - EQSTA: added 3 new fields:
+	1) added probabilstic test for data active (prob_active), with probability prob_active, station/phase is included in synthetic phase timess for each event
+	2, 3) added probabilstic data outlier (prob_outlier, outlier_err_factor), with probability prob_outlier, phase error is increased by outlier_err_factor
+	New syntax: EQSTA label phase errorType error errorReportType errorReport probActive probOutlier outlierErrorFactor
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

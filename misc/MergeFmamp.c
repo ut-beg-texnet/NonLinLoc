@@ -38,7 +38,7 @@
 
 
 
-#include "../src/GridLib.h"
+#include "../src/include/GridLib.h"
 
 
 /* defines */
@@ -173,7 +173,7 @@ int main(int argc, char** argv) {
 int MergeFmamp(int argc, char** argv) {
 
     int istat1, istat2;
-    int ok;
+    int matched;
     int numNLLFiles;
     int nHypMerged, nFmampRead, nNLLRead, nNLLFilesRead;
 
@@ -328,7 +328,7 @@ int MergeFmamp(int argc, char** argv) {
 
             if (istat1 >= 0 && istat1 != EOF) {
 
-                ok = 0;
+                matched = 0;
                 while (1) {
 
                     idiff = compareTimes(HypoFmamp.year, HypoNLL.year, HypoFmamp.month, HypoNLL.month,
@@ -337,7 +337,7 @@ int MergeFmamp(int argc, char** argv) {
                             time_tolerance);
 
                     if (idiff == 0) { // match
-                        ok = 1;
+                        matched = 1;
                         break;
                     } else if (idiff < 0) {
                         // fmamp hyp earlier, read next fmamp hyp
@@ -353,8 +353,9 @@ int MergeFmamp(int argc, char** argv) {
                         break;
                     }
                 }
-                if (!ok)
-                    continue;
+                // 20200818 AJL - write all hypos to output, event if no fmamp match
+                //if (!matched)
+                //continue;
 
                 // check optional limits
 
@@ -379,8 +380,10 @@ int MergeFmamp(int argc, char** argv) {
                 }
 
                 // merge fmamp info into NLL hyp
-
-                HypoNLL.focMech = HypoFmamp.focMech;
+                // 20200818 AJL - write all hypos to output, event if no fmamp match
+                if (matched) {
+                    HypoNLL.focMech = HypoFmamp.focMech;
+                }
 
                 // output merged hyp
                 WriteGrid3dHdr(&locgrid, NULL, fn_out, NULL);
@@ -391,7 +394,9 @@ int MergeFmamp(int argc, char** argv) {
 
             }
 
-            break; // next fmamp hypo
+            if (matched) {
+                break; // next fmamp hypo
+            }
 
         }
 

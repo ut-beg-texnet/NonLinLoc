@@ -63,7 +63,8 @@ tel: +33(0)493752502  e-mail: anthony@alomax.net  web: http://www.alomax.net
 //#define PLOT_HEIGHT 27.0
 // A4
 #define PLOT_HEIGHT 28.7
-#define TITLE_FONT_SIZE 17
+//#define TITLE_FONT_SIZE 17
+#define TITLE_FONT_SIZE 15
 #define TITLE_FONT 4
 #define HYPO_FONT 4
 #define STA_FONT 4
@@ -203,22 +204,22 @@ int main(int argc, char *argv[]) {
 
     /* check command line for correct usage */
 
-    if (message_flag > 0) {
+    //if (message_flag > 0) {
         fprintf(stdout, "\n%s Arguments: ", prog_name);
         for (narg = 0; narg < argc; narg++)
             fprintf(stdout, "<%s> ", argv[narg]);
         fprintf(stdout, "\n");
-    }
+    //}
 
     // count non option arguments
-    int argc_non_opt = 0;
-    // 20190508 AJL - bug fix: following prevents using negative numerical values in command line (e.g. VL -long)
-    /*for (narg = 0; narg < argc; narg++) {
-        if (argv[narg][0] != '-') {
-            argc_non_opt++;
+    int argc_non_opt = argc;
+    for (narg = argc - 1; narg >= 0; narg--) {
+        if (argv[narg][0] == '-') {
+            argc_non_opt--;
+        } else {
+            break;
         }
-    }*/
-    argc_non_opt = argc; // 20190508 AJL
+    }
 
 
     clatlongmode = '\0';
@@ -530,7 +531,9 @@ int GenGMTCommands(char cplotmode, char cdatatype,
     //fprintf(fp_gmt, "gmtset  ANNOT_FONT_SIZE_PRIMARY 8  ANNOT_FONT_SIZE_SECONDARY 6  HEADER_FONT_SIZE 12 LABEL_FONT_SIZE 10\n\n");
     //fprintf(fp_gmt, "gmtset  ANNOT_FONT_SIZE_PRIMARY 12  ANNOT_FONT_SIZE_SECONDARY 12  HEADER_FONT_SIZE 12 LABEL_FONT_SIZE 10\n\n");
     //fprintf(fp_gmt, "gmtset  ANNOT_FONT_SIZE_PRIMARY 14  ANNOT_FONT_SIZE_SECONDARY 14  HEADER_FONT_SIZE 14 LABEL_FONT_SIZE 14\n\n");
-    fprintf(fp_gmt, "gmtset  ANNOT_FONT_SIZE_PRIMARY 18  ANNOT_FONT_SIZE_SECONDARY 18  HEADER_FONT_SIZE 18 LABEL_FONT_SIZE 18\n\n");
+    //
+    //fprintf(fp_gmt, "gmtset  ANNOT_FONT_SIZE_PRIMARY 18  ANNOT_FONT_SIZE_SECONDARY 18  HEADER_FONT_SIZE 18 LABEL_FONT_SIZE 18\n\n");
+    fprintf(fp_gmt, "gmtset  ANNOT_FONT_SIZE_PRIMARY 14  ANNOT_FONT_SIZE_SECONDARY 14  HEADER_FONT_SIZE 14 LABEL_FONT_SIZE 14\n\n");
     fprintf(fp_gmt, "gmtset  ANNOT_FONT_PRIMARY 4  ANNOT_FONT_SECONDARY 4  HEADER_FONT 4 LABEL_FONT 4\n\n");
     fprintf(fp_gmt, "gmtset  LABEL_OFFSET 0.1c  ANNOT_OFFSET_PRIMARY 0.1c ANNOT_OFFSET_SECONDARY 0.1c\n\n");
 
@@ -568,7 +571,7 @@ int GenGMTCommands(char cplotmode, char cdatatype,
     /* begin plot */
 
     fprintf(fp_gmt,
-            "psbasemap -R0.5/1.0/0.5/1.0 -Bf10 -JX%lf/%lf -K > %s.ps\n\n",
+            "psbasemap -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -K > %s.ps\n\n",
             PLOT_WIDTH, PLOT_HEIGHT, fn_ps_output);
 
 
@@ -612,7 +615,7 @@ int GenGMTCommands(char cplotmode, char cdatatype,
                 NULL, 1, 1, 0, NULL, proj_index_output);
 
         fprintf(fp_gmt,
-                "pstext -R0.5/1.0/0.5/1.0 -Bf10 -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
+                "pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
                 PLOT_WIDTH, PLOT_HEIGHT, fn_ps_output,
                 0.75, 0.98, TITLE_FONT_SIZE,
                 0, TITLE_FONT, 2, Hypo.comment);
@@ -645,7 +648,7 @@ int GenGMTCommands(char cplotmode, char cdatatype,
         }
 
         fprintf(fp_gmt,
-                "pstext -R0.5/1.0/0.5/1.0 -Bf10 -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
+                "pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
                 PLOT_WIDTH, PLOT_HEIGHT, fn_ps_output,
                 0.75, 0.97, HYPO_FONT_SIZE,
                 0, HYPO_FONT, 2, hypotext);
@@ -685,32 +688,32 @@ int GenGMTCommands(char cplotmode, char cdatatype,
 
         if (cdatatype == 'S') {
             fprintf(fp_gmt,
-                    "pstext -R0.5/1.0/0.5/1.0 -Bf10 -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
+                    "pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
                     PLOT_WIDTH, PLOT_HEIGHT, fn_ps_output,
                     0.75, 0.96, HYPO_FONT_SIZE,
                     0, TITLE_FONT, 2, "PDF scatter sample");
         } else if (cdatatype == 'E') {
             fprintf(fp_gmt,
-                    "pstext -R0.5/1.0/0.5/1.0 -Bf10 -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
+                    "pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
                     PLOT_WIDTH, PLOT_HEIGHT, fn_ps_output,
                     0.75, 0.96, HYPO_FONT_SIZE,
                     0, TITLE_FONT, 2,
                     "Error Ellipsoid, Expectation (dot) and Maximum Likelihood (star)");
         } else if (cdatatype == 'M') {
             fprintf(fp_gmt,
-                    "pstext -R0.5/1.0/0.5/1.0 -Bf10 -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
+                    "pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
                     PLOT_WIDTH, PLOT_HEIGHT, fn_ps_output,
                     0.75, 0.96, HYPO_FONT_SIZE,
                     0, TITLE_FONT, 2, "Double-couple focal mechanisms");
         } else if (cdatatype == 'R') {
             fprintf(fp_gmt,
-                    "pstext -R0.5/1.0/0.5/1.0 -Bf10 -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s %s\nEND\n\n",
+                    "pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s %s\nEND\n\n",
                     PLOT_WIDTH, PLOT_HEIGHT, fn_ps_output,
                     0.75, 0.96, HYPO_FONT_SIZE,
                     0, TITLE_FONT, 2, arg_elements[0], "Residuals");
         } else if (cdatatype == 'C') {
             fprintf(fp_gmt,
-                    "pstext -R0.5/1.0/0.5/1.0 -Bf10 -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s %s\nEND\n\n",
+                    "pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s %s\nEND\n\n",
                     PLOT_WIDTH, PLOT_HEIGHT, fn_ps_output,
                     0.75, 0.96, HYPO_FONT_SIZE,
                     0, TITLE_FONT, 2, arg_elements[0], "StaCorr");
@@ -740,7 +743,7 @@ int GenGMTCommands(char cplotmode, char cdatatype,
         GenGridViewGMT(pgrid0, 'L', cdatatype, arg_elements, num_arg_elements,
                 0, Hypo.iy, pgrid0->numx,
                 Hypo.iy, 0,
-                plot_width, "WEnS", "", shift_str,
+                plot_width, "WenS", "", shift_str,
                 &scale, &xlen, &ylen, Hypo.z, Hypo.x,
                 Hypo.grid_misfit_max, res_scale, res_min_num_readings);
         xshift_cum += xshift;
@@ -763,7 +766,7 @@ int GenGMTCommands(char cplotmode, char cdatatype,
         GenGridViewGMT(pgrid0, 'L', cdatatype, arg_elements, num_arg_elements,
                 Hypo.ix, 0, Hypo.ix,
                 pgrid0->numy, 0,
-                plot_width, "wENS", "", shift_str,
+                plot_width, "wENs", "", shift_str,
                 &scale, &xlen, &ylen, Hypo.y, Hypo.z,
                 Hypo.grid_misfit_max, res_scale, res_min_num_readings);
         xshift_cum += xshift;
@@ -905,7 +908,7 @@ int GenGMTCommands(char cplotmode, char cdatatype,
     sprintf(signature_str, "%s   %s:v%s %s", Hypo.signature, PNAME, PVER, CurrTimeStr());
 
     fprintf(fp_gmt,
-            "pstext -R0.5/1.0/0.5/1.0 -Bf10 -JX%lf/%lf -X%lf -Y%lf -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
+            "pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -X%lf -Y%lf -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
             PLOT_WIDTH, PLOT_HEIGHT, -xshift_cum, -yshift_cum,
             fn_ps_output,
             0.501, 0.501, ANNOTATION_FONT_SIZE, 0, ANNOTATION_FONT,
@@ -1574,7 +1577,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
                         fprintf(fp_gmt,
                                 "   makecpt -Z -Chot -I -T0/1/0.1 > %s.cpt\n",
                                 fn_root_output);
-                    } else { // rainbow
+                    } else { // colortable
                         double contour_int_cpt = contour_int;
                         double value_min = contour_int * (floor(grid_value_min / contour_int) - 0.0);
                         double value_max = contour_int * (0.0 + ceil(grid_value_max / contour_int));
@@ -1594,7 +1597,8 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
                                 value_min = -contour_int;
                         } else {
                             // value range positive
-                            strcpy(cpt_colortable, "rainbow");
+                            //strcpy(cpt_colortable, "rainbow");
+                            strcpy(cpt_colortable, "seis");
                         }
                         char cpt_command[10 * MAXLINE];
                         sprintf(cpt_command, "makecpt -Z -C%s -T%g/%g/%g > %s.cpt",

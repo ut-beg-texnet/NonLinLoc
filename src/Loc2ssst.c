@@ -97,6 +97,7 @@ char fn_ls_output[FILENAME_MAX];
 char fn_time_input[FILENAME_MAX] = "";
 int ihave_time_input_grids = 0;
 double VpVsRatio;
+int iSwapBytesOnInput;
 
 
 /* functions */
@@ -294,9 +295,11 @@ int GetNLLoc_Files(char* line1) {
     int istat;
 
     //NLLocLib.c  istat = sscanf(line1, "%s %s %s %s %d", fnobs, ftype_obs, fn_loc_grids, fn_path_output, &iSwapBytesOnInput);
-    istat = sscanf(line1, "%*s %*s %s %*s %*d", fn_time_input);
+    istat = sscanf(line1, "%*s %*s %s %*s %d", fn_time_input, &iSwapBytesOnInput);
+    if (istat < 2)
+        iSwapBytesOnInput = 0;
 
-    sprintf(MsgStr, "LOCFILES:  InputTimeGrids: %s.*", fn_time_input);
+    sprintf(MsgStr, "LOCFILES:  InputTimeGrids: %s.* iSwapBytesOnInput: %d", fn_time_input, iSwapBytesOnInput);
     nll_putmsg(1, MsgStr);
 
     return (0);
@@ -346,6 +349,7 @@ int ReadLoc2ssstInput(FILE * fp_input) {
     int flag_mode = 1;
     int flag_stations = 1;
 
+    int flag_source = 0;
     int flag_nlloc_outfile = 0;
     int flag_out_grid = 0;
 
@@ -435,6 +439,17 @@ int ReadLoc2ssstInput(FILE * fp_input) {
                 nll_puterr("ERROR: reading phase identifier values.");
                 flag_phase_id = 0;
             }
+        }
+
+
+        /* read source params */
+
+        if (strcmp(param, "LOCSRCE") == 0 || strcmp(param, "GTSRCE") == 0) {
+            if ((istat = GetNextSource(strchr(line, ' '))) < 0) {
+                nll_puterr("ERROR: reading source params:");
+                nll_puterr(line);
+            } else
+                flag_source = 1;
         }
 
 
@@ -691,9 +706,17 @@ int DoLoc2ssst() {
 
             // do phase mapping before saving location arrivals and before accumulating time corrections
             for (int i = 0; i < NumArrivals; i++) {
+                // DEBUG
+                /*if (strcmp(Arrival[i].label, "PB07") == 0 && strcmp(Arrival[i].phase, "P") == 0) {
+                if (strcmp(Arrival[i].label, "PB07") == 0) {
+                    printf("DEBUG: PB07 %s found in arrival list res=%f hyp=%s\n", Arrival[i].phase, Arrival[i].residual, fn_hyp_in_list[nFile]);
+                }
+                 */
                 strcpy(arrival_phase, Arrival[i].phase);
                 EvalPhaseID(Arrival[i].phase, arrival_phase);
                 strcpy(Arrival[i].time_grid_label, Arrival[i].label);
+                // update swap bytes
+                Arrival[i].gdesc.iSwapBytes = iSwapBytesOnInput;
             }
             int iuse_phaseid_in_label = 1;
             NumStationPhases = addToStationList(StationPhaseList, NumStationPhases, Arrival, NumArrivals, iuse_phaseid_in_label);
@@ -802,7 +825,7 @@ int DoLoc2ssst() {
             for (int narr = 0; narr < narrivals; narr++) {
                 parr = parrivals + narr;
                 if (fabs(parr->residual) > residualmax || strcmp(parr->label, stacode) != 0 || strcmp(parr->phase, phasecode) != 0) {
-                    //nll_puterr("WARNING: residual is greater than residualmax, ignoring event");
+                    //nll_puterr("WARNING: residual is greater than residualmax, ignoring arrival");
                     continue;
                 }
                 int addDuplicates = 1;
@@ -890,7 +913,14 @@ int DoLoc2ssst() {
             }
             // reset ssst grid type to TIME
             add_ssst_to_traveltime_grid(pssst_grid, &(PhsNodeArray[0]->parrival->gdesc), pssst_time_grid, station_phase, tfact);
-            sprintf(filename, "%s_ssst_corr.%s.%s", fn_ls_output, phasecode, stacode);
+            //sprintf(filename, "%s_ssst_corr.%s.%s", fn_ls_output, phasecode, stacode); // 20201010 AJL - bug fix: adding _ssst_corr to file root makes file management difficult
+            sprintf(filename, "%s.%s.%s", fn_ls_output, phasecode, stacode);
+            // remove existing files since may be links  // 20201010 AJL - added
+            char fname_remove[MAXLINE_LONG];
+            sprintf(fname_remove, "%s.%s.hdr", filename, "time");
+            remove(fname_remove);
+            sprintf(fname_remove, "%s.%s.buf", filename, "time");
+            remove(fname_remove);
             istat = WriteGrid3dBuf(pssst_time_grid, station_phase, filename, "time");
             if (istat < 0) {
                 nll_puterr2("ERROR: writing SSST corrected time grid to disk", filename);
@@ -1074,6 +1104,34 @@ int open_traveltime_grid(ArrivalDesc* parr, char *fn_time_grid_input, char *stac
             sprintf(MsgStr,
                     "INFO: S phase: using P phase travel time grid file: %s", filename);
             nll_putmsg(3, MsgStr);
+        }
+    }
+
+
+    // try opening DEFAULT time grid file
+    int i_need_elev_corr = 0; // TODO: implement elevation corr
+    if (istat < 0) {
+        SourceDesc* pstation = FindSource(parr->time_grid_label);
+        if (pstation != NULL) {
+            // open DEFAULT time grid for this phase
+            int iSwapBytes = parr->gdesc.iSwapBytes;
+            // 20201022 AJL - Cluge, assume need to byte swap if DEFAULT  // TODO: make this automatic or configurable
+            iSwapBytes = 1;
+            //
+            sprintf(filename, "%s.%s.%s.time", fn_time_grid_input, phasecode, "DEFAULT");
+            istat = OpenGrid3dFile(filename,
+                    &(parr->fpgrid),
+                    &(parr->fphdr),
+                    &(parr->gdesc), "time",
+                    &(parr->station),
+                    iSwapBytes);
+            if (istat >= 0 && message_flag >= 3) {
+                sprintf(MsgStr,
+                        "INFO: using DEFAULT travel time grid file: %s", filename);
+                nll_putmsg(3, MsgStr);
+            }
+            parr->station = *pstation;
+            i_need_elev_corr = 1;
         }
     }
 
