@@ -1,8 +1,6 @@
 Complete NonLinLoc distribution software package
 ------------------------------------------------------
-	Unpack source files: unpack: NLL[VER]_src.tgz
-	or
-	Get from https://github.com/alomax/NonLinLoc
+	Clone or download ZIP from https://github.com/alomax/NonLinLoc
 
 	To build:
 	cd src
@@ -10,6 +8,15 @@ Complete NonLinLoc distribution software package
 	cmake .
 	make
 	See http://alomax.net/nlloc and http://alomax.net/nlloc -> tutorials for further information
+	
+	To bulid debug:
+	# edit CMakeLists.txt to comment out Release build type and uncomment Debug bulid type:
+		#set(CMAKE_BUILD_TYPE Release)
+		set(CMAKE_BUILD_TYPE Debug)
+	cd src
+	rm CMakeCache.txt 
+	cmake .
+	make
 
 
 NLLoc_func_test program demonstrating running NLLoc through a function call
