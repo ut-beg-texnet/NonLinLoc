@@ -1633,7 +1633,7 @@ int GetObservations(FILE* fp_obs, char* ftype_obs, char* fn_grids,
                         sprintf(arrival[nobs].fileroot, "%s.%s.%s", fn_grids, eval_phase, "DEFAULT");
                         sprintf(filename, "%s.time", arrival[nobs].fileroot);
 
-#define LOC2SSST_CLUGE
+//#define LOC2SSST_CLUGE
 #ifdef LOC2SSST_CLUGE
             // 20201022 AJL - Cluge, assume need to byte swap if DEFAULT  // TODO: make this automatic or configurable
             arrival[nobs].gdesc.iSwapBytes = 1;

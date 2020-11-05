@@ -108,7 +108,7 @@ int DoLoc2ssst();
 double get_ssst_value(double xval, double yval, double zval,
         PhsNode **phs_node_array, int num_phs_nodes, LocNode **loc_node_array, int num_loc_nodes, LS_Params *pparams);
 int open_traveltime_grid(ArrivalDesc* parr, char *fn_time_grid_input, char *stacode, char *phasecode, double vp_vs_ratio, double *ptfact);
-int add_ssst_to_traveltime_grid(GridDesc *pssst_grid, GridDesc *ptraveltime_grid, GridDesc *pssst_time_grid, SourceDesc* psrce, double tfact);
+int add_ssst_to_traveltime_grid(char *phasecode, char *stacode, GridDesc *pssst_grid, GridDesc *ptraveltime_grid, GridDesc *pssst_time_grid, SourceDesc* psrce, double tfact);
 int GenAngleGrid(GridDesc* ptgrid, SourceDesc* psource, char *filename, GridDesc* pagrid, int angle_mode);
 
 
@@ -839,17 +839,28 @@ int DoLoc2ssst() {
         // put locations in array for efficiency
         NumLocNodes = 0;
         while ((locNode = getLocationFromLocList(loc_list_head, NumLocNodes)) != NULL) {
+            if (NumLocNodes >= MAX_NUM_INPUT_FILES) {
+                snprintf(MsgStr, sizeof (MsgStr), "ERROR: size LocNodeArray exceeded, only first phases %d will be processed.", MAX_NUM_INPUT_FILES);
+                nll_puterr(MsgStr);
+                break;
+            }
             LocNodeArray[NumLocNodes++] = locNode;
         }
         // put phases in array for efficiency
         PhsNode *phsNode;
         NumPhsNodes = 0;
         while ((phsNode = getPhsNodeFromPhaseList(phs_list_head, NumPhsNodes)) != NULL) {
+            if (NumPhsNodes >= X_MAX_NUM_ARRIVALS) {
+                snprintf(MsgStr, sizeof (MsgStr), "ERROR: size PhsNodeArray exceeded, only first phases %d will be processed.", X_MAX_NUM_ARRIVALS);
+                nll_puterr(MsgStr);
+                break;
+            }
             PhsNodeArray[NumPhsNodes++] = phsNode;
         }
         // clean up
-        freePhaseList(phs_list_head, 0);
-        phs_list_head = NULL;
+        // 20201104 AJL - Buf fix: moved this free to end of block, PhsNodeArray points to allocations made in addArrivalToPhaseList()
+        //freePhaseList(phs_list_head, 0);
+        //phs_list_head = NULL;
 
         //display_grid_param(pssst_grid);
 
@@ -906,13 +917,20 @@ int DoLoc2ssst() {
         if (ihave_time_input_grids) {
             nll_putmsg2(1, "INFO: Opening existing time grid", fn_time_input);
             double tfact = 1.0;
+            // DEBUG!!
+            //int message_flag_save = message_flag;
+            //message_flag = 99;
+            // END DEBUG
             istat = open_traveltime_grid(PhsNodeArray[0]->parrival, fn_time_input, stacode, phasecode, VpVsRatio, &tfact);
+            // DEBUG!!
+            //message_flag = message_flag_save;
+            // END DEBUG
             if (istat < 0) {
                 nll_puterr2("ERROR: Opening existing time grid", PhsNodeArray[0]->parrival->fileroot);
                 return (-1);
             }
             // reset ssst grid type to TIME
-            add_ssst_to_traveltime_grid(pssst_grid, &(PhsNodeArray[0]->parrival->gdesc), pssst_time_grid, station_phase, tfact);
+            add_ssst_to_traveltime_grid(phasecode, stacode, pssst_grid, &(PhsNodeArray[0]->parrival->gdesc), pssst_time_grid, station_phase, tfact);
             //sprintf(filename, "%s_ssst_corr.%s.%s", fn_ls_output, phasecode, stacode); // 20201010 AJL - bug fix: adding _ssst_corr to file root makes file management difficult
             sprintf(filename, "%s.%s.%s", fn_ls_output, phasecode, stacode);
             // remove existing files since may be links  // 20201010 AJL - added
@@ -979,6 +997,12 @@ int DoLoc2ssst() {
         system(system_str);
         sprintf(MsgStr, "Grid2GMT cpt file written to: %s", "Grid2GMT_SSST.cpt");
         nll_putmsg(1, MsgStr);
+
+        // clean up
+        // 20201104 AJL - Buf fix: moved this free from above
+        freePhaseList(phs_list_head, 0);
+        phs_list_head = NULL;
+
     }
 
     return (0);
@@ -1054,9 +1078,10 @@ double get_ssst_value(double xval, double yval, double zval,
 int open_traveltime_grid(ArrivalDesc* parr, char *fn_time_grid_input, char *stacode, char *phasecode, double vp_vs_ratio, double *ptfact) {
 
     int istat;
+    int DEBUG = 0;
 
     char filename[MAXLINE_LONG];
-    sprintf(filename, "%s.%s.%s", fn_time_grid_input, stacode, phasecode);
+    //sprintf(filename, "%s.%s.%s", fn_time_grid_input, stacode, phasecode);
 
     char arrival_phase[PHASE_LABEL_LEN];
     strcpy(arrival_phase, parr->phase);
@@ -1064,8 +1089,14 @@ int open_traveltime_grid(ArrivalDesc* parr, char *fn_time_grid_input, char *stac
     *ptfact = 1.0;
 
     // try to open time grid file using original phase ID
-    sprintf(parr->fileroot, "%s.%s.%s", fn_time_grid_input, phasecode, parr->time_grid_label);
+    //sprintf(parr->fileroot, "%s.%s.%s", fn_time_grid_input, phasecode, parr->time_grid_label);
+    sprintf(parr->fileroot, "%s.%s.%s", fn_time_grid_input, phasecode, stacode);
     sprintf(filename, "%s.time", parr->fileroot);
+    if (DEBUG) {
+        printf("DEBUG: parr->fileroot <%s>\n", parr->fileroot);
+        printf("DEBUG: filename <%s>\n", filename);
+        nll_puterr2("INFO: Opening existing time grid: ", filename);
+    }
     // try opening time grid file for this phase
     istat = OpenGrid3dFile(filename,
             &(parr->fpgrid),
@@ -1073,6 +1104,9 @@ int open_traveltime_grid(ArrivalDesc* parr, char *fn_time_grid_input, char *stac
             &(parr->gdesc), "time",
             &(parr->station),
             parr->gdesc.iSwapBytes);
+    if (DEBUG && istat < 0) {
+        nll_puterr2("WARNING: Cannot open existing time grid: ", filename);
+    }
 
     /* already mapped earlier
     if (istat < 0) {
@@ -1092,14 +1126,20 @@ int open_traveltime_grid(ArrivalDesc* parr, char *fn_time_grid_input, char *stac
     /* try opening P time grid file for S if no P companion phase */
     if (istat < 0 && vp_vs_ratio > 0.0 && IsPhaseID(phasecode, "S")) {
         *ptfact = vp_vs_ratio;
-        sprintf(parr->fileroot, "%s.%s.%s", fn_time_grid_input, "P", parr->time_grid_label);
+        sprintf(parr->fileroot, "%s.%s.%s", fn_time_grid_input, "P", stacode);
         sprintf(filename, "%s.time", parr->fileroot);
+        if (DEBUG && istat < 0) {
+            nll_puterr2("INFO: Opening existing time grid: ", filename);
+        }
         istat = OpenGrid3dFile(filename,
                 &(parr->fpgrid),
                 &(parr->fphdr),
                 &(parr->gdesc), "time",
                 &(parr->station),
                 parr->gdesc.iSwapBytes);
+        if (DEBUG && istat < 0) {
+            nll_puterr2("WARNING: Cannot open existing time grid: ", filename);
+        }
         if (message_flag >= 3) {
             sprintf(MsgStr,
                     "INFO: S phase: using P phase travel time grid file: %s", filename);
@@ -1111,7 +1151,7 @@ int open_traveltime_grid(ArrivalDesc* parr, char *fn_time_grid_input, char *stac
     // try opening DEFAULT time grid file
     int i_need_elev_corr = 0; // TODO: implement elevation corr
     if (istat < 0) {
-        SourceDesc* pstation = FindSource(parr->time_grid_label);
+        SourceDesc* pstation = FindSource(stacode);
         if (pstation != NULL) {
             // open DEFAULT time grid for this phase
             int iSwapBytes = parr->gdesc.iSwapBytes;
@@ -1119,12 +1159,18 @@ int open_traveltime_grid(ArrivalDesc* parr, char *fn_time_grid_input, char *stac
             iSwapBytes = 1;
             //
             sprintf(filename, "%s.%s.%s.time", fn_time_grid_input, phasecode, "DEFAULT");
+            if (DEBUG && istat < 0) {
+                nll_puterr2("INFO: Opening existing time grid: ", filename);
+            }
             istat = OpenGrid3dFile(filename,
                     &(parr->fpgrid),
                     &(parr->fphdr),
                     &(parr->gdesc), "time",
                     &(parr->station),
                     iSwapBytes);
+            if (DEBUG && istat < 0) {
+                nll_puterr2("WARNING: Cannot open existing time grid: ", filename);
+            }
             if (istat >= 0 && message_flag >= 3) {
                 sprintf(MsgStr,
                         "INFO: using DEFAULT travel time grid file: %s", filename);
@@ -1167,7 +1213,7 @@ int open_traveltime_grid(ArrivalDesc* parr, char *fn_time_grid_input, char *stac
 
 /** add original traveltimes to ssst corrections for a station/phase ssst grid
  */
-int add_ssst_to_traveltime_grid(GridDesc *pssst_grid, GridDesc *ptraveltime_grid, GridDesc *pssst_time_grid, SourceDesc* psrce, double tfact) {
+int add_ssst_to_traveltime_grid(char *phasecode, char *stacode, GridDesc *pssst_grid, GridDesc *ptraveltime_grid, GridDesc *pssst_time_grid, SourceDesc* psrce, double tfact) {
 
 
     int is3D = 0;
@@ -1175,6 +1221,7 @@ int add_ssst_to_traveltime_grid(GridDesc *pssst_grid, GridDesc *ptraveltime_grid
         is3D = 1;
     }
 
+    int debug_count = 0;
     int ix, iy, iz;
     double xval, yval, zval, ttval, arrival_dist, ssst_corr;
     xval = pssst_time_grid->origx;
@@ -1193,13 +1240,26 @@ int add_ssst_to_traveltime_grid(GridDesc *pssst_grid, GridDesc *ptraveltime_grid
                             GeometryMode == MODE_GLOBAL ? arrival_dist * KM2DEG : arrival_dist, zval);
                 }
                 if (ttval < -LARGE_FLOAT) {
+                    if (debug_count++ < 10) {
+                        printf("DEBUG ERROR ttval < -LARGE_FLOAT: %s %s  is3D %d, xval %f, yval %f, zval %f\n",
+                                phasecode, stacode, is3D, xval, yval, zval);
+                    }
                     ttval = 0.0;
                     ssst_corr = 0.0;
                 } else {
                     ssst_corr = ReadAbsInterpGrid3d(NULL, pssst_grid, xval, yval, zval, 1);
                     if (ssst_corr < -LARGE_FLOAT) {
-
+                        if (debug_count++ < 10) {
+                            printf("DEBUG ERROR ssst_corr < -LARGE_FLOAT: %s %s  is3D %d, xval %f, yval %f, zval %f\n",
+                                    phasecode, stacode, is3D, xval, yval, zval);
+                        }
                         ssst_corr = 0.0;
+                    }
+                }
+                if (fabs(ttval * tfact + ssst_corr) < SMALL_FLOAT) {
+                    if (debug_count++ < 10) {
+                        printf("DEBUG ERROR fabs(ttval * tfact + ssst_corr) < SMALL_FLOAT: %s %s  is3D %d, xval %f, yval %f, zval %f\n",
+                                phasecode, stacode, is3D, xval, yval, zval);
                     }
                 }
                 ((GRID_FLOAT_TYPE ***) pssst_time_grid->array)[ix][iy][iz] = (GRID_FLOAT_TYPE) (ttval * tfact + ssst_corr);
