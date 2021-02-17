@@ -4986,7 +4986,12 @@ int CmpDoubles(const double *keyval, const double *datum) {
 TakeOffAngles SetTakeOffAngles(double azim, double dip, int iqual) {
     TakeOffAngles angles;
 
-    angles.ival[1] = (unsigned short) (0.5 + 10.0 * azim);
+    // 20201221 AJL - Bug fix: cannot represent a negative number as unsigned short - duh!
+    if (azim < 0.0) {
+        angles.ival[1] = ANGLES_DIP_REVERSE;
+    } else {
+        angles.ival[1] = (unsigned short) (0.5 + 10.0 * azim);
+    }
     angles.ival[0] = (unsigned short) iqual
             + (unsigned short) ANGLES_OFFSET
             * (unsigned short) (0.5 + 10.0 * dip);
@@ -5047,9 +5052,12 @@ int ReadTakeOffAnglesFile(char *fname, double xloc, double yloc, double zloc,
 
     /* determine azimuth (2D grids) */
     if (gdesc.type == GRID_ANGLE_2D) {
-        if (*pazim > 0.0)
+        //printf("DEBUG: *pazim %f <= ANGLES_DIP_MAX %f\n", *pazim, ANGLES_DIP_MAX);
+        // 20201221 AJL - Bug fix: cannot represent a negative number as unsigned short - duh!
+        //if (*pazim > 0.0)
+        if (*pazim <= ANGLES_DIP_MAX)
             *pazim = sta_azim;
-        else {
+        else { // reverse azimuth
             *pazim = sta_azim - 180.0;
             if (*pazim < 0.0)
                 *pazim += 360.0;
@@ -6325,15 +6333,22 @@ TakeOffAngles GetGradientAngles(double vcent, double xlow, double xhigh,
     /* thats all for 2D grids */
     if (iflag2D) {
         /* calculate dip angle (range of 0 (down) to 180 (up)) */
-        dip = atan2(grady, -gradz) / cRPD;
+        //dip = atan2(grady, -gradz) / cRPD;
+        dip = atan2(fabs(grady), -gradz) / cRPD;
+        //dip = -dip; // TEST!
         iflip = 0;
-        if (dip > 180.0) {
+        // 20201221 AJL - Bug fix: ray depart direction depend only on grady
+        if (grady > 0.0) { // ray departs source away from station
+            iflip = 1;
+        }
+        // 20201221 AJL - Bug fix: with atan2(<positive>, real) dip is restricted to 0-180 (atan2 restricted to 0-PI)
+        /*if (dip > 180.0) {
             dip = dip - 180.0;
             iflip = 1;
         } else if (dip < 0.0) {
             dip = -dip;
             iflip = 1;
-        }
+        }*/
         /* calculate azimuth polarity (1 or -1) relative to pos Y dir */
         azim = iflip ? -1.0 : 1.0;
         /* find combined quality - weighted average of component qual */

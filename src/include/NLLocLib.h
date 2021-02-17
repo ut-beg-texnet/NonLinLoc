@@ -252,7 +252,7 @@ EXTERN_TXT int SearchType;
 #define PDF_GRID_OCT_TREE   2
 #define PDF_GRID_PRIOR   0
 #define PDF_GRID_POSTERIOR   1
-#define MAX_NUM_PDF_GRID_FILES 1000
+#define MAX_NUM_PDF_GRID_FILES 5000
 // location search prior  // 20190510 AJL - added
 EXTERN_TXT SearchPdfGridDesc SearchPrior;
 EXTERN_TXT int iUseSearchPrior;

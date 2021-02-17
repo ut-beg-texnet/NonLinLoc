@@ -610,6 +610,11 @@ HypoDesc;
 
 #define ANGLE_QUALITY_CUTOFF 5  /* value to determine "bad" angles */
 #define ANGLES_OFFSET 16
+// 20201221 AJL - Bug fix: cannot represent a negative number as unsigned short - duh!
+// 20201221 AJL - Bug fix: flag to indicate azimuth should be reversed for for 2D grids
+#define ANGLES_DIP_REVERSE ((unsigned short) 65535)
+// 20201221 AJL - Bug fix: maximum valid value for azimuth
+#define ANGLES_DIP_MAX 360.0001
 
 typedef union {
     unsigned short ival[2]; /* unsigned short values:

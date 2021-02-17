@@ -1,0 +1,323 @@
+# =============================================================================
+#  Sample NonLinLoc programs control file
+#
+#  NonLinLoc Version 2.3 - APR2001
+#
+#  Anthony Lomax <anthony@alomax.net>
+#
+#  See "Control File" and "Running the Sample Location" pages
+#     in the NonLicLoc on-line documentation:
+#     http://www.alomax.net/nlloc
+# =============================================================================
+
+
+# = comment
+
+# non-nested include files allowed, use:
+# INCLUDE <include_file_name>
+
+
+# =============================================================================
+# =============================================================================
+# Generic control file statements
+# =============================================================================
+#
+#
+
+# control (CONTROL message_flag (0:silent,1:few messages,2:verbose,...),
+#		RandomNumSeed)
+CONTROL 1 54321
+
+# -----------------------------------------------------------------------------
+# lat/long to rect grid transformation
+# -----------------------------------------------------------------------------
+
+# map projection / transformation
+# (TRANS type <params>)
+#    (char[])   search_type (SIMPLE, LAMBERT)
+#    <params>:
+#	SIMPLE LatOrig  LongOrig  RotCW
+#	LAMBERT  RefEllipsoid LatOrig  LongOrig
+#                   FirstStdParal  SecondStdParal   RotCW
+#
+#    RefEllipsoid choices:
+#                   WGS-84, GRS-80, WGS-72, Australian, Krasovsky,
+#                   International, Hayford-1909, Clarke-1880, Clarke-1866,
+#                   Airy, Bessel, Hayford-1830, Sphere
+#
+#
+# Lambert III France - IGN (except that origin is arbitrary)
+# ATTENZIONE: deve essere uguale a quello di NLLoc
+TRANS  LAMBERT  Clarke-1880  40.2781 14.9261 43.1993 44.9961  0.0
+
+# maplines (MAPLINE id_num, name, red, green, blue,
+#	linestyle (SOLID, DASHED, DOTTED, DASHDOT))
+MAPLINE  GMT_LONLAT /your_path/coast.lonlat  0.0 0.0 0.0  SOLID
+
+#
+#
+# =============================================================================
+# END of Generic control file statements
+# =============================================================================
+# =============================================================================
+
+
+
+
+# =============================================================================
+# =============================================================================
+# NLLoc control file statements
+# =============================================================================
+#
+#
+
+# signature
+# (LOCSIG signature)
+LOCSIG A.Lomax, RISSC
+
+# comment
+# (LOCCOM comment)
+LOCCOM RISSC 1D model
+
+
+
+# NLDiffLoc ===================================================================
+
+# $DOC$ NLDiffLoc -------------------------------------------------------------
+# input initial hypocenters filename
+# (DLOC_HYPFILE <hypos file> hypos_type num_hypo_fix num_hypo_free
+#    (char[])  hypos_type : (NLLOC_SUM HYPODD_INIT)
+#    (int)  num_hypo_fix : index of single hypo to fix, others are free (-1 none fixed)
+#    (int)  num_hypo_free : index of single hypo to free for inversion, others are fixed (-1 all free, except num_hypo_fix)
+#
+# 1D layer model initial hypocenter
+DLOC_HYPFILE  /your_path/NLDL_inp.hyp  NLLOC_SUM  -1 -1
+
+
+# $DOC$ NLDiffLoc -------------------------------------------------------------
+# search type
+# (DLOC_SEARCH search_type <params>)
+#    (char[])   search_type (MET (Metropolis))
+#    <params>:
+#   MET  NumSamples BeginSave NumSkip Step(km) Velocity(km/s) InitialTemperature
+#    (int)   	NumSamples : maximum number of accepted Metropolis samples
+#    (int)   	BeginSave : number of accepted Metropolis samples at which to begin saving samples to form pdf scatter cloud
+#               	(0 < BeginSave < NumSamples)
+#    (int)   	NumSkip : number of accepted Metropolis samples to skip between sample saves
+#    (double)   Step(km) : nominal Metropolis x,y,z,ot*v step size when temperature = 1.0
+#    (double)   Velocity(km/s) : velocity to convert ot to distance
+#    (double)   InitialTemperature : starting temperature; temperature will vary linearly from InitialTemperature->1.0
+#					when nSample varies from 0->BeginSave (InitialTemperature >= 1.0)
+#					During inversion, temperature is multiplied into active Metropolis Step and by LOCQUAL2ERR errors.
+#
+DLOC_SEARCH MET 20000 10000 20 0.005 6.0 5.0 10.0
+
+# END NLDiffLoc ================================================================
+
+
+
+
+# input  grid filenames root, output filename
+# (LOCFILES <obs file> obs_type  <travel-time grid files path/root> <output file path/root>)
+#    (char[])  obs_type : (NLLOC_OBS, HYPO71, HYPOELLIPSE, RENASS_DEP, SEISAN)
+#
+# ct
+LOCFILES /your_path/NLDL_inp.ct HYPODD_CT  /your_pathoftimegrid/your_timegrid_name  /your_pathofoutputs/NLDL_out
+ 
+
+	
+# $DOC$ NLDiffLoc -------------------------------------------------------------
+# quality to error mapping (for HYPO71, etc)
+# (LOCQUAL2ERR Err0 Err1 Err2 ... )
+#
+# for NLLDiffLoc, the first error Err0 is used for cross-correlation data, the second Err1 for catalog data
+#	 the effective differential time error will vary linearly with temperature when nSample varies from 0 to BeginSave
+#
+LOCQUAL2ERR 0.02 0.05
+
+
+# method
+# (LOCMETH method)
+#    (char[])   method (GAU_ANALYTIC)
+#    (float)   maximum_dist_sta_to_grid
+#    (int)   minimum_number_phases for location
+#    (int)   maximum_number_phases for location (-1 for no max)
+#    (int)   minimum_number_S_phases for location (-1 for no min)
+#    (float)   Vp/Vs ratio (< 0.0 to use S travel time grids) 
+#    (int)   maximum_number_3D_grids to attempt to read into memory (-1 for no max)
+#    (float)   minimum_dist_sta_to_grid
+#
+# normal
+LOCMETH GAU_ANALYTIC 9999.0 10 -1 -1 -1 -1 -1.0
+
+
+
+# location grids description
+# (LOCGRID  num_grid_x  num_grid_y  num_grid_z
+#   orig_grid_x  orig_grid_y  orig_grid_z
+#   d_grid_x d_grid_y d_grid_z
+#       type save_flag
+#    (float) num_grid_x/y/z : number of nodes along x/y/z axis
+#    (float)    orig_grid_x : x location of grid origin (0,0,0) in km pos east
+#    (float)    orig_grid_y : y location of grid origin (0,0,0) in km pos north
+#    (float)    orig_grid_z : z location of grid origin (0,0,0) in km pos down
+#    (float)   d_grid_x/y/x : grid spacing along  x/y/z axis
+#    (char[])  type : (PROB_DENSITY, MISFIT)
+#    (char[])  save_flag : (SAVE, NO_SAVE)
+# For Grid search, first grid is used for initial search.  Subsequent grids are
+# shifted in x/y/z so that they are centered on the minimum misfit hypocenter
+# x/y/z of the previous grid if x/y/z < -1.0e20.
+#
+#
+#LOCGRID  201 201 40  -50 -50 -2  1 1 1   PROB_DENSITY SAVE
+LOCGRID  201  201   66    0.000   0.000  0.000    0.500   0.500   0.500   PROB_DENSITY SAVE
+
+
+# output hypocenter file types
+# (LOCHYPOUT type1, type2, ...)
+#    (char[])   typeN (SAVE_NLLOC_ALL, SAVE_NLLOC_SUM,
+#        SAVE_HYPO71_ALL, SAVE_HYPO71_SUM, SAVE_HYPOELL_ALL, SAVE_HYPOELL_SUM,
+#        SAVE_HYPOINV_SUM)
+LOCHYPOUT SAVE_HYPO71_ALL SAVE_NLLOC_ALL
+
+
+# gaussian model error parameters
+# (LOCGAU Sigma_T (s), CorrLen (km))
+#LOCGAU 0.1 0.005
+LOCGAU 0.1 0.0
+
+# phase identifier mapping
+# (LOCPHASEID phase  phase_id0 phase_id1 ...)
+#
+# examples for P and S 
+#LOCPHASEID  P   P p
+#LOCPHASEID  S   S s
+#
+LOCPHASEID  P   P p G PN PG
+LOCPHASEID  S   S s G SN SG
+#ToIgnoreS#LOCPHASEID  S   $
+
+# fixed origin time
+# (LOCFIXOTIME year month day hour min sec)
+#    (int)   year month day hour min
+#    (float)   sec
+#LOCFIXOTIME 1995 04 21 08 02 57.09
+
+# phase statistics parameters
+# (LOCPHSTAT RMS_Max, NRdgs_Min, Gap_Max, P_ResMax, S_ResMax)
+#    (float)   RMS_Max : max hypocenter RMS to include in ave res
+#    (float)   NRdgs_Min : min hypocenter num readings to include in ave res
+#    (float)   Gap_Max : max hypocenter gap (deg) to include in ave res
+#    (float)   P_ResMax : max abs(P res) to include in ave res
+#    (float)   S_ResMax : max abs(S res) to include in ave res
+#LOCPHSTAT 9999.0 -1 9999.0 1.0 1.0
+LOCPHSTAT 9999.0 -1 9999.0 1.5 2.5
+
+# take-off angles mode & minimum quality
+# (LOCANGLES angles_mode, min_quality)
+#    (char[])   angles_mode (ANGLES_YES, ANGLES_NO)
+#    (integer)   min_quality : minimum quality to use take-off angles
+LOCANGLES ANGLES_YES 0
+
+
+# magnitude calculation method
+# (LOCMAG magnitude_type <params>)
+#    (char[])   magnitude_type (ML_HB (ML, Hutton Boore))
+#    <params>:
+#   ML_HB  amp_fact n K
+#LOCMAG ML_HB 1.0 1.110 0.00189
+
+# station/inst/comp parameters (for specifying component specific parameters, i.e. constants for magnitude calculation)
+# (LOCCMP name inst comp amp_fact sta_corr)
+#    (char[])   name  : station identifier (after alias evaluation, without trailing underscore "_")
+#    (char[])   name  : inst identifier (use '?' for don't care)
+#    (char[])   name  : comp identifier (use '?' for don't care)
+#    (float)    amp_fact: amplitude factor, will be multiplied by amplitude
+#    (float)    sta_corr: mganitude correction
+#
+# example:
+#
+#LOCCMP CDR ? ? 1.0 0.0
+#
+
+# station name alias (for aliasing sta names, for date validation and for
+#    phase time delays)
+# (LOCALIAS name alias year mo day year mo day)
+#    (char[])   name  : station identifier on input
+#    (char[])   alias : station identifier for travel time grid on output
+#                    NOTE: a trailing underscore "_" in aliases will only be
+#                          used for time grid identification, not for output
+#    (ints)    year mo day : start date of validity (0 0 0 = no start date)
+#    (ints)    year mo day : end date of validity  (9999 99 99 = no end date)
+#
+#   Note:
+#       Alias evaluation is applied recursively, beware of infinite recursion!
+#
+# example:
+#
+#LOCALIAS ART ART_  1996 05 29  1996 09 18
+#
+
+# phase exclude
+# (LOCEXCLUDE name phase)
+#    (char[])   name  : station identifier after any alias
+#    (char[])   phase : phase identifier on input
+#LOCEXCLUDE NEGI S
+
+# time delays
+# (##LOCDELAY name phase n_readings p_delay s_delay)
+#    (char[])   name  : station identifier on control file statements
+#    (char[])   phase : phase identifier
+#    (int)  n_readings : number of residuals used to calc delay
+#    (float)     delay : delay in seconds, subtracted from obs time
+#   station identifiers are evaluated after aliases has been evaluated!
+#
+# example:
+#
+###LOCDELAY NEGI P    1  0.04
+#
+
+
+
+
+
+
+#
+#
+# =============================================================================
+# END of NLLoc control file statements
+# =============================================================================
+# =============================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+# =============================================================================
+# calcpd control file statements
+# =============================================================================
+#
+#
+
+# (CPDFILES <model grid file root> <time grid file root>)
+#CPDFILES  .//temp/nlloc_tmp/dd_rissc/hypoDD_examples/model/WE2000 ./time/WE2000
+
+# Vp / Vs ratio (overrides any S travel-time grids)
+# (CPDVPVS VpVs_ratio)
+#CPDVPVS  1.85
+
+
+#
+#
+# =============================================================================
+# END of calcpd control file statements
+# =============================================================================
+# =============================================================================
+

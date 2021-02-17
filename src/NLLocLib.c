@@ -1633,11 +1633,11 @@ int GetObservations(FILE* fp_obs, char* ftype_obs, char* fn_grids,
                         sprintf(arrival[nobs].fileroot, "%s.%s.%s", fn_grids, eval_phase, "DEFAULT");
                         sprintf(filename, "%s.time", arrival[nobs].fileroot);
 
-//#define LOC2SSST_CLUGE
+                        //#define LOC2SSST_CLUGE
 #ifdef LOC2SSST_CLUGE
-            // 20201022 AJL - Cluge, assume need to byte swap if DEFAULT  // TODO: make this automatic or configurable
-            arrival[nobs].gdesc.iSwapBytes = 1;
-            //
+                        // 20201022 AJL - Cluge, assume need to byte swap if DEFAULT  // TODO: make this automatic or configurable
+                        arrival[nobs].gdesc.iSwapBytes = 1;
+                        //
 #endif
 
                         /* check if time grid already read */
@@ -6301,6 +6301,7 @@ int StdDateTime(ArrivalDesc *arrival, int num_arrivals, HypoDesc * phypo) {
     }
 
     hypotime2hrminsec(phypo->time, &(phypo->hour), &(phypo->min), &(phypo->sec));
+    //printf("DEBUG: StdDateTime: phypo->time %d:%d:%f\n", phypo->hour, phypo->min, phypo->sec);
 
     /*hyp_time_tmp = phypo->time;
                                     phypo->hour = (int) (hyp_time_tmp / 3600.0L);
@@ -7180,7 +7181,9 @@ int SaveBestLocation(OctNode* poct_node, int num_arr_total, int num_arr_loc, Arr
     value += log_prior; // 20190513 AJL
 
     // set rms if otime variance is available
-    if (otime_var > 0.0)
+    if (otime_var > 0.0
+            && !FixOriginTimeFlag // 20201201 AJL - bug fix.
+            )
         phypo->rms = sqrt(otime_var);
     else
         phypo->rms = -1.0;
@@ -10289,8 +10292,8 @@ int GetNLLoc_PdfGrid(char* line1, int prior_type) {
 
         // read oct-tree grids
         // check for wildcards in observation file name
-        char fn_pdf_grid[MAX_NUM_PDF_GRID_FILES][FILENAME_MAX];
-        double coherence[MAX_NUM_PDF_GRID_FILES];
+        static char fn_pdf_grid[MAX_NUM_PDF_GRID_FILES][FILENAME_MAX];
+        static double coherence[MAX_NUM_PDF_GRID_FILES];
         int numPdfGridFiles = ExpandWildCards(searchPdfGrid->grid_file_path, fn_pdf_grid, MAX_NUM_PDF_GRID_FILES);
         if (numPdfGridFiles >= MAX_NUM_PDF_GRID_FILES) {
             sprintf(MsgStr, "WARNING: maximum number of pdf grid files files exceeded, only first %d will be processed.", MAX_NUM_PDF_GRID_FILES);
@@ -10330,6 +10333,13 @@ int GetNLLoc_PdfGrid(char* line1, int prior_type) {
                                 strcpy(fn_pdf_grid[numPdfGridFiles], file_line);
                                 strcat(fn_pdf_grid[numPdfGridFiles], ".octree");
                                 numPdfGridFiles++;
+                                if (numPdfGridFiles >= MAX_NUM_PDF_GRID_FILES) {
+                                    sprintf(MsgStr,
+                                            "WARNING: maximum number of coherence pdf grid files files reached, only first %d will be processed.",
+                                            MAX_NUM_PDF_GRID_FILES);
+                                    nll_puterr(MsgStr);
+                                    break;
+                                }
                             }
                         }
                     }
@@ -10393,7 +10403,43 @@ int GetNLLoc_PdfGrid(char* line1, int prior_type) {
             // weight is zero at coherence_min and 1.0 at coherence=1.0
             searchPdfGrid->weight[nFile]
                     = (searchPdfGrid->coherence[nFile] - searchPdfGrid->coherence_min) / (1.0 - searchPdfGrid->coherence_min);
-            //printf("DEBUG: read input oct tree file: coherence: %f  weight %f  %s\n", coherence[nFile], searchPdfGrid->weight[nFile], fn_pdf_grid[nFile]);
+            // TEST 20210126 AJL - 0 -> 1 sine weighting
+            if (1) {
+                // weight is zero at coherence_min and 1.0 at coherence=0.9
+                double wt_tmp = (searchPdfGrid->coherence[nFile] - searchPdfGrid->coherence_min) / (0.9 - searchPdfGrid->coherence_min);
+                if (wt_tmp > 1.0) {
+                    wt_tmp = 1.0;
+                }
+                //printf("DEBUG: read input oct tree file: coherence: %f  weight %f  %s", coherence[nFile], searchPdfGrid->weight[nFile], fn_pdf_grid[nFile]);
+                wt_tmp = cPI * (wt_tmp - 0.5); // -PI/2 -> PI/2
+                //printf(" -> %f", wt_tmp);
+                wt_tmp = 0.5 * (sin(wt_tmp) + 1.0); // 0 -> 1 sine
+                //printf(" -> %f", wt_tmp);
+                //printf("\n");
+                searchPdfGrid->weight[nFile] = wt_tmp;
+            }
+            // END TEST
+            // TEST 20210110 AJL - 0 -> 1 sine weighting
+            if (0) {
+                //printf("DEBUG: read input oct tree file: coherence: %f  weight %f  %s", coherence[nFile], searchPdfGrid->weight[nFile], fn_pdf_grid[nFile]);
+                double wt_tmp = cPI * (searchPdfGrid->weight[nFile] - 0.5); // -PI/2 -> PI/2
+                //printf(" -> %f", wt_tmp);
+                wt_tmp = 0.5 * (sin(wt_tmp) + 1.0); // 0 -> 1 sine
+                //printf(" -> %f", wt_tmp);
+                // sqrt(sin)
+                if (1) {
+                    // =IF(D2>=0.5,0.5+0.5*POWER(2*(D2-0.5),1/2),0.5-0.5*POWER(-2*(D2-0.5),1/2))
+                    if (wt_tmp >= 0.5) {
+                        wt_tmp = 0.5 + 0.5 * sqrt(2.0 * (wt_tmp - 0.5));
+                    } else {
+                        wt_tmp = 0.5 - 0.5 * sqrt(-2.0 * (wt_tmp - 0.5));
+                    }
+                    //printf(" -> %f", wt_tmp);
+                }
+                //printf("\n");
+                searchPdfGrid->weight[nFile] = wt_tmp;
+            }
+            // END TEST
             // Limit total weight of other events  // 20200727 AJL - added
             if (nFile > 0) {
                 tot_other_wt += searchPdfGrid->weight[nFile];
@@ -10423,6 +10469,7 @@ int GetNLLoc_PdfGrid(char* line1, int prior_type) {
                 searchPdfGrid->weight[nFile] /= tot_other_wt;
             }
         }
+        free(arrival_tmp);
 
     } else if (strcmp(grid_type, "GRID") == 0) {
 
@@ -10638,10 +10685,10 @@ int GetNLLoc_Method(char* line1) {
     // 20200203 AJL - not sure if this is correct, may be OK?  TODO:
 
     /*if (VpVsRatio > 0.0 && GeometryMode == MODE_GLOBAL) {
-                        nll_puterr("ERROR: cannot use VpVsRatio>0 with TRANSFORM GLOBAL.");
+                            nll_puterr("ERROR: cannot use VpVsRatio>0 with TRANSFORM GLOBAL.");
 
-                        return (EXIT_ERROR_LOCATE);
-                    }*/
+                            return (EXIT_ERROR_LOCATE);
+                        }*/
 
     return (0);
 }
@@ -13398,9 +13445,9 @@ int isAboveTopo(double xval, double yval, double zval) {
         int iabove = elev > topo_elev;
 
         /*
-                                                                if (iabove) {
-                                                                    printf("xyz %f %f %f  lon/lat/elev %f %f %f  topo_elev %f  above %d\n", xval, yval, zval, ylat, xlon, elev, topo_elev, iabove);
-                                                                }//*/
+                                                                    if (iabove) {
+                                                                        printf("xyz %f %f %f  lon/lat/elev %f %f %f  topo_elev %f  above %d\n", xval, yval, zval, ylat, xlon, elev, topo_elev, iabove);
+                                                                    }//*/
 
         return (iabove);
     }
@@ -13470,7 +13517,7 @@ int LocOctree(int ngrid, int num_arr_total, int num_arr_loc,
     double xval, yval, zval;
 
     long double value, dlike, value_max = (long double) -VERY_LARGE_DOUBLE;
-    double misfit;
+    double misfit = -1.0;
     double misfit_min = VERY_LARGE_DOUBLE, misfit_max = -VERY_LARGE_DOUBLE;
     double hypo_dx = -1.0, hypo_dz = -1.0;
     double cell_diagonal_time_var_best = 0.0;
@@ -13930,11 +13977,11 @@ long double LocOctree_core(int ngrid, double xval, double yval, double zval,
     resultTreeRoot = addResult(resultTreeRoot, log_value_volume, volume, poct_node);
 
     /*static int icount_value = 0;
-                                                                                                                            if (icount_value < 10 && poct_node->value < -1.0e50) {
-                                                                                                                                printf("poct_node->value < -1.0e50 !!! poct_node->value %lg  logStationDensityWeight %lg  logWtMtrxSum %lg  log(volume) %lg\n",
-                                                                                                                                        poct_node->value, logStationDensityWeight, logWtMtrxSum, log(volume));
-                                                                                                                                icount_value++;
-                                                                                                                            }*/
+                                                                                                                                    if (icount_value < 10 && poct_node->value < -1.0e50) {
+                                                                                                                                        printf("poct_node->value < -1.0e50 !!! poct_node->value %lg  logStationDensityWeight %lg  logWtMtrxSum %lg  log(volume) %lg\n",
+                                                                                                                                                poct_node->value, logStationDensityWeight, logWtMtrxSum, log(volume));
+                                                                                                                                        icount_value++;
+                                                                                                                                    }*/
 
     return (value);
 
@@ -14206,7 +14253,7 @@ int GenEventScatterOcttree(OcttreeParams* pParams, double oct_node_value_max, fl
 
     // return if integral is nan    // 20201022 AJL - bug fix
     if (isnan(integral)) {
-            nll_puterr("ERROR: Generating event scatter: oct_tree_integral is nan.");
+        nll_puterr("ERROR: Generating event scatter: oct_tree_integral is nan.");
         return (0);
     }
 

@@ -507,6 +507,7 @@ New version 7.00 posted to web =================================
 	2, 3) added probabilstic data outlier (prob_outlier, outlier_err_factor), with probability prob_outlier, phase error is increased by outlier_err_factor
 	New syntax: EQSTA label phase errorType error errorReportType errorReport probActive probOutlier outlierErrorFactor
 
+20201221 NLL - Bug fix in logic to set reverse direction take-off angle azimuth for 2D angles grids. The flag to indicate azimuth should be reversed for for 2D grids was a negative unsigned short value, which is not possible. Changed to a flag value = (unsigned short) 65535
 
 
 
