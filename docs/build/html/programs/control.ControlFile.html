@@ -1393,9 +1393,10 @@ or <code class="docutils literal notranslate"><span class="pre">S</span></code> 
 <div class="line-block">
 <div class="line"><strong>LSPARAMS - General parameters</strong></div>
 <div class="line"><em>required</em>, <em>non-repeatable</em></div>
-<div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">LSPARAMS</span></code> <code class="docutils literal notranslate"><span class="pre">CharDist</span> <span class="pre">WeightFloor</span></code></div>
+<div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">LSPARAMS</span></code> <code class="docutils literal notranslate"><span class="pre">CharDist</span> <span class="pre">WeightFloor</span> <span class="pre">UseRejected</span></code></div>
 <div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">CharDist</span></code> (<a href="#id63"><span class="problematic" id="id64">*</span></a>float*`) Characteristic event-station distance for weighting contribution of an event to SSST correction for a station calculation.</div>
 <div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">WeightFloor</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>) Small value added to events-node weights so ssst values at large event-node distance remain non-zero (station static).</div>
+<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">UseRejected</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">1</span></code>, default:<code class="docutils literal notranslate"><span class="pre">0</span></code>) flag to indicate that NLL REJECTED locations should be accepted for SSST processing.</div>
 </div>
 <div class="line-block">
 <div class="line"><strong>LSMODE - Program Modes</strong></div>

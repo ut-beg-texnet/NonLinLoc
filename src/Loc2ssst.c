@@ -78,6 +78,7 @@ typedef struct {
     double char_dist; // Characteristic event-station distance in km for weighting contribution of an event to SSST correction for a station
     double weight_floor; // (0.0-1.0); small value added to events-station weights so ssst values at large event-station distance remain non-zero (station static).
     char stations[MAXLINE]; // List of stations to process, separated by non-character, no spaces
+    int use_rejected; // Flag to indicate that NLL REJECTED locations should be accepted for SSST processing (default=0)
 }
 LS_Params;
 LS_Params Params;
@@ -139,6 +140,7 @@ int main(int argc, char** argv) {
     Params.char_dist = LARGE_FLOAT;
     Params.weight_floor = 0.0;
     strcpy(Params.stations, "");
+    Params.use_rejected = 0;
 
     PhsStat.RMSMax = 1.0e6;
     PhsStat.NRdgsMin = 0;
@@ -218,8 +220,8 @@ int get_ls_phstat(char* line1) {
 
 int get_ls_params(char* line1) {
 
-    int istat = sscanf(line1, "%lf %lf",
-            &Params.char_dist, &Params.weight_floor);
+    int istat = sscanf(line1, "%lf %lf %d",
+            &Params.char_dist, &Params.weight_floor, &Params.use_rejected);
 
     if (Params.weight_floor < 0.0) {
         Params.weight_floor = 0.0;
@@ -228,8 +230,8 @@ int get_ls_params(char* line1) {
     }
 
     sprintf(MsgStr,
-            "LSPARAMS:  CharDist: %f  WeightFloor:%f",
-            Params.char_dist, Params.weight_floor);
+            "LSPARAMS:  CharDist: %f  WeightFloor:%f  UseRejected:%d",
+            Params.char_dist, Params.weight_floor, Params.use_rejected);
     nll_putmsg(1, MsgStr);
 
     if (istat < 1)
@@ -664,7 +666,7 @@ int DoLoc2ssst() {
             if (strcmp(hypo.locStat, "ABORTED") == 0) {
                 //nll_puterr("WARNING: location ABORTED, ignoring event");
                 continue;
-            } else if (strcmp(hypo.locStat, "REJECTED") == 0) {
+            } else if (!Params.use_rejected && strcmp(hypo.locStat, "REJECTED") == 0) {
                 //nll_puterr("WARNING: location REJECTED, ignoring event");
                 continue;
             }

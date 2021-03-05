@@ -10403,19 +10403,24 @@ int GetNLLoc_PdfGrid(char* line1, int prior_type) {
             // weight is zero at coherence_min and 1.0 at coherence=1.0
             searchPdfGrid->weight[nFile]
                     = (searchPdfGrid->coherence[nFile] - searchPdfGrid->coherence_min) / (1.0 - searchPdfGrid->coherence_min);
-            // TEST 20210126 AJL - 0 -> 1 sine weighting
+            // TEST 20210126 AJL - 0 -> 1 cosine taper weighting
             if (1) {
                 // weight is zero at coherence_min and 1.0 at coherence=0.9
                 double wt_tmp = (searchPdfGrid->coherence[nFile] - searchPdfGrid->coherence_min) / (0.9 - searchPdfGrid->coherence_min);
-                if (wt_tmp > 1.0) {
+                if (wt_tmp >= 1.0) {
                     wt_tmp = 1.0;
+                } else if (wt_tmp <= 0.0) {
+                    wt_tmp = 0.0;
+                } else {
+                    //printf("DEBUG: read input oct tree file: coherence: %f  weight %f  %s", coherence[nFile], searchPdfGrid->weight[nFile], fn_pdf_grid[nFile]);
+                    // use cos instead of sin   wt_tmp = cPI * (wt_tmp - 0.5); // -PI/2 -> PI/2
+                    wt_tmp = cPI * (1.0 - wt_tmp); // PI -> 0
+                    //printf(" -> %f", wt_tmp);
+                    // use cos instead of sin   wt_tmp = 0.5 * (sin(wt_tmp) + 1.0); // 0 -> 1 sine
+                    wt_tmp = 0.5 * cos(wt_tmp) + 0.5; // 0 -> 1 cos
+                    //printf(" -> %f", wt_tmp);
+                    //printf("\n");
                 }
-                //printf("DEBUG: read input oct tree file: coherence: %f  weight %f  %s", coherence[nFile], searchPdfGrid->weight[nFile], fn_pdf_grid[nFile]);
-                wt_tmp = cPI * (wt_tmp - 0.5); // -PI/2 -> PI/2
-                //printf(" -> %f", wt_tmp);
-                wt_tmp = 0.5 * (sin(wt_tmp) + 1.0); // 0 -> 1 sine
-                //printf(" -> %f", wt_tmp);
-                //printf("\n");
                 searchPdfGrid->weight[nFile] = wt_tmp;
             }
             // END TEST
@@ -13107,8 +13112,7 @@ int WriteStaStatTable(int ntable, FILE *fpio,
                 res_temp = np->residual_sum / np->weight_sum;
                 res_std_temp = np->residual_square_sum / np->weight_sum - res_temp * res_temp;
                 if (np->num_residuals > 1)
-                    res_std_temp = sqrt(np->residual_square_sum / np->weight_sum
-                        - res_temp * res_temp);
+                    res_std_temp = sqrt(np->residual_square_sum / np->weight_sum - res_temp * res_temp);
                 else
                     res_std_temp = -1.0;
                 if (imode == WRITE_RESIDUALS) {

@@ -1,14 +1,14 @@
 NonLinLoc Software Package Control File
 =======================================
 
-:ref:`Overview` - 
+:ref:`Overview` -
 :ref:`Definitions` -
 :ref:`Generic Control Statements` -
 :ref:`Vel2Grid Program` -
 :ref:`Vel2Grid3D Program` -
 :ref:`Grid2Time Program` -
-:ref:`Time2EQ Program` - 
-:ref:`NLLoc Program` - 
+:ref:`Time2EQ Program` -
+:ref:`NLLoc Program` -
 :ref:`Loc2ssst Program`
 
 Overview
@@ -1100,14 +1100,14 @@ NLLoc Program
     *M\ :sub:`L`* = log(\ *A f*) +\ *n*\ log(\ *r*/100)
     +\ *K*\ (*r*-100) + 3.0 +\ *S*,
 
-| 
+|
 | ``MD_FMAG`` (Duration magnitude\ *M\ :sub:`L`*\ fromLahr, J.C., (1989)
   HYPOELLIPSE),
 
     *MD* = *C\ :sub:`1`* + *C\ :sub:`2`*\ log(\ *Fc*) + *C\ :sub:`3`\ r*
     + *C\ :sub:`4`\ z* + *C\ :sub:`5`*\ [log(*Fc*))\ :sup:`2`,
 
-| 
+|
 |    ``f`` (*float*, min:\ ``0.0``) scaling factor to convert\ *A*\ to
   an equivalent Wood-Anderson amplitude.
 |    ``n`` (*float*) *n* from Hutton and Boore (1987), related to
@@ -1268,9 +1268,9 @@ NLLoc Program
  `cutoffDist                    ` < ``0.0``
   sets automatic cutoff distance: equal to the mean distance between all
   pairs of stations used for location.
-  
-  
-  
+
+
+
 Loc2ssst Program
 ----------------
 
@@ -1290,20 +1290,20 @@ where *label* is a source label ( *i.e.* a station or N_S_L_C code code), *gridT
 | *required*, *non-repeatable*
 | Syntax 1: ``LSLOCFILES``
  `inputFileRoot`` (*string*) full or relative path and file name (with .hyp extension and optional wild-cards) specifying input NLLoc *.hyp files
-  
+
 | **LOCFILES - Input and Output File Root Name**
 | *required*, *non-repeatable*
 | Specifies the directory path and filename for the phase/observation
   files, and the file *root* names (no extension) for the input time
   grids. These parameters should be identical to NLLoc Program->LOCFILES used to generate NLLoc *.hyp files specified in LSLOCFILES.
 | See NLLoc Program->LOCFILES for syntax.
- 
+
 | **LOCMETH - Location Method**
 | *required*, *non-repeatable*
-| Specifies the location method (algorithm) and method parameters. 
+| Specifies the location method (algorithm) and method parameters.
  These parameters should be identical to NLLoc Program->LOCMETH used to generate NLLoc *.hyp files specified in LSLOCFILES.
 | See NLLoc Program->LOCMETH for syntax.
- 
+
   **LOCPHASEID - Phase Identifier Mapping**
 | *required*, *non-repeatable*
 | Specifies the mapping of phase codes in the phase/observation file (
@@ -1313,9 +1313,11 @@ where *label* is a source label ( *i.e.* a station or N_S_L_C code code), *gridT
 
 | **LSPARAMS - General parameters**
 | *required*, *non-repeatable*
-| Syntax 1: ``LSPARAMS`` ``CharDist WeightFloor``
+| Syntax 1: ``LSPARAMS`` ``CharDist WeightFloor UseRejected``
 |    ``CharDist`` (*float*`) Characteristic event-station distance for weighting contribution of an event to SSST correction for a station calculation.
 |    ``WeightFloor`` (*float*, min:\ ``0.0``) Small value added to events-node weights so ssst values at large event-node distance remain non-zero (station static).
+|    ``UseRejected`` (*integer*, min:\ ``0``, max:\ ``1``, default:\ ``0``) flag to indicate that NLL REJECTED locations should be accepted for SSST processing.
+
 
 | **LSMODE - Program Modes**
 | *required*, *non-repeatable*
@@ -1325,7 +1327,7 @@ where *label* is a source label ( *i.e.* a station or N_S_L_C code code), *gridT
   angles are calculated and an angles grid is output ( ``ANGLES_YES``
   for angles calulcation or ``ANGLES_NO`` for no angles calculation,
   or ``ANGLES_INCLINATION`` for inclination angle calculation only with full precision)
-  
+
 | **LSGRID - ssst Grid Description**
 | *required*, *non-repeatable*
 | Syntax 1: ``LSGRID``
@@ -1349,7 +1351,7 @@ where *label* is a source label ( *i.e.* a station or N_S_L_C code code), *gridT
 |    3. For 2D velocity and travel-time grids LSGRID should be 3D and
   positioned absolutely in space, thus xNum >> 2 and xOrig and zOrig are
   in general != 0.0
- 
+
 | **LSOUTGRID - Output travel-time Grid Description**
 | *required*, *non-repeatable*
 | Syntax 1: ``LSOUTGRID``
@@ -1373,7 +1375,7 @@ where *label* is a source label ( *i.e.* a station or N_S_L_C code code), *gridT
 |    3. For 2D velocity and travel-time grids LSOUTGRID should be 3D and
   positioned absolutely in space, thus xNum >> 2 and xOrig and zOrig are
   in general != 0.0
- 
+
 | **LSPHSTAT - Phase Statistics parameters**
 | *optional*, *non-repeatable*
 | Syntax 1: ``LSPHSTAT``
@@ -1408,10 +1410,10 @@ where *label* is a source label ( *i.e.* a station or N_S_L_C code code), *gridT
 
 | **LSSTATIONS - Stations to process**
 | *optional*, *non-repeatable*
-| Syntax 1: ``LSSTATIONS sta1,sta2,...`` 
+| Syntax 1: ``LSSTATIONS sta1,sta2,...``
 | Specifies a set of station or N_S_L_C codes to be included for ssst processing. If not present, all stations with travel-time grids and arrivals will be processed.
 |    ``sta1,sta2,...`` (*string*) comma separated list without whitespce of stations to use for ssst processing
-| 
+|
 
 
 
