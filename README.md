@@ -1,13 +1,13 @@
-Complete NonLinLoc distribution software package
+Install complete NonLinLoc distribution software package
 ------------------------------------------------------
-	Clone or download ZIP from https://github.com/alomax/NonLinLoc
+	Clone or download ZIP from this repository [https://github.com/alomax/NonLinLoc](https://github.com/alomax/NonLinLoc)
 
 	To build:
 	cd src
 	rm CMakeCache.txt
 	cmake .
 	make
-	See (http://alomax.net/nlloc) and (http://alomax.net/nlloc) -> tutorials for further information
+	See [http://alomax.net/nlloc](http://alomax.net/nlloc) and [http://alomax.net/nlloc](http://alomax.net/nlloc) -> tutorials for further information
 
 	To bulid debug:
 	# edit CMakeLists.txt to comment out Release build type and uncomment Debug bulid type:
@@ -21,9 +21,9 @@ Complete NonLinLoc distribution software package
 
 Documentation
 ------------------------------------------------------
-        Future documentation: (http://alomax.net/nlloc/docs)
-        Legacy documentation: (http://alomax.net/nlloc)
-        Users guides and additional information: see doc/ (https://github.com/alomax/NonLinLoc/tree/main/doc) directory in this repository
+        Future documentation: [http://alomax.net/nlloc/docs](http://alomax.net/nlloc/docs)
+        Legacy documentation: [http://alomax.net/nlloc](http://alomax.net/nlloc)
+        Users guides and additional information: see [doc/](https://github.com/alomax/NonLinLoc/tree/main/doc) directory in this repository
 
 
 NLLoc_func_test program demonstrating running NLLoc through a function call
