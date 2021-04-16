@@ -214,7 +214,7 @@ int main(int argc, char *argv[]) {
     // count non option arguments
     int argc_non_opt = argc;
     for (narg = argc - 1; narg >= 0; narg--) {
-        if (argv[narg][0] == '-') {
+        if (argv[narg][0] == '-' && !isdigit(argv[narg][1])) {
             argc_non_opt--;
         } else {
             break;
