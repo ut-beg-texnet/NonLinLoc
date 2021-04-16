@@ -4,19 +4,26 @@ Complete NonLinLoc distribution software package
 
 	To build:
 	cd src
-	rm CMakeCache.txt 
+	rm CMakeCache.txt
 	cmake .
 	make
-	See http://alomax.net/nlloc and http://alomax.net/nlloc -> tutorials for further information
-	
+	See (http://alomax.net/nlloc) and (http://alomax.net/nlloc) -> tutorials for further information
+
 	To bulid debug:
 	# edit CMakeLists.txt to comment out Release build type and uncomment Debug bulid type:
 		#set(CMAKE_BUILD_TYPE Release)
 		set(CMAKE_BUILD_TYPE Debug)
 	cd src
-	rm CMakeCache.txt 
+	rm CMakeCache.txt
 	cmake .
 	make
+
+
+Documentation
+------------------------------------------------------
+        Future documentation: (http://alomax.net/nlloc/docs)
+        Legacy documentation: (http://alomax.net/nlloc)
+        Users guides and additional information: see doc/ (https://github.com/alomax/NonLinLoc/tree/main/doc) directory in this repository
 
 
 NLLoc_func_test program demonstrating running NLLoc through a function call
