@@ -1,6 +1,6 @@
 Install complete NonLinLoc distribution software package
 ------------------------------------------------------
-	Clone or download ZIP from this repository https://github.com/alomax/NonLinLoc
+	Clone or download ZIP from this repository (https://github.com/alomax/NonLinLoc)
 
 	To build:
 	cd src
@@ -17,6 +17,8 @@ Install complete NonLinLoc distribution software package
 	rm CMakeCache.txt
 	cmake .
 	make
+
+        Thanks to Gilles Celli (European Center for Geodynamics and Seismology) for creating and debugging the NonLinLoc CMake build system.
 
 
 Documentation

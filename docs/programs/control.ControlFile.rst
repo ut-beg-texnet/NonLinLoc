@@ -104,15 +104,14 @@ Generic Control Statements
 | Syntax 2: ``TRANS`` ``SIMPLE latOrig longOrig rotAngle``
 | Syntax 3: ``TRANS`` ``NONE``
 | Syntax 4: ``TRANS`` ``SDC latOrig longOrig rotAngle``
-| Syntax 5: ``TRANS``
- `LAMBERT refEllipsoid latOrig longOrig firstStdParal secondStdParal rotAngle``
-| Syntax 6: ``TRANS``
- `TRANS_MERC refEllipsoid latOrig longOrig rotAngle``
+| Syntax 5: ``TRANS`` ``LAMBERT refEllipsoid latOrig longOrig firstStdParal secondStdParal rotAngle``
+| Syntax 6: ``TRANS`` ``TRANS_MERC refEllipsoid latOrig longOrig rotAngle``
+| Syntax 7: ``TRANS`` ``AZIMUTHAL_EQUIDIST refEllipsoid latOrig longOrig rotAngle``
 | Sets geographic to working coordinates transformation parameters. The
  `GLOBAL`` option sets spherical regional/teleseismic mode, with no
   geographic transformation - most position values are input and used
   directly as latitude and longitude in degrees. The ``SIMPLE``,
- `SDC``, ``LAMBERT`` and ``TRANS_MERC`` options make transformations
+ `SDC``, ``LAMBERT``, ``TRANS_MERC`` and ``AZIMUTHAL_EQUIDIST`` options make transformations
   of geographic coordinates into a Cartesian/rectangular system. The
  `NONE`` transformation performs no geographic conversion.
 |    ``latOrig`` (*float*, min:\ ``-90.0``, max:\ ``90.0``) latitude in
@@ -155,9 +154,11 @@ Generic Control Statements
 |    5. The ``SDC`` transformation is a "Short Distance Conversion"
   projection indended for use with very small study regions. For
   algorithm details see ``MAP_TRANS_SDC`` in GridLib.c
-|    6. The ``LAMBERT`` Lambert Conformal Conic projection adapted from
+|    6. The ``LAMBERT`` Lambert Conformal Conic projection is adapted from
   the source code of the GMT plotting package
-|    7. The ``TRANS_MERC`` Transverse Mercator projection adapted from
+|    7. The ``TRANS_MERC`` Transverse Mercator projection is adapted from
+  the source code of the GMT plotting package
+|    8. The ``AZIMUTHAL_EQUIDIST`` Transverse Mercator projection is adapted from
   the source code of the GMT plotting package
 
 | **MAPLINE - Geographic Maplines**
@@ -326,7 +327,7 @@ Vel2Grid Program
 
 | **POLYGON2 - Velocity Model - 2D polygon**
 | *optional*, *repeatable*
-| Syntax 1: ``POLYGON2 id_num n_edges depth Vp_top Vp_grad Vs_top Vs_grad p_top p_grad   [NEW_LINE]  edge1, edge2, ...                `
+| Syntax 1: ``POLYGON2`` ``id_num n_edges depth Vp_top Vp_grad Vs_top Vs_grad p_top p_grad   [NEW_LINE]  edge1, edge2, ...``
 |    ``id_num`` (*integer*) polygon identification number (must be
   unique)
 |    ``n_edges`` (*integer*, min:\ ``0``) the number of edges defining
@@ -958,7 +959,7 @@ NLLoc Program
   time-grid file names)
 |    ``phaseCode1 ... phaseCodeN`` (*string*) one or more phase codes
   that may be present in a phase/observation file that should be mapped
-  to the ``stdPhase                    ` .
+  to the ``stdPhase``.
 | Notes:
 |    1. In the current version of NLLoc, it is assumed for some
   processing (such as the calculation of average P and S station
@@ -1289,7 +1290,7 @@ where *label* is a source label ( *i.e.* a station or N_S_L_C code code), *gridT
 | **LSLOCFILES - Input and Output File Root Name**
 | *required*, *non-repeatable*
 | Syntax 1: ``LSLOCFILES``
- `inputFileRoot`` (*string*) full or relative path and file name (with .hyp extension and optional wild-cards) specifying input NLLoc *.hyp files
+ ``inputFileRoot`` (*string*) full or relative path and file name (with .hyp extension and optional wild-cards) specifying input NLLoc *.hyp files
 
 | **LOCFILES - Input and Output File Root Name**
 | *required*, *non-repeatable*
