@@ -89,7 +89,9 @@ int main(int argc, char *argv[]) {
     // allocate arrivals array
     MAX_NUM_STATIONS = X_MAX_NUM_STATIONS_DIFF;
     MAX_NUM_ARRIVALS = MAX_NUM_ARRIVALS_STA * MAX_NUM_STATIONS;
-    if ((Arrival = (ArrivalDesc *) malloc(MAX_NUM_ARRIVALS * sizeof (ArrivalDesc))) == NULL) {
+    free(Arrival);  // 20210421 AJL - Bug fix?
+    // 20210421 AJL - Bug fix?  //if ((Arrival = (ArrivalDesc *) malloc(MAX_NUM_ARRIVALS * sizeof (ArrivalDesc))) == NULL) {
+    if ((Arrival = (ArrivalDesc *) calloc(MAX_NUM_ARRIVALS, sizeof (ArrivalDesc))) == NULL) {
         nll_puterr("ERROR: re-allocating Arrival array.");
         return (EXIT_ERROR_MEMORY);
     }

@@ -855,6 +855,7 @@ int WriteArrival(FILE*, ArrivalDesc*, int);
 int WriteArrivalHypo(FILE*, ArrivalDesc*, int);
 int ReadHypStatistics(FILE **, char*, Vect3D*, Vect3D*,
         Mtrx3D*, Ellipsoid3D*, ArrivalDesc*, int*);
+int ReadHypSe3(FILE **pfpio, char* fnroot_in, double *pse3);
 int ReadFocalMech(FILE **pfpio, char* fnroot_in, FocalMech* pfocalMech,
         ArrivalDesc* parrivals, int *pnarrivals);
 int ReadFirstMotionArrivals(FILE **pfpio, char* fnroot_in, ArrivalDesc* parrivals, int *pnarrivals);

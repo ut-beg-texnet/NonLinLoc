@@ -10277,12 +10277,13 @@ int GetNLLoc_PdfGrid(char* line1, int prior_type) {
 
         searchPdfGrid->gridType = PDF_GRID_OCT_TREE;
         searchPdfGrid->max_total_other_weight = -1.0; // default
-        istat = sscanf(line1, "%*s %s %lf %lf %lf",
+        searchPdfGrid->max_se3 = -1.0; // default
+        istat = sscanf(line1, "%*s %s %lf %lf %lf %lf",
                 searchPdfGrid->grid_file_path, &(searchPdfGrid->default_value),
-                &(searchPdfGrid->coherence_min), &(searchPdfGrid->max_total_other_weight));
-        sprintf(MsgStr, "LOCPRIOR/LOCPOSTERIOR:  Type: %s  GridFile: %s  DefaultValue: %e  CoherenceMin: %f  MaxOtherWeight: %f",
+                &(searchPdfGrid->coherence_min), &(searchPdfGrid->max_total_other_weight), &(searchPdfGrid->max_se3));
+        sprintf(MsgStr, "LOCPRIOR/LOCPOSTERIOR:  Type: %s  GridFile: %s  DefaultValue: %e  CoherenceMin: %f  MaxOtherWeight: %f  MaxSE3: %f",
                 grid_type, searchPdfGrid->grid_file_path, searchPdfGrid->default_value,
-                searchPdfGrid->coherence_min, searchPdfGrid->max_total_other_weight);
+                searchPdfGrid->coherence_min, searchPdfGrid->max_total_other_weight, searchPdfGrid->max_se3);
         nll_putmsg(3, MsgStr);
         ierr = 0;
         if (checkRangeDouble("LOCPRIOR/LOCPOSTERIOR", "DefaultValue", searchPdfGrid->default_value, 1, 0.0, 0, 0.0) != 0)
@@ -10329,6 +10330,18 @@ int GetNLLoc_PdfGrid(char* line1, int prior_type) {
                         }
                         // next lines are coherence and oct-tree file root for each child
                         while (fscanf(fp_coherence_test, "%lf %s", &(coherence[numPdfGridFiles]), file_line) > 1) {
+                            // check se3
+                            if (searchPdfGrid->max_se3 > 0.0) {
+                                FILE *fpio_tmp = NULL;
+                                double se3 = -1.0;
+                                ReadHypSe3(&fpio_tmp, file_line, &se3);
+                                if (se3 > searchPdfGrid->max_se3) {
+                                    printf(MsgStr, "INFO: GetNLLoc_PdfGrid: se3: %f > searchPdfGrid->max_se3 %f  %s : IGNORED\n",
+                                            se3, searchPdfGrid->max_se3, file_line);
+                                    nll_putmsg(3, MsgStr);
+                                    continue;
+                                }
+                            }
                             if (coherence[numPdfGridFiles] >= searchPdfGrid->coherence_min) {
                                 strcpy(fn_pdf_grid[numPdfGridFiles], file_line);
                                 strcat(fn_pdf_grid[numPdfGridFiles], ".octree");
@@ -12005,9 +12018,9 @@ int WriteHypoInverseArchive(FILE *fpio, HypoDesc *phypo, ArrivalDesc *parrivals,
         strncpy(chrtmp, HypoInverseArchiveSumHdr + 36, 3);
         chrtmp[3] = '\0';
         if (sscanf(chrtmp, "%3lf", &amp_mag) != 0) {
-          amp_mag /= 100.0;
+            amp_mag /= 100.0;
         } else {
-          amp_mag = 0.0;
+            amp_mag = 0.0;
         }
     } else {
         amp_mag = 0.0;
@@ -12022,9 +12035,9 @@ int WriteHypoInverseArchive(FILE *fpio, HypoDesc *phypo, ArrivalDesc *parrivals,
         strncpy(chrtmp, HypoInverseArchiveSumHdr + 70, 3);
         chrtmp[3] = '\0';
         if (sscanf(chrtmp, "%3lf", &dur_mag) != 0) {
-          dur_mag /= 100.0;
+            dur_mag /= 100.0;
         } else {
-          dur_mag = 0.0;
+            dur_mag = 0.0;
         }
     } else {
         dur_mag = 0.0;
@@ -12077,13 +12090,13 @@ int WriteHypoInverseArchive(FILE *fpio, HypoDesc *phypo, ArrivalDesc *parrivals,
     // JMS 20210304 - improvement: seems unecessary now, check performed earlier at mag reading
     // JMS 20210304 - bug fix: if no magnitude, print spaces
     if (amp_mag == 0.0)
-        fprintf(fpio, "%s", writeY2000 ? "   " : "  " );
+        fprintf(fpio, "%s", writeY2000 ? "   " : "  ");
     else {
-          if (writeY2000)
-              fprintf(fpio, "%3.0lf", 100.0 * amp_mag);
-          else
-              fprintf(fpio, "%2.0lf", 10.0 * amp_mag);
-        }
+        if (writeY2000)
+            fprintf(fpio, "%3.0lf", 100.0 * amp_mag);
+        else
+            fprintf(fpio, "%2.0lf", 10.0 * amp_mag);
+    }
     // 40 3 I3 Number of P & S times with final weights greater than 0.1.
     // 43 3 I3 Maximum azimuthal gap, degrees.
     // 46 3 F3.0 Distance to nearest station (km).
@@ -12127,13 +12140,13 @@ int WriteHypoInverseArchive(FILE *fpio, HypoDesc *phypo, ArrivalDesc *parrivals,
     // 71 3 F3.2 Coda duration magnitude. *
     // JMS 20210304 - bug fix: if no magnitude, print spaces
     if (dur_mag == 0.0)
-        fprintf(fpio, "%s", writeY2000 ? "   " : "  " );
+        fprintf(fpio, "%s", writeY2000 ? "   " : "  ");
     else {
-          if (writeY2000)
-              fprintf(fpio, "%3.0lf", 100.0 * dur_mag);
-          else
-              fprintf(fpio, "%2.0lf", 10.0 * dur_mag);
-        }
+        if (writeY2000)
+            fprintf(fpio, "%3.0lf", 100.0 * dur_mag);
+        else
+            fprintf(fpio, "%2.0lf", 10.0 * dur_mag);
+    }
     // 74 3 A3 Event location remark (region), derived from location.
     // 77 4 F4.2 Size of smallest principal error (km).
     // 81 1 A1 Auxiliary remark from analyst (i.e. Q for quarry).

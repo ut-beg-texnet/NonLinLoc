@@ -5490,6 +5490,46 @@ int ReadHypStatistics(FILE **pfpio, char* fnroot_in,
 
 }
 
+/** function to read expectation and covariance from a hyp file */
+
+int ReadHypSe3(FILE **pfpio, char* fnroot_in, double *pse3) {
+
+    char fn_in[FILENAME_MAX];
+    static HypoDesc hypo;
+
+
+    /* open hypocenter file if necessary */
+
+    if (*pfpio == NULL) {
+        sprintf(fn_in, "%s.hyp", fnroot_in);
+        if ((*pfpio = fopen(fn_in, "r")) == NULL) {
+            nll_puterr("ERROR: opening hypocenter file.");
+            return (EOF);
+        }
+        NumFilesOpen++;
+    }
+
+
+    /* read next hypocenter */
+
+    ArrivalDesc* parrivals;
+    int *pnarrivals = NULL;
+    *pse3 = -1.0;
+    if (GetHypLoc(*pfpio, fnroot_in, &hypo, parrivals, pnarrivals, 0, NULL, 0) != EOF) {
+        *pse3 = hypo.ellipsoid.len3;
+        return (0);
+    }
+
+
+    /* end of file */
+
+    fclose(*pfpio);
+    NumFilesOpen--;
+
+    return (EOF);
+
+}
+
 /** function to read mechanism from a hyp file */
 
 int ReadFocalMech(FILE **pfpio, char* fnroot_in,

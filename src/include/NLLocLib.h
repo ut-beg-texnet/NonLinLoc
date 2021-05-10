@@ -185,6 +185,7 @@ typedef struct {
     double *coherence;  // array of nGrids coherences for each corresponding tree3D
     double coherence_min;  // minimum coherence to use grid
     double max_total_other_weight;  // maximum total of coherence weight for other events; if exceeded, other event coherences normalized to sum to this value
+    double max_se3;  // maximum se3 (ellipsoid.len3) of hypocenter to use grid
     double *weight;  // array of nGrids weights (function of coherence and coherence_min) for each corresponding tree3D
     // arrivals storage
     ArrivalDesc** first_motion_arrivals; // arrivals with first-motion readings
