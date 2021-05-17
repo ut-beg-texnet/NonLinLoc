@@ -25,6 +25,18 @@ include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+# 20210511 AJL - Possible bug fix for Loc2ddct compile errors on older(?) compilers "relocation truncated to fit: R_X86_64_PC32 against symbol"
+# https://stackoverflow.com/questions/57331990/c-compiling-relocation-truncated-to-fit-r-x86-64-pc32-against-symbol
+# These compile/link options not needed if following define used in Loc2ddct.c
+# #define  MAX_NUM_DIFF_HYPOCENTERS 50000
+#
+# Adds options to the COMPILE_OPTIONS directory property. These options are used when compiling targets from the current directory and below.
+#add_compile_options(-mcmodel=medium)
+#
+# Add options to the link step for executable, shared library or module library targets in the current directory and below that are added after this command is invoked.
+#add_link_options("-Wl,-no_pie")
+
+
 ## Create the .o object files with add_library()
 ### Simplify by just creating the GRID_LIB_OBJS .o object file
 add_library(GRID_LIB_OBJS OBJECT GridLib.c util.c geo.c octtree/octtree.c alomax_matrix/alomax_matrix.c alomax_matrix/eigv.c alomax_matrix/alomax_matrix_svd.c matrix_statistics/matrix_statistics.c vector/vector.c ran1/ran1.c map_project.c)
@@ -44,18 +56,6 @@ set(OBJS0 NLLoc1 GRID_LIB_OBJS NLLOC_LIB_OBJS)
 # Also: add the math lib with: m
 add_executable(NLLoc NLLoc_main.c)
 target_link_libraries(NLLoc ${OBJS0} m)
-
-# --------------------------------------------------------------------------
-# NLDiffLoc
-#
-add_executable(NLDiffLoc NLDiffLoc.c)
-target_link_libraries(NLDiffLoc GRID_LIB_OBJS NLLOC_LIB_OBJS m)
-
-# --------------------------------------------------------------------------
-# Loc2ddct
-#
-add_executable(Loc2ddct Loc2ddct.c)
-target_link_libraries(Loc2ddct GRID_LIB_OBJS m)
 
 # --------------------------------------------------------------------------
 # Vel2Grid
@@ -189,3 +189,14 @@ add_library(loclist OBJECT loclist.c)
 add_executable(Loc2ssst Loc2ssst.c)
 target_link_libraries(Loc2ssst GRID_LIB_OBJS phaselist loclist m)
 
+# --------------------------------------------------------------------------
+# NLDiffLoc
+#
+add_executable(NLDiffLoc NLDiffLoc.c)
+target_link_libraries(NLDiffLoc GRID_LIB_OBJS NLLOC_LIB_OBJS m)
+
+# --------------------------------------------------------------------------
+# Loc2ddct
+#
+add_executable(Loc2ddct Loc2ddct.c)
+target_link_libraries(Loc2ddct GRID_LIB_OBJS m)

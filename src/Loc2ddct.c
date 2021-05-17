@@ -112,7 +112,10 @@ int main(int argc, char *argv[]) {
 }
 
 
-#define  MAX_NUM_DIFF_HYPOCENTERS 100000
+// 20210511 AJL - Bug fix: following gives errors on older(?) compilers "relocation truncated to fit: R_X86_64_PC32 against symbol"
+// https://stackoverflow.com/questions/57331990/c-compiling-relocation-truncated-to-fit-r-x86-64-pc32-against-symbol
+//#define  MAX_NUM_DIFF_HYPOCENTERS 100000
+#define  MAX_NUM_DIFF_HYPOCENTERS 50000
 HypoDesc diffHypos[MAX_NUM_DIFF_HYPOCENTERS];
 
 int ConvertLocToCT(int argc, char *argv[]) {

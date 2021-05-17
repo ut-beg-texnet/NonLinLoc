@@ -196,19 +196,6 @@ scat2latlon/fast:
 .PHONY : scat2latlon/fast
 
 #=============================================================================
-# Target rules for targets named interface2fmm
-
-# Build rule for target.
-interface2fmm: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 interface2fmm
-.PHONY : interface2fmm
-
-# fast build rule for target.
-interface2fmm/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/interface2fmm.dir/build.make CMakeFiles/interface2fmm.dir/build
-.PHONY : interface2fmm/fast
-
-#=============================================================================
 # Target rules for targets named Vel2Grid3D
 
 # Build rule for target.
@@ -300,17 +287,30 @@ Time2EQ/fast:
 .PHONY : Time2EQ/fast
 
 #=============================================================================
-# Target rules for targets named GridGraphLib
+# Target rules for targets named GRID_LIB_OBJS
 
 # Build rule for target.
-GridGraphLib: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 GridGraphLib
-.PHONY : GridGraphLib
+GRID_LIB_OBJS: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 GRID_LIB_OBJS
+.PHONY : GRID_LIB_OBJS
 
 # fast build rule for target.
-GridGraphLib/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/GridGraphLib.dir/build.make CMakeFiles/GridGraphLib.dir/build
-.PHONY : GridGraphLib/fast
+GRID_LIB_OBJS/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/GRID_LIB_OBJS.dir/build.make CMakeFiles/GRID_LIB_OBJS.dir/build
+.PHONY : GRID_LIB_OBJS/fast
+
+#=============================================================================
+# Target rules for targets named fmm2grid
+
+# Build rule for target.
+fmm2grid: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 fmm2grid
+.PHONY : fmm2grid
+
+# fast build rule for target.
+fmm2grid/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/fmm2grid.dir/build.make CMakeFiles/fmm2grid.dir/build
+.PHONY : fmm2grid/fast
 
 #=============================================================================
 # Target rules for targets named PhsAssoc
@@ -350,6 +350,71 @@ Time2Angles: cmake_check_build_system
 Time2Angles/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Time2Angles.dir/build.make CMakeFiles/Time2Angles.dir/build
 .PHONY : Time2Angles/fast
+
+#=============================================================================
+# Target rules for targets named NLLoc1
+
+# Build rule for target.
+NLLoc1: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 NLLoc1
+.PHONY : NLLoc1
+
+# fast build rule for target.
+NLLoc1/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NLLoc1.dir/build.make CMakeFiles/NLLoc1.dir/build
+.PHONY : NLLoc1/fast
+
+#=============================================================================
+# Target rules for targets named Loc2ddct
+
+# Build rule for target.
+Loc2ddct: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Loc2ddct
+.PHONY : Loc2ddct
+
+# fast build rule for target.
+Loc2ddct/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Loc2ddct.dir/build.make CMakeFiles/Loc2ddct.dir/build
+.PHONY : Loc2ddct/fast
+
+#=============================================================================
+# Target rules for targets named Vel2Grid
+
+# Build rule for target.
+Vel2Grid: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Vel2Grid
+.PHONY : Vel2Grid
+
+# fast build rule for target.
+Vel2Grid/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Vel2Grid.dir/build.make CMakeFiles/Vel2Grid.dir/build
+.PHONY : Vel2Grid/fast
+
+#=============================================================================
+# Target rules for targets named NLLOC_LIB_OBJS
+
+# Build rule for target.
+NLLOC_LIB_OBJS: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 NLLOC_LIB_OBJS
+.PHONY : NLLOC_LIB_OBJS
+
+# fast build rule for target.
+NLLOC_LIB_OBJS/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NLLOC_LIB_OBJS.dir/build.make CMakeFiles/NLLOC_LIB_OBJS.dir/build
+.PHONY : NLLOC_LIB_OBJS/fast
+
+#=============================================================================
+# Target rules for targets named interface2fmm
+
+# Build rule for target.
+interface2fmm: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 interface2fmm
+.PHONY : interface2fmm
+
+# fast build rule for target.
+interface2fmm/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/interface2fmm.dir/build.make CMakeFiles/interface2fmm.dir/build
+.PHONY : interface2fmm/fast
 
 #=============================================================================
 # Target rules for targets named oct2grid
@@ -404,82 +469,17 @@ velmod/fast:
 .PHONY : velmod/fast
 
 #=============================================================================
-# Target rules for targets named loclist
+# Target rules for targets named GridGraphLib
 
 # Build rule for target.
-loclist: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 loclist
-.PHONY : loclist
+GridGraphLib: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 GridGraphLib
+.PHONY : GridGraphLib
 
 # fast build rule for target.
-loclist/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/loclist.dir/build.make CMakeFiles/loclist.dir/build
-.PHONY : loclist/fast
-
-#=============================================================================
-# Target rules for targets named Grid2Time
-
-# Build rule for target.
-Grid2Time: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Grid2Time
-.PHONY : Grid2Time
-
-# fast build rule for target.
-Grid2Time/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Grid2Time.dir/build.make CMakeFiles/Grid2Time.dir/build
-.PHONY : Grid2Time/fast
-
-#=============================================================================
-# Target rules for targets named Loc2ddct
-
-# Build rule for target.
-Loc2ddct: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Loc2ddct
-.PHONY : Loc2ddct
-
-# fast build rule for target.
-Loc2ddct/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Loc2ddct.dir/build.make CMakeFiles/Loc2ddct.dir/build
-.PHONY : Loc2ddct/fast
-
-#=============================================================================
-# Target rules for targets named Vel2Grid
-
-# Build rule for target.
-Vel2Grid: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Vel2Grid
-.PHONY : Vel2Grid
-
-# fast build rule for target.
-Vel2Grid/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Vel2Grid.dir/build.make CMakeFiles/Vel2Grid.dir/build
-.PHONY : Vel2Grid/fast
-
-#=============================================================================
-# Target rules for targets named NLLoc1
-
-# Build rule for target.
-NLLoc1: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 NLLoc1
-.PHONY : NLLoc1
-
-# fast build rule for target.
-NLLoc1/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NLLoc1.dir/build.make CMakeFiles/NLLoc1.dir/build
-.PHONY : NLLoc1/fast
-
-#=============================================================================
-# Target rules for targets named NLLOC_LIB_OBJS
-
-# Build rule for target.
-NLLOC_LIB_OBJS: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 NLLOC_LIB_OBJS
-.PHONY : NLLOC_LIB_OBJS
-
-# fast build rule for target.
-NLLOC_LIB_OBJS/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NLLOC_LIB_OBJS.dir/build.make CMakeFiles/NLLOC_LIB_OBJS.dir/build
-.PHONY : NLLOC_LIB_OBJS/fast
+GridGraphLib/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/GridGraphLib.dir/build.make CMakeFiles/GridGraphLib.dir/build
+.PHONY : GridGraphLib/fast
 
 #=============================================================================
 # Target rules for targets named mag_func_test
@@ -508,6 +508,32 @@ NLLoc/fast:
 .PHONY : NLLoc/fast
 
 #=============================================================================
+# Target rules for targets named loclist
+
+# Build rule for target.
+loclist: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 loclist
+.PHONY : loclist
+
+# fast build rule for target.
+loclist/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/loclist.dir/build.make CMakeFiles/loclist.dir/build
+.PHONY : loclist/fast
+
+#=============================================================================
+# Target rules for targets named Grid2Time
+
+# Build rule for target.
+Grid2Time: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Grid2Time
+.PHONY : Grid2Time
+
+# fast build rule for target.
+Grid2Time/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Grid2Time.dir/build.make CMakeFiles/Grid2Time.dir/build
+.PHONY : Grid2Time/fast
+
+#=============================================================================
 # Target rules for targets named Time_3d_NLL
 
 # Build rule for target.
@@ -519,32 +545,6 @@ Time_3d_NLL: cmake_check_build_system
 Time_3d_NLL/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Time_3d_NLL.dir/build.make CMakeFiles/Time_3d_NLL.dir/build
 .PHONY : Time_3d_NLL/fast
-
-#=============================================================================
-# Target rules for targets named fmm2grid
-
-# Build rule for target.
-fmm2grid: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 fmm2grid
-.PHONY : fmm2grid
-
-# fast build rule for target.
-fmm2grid/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/fmm2grid.dir/build.make CMakeFiles/fmm2grid.dir/build
-.PHONY : fmm2grid/fast
-
-#=============================================================================
-# Target rules for targets named GRID_LIB_OBJS
-
-# Build rule for target.
-GRID_LIB_OBJS: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 GRID_LIB_OBJS
-.PHONY : GRID_LIB_OBJS
-
-# fast build rule for target.
-GRID_LIB_OBJS/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/GRID_LIB_OBJS.dir/build.make CMakeFiles/GRID_LIB_OBJS.dir/build
-.PHONY : GRID_LIB_OBJS/fast
 
 Grid2GMT.o: Grid2GMT.c.o
 
@@ -1338,8 +1338,8 @@ loclist.o: loclist.c.o
 
 # target to build an object file
 loclist.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/loclist.dir/build.make CMakeFiles/loclist.dir/loclist.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/NLLOC_LIB_OBJS.dir/build.make CMakeFiles/NLLOC_LIB_OBJS.dir/loclist.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/loclist.dir/build.make CMakeFiles/loclist.dir/loclist.c.o
 .PHONY : loclist.c.o
 
 loclist.i: loclist.c.i
@@ -1348,8 +1348,8 @@ loclist.i: loclist.c.i
 
 # target to preprocess a source file
 loclist.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/loclist.dir/build.make CMakeFiles/loclist.dir/loclist.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/NLLOC_LIB_OBJS.dir/build.make CMakeFiles/NLLOC_LIB_OBJS.dir/loclist.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/loclist.dir/build.make CMakeFiles/loclist.dir/loclist.c.i
 .PHONY : loclist.c.i
 
 loclist.s: loclist.c.s
@@ -1358,8 +1358,8 @@ loclist.s: loclist.c.s
 
 # target to generate assembly for a file
 loclist.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/loclist.dir/build.make CMakeFiles/loclist.dir/loclist.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/NLLOC_LIB_OBJS.dir/build.make CMakeFiles/NLLOC_LIB_OBJS.dir/loclist.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/loclist.dir/build.make CMakeFiles/loclist.dir/loclist.c.s
 .PHONY : loclist.c.s
 
 mag_func_test.o: mag_func_test.c.o
@@ -1722,8 +1722,8 @@ velmod.o: velmod.c.o
 
 # target to build an object file
 velmod.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/velmod.dir/build.make CMakeFiles/velmod.dir/velmod.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/NLLOC_LIB_OBJS.dir/build.make CMakeFiles/NLLOC_LIB_OBJS.dir/velmod.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/velmod.dir/build.make CMakeFiles/velmod.dir/velmod.c.o
 .PHONY : velmod.c.o
 
 velmod.i: velmod.c.i
@@ -1732,8 +1732,8 @@ velmod.i: velmod.c.i
 
 # target to preprocess a source file
 velmod.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/velmod.dir/build.make CMakeFiles/velmod.dir/velmod.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/NLLOC_LIB_OBJS.dir/build.make CMakeFiles/NLLOC_LIB_OBJS.dir/velmod.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/velmod.dir/build.make CMakeFiles/velmod.dir/velmod.c.i
 .PHONY : velmod.c.i
 
 velmod.s: velmod.c.s
@@ -1742,8 +1742,8 @@ velmod.s: velmod.c.s
 
 # target to generate assembly for a file
 velmod.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/velmod.dir/build.make CMakeFiles/velmod.dir/velmod.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/NLLOC_LIB_OBJS.dir/build.make CMakeFiles/NLLOC_LIB_OBJS.dir/velmod.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/velmod.dir/build.make CMakeFiles/velmod.dir/velmod.c.s
 .PHONY : velmod.c.s
 
 # Help Target

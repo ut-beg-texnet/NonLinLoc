@@ -124,7 +124,8 @@ int main(int argc, char** argv) {
 
     /* set program name */
 
-    strlcpy(prog_name, PNAME, sizeof (prog_name));
+    // 20210511 AJL - Bug fix: changed to strncpy from strlcpy which is not available in Linux.
+    strncpy(prog_name, PNAME, sizeof (prog_name));
 
 
     // check command line for correct usage
@@ -150,7 +151,8 @@ int main(int argc, char** argv) {
     PhsStat.EllLen3Max = 1.0e6;
 
     // read control file
-    strlcpy(fn_control, argv[1], sizeof (fn_control));
+    // 20210511 AJL - Bug fix: changed to strncpy from strlcpy which is not available in Linux.
+    strncpy(fn_control, argv[1], sizeof (fn_control));
     if ((fp_control = fopen(fn_control, "r")) == NULL) {
         nll_puterr("ERROR: opening control file.");
         exit(EXIT_ERROR_FILEIO);
