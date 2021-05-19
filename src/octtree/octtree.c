@@ -339,10 +339,12 @@ void freeNode(OctNode* node, int freeDataPointer) {
 
 /*** function to get the leaf node in a Tree3D containing the given x, y, z coordinates ***/
 
-OctNode* getTreeNodeContaining(Tree3D* tree, Vect3D coords) {
+OctNode* getTreeNodeContaining(Tree3D* tree, Vect3D coords, double *padjusted_coords_x) {
 
     int ix, iy, iz;
     OctNode* rootNode;
+
+    *padjusted_coords_x = coords.x;
 
     // get indices of root in tree
     // z
@@ -382,7 +384,18 @@ OctNode* getTreeNodeContaining(Tree3D* tree, Vect3D coords) {
         dx = tree->ds.x;
         num_x = tree->numx;
     }
-    double dix = (coords.x - tree->orig.x) / dx;
+    double coords_x = coords.x;
+    // check for longitude wrap-around  // 20210519 AJL - bug fix
+    if (tree->isSpherical) {
+        if (coords_x < tree->orig.x) {
+            coords_x += 360.0;
+            *padjusted_coords_x = coords_x;
+        } else if ((coords_x - tree->orig.x) > (double) (num_x - 1) * dx) {
+            coords_x -= 360.0;
+            *padjusted_coords_x = coords_x;
+        }
+    }
+    double dix = (coords_x - tree->orig.x) / dx;
     if (dix < 0.0) {
         // x is far lower bound of tree limits
         return (NULL);
@@ -409,12 +422,14 @@ OctNode* getTreeNodeContaining(Tree3D* tree, Vect3D coords) {
 
 OctNode* getLeafNodeContaining(Tree3D* tree, Vect3D coords) {
 
-    OctNode* rootNode = getTreeNodeContaining(tree, coords);
+    double adjusted_coords_x = coords.x;
+    OctNode* rootNode = getTreeNodeContaining(tree, coords, &adjusted_coords_x);
+    //printf("DEBUG: coords.x %f  adjusted_coords_x %f  tree->orig.x %f  diff: %d\n", coords.x, adjusted_coords_x, tree->orig.x, coords.x == adjusted_coords_x);
 
     if (rootNode == NULL)
         return (NULL);
 
-    return (getLeafContaining(rootNode, coords.x, coords.y, coords.z));
+    return (getLeafContaining(rootNode, adjusted_coords_x, coords.y, coords.z));
 }
 
 /*** function to get the leaf node in a node containing the given x, y, z coordinates ***/

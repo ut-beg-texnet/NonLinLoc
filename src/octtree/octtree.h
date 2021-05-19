@@ -150,7 +150,7 @@ OctNode* newOctNode(OctNode* parent, Vect3D center, Vect3D ds, double value, voi
 void subdivide(OctNode* parent, double value, void *pdata);
 void freeTree3D(Tree3D* tree, int freeDataPointer);
 void freeNode(OctNode* node, int freeDataPointer);
-OctNode* getTreeNodeContaining(Tree3D* tree, Vect3D coords);
+OctNode* getTreeNodeContaining(Tree3D* tree, Vect3D coords, double *padjusted_coords_x);
 OctNode* getLeafNodeContaining(Tree3D* tree, Vect3D coords);
 OctNode* getLeafContaining(OctNode* node, double x, double y, double z);
 
