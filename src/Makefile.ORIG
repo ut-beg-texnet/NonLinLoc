@@ -51,6 +51,7 @@ export CCFLAGS = -O3 $(CCFLAGS_BASIC)
 # gdb --args exe_name
 # gdb-apple --args exe_name
 # lldb exe_name
+# lldb -o run -- <exe_name> <exe_args>
 # valgrind --leak-check=yes --dsymutil=yes exe_name <args>
 # valgrind --leak-check=full --show-reachable=yes exe_name <args>
 
@@ -177,7 +178,7 @@ Grid2Time_ : ${BINDIR}/Grid2Time
 
 ${BINDIR}/Grid2Time : Grid2Time${PVER}.o ${OBJS3}
 	${CC} Grid2Time${PVER}.o ${OBJS3} ${CCFLAGS} -o ${BINDIR}/Grid2Time -lm
-		
+
 Grid2Time${PVER}.o : Grid2Time${PVER}.c GridLib.h
 	${CC}  ${CCFLAGS} -c Grid2Time${PVER}.c
 

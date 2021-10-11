@@ -960,7 +960,7 @@ double IntegrateGrid(GridDesc* pgrid, int flag_normalize);
 
 
 // 20200122 AJL - following function moved here from NLLocLib.h
-int addToStationList(SourceDesc *stations, int numStations, ArrivalDesc *arrival, int nArrivals, int iuse_phaseid_in_label);
+int addToStationList(SourceDesc *stations, int numStations, ArrivalDesc *arrival, int nArrivals, int iuse_phaseid_in_label, int i_check_station_has_XYZ_coords);
 int WriteStationList(FILE*, SourceDesc*, int);
 int GetPhaseID(char*);
 

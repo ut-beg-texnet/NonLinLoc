@@ -467,7 +467,8 @@ int NLLoc
             // station distribution weighting
             if (iSetStationDistributionWeights || iSaveNLLocSum || octtreeParams.use_stations_density) {
                 //printf(">>>>>>>>>>> NumStations %d, NumArrivals %d, numArrivalsReject %d\n", NumStations, NumArrivals, numArrivalsReject);
-                NumStationPhases = addToStationList(StationPhaseList, NumStationPhases, Arrival, NumArrivalsRead, 0);
+                int i_check_station_has_XYZ_coords = 0;
+                NumStationPhases = addToStationList(StationPhaseList, NumStationPhases, Arrival, NumArrivalsRead, 0, i_check_station_has_XYZ_coords);
                 if (iSetStationDistributionWeights)
                     setStationDistributionWeights(StationPhaseList, NumStationPhases, Arrival, NumArrivals);
 

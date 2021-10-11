@@ -2654,10 +2654,13 @@ GRID_FLOAT_TYPE ReadGrid3dValue_Cascading_Interp(FILE *fpgrid, double ix_dbl, do
     vval111 = ReadCascadingGrid3dValue(fpgrid, ix1_casc_dn, iy1_casc_dn, iz1_casc, pgrid);
 
     // check for invalid / mask nodes
-    if (vval000 < 0.0 || vval010 < 0.0 || vval100 < 0.0 || vval110 < 0.0
-            || vval001 < 0.0 || vval011 < 0.0 || vval101 < 0.0 || vval111 < 0.0) {
-        value = -VERY_LARGE_FLOAT;
-        goto cleanup;
+    // 20210803 AJL - Bug fix: only perform this test for grids that never have valid negative values!
+    if (pgrid->type != GRID_SSST_TIMECORR) {
+        if (vval000 < 0.0 || vval010 < 0.0 || vval100 < 0.0 || vval110 < 0.0
+                || vval001 < 0.0 || vval011 < 0.0 || vval101 < 0.0 || vval111 < 0.0) {
+            value = -VERY_LARGE_FLOAT;
+            goto cleanup;
+        }
     }
     value = InterpCubeLagrange(xdiff, ydiff, zdiff,
             vval000, vval001, vval010, vval011,
@@ -2995,12 +2998,18 @@ GRID_FLOAT_TYPE ReadAbsInterpGrid3d(FILE *fpgrid, GridDesc* pgrid, double xloc, 
     ydiff = yoff - (DOUBLE) iy0;
     zdiff = zoff - (DOUBLE) iz0;
 
-    if (xdiff < 0.0 || xdiff > 1.0)
+    if (xdiff < 0.0 || xdiff > 1.0) {
+        //printf("DEBUG: xdiff < 0.0 || xdiff > 1.0:  xloc %f  yloc %f  zloc %f\n", xloc,  yloc,  zloc);
         return (-VERY_LARGE_FLOAT);
-    if (ydiff < 0.0 || ydiff > 1.0)
+    }
+    if (ydiff < 0.0 || ydiff > 1.0) {
+        //printf("DEBUG: ydiff < 0.0 || ydiff > 1.0:  xloc %f  yloc %f  zloc %f\n", xloc,  yloc,  zloc);
         return (-VERY_LARGE_FLOAT);
-    if (zdiff < 0.0 || zdiff > 1.0)
+    }
+    if (zdiff < 0.0 || zdiff > 1.0) {
+        //printf("DEBUG: zdiff < 0.0 || zdiff > 1.0:  xloc %f  yloc %f  zloc %f\n", xloc,  yloc,  zloc);
         return (-VERY_LARGE_FLOAT);
+    }
 
     /* location at grid node */
 
@@ -3054,10 +3063,14 @@ GRID_FLOAT_TYPE ReadAbsInterpGrid3d(FILE *fpgrid, GridDesc* pgrid, double xloc, 
     } else {
         // INGV
         // check for invalid / mask nodes
-        if (vval000 < 0.0 || vval010 < 0.0 || vval100 < 0.0 || vval110 < 0.0
-                || vval001 < 0.0 || vval011 < 0.0 || vval101 < 0.0 || vval111 < 0.0)
-
-            return (-VERY_LARGE_FLOAT);
+        // 20210803 AJL - Bug fix: only perform this test for grids that never have valid negative values!
+        if (pgrid->type != GRID_SSST_TIMECORR) {
+            if (vval000 < 0.0 || vval010 < 0.0 || vval100 < 0.0 || vval110 < 0.0
+                    || vval001 < 0.0 || vval011 < 0.0 || vval101 < 0.0 || vval111 < 0.0) {
+                //printf("DEBUG: vvalNNN < 0.0 vval000 %f  vval001 %f  vval010 %f  vval011 %f  vval100 %f  vval101 %f  vval110 %f  vval111 %f\n", vval000, vval001, vval010, vval011, vval100, vval101, vval110, vval111);
+                return (-VERY_LARGE_FLOAT);
+            }
+        }
         value = InterpCubeLagrange(xdiff, ydiff, zdiff,
                 vval000, vval001, vval010, vval011,
                 vval100, vval101, vval110, vval111);
@@ -3161,8 +3174,11 @@ DOUBLE ReadAbsInterpGrid2d(FILE *fpgrid, GridDesc* pgrid, double yloc, double zl
 
     // INGV
     // check for invalid / mask nodes
-    if (vval00 < 0.0 || vval01 < 0.0 || vval10 < 0.0 || vval11 < 0.0)
-        return (-VERY_LARGE_DOUBLE);
+    // 20210803 AJL - Bug fix: only perform this test for grids that never have valid negative values!
+    if (pgrid->type != GRID_SSST_TIMECORR) {
+        if (vval00 < 0.0 || vval01 < 0.0 || vval10 < 0.0 || vval11 < 0.0)
+            return (-VERY_LARGE_DOUBLE);
+    }
 
     /* interpolate values */
 
@@ -3354,8 +3370,8 @@ int _WriteLocation(FILE *fpio, HypoDesc* phypo, ArrivalDesc* parrivals,
         // QML fields added for compatibility with QuakeML OriginUncertainty attributes (AJL 201005)
         // preferredDescription enum 0..1 – Element (OriginUncertaintyDescription)
         double horizontalUncertainty; // QML - Circular confidence region, given by single value of horizontal uncertainty. Unit: km
-        double minHorizontalUncertainty; // QML - Semi-major axis of confidence ellipse. Unit: km
-        double maxHorizontalUncertainty; // QML - Semi-minor axis of confidence ellipse. Unit: km
+        double minHorizontalUncertainty; // QML - Semi-minor axis of confidence ellipse. Unit: km
+        double maxHorizontalUncertainty; // QML - Semi-major axis of confidence ellipse. Unit: km
         double azimuthMaxHorizontalUncertainty; // QML - Azimuth of major axis of confidence ellipse. Unit: km
          */
         double azMaxHorUnc = phypo->ellipse.az1 + 90.0;
@@ -6617,7 +6633,7 @@ double IntegrateGrid(GridDesc* pgrid, int flag_normalize) {
 
 /** function to add arrival station to station list */
 
-int addToStationList(SourceDesc *stations, int numStations, ArrivalDesc *arrival, int nArrivals, int iuse_phaseid_in_label) {
+int addToStationList(SourceDesc *stations, int numStations, ArrivalDesc *arrival, int nArrivals, int iuse_phaseid_in_label, int i_check_station_has_XYZ_coords) {
 
     int i, n, nAdded = 0;
 
@@ -6644,6 +6660,14 @@ int addToStationList(SourceDesc *stations, int numStations, ArrivalDesc *arrival
         for (; n < numStations; n++) {
             if (strcmp((stations + n)->label, arrival_label) == 0) {
                 break; // already in list
+            }
+        }
+        // check station has xyz coordinates
+        if (i_check_station_has_XYZ_coords) {
+            if ((stations + n)->x < -LARGE_DOUBLE / 2.0 || (stations + n)->y < -LARGE_DOUBLE / 2.0 || (stations + n)->z < -LARGE_DOUBLE / 2.0) {
+                sprintf(MsgStr, "ERROR: addToStationList: No xyz station coordinates available: cannot add station %s ", arrival_label);
+                nll_puterr(MsgStr);
+                continue;
             }
         }
 

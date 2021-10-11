@@ -499,7 +499,7 @@ int Locate(int ngrid, char* fn_loc_obs, char* fn_root_out, int numArrivalsReject
             Hypocenter.ellipsoid = CalcErrorEllipsoid(&Hypocenter.cov, DELTA_CHI_SQR_68_3);
             Hypocenter.ellipse = CalcHorizontalErrorEllipse(&Hypocenter.cov, DELTA_CHI_SQR_68_2);
             sprintf(MsgStr, "ellipsoid_volume = %le", (4.0 / 3.0) * cPI * 8.0 * Hypocenter.ellipsoid.len1 * Hypocenter.ellipsoid.len2 * Hypocenter.ellipsoid.len3);
-            nll_putmsg(1, MsgStr);
+            nll_putmsg(2, MsgStr);
         }
     }
 
@@ -927,7 +927,7 @@ static int save_location_count = 0;
 /** function to display and save minimum misfit location to file */
 
 int SaveLocation(HypoDesc* hypo, int ngrid, char* fnobs, char *fnout, int numArrivalsReject,
-        char* typename, int isave_phases, GaussLocParams * gauss_par) {
+        char* loctypename, int isave_phases, GaussLocParams * gauss_par) {
     int istat;
     char *pchr;
     char sys_command[2 * FILENAME_MAX];
@@ -994,7 +994,7 @@ int SaveLocation(HypoDesc* hypo, int ngrid, char* fnobs, char *fnout, int numArr
         /* copy event grid header to .sum header */
         sprintf(sys_command,
                 "cp %s.loc.hdr %s.sum.%s%d.loc.hdr",
-                fnout, fn_path_output, typename, ngrid);
+                fnout, fn_path_output, loctypename, ngrid);
         system(sys_command);
     }
 
@@ -4563,13 +4563,18 @@ IM PD31 BHN --	0.378028	236.911	Sn	2013-09-21T13:16:55.11Z	manual	0.00	0.0340
             if (cstat == NULL)
                 return (OBS_FILE_END_OF_INPUT);
         } while (LineIsBlank(line));
-        // check for end of event (assumes Event or STOP at end of event
+        // check for end of event (assumes Event or STOP at end of event or following DATA_TYPE)
         if ((in_hypocenter_event && strncmp(line, "Event", 5) == 0)) {
             /* end of event */
             fseek(fp_obs, file_pos, SEEK_SET);
             return (OBS_FILE_END_OF_EVENT);
         }
         if (strncmp(line, "STOP", 4) == 0) {
+            /* end of event */
+            return (OBS_FILE_END_OF_EVENT);
+        }
+        // 20210917 AJL - added to support DATA_TYPE BULLETIN IMS1.0:short with ISF2.0 extensions Bulletin from IGN
+        if (strncmp(line, "DATA_TYPE", 4) == 0) {
             /* end of event */
             return (OBS_FILE_END_OF_EVENT);
         }
@@ -7352,11 +7357,11 @@ int ConstWeightMatrix(int num_arrivals, ArrivalDesc *arrival, GaussLocParams * g
     if (corr_len2 < VERY_SMALL_DOUBLE || gauss_par->CorrLen < 0.0) {
         corr_len_nonzero = 0;
         sprintf(MsgStr, "LOCGAU param CorrLen is zero, will not be used: %lf", gauss_par->CorrLen);
-        nll_putmsg(1, MsgStr);
+        nll_putmsg(2, MsgStr);
     } else {
         corr_len_nonzero = 1;
         sprintf(MsgStr, "LOCGAU param CorrLen is non-zero, will be used: %lf", gauss_par->CorrLen);
-        nll_putmsg(1, MsgStr);
+        nll_putmsg(2, MsgStr);
     }
 
 
@@ -10285,6 +10290,7 @@ int GetNLLoc_PdfGrid(char* line1, int prior_type) {
                 grid_type, searchPdfGrid->grid_file_path, searchPdfGrid->default_value,
                 searchPdfGrid->coherence_min, searchPdfGrid->max_total_other_weight, searchPdfGrid->max_se3);
         nll_putmsg(3, MsgStr);
+        sprintf(MsgStr, "");  // 20210527 AJL - Bug Fix: TODO: somewhere this message is printed!
         ierr = 0;
         if (checkRangeDouble("LOCPRIOR/LOCPOSTERIOR", "DefaultValue", searchPdfGrid->default_value, 1, 0.0, 0, 0.0) != 0)
             ierr = -1;
@@ -11253,7 +11259,7 @@ int GetElevCorr(char* line1) {
 
 /** function to open summary output files */
 
-int OpenSummaryFiles(char *path_output, char* typename) {
+int OpenSummaryFiles(char *path_output, char* loctypename) {
 
     int ngrid;
     char fname[FILENAME_MAX];
@@ -11268,7 +11274,7 @@ int OpenSummaryFiles(char *path_output, char* typename) {
         /* Grid Hyp format */
 
         pSumFileHypNLLoc[ngrid] = NULL;
-        sprintf(fname, "%s.sum.%s%d.loc.hyp", path_output, typename, ngrid);
+        sprintf(fname, "%s.sum.%s%d.loc.hyp", path_output, loctypename, ngrid);
         if ((pSumFileHypNLLoc[ngrid] = fopen(fname, "w")) == NULL) {
             nll_puterr2("ERROR: opening summary output file", fname);
             return (-1);
@@ -11282,7 +11288,7 @@ int OpenSummaryFiles(char *path_output, char* typename) {
         /* Hypo71 format */
         pSumFileHypo71[ngrid] = NULL;
         if (iSaveHypo71Sum) {
-            sprintf(fname, "%s.sum.%s%d.loc.hypo_71", path_output, typename, ngrid);
+            sprintf(fname, "%s.sum.%s%d.loc.hypo_71", path_output, loctypename, ngrid);
             if ((pSumFileHypo71[ngrid] = fopen(fname, "w"))
                     == NULL) {
                 nll_puterr2(
@@ -11300,7 +11306,7 @@ int OpenSummaryFiles(char *path_output, char* typename) {
         /* HypoEllipse format */
         pSumFileHypoEll[ngrid] = NULL;
         if (iSaveHypoEllSum) {
-            sprintf(fname, "%s.sum.%s%d.loc.hypo_ell", path_output, typename, ngrid);
+            sprintf(fname, "%s.sum.%s%d.loc.hypo_ell", path_output, loctypename, ngrid);
             if ((pSumFileHypoEll[ngrid] = fopen(fname, "w"))
                     == NULL) {
                 nll_puterr2(
@@ -11318,7 +11324,7 @@ int OpenSummaryFiles(char *path_output, char* typename) {
         /* HypoInverse Archive format */
         pSumFileHypoInv[ngrid] = NULL;
         if (iSaveHypoInvSum) {
-            sprintf(fname, "%s.sum.%s%d.loc.hypo_inv", path_output, typename, ngrid);
+            sprintf(fname, "%s.sum.%s%d.loc.hypo_inv", path_output, loctypename, ngrid);
             if ((pSumFileHypoInv[ngrid] = fopen(fname, "w"))
                     == NULL) {
                 nll_puterr2(
@@ -11333,7 +11339,7 @@ int OpenSummaryFiles(char *path_output, char* typename) {
         /* HypoInverse Archive Y2000 format */
         pSumFileHypoInvY2K[ngrid] = NULL;
         if (iSaveHypoInvY2KArc) {
-            sprintf(fname, "%s.sum.%s%d.loc.arc", path_output, typename, ngrid);
+            sprintf(fname, "%s.sum.%s%d.loc.arc", path_output, loctypename, ngrid);
             if ((pSumFileHypoInvY2K[ngrid] = fopen(fname, "w"))
                     == NULL) {
                 nll_puterr2(
@@ -11348,7 +11354,7 @@ int OpenSummaryFiles(char *path_output, char* typename) {
         /* Alberto 3D 4 chr sta SIMULPS format */
         pSumFileAlberto4[ngrid] = NULL;
         if (iSaveAlberto4Sum) {
-            sprintf(fname, "%s.sum.%s%d.loc.sim", path_output, typename, ngrid);
+            sprintf(fname, "%s.sum.%s%d.loc.sim", path_output, loctypename, ngrid);
             if ((pSumFileAlberto4[ngrid] = fopen(fname, "w"))
                     == NULL) {
                 nll_puterr2(
@@ -11364,7 +11370,7 @@ int OpenSummaryFiles(char *path_output, char* typename) {
         // fmamp hypocenter-phase format  // 20160920 AJL - added
         pSumFileFmamp[ngrid] = NULL;
         if (iSaveFmamp) {
-            sprintf(fname, "%s.sum.%s%d.loc.fmamp", path_output, typename, ngrid);
+            sprintf(fname, "%s.sum.%s%d.loc.fmamp", path_output, loctypename, ngrid);
             if ((pSumFileFmamp[ngrid] = fopen(fname, "w"))
                     == NULL) {
                 nll_puterr2(
@@ -13779,6 +13785,11 @@ int LocOctree(int ngrid, int num_arr_total, int num_arr_loc,
                         /*if (value < -LARGE_FLOAT) {
                             sprintf(MsgStr, "ERROR: log(prob_density) at (%lf,%lf,%lf) is too small %lg.", xval, yval, zval, (double) value);
                             nll_puterr(MsgStr);
+                        }*/
+                        /*if (isnan(value)) {
+                            sprintf(MsgStr, "WARNNG: log(prob_density) at (%lf,%lf,%lf) is NaN (%lg), reset to %g.", xval, yval, zval, (double) value, -VERY_LARGE_DOUBLE);
+                            nll_puterr(MsgStr);
+                            value = -VERY_LARGE_DOUBLE;
                         }*/
 
                         /* check for maximum likelihood */

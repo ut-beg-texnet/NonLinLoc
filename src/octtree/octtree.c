@@ -351,12 +351,14 @@ OctNode* getTreeNodeContaining(Tree3D* tree, Vect3D coords, double *padjusted_co
     double diz = (coords.z - tree->orig.z) / tree->ds.z;
     iz = (int) diz;
     if (iz < 0 || iz > tree->numz) {
+        printf("DEBUG: getTreeNodeContaining: TP 1: iz %d\n", iz);
         return (NULL);
     } else if (iz == tree->numz) {
         if (fabs(diz - (double) tree->numz) < tree->ds.z / 10000.0) {
             // z is at upper bound of tree limits
             iz = tree->numz - 1;
         } else {
+            printf("DEBUG: getTreeNodeContaining: TP 2: iz %d\n", iz);
             return (NULL);
         }
     }
@@ -365,12 +367,14 @@ OctNode* getTreeNodeContaining(Tree3D* tree, Vect3D coords, double *padjusted_co
     double diy = (coords.y - tree->orig.y) / tree->ds.y;
     iy = (int) diy;
     if (iy < 0 || iy > tree->numy) {
+        printf("DEBUG: getTreeNodeContaining: TP 3: iy %d\n", iy);
         return (NULL);
     } else if (iy == tree->numy) {
         if (fabs(diy - (double) tree->numy) < tree->ds.y / 10000.0) {
             // y is at upper bound of tree limits
             iy = tree->numy - 1;
         } else {
+        printf("DEBUG: getTreeNodeContaining: TP 4: iy %d\n", iy);
             return (NULL);
         }
     }
@@ -398,16 +402,19 @@ OctNode* getTreeNodeContaining(Tree3D* tree, Vect3D coords, double *padjusted_co
     double dix = (coords_x - tree->orig.x) / dx;
     if (dix < 0.0) {
         // x is far lower bound of tree limits
+        printf("DEBUG: getTreeNodeContaining: TP 5: dix %f\n", dix);
         return (NULL);
     }
     ix = (int) dix;
     if (ix < 0 || ix > num_x) {
+        printf("DEBUG: getTreeNodeContaining: TP 6: ix %d\n", ix);
         return (NULL);
     } else if (ix == num_x) {
         if (fabs(dix - (double) num_x) < dx / 10000.0) {
             // x is at upper bound of tree limits
             ix = num_x - 1;
         } else {
+        printf("DEBUG: getTreeNodeContaining: TP 7: ix %d\n", ix);
             return (NULL);
         }
     }
@@ -1149,6 +1156,7 @@ double integrateResultTreeAtLevels(ResultTreeNode* prtree, int value_type, doubl
 
     pnode = prtree->pnode;
     if (pnode->isLeaf && pnode->level >= level_min && pnode->level <= level_max) {
+        //printf("DEBUG: sum_in=%f", sum);
         // result tree value is log(value + volume)
         // AJL 20061023 bug fix - prtree value may not be same as pnode value * volume
         //sum += exp(prtree->value - oct_node_value_ref);
@@ -1161,6 +1169,7 @@ double integrateResultTreeAtLevels(ResultTreeNode* prtree, int value_type, doubl
             sum += (pnode->value / oct_node_value_ref) > 0.0 ? (pnode->value / oct_node_value_ref) : 0.0;
             //sum += (pnode->value - oct_node_value_ref) > 0.0 ? (pnode->value - oct_node_value_ref) : 0.0;
         }
+        //printf(" sum=%f  leaf=%d  level=%d  value=%f oct_node_value_ref=%f volume=%f exp()=%f\n", sum, pnode->isLeaf, pnode->level, pnode->value, oct_node_value_ref, prtree->volume, exp(pnode->value - oct_node_value_ref) * prtree->volume);
     }
 
     if (prtree->right != NULL)

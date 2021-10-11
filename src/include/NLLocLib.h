@@ -582,7 +582,7 @@ int hypotime2hrminsec(long double phypo_time, int *phypo_hour, int *phypo_min, d
 int StdDateTime(ArrivalDesc*, int, HypoDesc*);
 int SetOutName(ArrivalDesc *arrival, char* out_file_root, char* out_file, char lastfile[FILENAME_MAX], int isec, int *pncount);
 int SaveLocation(HypoDesc* hypo, int ngrid, char* fnobs, char *fnout, int numArrivalsReject,
-        char* typename, int isave_phases, GaussLocParams* gauss_par);
+        char* loctypename, int isave_phases, GaussLocParams* gauss_par);
 void InitializeArrivalFields(ArrivalDesc *);
 int isExcluded(char *label, char *phase);
 int EvaluateArrivalAlias(ArrivalDesc *);

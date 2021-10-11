@@ -25,6 +25,13 @@ include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+
+# Uncomment the following if the compiler you are using supports GNU extensions such as:
+#   fmemopen, open_memstream -  open memory as stream (required to pass observations file lines as parameters
+#   to a function call to NLLoc() and to run NLLoc_func_test)
+#add_compile_options(-D _GNU_SOURCE)
+
+
 # 20210511 AJL - Possible bug fix for Loc2ddct compile errors on older(?) compilers "relocation truncated to fit: R_X86_64_PC32 against symbol"
 # https://stackoverflow.com/questions/57331990/c-compiling-relocation-truncated-to-fit-r-x86-64-pc32-against-symbol
 # These compile/link options not needed if following define used in Loc2ddct.c

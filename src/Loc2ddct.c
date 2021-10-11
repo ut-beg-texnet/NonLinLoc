@@ -112,8 +112,10 @@ int main(int argc, char *argv[]) {
 }
 
 
-// 20210511 AJL - Bug fix: following gives errors on older(?) compilers "relocation truncated to fit: R_X86_64_PC32 against symbol"
+// 20210511 AJL - Bug fix: following gives errors on older(?) or some compilers: "relocation truncated to fit: R_X86_64_PC32 against symbol"
 // https://stackoverflow.com/questions/57331990/c-compiling-relocation-truncated-to-fit-r-x86-64-pc32-against-symbol
+// https://github.com/alomax/NonLinLoc/issues/7
+// 20210922: Debian 11, with gcc-9: max value is 78546
 //#define  MAX_NUM_DIFF_HYPOCENTERS 100000
 #define  MAX_NUM_DIFF_HYPOCENTERS 50000
 HypoDesc diffHypos[MAX_NUM_DIFF_HYPOCENTERS];

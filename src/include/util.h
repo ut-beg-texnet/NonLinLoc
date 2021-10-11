@@ -49,7 +49,7 @@ EXTERN_TXT char prog_ver[MAXLINE];
 EXTERN_TXT char prog_date[MAXLINE];
 EXTERN_TXT char prog_copyright[MAXLINE];
 EXTERN_TXT int message_flag;
-EXTERN_TXT char MsgStr[10 * MAXLINE];
+EXTERN_TXT char MsgStr[100 * MAXLINE];
 
 
 /*** function to display command usage */
