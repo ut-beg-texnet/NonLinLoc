@@ -2,23 +2,23 @@ Citation
 ------------------------------------------------------
         If you use the NonLinLoc package in your work, please cite the following papers:
 
-        * Lomax A., Virieux J., Volant P., Berge-Thierry C. (2000) Probabilistic Earthquake Location in 3D and Layered Models. In: Thurber C.H., Rabinowitz N. (eds) Advances in Seismic Event Location. Modern Approaches in Geophysics, vol 18. Springer, Dordrecht. [https://doi.org/10.1007/978-94-015-9536-0_5](https://doi.org/10.1007/978-94-015-9536-0_5)
+        * Lomax A., Virieux J., Volant P., Berge-Thierry C. (2000) Probabilistic Earthquake Location in 3D and Layered Models. In: Thurber C.H., Rabinowitz N. (eds) Advances in Seismic Event Location. Modern Approaches in Geophysics, vol 18. Springer, Dordrecht. [lomax_et](https://doi.org/10.1007/978-94-015-9536-0_5)
 
-        * Lomax A., Michelini A., Curtis A. (2014) Earthquake Location, Direct, Global-Search Methods. In: Meyers R. (eds) Encyclopedia of Complexity and Systems Science. Springer, New York, NY. [https://doi.org/10.1007/978-3-642-27737-5_150-2](https://doi.org/10.1007/978-3-642-27737-5_150-2)
+        * Lomax A., Michelini A., Curtis A. (2014) Earthquake Location, Direct, Global-Search Methods. In: Meyers R. (eds) Encyclopedia of Complexity and Systems Science. Springer, New York, NY. [Lomax_Michelini_Curtis](https://doi.org/10.1007/978-3-642-27737-5_150-2)
 
-        For other A. Lomax NonLinLoc publications, see [http://alomax.net/pub_list.html](http://alomax.net/pub_list.html)
+        For other A. Lomax NonLinLoc publications, see [pub_list](http://alomax.net/pub_list.html)
 
 
 Install complete NonLinLoc distribution software package
 ------------------------------------------------------
-	Clone or download ZIP from this repository [https://github.com/alomax/NonLinLoc](https://github.com/alomax/NonLinLoc)
+	Clone or download ZIP from this repository [github.com/alomax/NonLinLoc](https://github.com/alomax/NonLinLoc)
 
 	To build:
 	cd src
 	rm CMakeCache.txt
 	cmake .
 	make
-	See [http://alomax.net/nlloc](http://alomax.net/nlloc) and [http://alomax.net/nlloc](http://alomax.net/nlloc) -> tutorials for further information
+	See [alomax_net_nlloc](http://alomax.net/nlloc) and -> tutorials for further information
 
 	To bulid debug:
 	# edit CMakeLists.txt to comment out Release build type and uncomment Debug bulid type:
@@ -34,8 +34,8 @@ Install complete NonLinLoc distribution software package
 
 Documentation
 ------------------------------------------------------
-        Future documentation (incomplete): [http://alomax.net/nlloc/docs](http://alomax.net/nlloc/docs)
-        Legacy documentation (more extensive): [http://alomax.net/nlloc](http://alomax.net/nlloc)
+        Future documentation (incomplete): [docs](http://alomax.net/nlloc/docs)
+        Legacy documentation (more extensive): [alomax_net_nlloc](http://alomax.net/nlloc)
         Users guides and additional information: see doc/ directory in this repository
 
 
