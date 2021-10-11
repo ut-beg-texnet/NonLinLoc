@@ -23,7 +23,7 @@ make
 See [http://alomax.net/nlloc](http://alomax.net/nlloc) and [http://alomax.net/nlloc](http://alomax.net/nlloc) -> tutorials for further information
 
 To bulid debug:
-# edit CMakeLists.txt to comment out Release build type and uncomment Debug bulid type:
+edit CMakeLists.txt to comment out Release build type and uncomment Debug bulid type:
 ```
 #set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_BUILD_TYPE Debug)
