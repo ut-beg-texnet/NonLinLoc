@@ -1,4 +1,5 @@
 # NonLinLoc
+The NonLinLoc (Non-Linear Location) package is a set of programs for velocity model construction, travel-time calculation and probabilistic, non-linear, global-search earthquake location in 3D structures, and for visualisation of 3D volume data and location results. Many of the programs operate with a 3D Grid structure which defines a specific, gridded, rectangular volume (Non-GLOBAL mode) or spherical section (GLOBAL mode). 
 
 ## Citation
 If you use the NonLinLoc package in your work, please cite the following papers:
@@ -40,12 +41,15 @@ Thanks to Gilles Celli (European Center for Geodynamics and Seismology) for crea
 
 
 ## Documentation
-Future documentation (incomplete): [http://alomax.net/nlloc/docs](http://alomax.net/nlloc/docs)
-Legacy documentation (more extensive): [http://alomax.net/nlloc](http://alomax.net/nlloc)
-Users guides and additional information: see doc/ directory in this repository
+- Future documentation (incomplete): [http://alomax.net/nlloc/docs](http://alomax.net/nlloc/docs)
+- Legacy documentation (more extensive): [http://alomax.net/nlloc](http://alomax.net/nlloc)
+- Users guides and additional information: see [doc/](doc/) directory in this repository
 
 
-## NLLoc_func_test program demonstrating running NLLoc through a function call
+## Additional information
+
+
+### NLLoc_func_test program demonstrating running NLLoc through a function call
 Install as above.
 TODO: how to build GNU_SOURCE with cmake?????
 
@@ -72,7 +76,7 @@ cd ..
 See nll_func/run_func.sh for more detail.
 
 
-## ttime_func_test program demonstrating reading values from 2D or 3D grid file through a function call
+### ttime_func_test program demonstrating reading values from 2D or 3D grid file through a function call
 Install as above.
 
 Unpack demo files: unpack: NLL[VER]_func.tgz
@@ -85,7 +89,7 @@ cd ..
 See ttime_func/run_func.sh for more detail.
 
 
-## IMPORTANT NOTE: Covariance errors (2014.10.30)
+### IMPORTANT NOTE: Covariance errors (2014.10.30)
 Applies to: LOCSEARCH MET and LOCSEARCH OCT
 The algorithm for calculating the covariance of the PDF scatter sample used in NLLoc
 was subject to precision errors when the expectation of the scatter sample (e.g. the event location)
