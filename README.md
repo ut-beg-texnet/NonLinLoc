@@ -1,5 +1,5 @@
 # NonLinLoc
-The NonLinLoc (Non-Linear Location) package is a set of programs for velocity model construction, travel-time calculation and probabilistic, non-linear, global-search earthquake location in 3D structures, and for visualisation of 3D volume data and location results. Many of the programs operate with a 3D Grid structure which defines a specific, gridded, rectangular volume (Non-GLOBAL mode) or spherical section (GLOBAL mode). 
+The NonLinLoc (Non-Linear Location) package is a set of programs for velocity model construction, travel-time calculation and probabilistic, non-linear, global-search earthquake location in 3D structures, and for visualisation of 3D volume data and location results. Many of the programs operate with a 3D Grid structure which defines a specific, gridded, rectangular volume (Non-GLOBAL mode) or spherical section (GLOBAL mode).
 
 ## Citation
 If you use the NonLinLoc package in your work, please cite the following papers:
@@ -13,6 +13,16 @@ For other A. Lomax NonLinLoc publications, see [http://alomax.net/pub_list.html]
 
 ## Install complete NonLinLoc distribution software package
 Clone or download ZIP from this repository [https://github.com/alomax/NonLinLoc](https://github.com/alomax/NonLinLoc)
+
+Set output bin/ directory, if you have not already done this:
+```
+cd src
+rm bin
+# either do this:
+mkdir bin   # bin/ is a subdirectory of src/
+# or this:
+ln -s <my_favorite_bin_path> bin   # bin/ is somewhere else
+```
 
 To build:
 ```
