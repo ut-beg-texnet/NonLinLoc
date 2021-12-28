@@ -6,13 +6,14 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.15)
 
 PROJECT(NonLinLoc)
 set(CMAKE_BUILD_TYPE Release)
-#set(CMAKE_BUILD_TYPE Debug)
+###set(CMAKE_BUILD_TYPE Debug)
 
 # If you want to build the library in ${CMAKE_CURRENT_SOURCE_DIR}/lib
 #set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
 # If you want to move the binaries in ${CMAKE_CURRENT_SOURCE_DIR}/bin
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+###set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin_debug)
 
 # Bring the include directory with its headers into the project
 include_directories(
@@ -22,6 +23,8 @@ include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/matrix_statistics
 	${CMAKE_CURRENT_SOURCE_DIR}/ran1
 	${CMAKE_CURRENT_SOURCE_DIR}/octtree
+	${CMAKE_CURRENT_SOURCE_DIR}/io
+	${CMAKE_CURRENT_SOURCE_DIR}/io/jReadWrite
 	${CMAKE_CURRENT_SOURCE_DIR}
 )
 
@@ -46,7 +49,7 @@ include_directories(
 
 ## Create the .o object files with add_library()
 ### Simplify by just creating the GRID_LIB_OBJS .o object file
-add_library(GRID_LIB_OBJS OBJECT GridLib.c util.c geo.c octtree/octtree.c alomax_matrix/alomax_matrix.c alomax_matrix/eigv.c alomax_matrix/alomax_matrix_svd.c matrix_statistics/matrix_statistics.c vector/vector.c ran1/ran1.c map_project.c)
+add_library(GRID_LIB_OBJS OBJECT GridLib.c util.c geo.c octtree/octtree.c io/json_io.c io/jReadWrite/source/jRead.c io/jReadWrite/source/jWrite.c alomax_matrix/alomax_matrix.c alomax_matrix/eigv.c alomax_matrix/alomax_matrix_svd.c matrix_statistics/matrix_statistics.c vector/vector.c ran1/ran1.c map_project.c)
 
 ### Simplify by just creating the NLLOC_LIB_OBJS .o object file
 add_library(NLLOC_LIB_OBJS OBJECT calc_crust_corr.c velmod.c NLLocLib.c GridMemLib.c phaselist.c loclist.c otime_limit.c)

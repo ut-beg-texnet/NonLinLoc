@@ -34,8 +34,8 @@ www.alomax.net
 
 
 #define PACKAGE  "NonLinLoc"
-#define PVER  "7.00.11"
-#define PDATE "11Oct2021"
+#define PVER  "7.00.12"
+#define PDATE "28Dec2021"
 /*#define PCOPYRIGHT "\nCopyright (C) 1999-2019 Anthony Lomax\n"*/
 #define PCOPYRIGHT "\0"
 
@@ -363,9 +363,9 @@ typedef struct {
     // 20100506 AJL - added to support preservation of observation index order for calls to NLLoc() function (e.g. from SeisComp3)
     int original_obs_index; // index of observation in order originally read from input
 
-    char label[ARRIVAL_LABEL_LEN]; /* char label (i.e. station or site code) */
-    char network[ARRIVAL_LABEL_LEN]; /* char network name */
-    char time_grid_label[ARRIVAL_LABEL_LEN]; /* char label for time grid */
+    char label[ARRIVAL_LABEL_LEN]; /* char label (i.e. station or site code), can use NN_STA, NN_STA_LL_CHA, etc to correspond to GTSRCE code */
+    char network[ARRIVAL_LABEL_LEN]; /* char network name, not used by NLL, put network in label to explicitly use */
+    char time_grid_label[ARRIVAL_LABEL_LEN]; /* char label for time grid, set internally by NLL */
     char inst[INST_LABEL_LEN]; /* instrument code */
     char comp[COMP_LABEL_LEN]; /* component (ie Z N 128) */
 
@@ -400,10 +400,8 @@ typedef struct {
 
     double tt_error; /* travel time error (=LOCGAU if no LOCGAU2, otherwise calculated
 						from travel time using LOCGAU2 params) */
-    double delay; /* time delay (is subtracted from arival
-						seconds when phase read */
-    double elev_corr; /* elevation correction (is added to arival
-						seconds when phase read */
+    double delay; /* time delay (is subtracted from arrival seconds when phase read */
+    double elev_corr; /* elevation correction (is added to arrival seconds when phase read */
     int day_of_year; /* day of year (of earliest arrival) */
     long double obs_time; /* corrected observed time; secs from beginning of day of year */
 

@@ -74,10 +74,13 @@ LocNode *LocNodeArray[MAX_NUM_INPUT_FILES];
 int NumPhsNodes;
 PhsNode *PhsNodeArray[X_MAX_NUM_ARRIVALS];
 
+// station list input line can be very long
+#define MAX_LEN_STATION_LINE 64000
+
 typedef struct {
     double char_dist; // Characteristic event-station distance in km for weighting contribution of an event to SSST correction for a station
     double weight_floor; // (0.0-1.0); small value added to events-station weights so ssst values at large event-station distance remain non-zero (station static).
-    char stations[MAXLINE]; // List of stations to process, separated by non-character, no spaces
+    char stations[MAX_LEN_STATION_LINE]; // List of stations to process, separated by non-character, no spaces
     int use_rejected; // Flag to indicate that NLL REJECTED locations should be accepted for SSST processing (default=0)
 }
 LS_Params;
@@ -342,7 +345,7 @@ int ReadLoc2ssstInput(FILE * fp_input) {
 
     int istat, iscan;
     char param[MAXLINE], *pchr;
-    char line[2 * MAXLINE], *fgets_return;
+    char line[MAX_LEN_STATION_LINE], *fgets_return;
 
     int flag_control = 0, flag_inpfile = 0, flag_outfile = 0, flag_grid = 0,
             flag_trans = 0, flag_params = 0;
@@ -359,7 +362,7 @@ int ReadLoc2ssstInput(FILE * fp_input) {
 
     // read each input line
 
-    while ((fgets_return = fgets(line, 2 * MAXLINE, fp_input)) != NULL
+    while ((fgets_return = fgets(line, MAX_LEN_STATION_LINE, fp_input)) != NULL
             || fp_include != NULL) {
 
 
@@ -1165,7 +1168,7 @@ int open_traveltime_grid(ArrivalDesc* parr, char *fn_time_grid_input, char *stac
             // open DEFAULT time grid for this phase
             int iSwapBytes = parr->gdesc.iSwapBytes;
             // 20201022 AJL - Cluge, assume need to byte swap if DEFAULT  // TODO: make this automatic or configurable
-            iSwapBytes = 1;
+            //iSwapBytes = 1;
             //
             sprintf(filename, "%s.%s.%s.time", fn_time_grid_input, phasecode, "DEFAULT");
             if (DEBUG && istat < 0) {

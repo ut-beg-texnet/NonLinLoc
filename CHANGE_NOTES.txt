@@ -250,7 +250,7 @@ Apr2005 NLLoc - LOCDELAY_SURFACE
 
 12Aug2009 NLLoc -  Fixed bug: Inconsistent treatment of zero weight, ignored and large error (>9998sec) phases in location and output.  Now: 1) Phases with phase name starting with "*", PriorWt = 0, ErrMag > 9998.0 or excluded (LOCEXCLUDE) are not used for location, their Weight will be 0. 2) Phases with Weight = 0 are not used to compute the QUALITY measures: Nphs, Gap or Dist.
 
-15Jun2006 NLLoc - Added: LOCHYPOUT->FILENAME_DEC_SEC format added.
+15Jun2006 NLLoc - Added: LOCHYPOUT->FILENAME_DEC_SEC format; uses decimal seconds precision for hr/min/sec component of output event filename.
 
 10Sep2009 Vel2Grid - Add to doc: The 2D grids represent the travel times from each station, with the source at the position 0,0,z_station in the grid; thus the Velocity grid (which serves as a template for the travel time grid) must have orig_grid_x/y = 0.  For 2D grid (1D models) the position in geographic space is controlled by the xy location of the grid in LOCGRID and by the TRANS control statements.  For 3D grids, the position is also controlled by the VGGRID statement.
 
@@ -384,7 +384,7 @@ Following  not added to 6.00 doc :
     using a regional, metric-based cartesian grid coordinate system with origin far from the study area.
     For local studies in rectangular coordinates where the NLL coordinates origin is within or near the network
     and target sources, the errors should be very small or negligible.
-    
+
 	The algorithm for calculating the covariance of the PDF scatter sample used in NLLoc v.6.03.00 and later does not
 	have these precision errors and is valid for locations far from the origin of the coordinate system.
 
@@ -400,7 +400,7 @@ Following  not added to 6.00 doc :
 
 20151106 AJL - Changed km/deg scaling to be based on sphere with radius 6371, average Earth radius, instead of 90deg/10000km.
 
-20160726 NLL - Added: TRANS TRANS_MERC transform mode added.  (Transverse Mercator projection) 
+20160726 NLL - Added: TRANS TRANS_MERC transform mode added.  (Transverse Mercator projection)
 
 20160805 NLLoc: fixed bug in associating S with P from same station when LOCMETH VpVs used, in some cases location would abort because P travel time grid for S picks not found
 
@@ -435,7 +435,7 @@ Following  not added to 6.00 doc :
 New version 7.00 posted to web =================================
 
 
-20171120 NLL - Added: AZIMUTHAL_EQUIDIST transform mode added.  (Azimuthal Equidistant projection) 
+20171120 NLL - Added: AZIMUTHAL_EQUIDIST transform mode added.  (Azimuthal Equidistant projection)
 
 20171122 NLL - Changed all PI and related (e.g. degree <-> radians conversions) to be based on math.h -> M_PI
 
@@ -515,13 +515,11 @@ New version 7.00 posted to web =================================
 // https://stackoverflow.com/questions/57331990/c-compiling-relocation-truncated-to-fit-r-x86-64-pc32-against-symbol
 // https://github.com/alomax/NonLinLoc/issues/7
 
+20210917 NLLoc - ISC_IMS1.0 obs format: added support for DATA_TYPE BULLETIN IMS1.0:short with ISF2.0 extensions Bulletin from IGN
 
+20211012 NLLoc - Added INGV_JSON phase input format.
 
-
-
-
-
-
+20211208 NLLoc - Added: LOCHYPOUT->FILENAME_PUBLIC_ID_DEC_SEC format; appends event public ID to hr/min/sec component of output event filename.
 
 
 

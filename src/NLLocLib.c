@@ -114,6 +114,7 @@ e-mail: anthony@alomax.net  web: http://www.alomax.net
 #include "phaseloclist.h"
 #include "otime_limit.h"
 #include "NLLocLib.h"
+#include "json_io.h"
 
 #ifdef CUSTOM_ETH
 #include "custom_eth/eth_functions.h"
@@ -2571,6 +2572,10 @@ int GetNextObs(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, char* ftype_
     arrival->dd_event_id_1 = -1;
     arrival->flag_ignore = 0; // 20150521 AJL
 
+    // 20211211 AJL - Bug fix?
+    arrival->sheetdesc.array = NULL;
+    arrival->sheetdesc.buffer = NULL;
+
     /* attempt to read obs based on obs file type */
 
     if (strncmp(ftype_obs, "NLLOC_OBS", 9) == 0) {
@@ -2641,12 +2646,23 @@ int GetNextObs(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, char* ftype_
 
         return (istat);
 
-    }/* SH Seismograph Station University of Utah format (PING)
-                            first line: reftime (yymmddhhmm)
-                            next lines arrival times rel. to reftime incl. duration
-         */
+    } else if (strncmp(ftype_obs, "INGV_JSON", 9) == 0) {
 
-    else if (strcmp(ftype_obs, "UUSS") == 0) {
+        // INGV json format 20211012
+        // assumes a single event in each input file
+
+        istat = jReadNextArrival_INGV(phypo, fp_obs, arrival, nfirst);
+        if (istat < 1) {
+            return (OBS_FILE_END_OF_INPUT);
+        }
+
+        return (istat);
+
+    } else if (strcmp(ftype_obs, "UUSS") == 0) {
+        /* SH Seismograph Station University of Utah format (PING)
+                                    first line: reftime (yymmddhhmm)
+                                    next lines arrival times rel. to reftime incl. duration
+         */
         /* interpret line: reftime or phase information or comment line etc */
         chr = fgetc(fp_obs);
         /* fprintf(stderr,"GetNextObs: chr %d\n",chr); */
@@ -6319,10 +6335,10 @@ int StdDateTime(ArrivalDesc *arrival, int num_arrivals, HypoDesc * phypo) {
 
 }
 
-/** function to set output file root name using arrival time */
+/** function to set output file root name using arrival time or public_id */
 
 int SetOutName(ArrivalDesc *arrival, char* out_file_root, char* out_file,
-        char* lastfile, int isec, int *pncount) {
+        char* lastfile, int isec, int ipublic_id, char* public_id, int *pncount) {
 
     char filename_ctr[10];
 
@@ -6335,14 +6351,19 @@ int SetOutName(ArrivalDesc *arrival, char* out_file_root, char* out_file,
             out_file_root, arrival->year, arrival->month, arrival->day,
             arrival->hour, arrival->min);  */
     /* SH 03/28/02 change to include digits of sec to construct filename */
-    if (isec)
+    if (isec) {
         sprintf(out_file, "%s.%4.4d%2.2d%2.2d.%2.2d%2.2d%05.2f",
-            out_file_root, arrival->year, arrival->month, arrival->day,
-            arrival->hour, arrival->min, arrival->sec);
-    else
+                out_file_root, arrival->year, arrival->month, arrival->day,
+                arrival->hour, arrival->min, arrival->sec);
+    } else if (ipublic_id) {
+        sprintf(out_file, "%s.%4.4d%2.2d%2.2d.%2.2d%2.2d%2.2d_%s",
+                out_file_root, arrival->year, arrival->month, arrival->day,
+                arrival->hour, arrival->min, (int) arrival->sec, public_id);
+    } else {
         sprintf(out_file, "%s.%4.4d%2.2d%2.2d.%2.2d%2.2d%2.2d",
-            out_file_root, arrival->year, arrival->month, arrival->day,
-            arrival->hour, arrival->min, (int) arrival->sec);
+                out_file_root, arrival->year, arrival->month, arrival->day,
+                arrival->hour, arrival->min, (int) arrival->sec);
+    }
     /* SH 04/08/02 check if same filename as previous event;
             if so append 'b' to filename;
             identical filenames can happen with swarm data */
@@ -7679,6 +7700,15 @@ void CalcCenteredTimesPred(int num_arrivals, ArrivalDesc *arrival, GaussLocParam
 
 //static double maxvalue = -1.0;
 
+#define STACK_POSTERIOR
+// various test to satisfy Reviewer #1
+//#define TEST_TARGET_PRODUCT_POSTERIOR
+//#define TEST_FULL_PRODUCT_POSTERIOR
+
+#ifdef STACK_POSTERIOR
+
+// stack over all other events and target event with coherence weights
+
 double getLogPdfValue(SearchPdfGridDesc *searchPdfGrid, double hypo_x, double hypo_y, double hypo_z) {
 
     double log_pdf_value = 0.0;
@@ -7731,6 +7761,146 @@ double getLogPdfValue(SearchPdfGridDesc *searchPdfGrid, double hypo_x, double hy
     return (log_pdf_value);
 
 }
+
+#else
+#ifdef TEST_TARGET_PRODUCT_POSTERIOR
+
+// weighted stack of other event pdf's multiplied by target event pdf
+// gives much worse results relative to STACK_POSTERIOR
+//    /Users/anthony/work_temp/nlloc_tmp/Hukkakero_2007/20210809B_FP_3D_PRODUCT_TEST/ak135/pdf_prior_posterior/Hukkakero/RUN1000/001_2.0-25Hz_dmsl4.0_cm0.45__coherence_0.45_TARGET_PRODUCT_ONLY/Hukkakero_2007.sum_ALL.grid0.loc.hyp
+
+// if use "// EXP raise pdf value to power of weight_sum", gives results only slightly more scattered than STACK_POSTERIOR
+//    /Users/anthony/work_temp/nlloc_tmp/Hukkakero_2007/20210809B_FP_3D_PRODUCT_TEST/ak135/pdf_prior_posterior/Hukkakero/RUN1000/001_2.0-25Hz_dmsl4.0_cm0.45__coherence_0.45_TARGET_PRODUCT_ONLY_EXP/Hukkakero_2007.sum_ALL.grid0.loc.hyp
+
+double getLogPdfValue(SearchPdfGridDesc *searchPdfGrid, double hypo_x, double hypo_y, double hypo_z) {
+
+    double log_pdf_value = 0.0;
+
+    if (searchPdfGrid->gridType == PDF_GRID_GRID) {
+        double pdf_value = (double) ReadAbsInterpGrid3d(NULL, &searchPdfGrid->grid, hypo_x, hypo_y, hypo_z, 1);
+        if (pdf_value < searchPdfGrid->default_value) {
+            pdf_value = searchPdfGrid->default_value;
+        }
+        if (pdf_value > FLT_MIN) {
+            log_pdf_value = log(pdf_value);
+        }
+    } else if (searchPdfGrid->gridType == PDF_GRID_OCT_TREE) {
+        double pdf_value = 0.0;
+        double weight_sum = 0.0;
+        OctNode* node;
+        Vect3D coords;
+        coords.x = hypo_x;
+        coords.y = hypo_y;
+        coords.z = hypo_z;
+        double target_pdf_value = 0.0;
+        for (int ngrid = 0; ngrid < searchPdfGrid->nGrids; ngrid++) {
+            //printf("DEBUG: ngrid : %d\n", ngrid);
+            if (searchPdfGrid->coherence[ngrid] > searchPdfGrid->coherence_min) {
+                node = getLeafNodeContaining(searchPdfGrid->tree3D[ngrid], coords);
+                if (node != NULL) { // 20200528 AJL - bug fix.
+                    double value = (double) node->value;
+                    // stack pdf over all but target event
+                    if (ngrid == 0) { // target event
+                        target_pdf_value = value;
+                        continue;
+                    }
+                    //                    if (value > maxvalue) {
+                    //                        printf("DEBUG: node %ld  value %le  weight %lf  coords.x y z: %f %f %f\n", (long) node, value, searchPdfGrid->weight[ngrid], coords.x, coords.y, coords.z);
+                    //                        maxvalue = value;
+                    //                    }
+                    if (value < searchPdfGrid->default_value) {
+                        value = searchPdfGrid->default_value;
+                    }
+                    pdf_value += value * searchPdfGrid->weight[ngrid];
+                    weight_sum += searchPdfGrid->weight[ngrid];
+                }
+            }
+        }
+
+        if (pdf_value > FLT_MIN) {
+
+            log_pdf_value = log(pdf_value);
+            // EXP raise pdf value to power of weight_sum
+            //log_pdf_value *= weight_sum;
+
+            // multiply by target event pdf
+            if (target_pdf_value > FLT_MIN) {
+                log_pdf_value += log(target_pdf_value);
+            }
+
+        }
+
+    }
+
+    return (log_pdf_value);
+
+}
+
+#else
+#ifdef TEST_FULL_PRODUCT_POSTERIOR
+
+// product of all events with no weight
+// gives worse results than to FULL_PRODUCT_POSTERIOR
+//    /Users/anthony/work_temp/nlloc_tmp/Hukkakero_2007/20210809B_FP_3D_PRODUCT_TEST/ak135/pdf_prior_posterior/Hukkakero/RUN1000/001_2.0-25Hz_dmsl4.0_cm0.45__coherence_0.45_FULL_PRODUCT_NO_WT/Hukkakero_2007.sum_ALL.grid0.loc.hyp
+
+// product of all events with exp weight
+// gives moderately worse results than to FULL_PRODUCT_POSTERIOR, better than FULL_PRODUCT_NO_WT
+//    /Users/anthony/work_temp/nlloc_tmp/Hukkakero_2007/20210809B_FP_3D_PRODUCT_TEST/ak135/pdf_prior_posterior/Hukkakero/RUN1000/001_2.0-25Hz_dmsl4.0_cm0.45__coherence_0.45_FULL_PRODUCT_EXP_WT/Hukkakero_2007.sum_ALL.grid0.loc.hyp
+
+double getLogPdfValue(SearchPdfGridDesc *searchPdfGrid, double hypo_x, double hypo_y, double hypo_z) {
+
+    double log_pdf_value = 0.0;
+
+    if (searchPdfGrid->gridType == PDF_GRID_GRID) {
+        double pdf_value = (double) ReadAbsInterpGrid3d(NULL, &searchPdfGrid->grid, hypo_x, hypo_y, hypo_z, 1);
+        if (pdf_value < searchPdfGrid->default_value) {
+            pdf_value = searchPdfGrid->default_value;
+        }
+        if (pdf_value > FLT_MIN) {
+            log_pdf_value = log(pdf_value);
+        }
+    } else if (searchPdfGrid->gridType == PDF_GRID_OCT_TREE) {
+        double pdf_value = 0.0;
+        double weight_sum = 0.0;
+        OctNode* node;
+        Vect3D coords;
+        coords.x = hypo_x;
+        coords.y = hypo_y;
+        coords.z = hypo_z;
+        double target_pdf_value = 0.0;
+        for (int ngrid = 0; ngrid < searchPdfGrid->nGrids; ngrid++) {
+            //printf("DEBUG: ngrid : %d\n", ngrid);
+            if (searchPdfGrid->coherence[ngrid] > searchPdfGrid->coherence_min) {
+                node = getLeafNodeContaining(searchPdfGrid->tree3D[ngrid], coords);
+                if (node != NULL) { // 20200528 AJL - bug fix.
+                    double value = (double) node->value;
+                    //                    if (value > maxvalue) {
+                    //                        printf("DEBUG: node %ld  value %le  weight %lf  coords.x y z: %f %f %f\n", (long) node, value, searchPdfGrid->weight[ngrid], coords.x, coords.y, coords.z);
+                    //                        maxvalue = value;
+                    //                    }
+                    if (value < searchPdfGrid->default_value) {
+                        value = searchPdfGrid->default_value;
+                    }
+                    if (value > FLT_MIN) {
+                        pdf_value += log(value) * searchPdfGrid->weight[ngrid];
+                        // NO_WT  pdf_value += log(value);
+                    }
+                    //weight_sum += searchPdfGrid->weight[ngrid];
+                }
+            }
+        }
+
+        log_pdf_value = pdf_value;
+
+    }
+
+    return (log_pdf_value);
+
+}
+
+#endif
+#endif
+#endif
 
 /** function to calculate probability density */
 
@@ -7788,7 +7958,6 @@ double CalcSolutionQuality(double hypo_x, double hypo_y, double hypo_z, OctNode*
     return (value);
 
 }
-
 
 
 
@@ -7906,6 +8075,10 @@ double CalcSolutionQuality_EDT(int num_arrivals, ArrivalDesc *arrival,
     ot_weight = 0.0L;
     ot_error_2 = 0.0L;
     num_otime_error = 0;
+//#define TEST_COUNT_ONLY_USED_ARRIVALS
+#ifdef TEST_COUNT_ONLY_USED_ARRIVALS
+    int num_arrivals_used = 0;
+#endif
     for (nrow = 0; nrow < num_arrivals; nrow++) {
 
         //printf("DEBUG: arrival[%d].pred_travel_time %f\n", nrow, arrival[nrow].pred_travel_time);
@@ -7920,6 +8093,9 @@ double CalcSolutionQuality_EDT(int num_arrivals, ArrivalDesc *arrival,
         }
         // END
 
+#ifdef TEST_COUNT_ONLY_USED_ARRIVALS
+        num_arrivals_used++;
+#endif
         // set error
         //printf("iUseGauss2 %d\n", iUseGauss2);
         if (iUseGauss2) {
@@ -8138,7 +8314,14 @@ double CalcSolutionQuality_EDT(int num_arrivals, ArrivalDesc *arrival,
         *pmisfit = rms_misfit;
         return (rms_misfit);
     } else if (itype == GRID_PROB_DENSITY) {
+#ifdef TEST_COUNT_ONLY_USED_ARRIVALS
+        ln_prob_density = -edtSumMisfit * (long double) num_arrivals_used; // best, give power of N
+        if (icalc_otime) {
+            printf("DEBUG ln_prob_density: num_arrivals %d  num_arrivals_used %d\n", num_arrivals, num_arrivals_used);
+        }
+#else
         ln_prob_density = -edtSumMisfit * (long double) num_arrivals; // best, give power of N
+#endif
         //if (EDT_otime_weight_active)
         ln_prob_density += ot_var_weight;
         // 20200619 AJL - Test weighting by edt_weight (~number of readings) to avoid discontinuities in pdf when travel-times for a phase become unavailable
@@ -9494,6 +9677,36 @@ int CalcConfidenceIntrvl(GridDesc* ptgrid, HypoDesc* phypo, char* filename) {
 
 
 
+
+/** function to check if nll input file is nll-control JSON format */
+
+// AJL 20211014 - added
+
+int is_nll_control_json(FILE* fp_input) {
+
+    char line_buf[MAXLINE_LONG];
+
+    // read each input line and check for nll-control JSON name tag
+
+    while (fgets(line_buf, MAXLINE_LONG, fp_input) != NULL) { // read next line
+
+        // skip comment line
+        if (strncmp(line_buf, "#", 1) == 0) {
+            continue;
+        }
+
+        // check for JSON name tag
+        if (strstr(line_buf, "nll-control") != NULL) {
+            rewind(fp_input);
+            return (1);
+        }
+    }
+
+    rewind(fp_input);
+    return (0);
+
+}
+
 /** function to read input control file */
 
 // AJL 20071217 - added char** passing of parameters
@@ -9980,6 +10193,7 @@ patch below fixes this problem.
         iSaveSnapSum = 0;
         iCalcSedOrigin = 0;
         iSaveDecSec = 0;
+        iSavePublicID = 0; // 20211208 AJL - added
         iSaveNone = 0;
     }
     if (!flag_phase_id) {
@@ -10282,15 +10496,16 @@ int GetNLLoc_PdfGrid(char* line1, int prior_type) {
 
         searchPdfGrid->gridType = PDF_GRID_OCT_TREE;
         searchPdfGrid->max_total_other_weight = -1.0; // default
+        searchPdfGrid->max_count_other = -1; // default   // 20211031 AJL - added
         searchPdfGrid->max_se3 = -1.0; // default
-        istat = sscanf(line1, "%*s %s %lf %lf %lf %lf",
+        istat = sscanf(line1, "%*s %s %lf %lf %lf %lf %d",
                 searchPdfGrid->grid_file_path, &(searchPdfGrid->default_value),
-                &(searchPdfGrid->coherence_min), &(searchPdfGrid->max_total_other_weight), &(searchPdfGrid->max_se3));
-        sprintf(MsgStr, "LOCPRIOR/LOCPOSTERIOR:  Type: %s  GridFile: %s  DefaultValue: %e  CoherenceMin: %f  MaxOtherWeight: %f  MaxSE3: %f",
+                &(searchPdfGrid->coherence_min), &(searchPdfGrid->max_total_other_weight), &(searchPdfGrid->max_se3), &(searchPdfGrid->max_count_other));
+        sprintf(MsgStr, "LOCPRIOR/LOCPOSTERIOR:  Type: %s  GridFile: %s  DefaultValue: %e  CoherenceMin: %f  MaxOtherWeight: %f  MaxSE3: %f  MaxNother: %d",
                 grid_type, searchPdfGrid->grid_file_path, searchPdfGrid->default_value,
-                searchPdfGrid->coherence_min, searchPdfGrid->max_total_other_weight, searchPdfGrid->max_se3);
+                searchPdfGrid->coherence_min, searchPdfGrid->max_total_other_weight, searchPdfGrid->max_se3, searchPdfGrid->max_count_other);
         nll_putmsg(3, MsgStr);
-        sprintf(MsgStr, "");  // 20210527 AJL - Bug Fix: TODO: somewhere this message is printed!
+        sprintf(MsgStr, ""); // 20210527 AJL - Bug Fix: TODO: somewhere this message is printed!
         ierr = 0;
         if (checkRangeDouble("LOCPRIOR/LOCPOSTERIOR", "DefaultValue", searchPdfGrid->default_value, 1, 0.0, 0, 0.0) != 0)
             ierr = -1;
@@ -10356,6 +10571,14 @@ int GetNLLoc_PdfGrid(char* line1, int prior_type) {
                                     sprintf(MsgStr,
                                             "WARNING: maximum number of coherence pdf grid files files reached, only first %d will be processed.",
                                             MAX_NUM_PDF_GRID_FILES);
+                                    nll_puterr(MsgStr);
+                                    break;
+                                }
+                                if (searchPdfGrid->max_count_other >= 0
+                                        && numPdfGridFiles > searchPdfGrid->max_count_other) {
+                                    sprintf(MsgStr,
+                                            "WARNING: maximum number of other coherence pdf grid files files reached, only first %d will be processed.",
+                                            searchPdfGrid->max_count_other);
                                     nll_puterr(MsgStr);
                                     break;
                                 }
@@ -10552,8 +10775,13 @@ int GetNLLoc_PdfGrid(char* line1, int prior_type) {
     if (prior_type == PDF_GRID_PRIOR) {
         iUseSearchPrior = 1;
     } else if (prior_type == PDF_GRID_POSTERIOR) {
-
         iUseSearchPosterior = 1;
+        // 20211026 AJL - Bug fix: do not put 3D grids in memory: LOCMETH maximum_number_3D_grids, not needed and can use much memory
+        if (MaxNum3DGridMemory != 0) {
+            MaxNum3DGridMemory = 0;
+            sprintf(MsgStr, "INFO: LOCPOSTERIOR is active: LOCMETH maximum_number_3D_grids reset to 0");
+            nll_putmsg(1, MsgStr);
+        }
     }
 
     return (0);
@@ -10615,6 +10843,8 @@ int GetNLLoc_HypOutTypes(char* line1) {
             /* filename format, int sec or 5.2 decimal seconds */
         else if (strcmp(hyp_type, "FILENAME_DEC_SEC") == 0)
             iSaveDecSec = 1;
+        else if (strcmp(hyp_type, "FILENAME_PUBLIC_ID") == 0) // 20211208 AJL - added
+            iSavePublicID = 1;
             /* new values NLL PHASE_2 format*/
             /* 20060629 AJL - Added */
         else if (strcmp(hyp_type, "NLL_FORMAT_VER_2") == 0)
@@ -10623,7 +10853,7 @@ int GetNLLoc_HypOutTypes(char* line1) {
             iSaveNone = 1;
             iSaveNLLocEvent = iSaveNLLocSum = iSaveHypo71Sum = iSaveHypoEllSum =
                     iSaveHypo71Event = iSaveHypoEllEvent = iSaveHypoInvSum = iSaveHypoInvY2KArc =
-                    iSaveAlberto4Sum = iSaveFmamp = iSaveSnapSum = iCalcSedOrigin = iSaveDecSec = 0;
+                    iSaveAlberto4Sum = iSaveFmamp = iSaveSnapSum = iCalcSedOrigin = iSaveDecSec = iSavePublicID = 0;
             iSaveNLLocExpectation = 0; // 20170811 AJL - added
         } else
             return (-1);
@@ -10663,6 +10893,16 @@ int GetNLLoc_Method(char* line1) {
             loc_method, DistStaGridMin, DistStaGridMax, MinNumArrLoc, MaxNumArrLoc,
             MinNumSArrLoc, VpVsRatio, MaxNum3DGridMemory, DistStaGridMin, iRejectDuplicateArrivals);
     nll_putmsg(3, MsgStr);
+
+    // 20211026 AJL - Bug fix: do not put 3D grids in memory: LOCMETH maximum_number_3D_grids, not needed and can use much memory
+    if (iUseSearchPosterior == 1) {
+        // 20211026 AJL - Bug fix: do not put 3D grids in memory LOCMETH maximum_number_3D_grids, not needed and can use much memory
+        if (MaxNum3DGridMemory != 0) {
+            MaxNum3DGridMemory = 0;
+            sprintf(MsgStr, "INFO: LOCPOSTERIOR is active: LOCMETH maximum_number_3D_grids reset to 0");
+            nll_putmsg(1, MsgStr);
+        }
+    }
 
     // 20170922 AJL - bug fix, since MaxNum3DGridMemory used in GridMemLib.c with values assumed >=0, just set very large value here if <0
     if (MaxNum3DGridMemory < 0) {
@@ -11076,7 +11316,7 @@ int GetLocExclude(char* line1) {
         sprintf(MsgStr, "%s", line1);
         nll_putmsg(1, MsgStr);
         sprintf(MsgStr,
-                "WARNING: maximum number of excluded phases reached, ignoring exclude.");
+                "WARNING: maximum number of LOCEXCLUDE phases reached, ignoring exclude.");
         nll_putmsg(1, MsgStr);
         return (-1);
     }
@@ -11103,7 +11343,7 @@ int GetLocInclude(char* line1) {
         sprintf(MsgStr, "%s", line1);
         nll_putmsg(1, MsgStr);
         sprintf(MsgStr,
-                "WARNING: maximum number of excluded phases reached, ignoring exclude.");
+                "WARNING: maximum number of LOCINCLUDE phases reached, ignoring include.");
         nll_putmsg(1, MsgStr);
         return (-1);
     }

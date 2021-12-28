@@ -68,6 +68,8 @@ tel: +33(0)493752502  e-mail: anthony@alomax.net  web: http://www.alomax.net
 #include "otime_limit.h"
 #include "NLLocLib.h"
 
+#include "json_io.h"
+
 #ifdef CUSTOM_ETH
 #include "custom_eth/eth_functions.h"
 #endif
@@ -101,7 +103,7 @@ int NLLoc
     int maxArrExceeded = 0;
     int n_file_root_count = 1;
     char fn_root_out[FILENAME_MAX], fname[FILENAME_MAX], fn_root_out_last[FILENAME_MAX];
-    char sys_command[2*FILENAME_MAX];
+    char sys_command[2 * FILENAME_MAX];
     char *chr;
     FILE *fp_obs = NULL, *fpio;
 
@@ -199,6 +201,24 @@ int NLLoc
         }
     } else {
         fp_control = NULL;
+    }
+
+    // test if control file is nll-control JSON
+    int is_nll_control_json_file = 0;
+    if (fp_control != NULL) {
+        if ((is_nll_control_json_file = is_nll_control_json(fp_control))) {
+            // read nll-control JSON into array of NLLoc control file lines
+            param_line_array = read_nll_control_json(fp_control, &n_param_lines);
+            if (fp_control != NULL) {
+                fclose(fp_control);
+                NumFilesOpen--;
+            }
+            if (param_line_array == NULL) {
+                nll_puterr("FATAL ERROR: reading nll-control JSON file.");
+                return_value = EXIT_ERROR_FILEIO;
+                goto cleanup_return;
+            }
+        }
     }
 
 
@@ -415,7 +435,7 @@ int NLLoc
 
             nll_putmsg(2, "");
             // AJL 20040720 SetOutName(Arrival + 0, fn_path_output, fn_root_out, fn_root_out_last, 1);
-            SetOutName(Arrival + 0, fn_path_output, fn_root_out, fn_root_out_last, iSaveDecSec, &n_file_root_count);
+            SetOutName(Arrival + 0, fn_path_output, fn_root_out, fn_root_out_last, iSaveDecSec, iSavePublicID, Hypocenter.public_id, &n_file_root_count);
             //strcpy(fn_root_out_last, fn_root_out); /* save filename */
             sprintf(MsgStr,
                     "... %d observations read, %d will be used for location (%s).",
@@ -654,7 +674,7 @@ cleanup:
                 sprintf(fname, "%s.sum.grid%d.loc.stations", fn_path_output, ngrid);
                 if ((fpio = fopen(fname, "w")) == NULL) {
                     nll_puterr2(
-                            "ERROR: opening cumulative phase statistics output file", fname);
+                            "ERROR: opening station list output file", fname);
                     return_value = EXIT_ERROR_FILEIO;
                     goto cleanup_return;
                 } else {
@@ -706,12 +726,24 @@ cleanup_return:
         free_surface(model_surface + n);
     }
 
-
     if (bp_memory_stream != NULL) {
         free(bp_memory_stream);
         bp_memory_stream = NULL;
     }
 
+    // clean up memory allocations in read_nll_control_json
+    if (is_nll_control_json_file) {
+        for (int i = 0; i < n_param_lines; i++) {
+            if (param_line_array[i] != NULL) {
+                free(param_line_array[i]);
+            }
+        }
+        n_param_lines = 0;
+        if (param_line_array != NULL) {
+            free(param_line_array);
+        }
+        param_line_array = NULL;
+    }
 
     return (return_value);
 

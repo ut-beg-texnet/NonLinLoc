@@ -183,9 +183,20 @@ typedef struct {
     int nGrids;
     Tree3D **tree3D;    // array of nGrids tree3D oct-trees
     double *coherence;  // array of nGrids coherences for each corresponding tree3D
-    double coherence_min;  // minimum coherence to use grid
-    double max_total_other_weight;  // maximum total of coherence weight for other events; if exceeded, other event coherences normalized to sum to this value
-    double max_se3;  // maximum se3 (ellipsoid.len3) of hypocenter to use grid
+    double coherence_min;
+    // minimum coherence to use for mapping coherence to NLL-cohernce pdf stack weight
+    double max_total_other_weight;
+    // maximum total of coherence weight for other events; if exceeded, other event coherences normalized to sum to this value
+    int max_count_other;  // 20211031 AJL - added
+    // maximum number of other events to include in pdf stack, Use negative value for no limit.
+    //   limit processing time and number of files open when a large number of events have high coherency.
+    double max_se3;
+    // maximum event se3 (ellipsoid.len3) to include event in pdf stack. Use negative value to disable this check.
+    //   Excludes events with poor location constraint and large pdf extent. Such event pdf's would only contribute noise to stack,
+    //   but due to potentially high complexity of stack pdf, including such pdf's may cause oct-tree search to get trapped
+    //   in a local minimum within this event pdf (especially if LOC_SEARCH init_num_cells_x/y/z are too few). When this trapping occurs, some NLL-coherence events may cluster far from
+    //   any events in SSST reference events (LOC_PATH), with unusual epicenter or depth.
+    //   May typically have same or similar value as COHERENCE_MAX_DIST
     double *weight;  // array of nGrids weights (function of coherence and coherence_min) for each corresponding tree3D
     // arrivals storage
     ArrivalDesc** first_motion_arrivals; // arrivals with first-motion readings
@@ -312,7 +323,7 @@ EXTERN_TXT int iSaveNLLocEvent, iSaveNLLocSum, iSaveNLLocOctree,
 iSaveHypo71Event, iSaveHypo71Sum,
 iSaveHypoEllEvent, iSaveHypoEllSum,
 iSaveHypoInvSum, iSaveHypoInvY2KArc, iSaveAlberto4Sum, iSaveFmamp,
-iSaveSnapSum, iCalcSedOrigin, iSaveDecSec, iSaveNone;
+iSaveSnapSum, iCalcSedOrigin, iSaveDecSec, iSavePublicID, iSaveNone;
 // 20170811 AJL - added to allow saving of expectation hypocenter results instead of maximum likelihood
 EXTERN_TXT int iSaveNLLocExpectation;
 
@@ -500,6 +511,7 @@ int Locate(int ngrid, char* fn_loc_obs, char* fn_root_out, int numArrivalsReject
 
 int checkObs(ArrivalDesc *arrival, int nobs);
 int ExtractFilenameInfo(char*, char*);
+int is_nll_control_json(FILE* fp_input);
 int ReadNLLoc_Input(FILE* fp_input, char **param_line_array, int n_param_lines);
 int GetNLLoc_Grid(char*);
 int GetNLLoc_HypOutTypes(char*);
@@ -580,7 +592,8 @@ int HomogDateTime(ArrivalDesc*, int, HypoDesc*);
 int CheckAbsoluteTiming(ArrivalDesc *arrival, int num_arrivals);
 int hypotime2hrminsec(long double phypo_time, int *phypo_hour, int *phypo_min, double *phypo_sec);
 int StdDateTime(ArrivalDesc*, int, HypoDesc*);
-int SetOutName(ArrivalDesc *arrival, char* out_file_root, char* out_file, char lastfile[FILENAME_MAX], int isec, int *pncount);
+int SetOutName(ArrivalDesc *arrival, char* out_file_root, char* out_file,
+        char* lastfile, int isec, int ipublic_id, char* public_id, int *pncount);
 int SaveLocation(HypoDesc* hypo, int ngrid, char* fnobs, char *fnout, int numArrivalsReject,
         char* loctypename, int isave_phases, GaussLocParams* gauss_par);
 void InitializeArrivalFields(ArrivalDesc *);

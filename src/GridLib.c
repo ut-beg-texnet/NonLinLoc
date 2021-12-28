@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1999-2010 Anthony Lomax <anthony@alomax.net, http://www.alomax.net>
+ * Copyright (C) 1999-2021 Anthony Lomax <anthony@alomax.net, http://www.alomax.net>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser Public License as published by
@@ -27,8 +27,8 @@
 /*-----------------------------------------------------------------------
 Anthony Lomax
 Anthony Lomax Scientific Software
-161 Allee du Micocoulier, 06370 Mouans-Sartoux, France
-tel: +33(0)493752502  e-mail: anthony@alomax.net  web: http://www.alomax.net
+Mouans-Sartoux, France
+e-mail: anthony@alomax.net  web: http://www.alomax.net
 -------------------------------------------------------------------------*/
 
 
@@ -1243,10 +1243,12 @@ void DestroyGridArray(GridDesc * pgrid) {
 
     int ix;
 
+    //printf("DEBUG: DestroyGridArray(): pgrid %X pgrid->array %X\n", pgrid, pgrid->array);
+
     if (pgrid->array != NULL) {
 
         for (ix = 0; ix < pgrid->numx; ix++) {
-            //printf("ix %d/%d pgrid->array[ix] %ld\n", ix, pgrid->numx, pgrid->array[ix]);
+            //printf("DEBUG: DestroyGridArray(): ix %d/%d pgrid->array[ix] %X\n", ix, pgrid->numx, pgrid->array[ix]);
             free(pgrid->array[ix]);
             pgrid->array[ix] = NULL;
             NumAllocations--;
@@ -2272,9 +2274,11 @@ int OpenGrid3dFile(char *fname, FILE **fp_grid, FILE **fp_hdr,
         display_grid_param(pgrid);
 
     if (psrce != NULL && (strncmp(file_type, "time", 4) == 0
-            || strncmp(file_type, "angle", 4) == 0))
+            || strncmp(file_type, "angle", 4) == 0)) {
         fscanf(*fp_hdr, "%s %lf %lf %lf\n",
             psrce->label, &(psrce->x), &(psrce->y), &(psrce->z));
+        psrce->is_coord_xyz = 1;
+    }
 
     // save filename as grid identifier
     strcpy(pgrid->title, fname);
@@ -6662,9 +6666,9 @@ int addToStationList(SourceDesc *stations, int numStations, ArrivalDesc *arrival
                 break; // already in list
             }
         }
-        // check station has xyz coordinates
+        // check arrival station has xyz coordinates
         if (i_check_station_has_XYZ_coords) {
-            if ((stations + n)->x < -LARGE_DOUBLE / 2.0 || (stations + n)->y < -LARGE_DOUBLE / 2.0 || (stations + n)->z < -LARGE_DOUBLE / 2.0) {
+            if (((arrival + i)->station).x < -LARGE_DOUBLE / 2.0 || ((arrival + i)->station).y < -LARGE_DOUBLE / 2.0 || ((arrival + i)->station).z < -LARGE_DOUBLE / 2.0) {
                 sprintf(MsgStr, "ERROR: addToStationList: No xyz station coordinates available: cannot add station %s ", arrival_label);
                 nll_puterr(MsgStr);
                 continue;
@@ -6686,8 +6690,7 @@ int addToStationList(SourceDesc *stations, int numStations, ArrivalDesc *arrival
             numStations++;
             if (message_flag >= 4) {
                 sprintf(MsgStr, "Added to station list: %s (%lf,%lf,%lf)",
-                        (stations + n)->label, (stations + n)->x, (stations + n)->y,
-                        (stations + n)->z);
+                        (stations + n)->label, (stations + n)->x, (stations + n)->y, (stations + n)->z);
                 nll_putmsg(4, MsgStr);
             }
         }
@@ -6706,12 +6709,13 @@ int addToStationList(SourceDesc *stations, int numStations, ArrivalDesc *arrival
 
 int WriteStationList(FILE* fpio, SourceDesc *stations, int numStations) {
 
-    int n;
+    fprintf(fpio, "Label x y z lat lon depth\n");
 
-    for (n = 0; n < numStations; n++) {
+    ConvertSourceLoc(0, stations, numStations, 1, 1);
 
-        fprintf(fpio, "%s %lf %lf %lf\n",
-                (stations + n)->label, (stations + n)->x, (stations + n)->y, (stations + n)->z);
+    for (int n = 0; n < numStations; n++) {
+        fprintf(fpio, "%s %lf %lf %lf %lf %lf %lf\n",
+                (stations + n)->label, (stations + n)->x, (stations + n)->y, (stations + n)->z, (stations + n)->dlat, (stations + n)->dlong, (stations + n)->depth);
     }
 
     return (0);

@@ -382,7 +382,8 @@ OctNode* getTreeNodeContaining(Tree3D* tree, Vect3D coords, double *padjusted_co
     }
 
     // x
-    double dx, num_x;
+    double dx;
+    int num_x;
     if (tree->isSpherical) {
         dx = tree->ds_x[iy];
         num_x = tree->num_x[iy];
@@ -396,27 +397,28 @@ OctNode* getTreeNodeContaining(Tree3D* tree, Vect3D coords, double *padjusted_co
         if (coords_x < tree->orig.x) {
             coords_x += 360.0;
             *padjusted_coords_x = coords_x;
-        } else if ((coords_x - tree->orig.x) > (double) (num_x - 1) * dx) {
+        // 20211207 AJL - bug fix: //} else if ((coords_x - tree->orig.x) > (double) (num_x - 1) * dx) {
+        } else if (coords_x > tree->orig.x + (double) num_x * dx) {  // 20211207 AJL - bug fix
             coords_x -= 360.0;
             *padjusted_coords_x = coords_x;
         }
     }
     double dix = (coords_x - tree->orig.x) / dx;
     if (dix < 0.0) {
-        // x is far lower bound of tree limits
+        // x is less than lower bound of tree limits
         if (DEBUG_202110) printf("DEBUG: getTreeNodeContaining: TP 5: dix %f\n", dix);
         return (NULL);
     }
     ix = (int) dix;
     if (ix < 0 || ix > num_x) {
-        if (DEBUG_202110) printf("DEBUG: getTreeNodeContaining: TP 6: ix %d\n", ix);
+        if (DEBUG_202110) printf("DEBUG: getTreeNodeContaining: TP 6: dix %f ix %d num_x %d\n", dix, ix, num_x);
         return (NULL);
     } else if (ix == num_x) {
         if (fabs(dix - (double) num_x) < dx / 10000.0) {
             // x is at upper bound of tree limits
             ix = num_x - 1;
         } else {
-        if (DEBUG_202110) printf("DEBUG: getTreeNodeContaining: TP 7: ix %d\n", ix);
+        if (DEBUG_202110) printf("DEBUG: getTreeNodeContaining: TP 7: dix %f ix %d num_x %d\n", dix, ix, num_x);
             return (NULL);
         }
     }

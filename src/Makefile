@@ -1231,6 +1231,78 @@ interface2fmm.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/interface2fmm.dir/build.make CMakeFiles/interface2fmm.dir/interface2fmm.c.s
 .PHONY : interface2fmm.c.s
 
+io/jReadWrite/source/jRead.o: io/jReadWrite/source/jRead.c.o
+.PHONY : io/jReadWrite/source/jRead.o
+
+# target to build an object file
+io/jReadWrite/source/jRead.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/GRID_LIB_OBJS.dir/build.make CMakeFiles/GRID_LIB_OBJS.dir/io/jReadWrite/source/jRead.c.o
+.PHONY : io/jReadWrite/source/jRead.c.o
+
+io/jReadWrite/source/jRead.i: io/jReadWrite/source/jRead.c.i
+.PHONY : io/jReadWrite/source/jRead.i
+
+# target to preprocess a source file
+io/jReadWrite/source/jRead.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/GRID_LIB_OBJS.dir/build.make CMakeFiles/GRID_LIB_OBJS.dir/io/jReadWrite/source/jRead.c.i
+.PHONY : io/jReadWrite/source/jRead.c.i
+
+io/jReadWrite/source/jRead.s: io/jReadWrite/source/jRead.c.s
+.PHONY : io/jReadWrite/source/jRead.s
+
+# target to generate assembly for a file
+io/jReadWrite/source/jRead.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/GRID_LIB_OBJS.dir/build.make CMakeFiles/GRID_LIB_OBJS.dir/io/jReadWrite/source/jRead.c.s
+.PHONY : io/jReadWrite/source/jRead.c.s
+
+io/jReadWrite/source/jWrite.o: io/jReadWrite/source/jWrite.c.o
+.PHONY : io/jReadWrite/source/jWrite.o
+
+# target to build an object file
+io/jReadWrite/source/jWrite.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/GRID_LIB_OBJS.dir/build.make CMakeFiles/GRID_LIB_OBJS.dir/io/jReadWrite/source/jWrite.c.o
+.PHONY : io/jReadWrite/source/jWrite.c.o
+
+io/jReadWrite/source/jWrite.i: io/jReadWrite/source/jWrite.c.i
+.PHONY : io/jReadWrite/source/jWrite.i
+
+# target to preprocess a source file
+io/jReadWrite/source/jWrite.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/GRID_LIB_OBJS.dir/build.make CMakeFiles/GRID_LIB_OBJS.dir/io/jReadWrite/source/jWrite.c.i
+.PHONY : io/jReadWrite/source/jWrite.c.i
+
+io/jReadWrite/source/jWrite.s: io/jReadWrite/source/jWrite.c.s
+.PHONY : io/jReadWrite/source/jWrite.s
+
+# target to generate assembly for a file
+io/jReadWrite/source/jWrite.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/GRID_LIB_OBJS.dir/build.make CMakeFiles/GRID_LIB_OBJS.dir/io/jReadWrite/source/jWrite.c.s
+.PHONY : io/jReadWrite/source/jWrite.c.s
+
+io/json_io.o: io/json_io.c.o
+.PHONY : io/json_io.o
+
+# target to build an object file
+io/json_io.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/GRID_LIB_OBJS.dir/build.make CMakeFiles/GRID_LIB_OBJS.dir/io/json_io.c.o
+.PHONY : io/json_io.c.o
+
+io/json_io.i: io/json_io.c.i
+.PHONY : io/json_io.i
+
+# target to preprocess a source file
+io/json_io.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/GRID_LIB_OBJS.dir/build.make CMakeFiles/GRID_LIB_OBJS.dir/io/json_io.c.i
+.PHONY : io/json_io.c.i
+
+io/json_io.s: io/json_io.c.s
+.PHONY : io/json_io.s
+
+# target to generate assembly for a file
+io/json_io.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/GRID_LIB_OBJS.dir/build.make CMakeFiles/GRID_LIB_OBJS.dir/io/json_io.c.s
+.PHONY : io/json_io.c.s
+
 loclist.o: loclist.c.o
 .PHONY : loclist.o
 
@@ -1727,6 +1799,15 @@ help:
 	@echo "... interface2fmm.o"
 	@echo "... interface2fmm.i"
 	@echo "... interface2fmm.s"
+	@echo "... io/jReadWrite/source/jRead.o"
+	@echo "... io/jReadWrite/source/jRead.i"
+	@echo "... io/jReadWrite/source/jRead.s"
+	@echo "... io/jReadWrite/source/jWrite.o"
+	@echo "... io/jReadWrite/source/jWrite.i"
+	@echo "... io/jReadWrite/source/jWrite.s"
+	@echo "... io/json_io.o"
+	@echo "... io/json_io.i"
+	@echo "... io/json_io.s"
 	@echo "... loclist.o"
 	@echo "... loclist.i"
 	@echo "... loclist.s"
