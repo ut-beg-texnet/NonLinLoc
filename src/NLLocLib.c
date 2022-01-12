@@ -10776,12 +10776,14 @@ int GetNLLoc_PdfGrid(char* line1, int prior_type) {
         iUseSearchPrior = 1;
     } else if (prior_type == PDF_GRID_POSTERIOR) {
         iUseSearchPosterior = 1;
+        /* 20220107 AJL - Revert Bug fix: faster to put grids in memory, maybe too much disk I/O otherwise
         // 20211026 AJL - Bug fix: do not put 3D grids in memory: LOCMETH maximum_number_3D_grids, not needed and can use much memory
         if (MaxNum3DGridMemory != 0) {
             MaxNum3DGridMemory = 0;
             sprintf(MsgStr, "INFO: LOCPOSTERIOR is active: LOCMETH maximum_number_3D_grids reset to 0");
             nll_putmsg(1, MsgStr);
         }
+        */
     }
 
     return (0);
@@ -10894,6 +10896,7 @@ int GetNLLoc_Method(char* line1) {
             MinNumSArrLoc, VpVsRatio, MaxNum3DGridMemory, DistStaGridMin, iRejectDuplicateArrivals);
     nll_putmsg(3, MsgStr);
 
+    /* 20220107 AJL - Revert Bug fix: faster to put grids in memory, maybe too much disk I/O otherwise
     // 20211026 AJL - Bug fix: do not put 3D grids in memory: LOCMETH maximum_number_3D_grids, not needed and can use much memory
     if (iUseSearchPosterior == 1) {
         // 20211026 AJL - Bug fix: do not put 3D grids in memory LOCMETH maximum_number_3D_grids, not needed and can use much memory
@@ -10902,7 +10905,7 @@ int GetNLLoc_Method(char* line1) {
             sprintf(MsgStr, "INFO: LOCPOSTERIOR is active: LOCMETH maximum_number_3D_grids reset to 0");
             nll_putmsg(1, MsgStr);
         }
-    }
+    }*/
 
     // 20170922 AJL - bug fix, since MaxNum3DGridMemory used in GridMemLib.c with values assumed >=0, just set very large value here if <0
     if (MaxNum3DGridMemory < 0) {
