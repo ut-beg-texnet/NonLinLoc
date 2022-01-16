@@ -41,7 +41,10 @@
 # Debug files
 *.dSYM/
 /src/CMakeCache.txt
-/src/bin/
+/src/cmake_install.cmake
+/src/Makefile
+/src/bin
+/src/bin_debug
 /src/CMakeLists-OLD.txt
 /src/CMakeFiles/
 /src_OLD/
