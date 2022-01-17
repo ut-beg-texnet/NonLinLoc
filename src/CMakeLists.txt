@@ -28,6 +28,7 @@ include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+add_compile_options(-fcommon)
 
 # Uncomment the following if the compiler you are using supports GNU extensions such as:
 #   fmemopen, open_memstream -  open memory as stream (required to pass observations file lines as parameters
