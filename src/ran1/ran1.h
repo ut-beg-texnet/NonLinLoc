@@ -1,4 +1,8 @@
 
+#ifndef _RAN1_H
+#define _RAN1_H
+
+/* 20220118 AJL
 #ifdef EXTERN_MODE
 #define EXTERN_TXT extern
 #else
@@ -6,6 +10,7 @@
 #endif
 
 EXTERN_TXT int RanSeed;
+// 20220118 AJL */
 
 
 
@@ -55,6 +60,12 @@ void test_rand_int();
 
 
 
+/*//////// Numerical Recipies stuff */
+
+double seed_ran1(int iseed);
+double get_ran1();
+double ran1(int* idum);
+
 
 
 /*//////// UNI stuff */
@@ -62,3 +73,6 @@ void test_rand_int();
 double uni(void);
 void rstart(int i, int j, int k, int l);
 void rinit(int ijkl);
+
+
+#endif

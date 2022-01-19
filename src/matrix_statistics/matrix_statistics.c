@@ -57,7 +57,7 @@ Vect3D CalcExpectationSamples(float* fdata, int nSamples) {
 
     int nsamp, ipos;
 
-    float x, y, z, prob;
+    float x, y, z; //, prob;
     Vect3D expect = {0.0, 0.0, 0.0};
 
 
@@ -66,7 +66,7 @@ Vect3D CalcExpectationSamples(float* fdata, int nSamples) {
         x = fdata[ipos++];
         y = fdata[ipos++];
         z = fdata[ipos++];
-        prob = fdata[ipos++];
+        ipos++; //prob = fdata[ipos++];
         expect.x += (double) x;
         expect.y += (double) y;
         expect.z += (double) z;
@@ -198,7 +198,7 @@ Mtrx3D CalcCovarianceSamplesRect(float* fdata, int nSamples, Vect3D* pexpect) {
 
     int nsamp, ipos;
 
-    float x, y, z, prob;
+    float x, y, z; //, prob;
     Mtrx3D cov = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
 
@@ -209,7 +209,7 @@ Mtrx3D CalcCovarianceSamplesRect(float* fdata, int nSamples, Vect3D* pexpect) {
         x = fdata[ipos++] - pexpect->x;
         y = fdata[ipos++] - pexpect->y;
         z = fdata[ipos++] - pexpect->z;
-        prob = fdata[ipos++]; // do not use prob since samples follow target PDF
+        ipos++; //prob = fdata[ipos++]; // do not use prob since samples follow target PDF
 
         cov.xx += (double) (x * x);
         cov.xy += (double) (x * y);
@@ -247,7 +247,7 @@ Mtrx3D CalcCovarianceSamplesRect_OLD(float* fdata, int nSamples, Vect3D* pexpect
 
     int nsamp, ipos;
 
-    float x, y, z, prob;
+    float x, y, z; //, prob;
     Mtrx3D cov = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
 
@@ -258,7 +258,7 @@ Mtrx3D CalcCovarianceSamplesRect_OLD(float* fdata, int nSamples, Vect3D* pexpect
         x = fdata[ipos++];
         y = fdata[ipos++];
         z = fdata[ipos++];
-        prob = fdata[ipos++];
+        ipos++; //prob = fdata[ipos++];
 
         cov.xx += (double) (x * x);
         cov.xy += (double) (x * y);
@@ -353,7 +353,7 @@ Mtrx3D CalcCovarianceSamplesGlobal(float* fdata, int nSamples, Vect3D* pexpect) 
 
     int nsamp, ipos;
 
-    double lat, lon, x, y, z, prob;
+    double lat, lon, x, y, z; //, prob;
     Mtrx3D cov = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
     double distance, azimuth;
@@ -377,7 +377,7 @@ Mtrx3D CalcCovarianceSamplesGlobal(float* fdata, int nSamples, Vect3D* pexpect) 
         x = distance * sin(azimuth * DE2RA); // azimuth is deg CW from North
         y = distance * cos(azimuth * DE2RA);
         z = (fdata[ipos++] - pexpect->z);
-        prob = fdata[ipos++]; // do not use prob since sample density already follow target PDF
+        ipos++; //prob = fdata[ipos++]; // do not use prob since sample density already follow target PDF
 
         cov.xx += (double) (x * x);
         cov.xy += (double) (x * y);
@@ -419,7 +419,7 @@ Mtrx3D CalcCovarianceSamplesGlobal_NEW(float* fdata, int nSamples, Vect3D* pexpe
 
     int nsamp, ipos;
 
-    float x, y, z, prob;
+    float x, y, z; //, prob;
     Mtrx3D cov = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
     double cos_lat = cos(pexpect->y * DE2RA);
@@ -437,7 +437,7 @@ Mtrx3D CalcCovarianceSamplesGlobal_NEW(float* fdata, int nSamples, Vect3D* pexpe
         x = (x - pexpect->x) * DEG2KM * cos_lat;
         y = (fdata[ipos++] - pexpect->y) * DEG2KM;
         z = (fdata[ipos++] - pexpect->z);
-        prob = fdata[ipos++]; // do not use prob since samples follow target PDF
+        ipos++; //prob = fdata[ipos++]; // do not use prob since samples follow target PDF
 
         cov.xx += (double) (x * x);
         cov.xy += (double) (x * y);
@@ -476,7 +476,7 @@ Mtrx3D CalcCovarianceSamplesGlobal_OLD(float* fdata, int nSamples, Vect3D* pexpe
 
     int nsamp, ipos;
 
-    float x, y, z, prob;
+    float x, y, z; //, prob;
     Mtrx3D cov = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
     double cos_lat = cos(pexpect->y * DE2RA);
@@ -494,7 +494,7 @@ Mtrx3D CalcCovarianceSamplesGlobal_OLD(float* fdata, int nSamples, Vect3D* pexpe
         x = x * DEG2KM * cos_lat;
         y = fdata[ipos++] * DEG2KM;
         z = fdata[ipos++];
-        prob = fdata[ipos++];
+        ipos++; //prob = fdata[ipos++];
 
         cov.xx += (double) (x * x);
         cov.xy += (double) (x * y);

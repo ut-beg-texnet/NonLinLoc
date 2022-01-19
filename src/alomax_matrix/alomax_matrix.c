@@ -238,9 +238,7 @@ int matrix_double_inverse(MatrixDouble dmtx, int num_rows, int num_cols) {
     free_matrix_double(augmented_mtx, num_rows, 2 * num_cols);
 
     if (istat < 0) {
-        char error_message2[4096];
-        sprintf(error_message2, "ERROR: in matrix_double_inverse(): %s", error_message);
-        strcpy(error_message, error_message2);
+        snprintf(error_message, sizeof (error_message), "ERROR: in matrix_double_inverse()->gauss_jordan() %d", istat);
         return (-1);
     }
 
@@ -332,10 +330,9 @@ int matrix_double_check_diagonal_non_zero_inverse(MatrixDouble mtx_original, int
     }*/
 
     // invert
-    if (matrix_double_inverse(mtx_checked, i_checked_size, i_checked_size) < 0) {
-        char error_message2[4096];
-        sprintf(error_message2, "ERROR: in matrix_double_check_diagonal_non_zero_inverse(): %s", error_message);
-        strcpy(error_message, error_message2);
+    int istat;
+    if ((istat = matrix_double_inverse(mtx_checked, i_checked_size, i_checked_size)) < 0) {
+        snprintf(error_message, sizeof (error_message), "ERROR: in matrix_double_check_diagonal_non_zero_inverse()->matrix_double_inverse(): %d", istat);
         if (verify_inverse)
             free_matrix_double(mtx_checked_before_inverse, i_checked_size, i_checked_size);
         return (-1);

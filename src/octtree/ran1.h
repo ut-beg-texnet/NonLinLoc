@@ -1,4 +1,8 @@
 
+#ifndef _RAN1_H
+#define _RAN1_H
+
+/* 20220118 AJL
 #ifdef EXTERN_MODE
 #define EXTERN_TXT extern
 #else
@@ -6,6 +10,7 @@
 #endif
 
 EXTERN_TXT int RanSeed;
+// 20220118 AJL */
 
 
 
@@ -68,3 +73,6 @@ double ran1(int* idum);
 double uni(void);
 void rstart(int i, int j, int k, int l);
 void rinit(int ijkl);
+
+
+#endif
