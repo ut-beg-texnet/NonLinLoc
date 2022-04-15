@@ -52,9 +52,15 @@ tel: +33(0)493752502  e-mail: anthony@alomax.net  web: http://www.alomax.net
 #include "GridLib.h"
 #include "GridGraphLib.h"
 
-#define GMT_VER_3_3_4 1
-
-
+#ifdef GMT_VER_5
+    #define GMT_COMMAND_PREFIX "gmt "
+    #define GMT_PEN_WIDTH_SUFFIX "p,"
+    #define GMT_SCAT_WIDTH_SUFFIX "p -G"
+#else
+    #define GMT_COMMAND_PREFIX ""
+    #define GMT_PEN_WIDTH_SUFFIX "/"
+    #define GMT_SCAT_WIDTH_SUFFIX "/"
+#endif
 
 #define NUM_COLORS 8
 #define MISFIT_CONTOUR_INTERVAL_XY 1.0
@@ -524,10 +530,19 @@ int GenGMTCommands(char cplotmode, char cdatatype,
     fprintf(fp_gmt, "set -ex\n#\n#\n\n");
 
     // gmtdefaults
+#ifdef GMT_VER_5
+    fprintf(fp_gmt, GMT_COMMAND_PREFIX"gmtset FONT_ANNOT_PRIMARY 14  FONT_ANNOT_SECONDARY 14  FONT_TITLE 14\n\n");
+    fprintf(fp_gmt, GMT_COMMAND_PREFIX"gmtset PS_PAGE_ORIENTATION portrait  MAP_ORIGIN_X 0.5  MAP_ORIGIN_Y 0.5 \n\n");
+    fprintf(fp_gmt, GMT_COMMAND_PREFIX"gmtset FONT_ANNOT_PRIMARY 8  FONT_ANNOT_SECONDARY 6  FONT_HEADING 12  FONT_LABEL 10\n\n");
+    fprintf(fp_gmt, GMT_COMMAND_PREFIX"gmtset MAP_LABEL_OFFSET 0.1c  MAP_ANNOT_OFFSET_PRIMARY 0.1c MAP_ANNOT_OFFSET_SECONDARY 0.1c\n\n");
+    fprintf(fp_gmt, GMT_COMMAND_PREFIX"gmtset GMT_VERBOSE i\n\n");
+#else
     fprintf(fp_gmt, "gmtset PAGE_ORIENTATION portrait  X_ORIGIN 0.5  Y_ORIGIN 0.5 \n\n");
     fprintf(fp_gmt, "gmtset ANNOT_FONT_SIZE_PRIMARY 14  ANNOT_FONT_SIZE_SECONDARY 14  HEADER_FONT_SIZE 14 LABEL_FONT_SIZE 14\n\n");
     fprintf(fp_gmt, "gmtset ANNOT_FONT_PRIMARY 4  ANNOT_FONT_SECONDARY 4  HEADER_FONT 4 LABEL_FONT 4\n\n");
     fprintf(fp_gmt, "gmtset LABEL_OFFSET 0.1c  ANNOT_OFFSET_PRIMARY 0.1c ANNOT_OFFSET_SECONDARY 0.1c\n\n");
+    fprintf(fp_gmt, "gmtset VERBOSE TRUE\n\n");
+#endif
 
     fprintf(fp_gmt, "POSTSCRIPT_NAME=%s\n\n", fn_root_output);
     fprintf(fp_gmt, "\\rm -f $POSTSCRIPT_NAME.ps\n\n");
@@ -562,7 +577,7 @@ int GenGMTCommands(char cplotmode, char cdatatype,
     /* begin plot */
 
     fprintf(fp_gmt,
-            "psbasemap -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -K > %s.ps\n\n",
+            GMT_COMMAND_PREFIX"psbasemap -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -K > %s.ps\n\n",
             PLOT_WIDTH, PLOT_HEIGHT, fn_ps_output);
 
 
@@ -606,7 +621,7 @@ int GenGMTCommands(char cplotmode, char cdatatype,
                 NULL, 1, 1, 0, NULL, proj_index_output);
 
         fprintf(fp_gmt,
-                "pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
+                GMT_COMMAND_PREFIX"pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
                 PLOT_WIDTH, PLOT_HEIGHT, fn_ps_output,
                 0.75, 0.98, TITLE_FONT_SIZE,
                 0, TITLE_FONT, 2, Hypo.comment);
@@ -639,7 +654,7 @@ int GenGMTCommands(char cplotmode, char cdatatype,
         }
 
         fprintf(fp_gmt,
-                "pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
+                GMT_COMMAND_PREFIX"pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
                 PLOT_WIDTH, PLOT_HEIGHT, fn_ps_output,
                 0.75, 0.97, HYPO_FONT_SIZE,
                 0, HYPO_FONT, 2, hypotext);
@@ -679,32 +694,32 @@ int GenGMTCommands(char cplotmode, char cdatatype,
 
         if (cdatatype == 'S') {
             fprintf(fp_gmt,
-                    "pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
+                    GMT_COMMAND_PREFIX"pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
                     PLOT_WIDTH, PLOT_HEIGHT, fn_ps_output,
                     0.75, 0.96, HYPO_FONT_SIZE,
                     0, TITLE_FONT, 2, "PDF scatter sample");
         } else if (cdatatype == 'E') {
             fprintf(fp_gmt,
-                    "pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
+                    GMT_COMMAND_PREFIX"pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
                     PLOT_WIDTH, PLOT_HEIGHT, fn_ps_output,
                     0.75, 0.96, HYPO_FONT_SIZE,
                     0, TITLE_FONT, 2,
                     "Error Ellipsoid, Expectation (dot) and Maximum Likelihood (star)");
         } else if (cdatatype == 'M') {
             fprintf(fp_gmt,
-                    "pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
+                    GMT_COMMAND_PREFIX"pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
                     PLOT_WIDTH, PLOT_HEIGHT, fn_ps_output,
                     0.75, 0.96, HYPO_FONT_SIZE,
                     0, TITLE_FONT, 2, "Double-couple focal mechanisms");
         } else if (cdatatype == 'R') {
             fprintf(fp_gmt,
-                    "pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s %s\nEND\n\n",
+                    GMT_COMMAND_PREFIX"pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s %s\nEND\n\n",
                     PLOT_WIDTH, PLOT_HEIGHT, fn_ps_output,
                     0.75, 0.96, HYPO_FONT_SIZE,
                     0, TITLE_FONT, 2, arg_elements[0], "Residuals");
         } else if (cdatatype == 'C') {
             fprintf(fp_gmt,
-                    "pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s %s\nEND\n\n",
+                    GMT_COMMAND_PREFIX"pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s %s\nEND\n\n",
                     PLOT_WIDTH, PLOT_HEIGHT, fn_ps_output,
                     0.75, 0.96, HYPO_FONT_SIZE,
                     0, TITLE_FONT, 2, arg_elements[0], "StaCorr");
@@ -847,11 +862,19 @@ int GenGMTCommands(char cplotmode, char cdatatype,
             strcpy(scale_label_str, "UNKNOWN SCALE");
         }
 
+#ifdef GMT_VER_5
         fprintf(fp_gmt,
-                "psscale -C%s.%scpt -D%lf/%lf/14.0/0.5h -B:\"%s\": -X%lf -Y%lf $SCALE_FLAG -K -O >> %s.ps\n\n",
+                GMT_COMMAND_PREFIX"psscale -C%s.%scpt -D%lf/%lf/14.0/0.5h -Bx+l\"%s\" -X%lf -Y%lf $SCALE_FLAG -K -O >> %s.ps\n\n",
                 fn_root_output, cpt_str,
                 (1.0 / 2.0) * PLOT_WIDTH + scaleshift, 0.75,
                 scale_label_str, sxshift, syshift, fn_ps_output);
+#else
+        fprintf(fp_gmt,
+                GMT_COMMAND_PREFIX"psscale -C%s.%scpt -D%lf/%lf/14.0/0.5h -B:\"%s\": -X%lf -Y%lf $SCALE_FLAG -K -O >> %s.ps\n\n",
+                fn_root_output, cpt_str,
+                (1.0 / 2.0) * PLOT_WIDTH + scaleshift, 0.75,
+                scale_label_str, sxshift, syshift, fn_ps_output);
+#endif
         xshift_cum += sxshift;
         yshift_cum += syshift;
     }
@@ -870,12 +893,12 @@ int GenGMTCommands(char cplotmode, char cdatatype,
         sprintf(res_legend_mag_string, "+%.2f sec", res_legend_mag);
         if (cdatatype == 'R') {
             fprintf(fp_gmt,
-                    "pstext $JVAL $RVAL $BVAL -N -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s Residuals      %s\nEND\n\n",
+                    GMT_COMMAND_PREFIX"pstext $JVAL $RVAL $BVAL -N -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s Residuals      %s\nEND\n\n",
                     fn_ps_output, xres - 0.25, yres,
                     HYPO_FONT_SIZE, 0, STA_FONT, 7, arg_elements[0], res_legend_mag_string);
         } else {
             fprintf(fp_gmt,
-                    "pstext $JVAL $RVAL $BVAL -N -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s StaCorr      %s\nEND\n\n",
+                    GMT_COMMAND_PREFIX"pstext $JVAL $RVAL $BVAL -N -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s StaCorr      %s\nEND\n\n",
                     fn_ps_output, xres - 0.25, yres,
                     HYPO_FONT_SIZE, 0, STA_FONT, 7, arg_elements[0], res_legend_mag_string);
         }
@@ -884,7 +907,7 @@ int GenGMTCommands(char cplotmode, char cdatatype,
         genResidualGMT(fp_gmt, "-N", -res_legend_mag, xres + xres_shift, yres, res_scale);
         sprintf(res_legend_mag_string, "%.2f sec", -res_legend_mag);
         fprintf(fp_gmt,
-                "pstext $JVAL $RVAL $BVAL -N -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
+                GMT_COMMAND_PREFIX"pstext $JVAL $RVAL $BVAL -N -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
                 fn_ps_output, xres - 0.25, yres,
                 HYPO_FONT_SIZE, 0, STA_FONT, 7, res_legend_mag_string);
 
@@ -899,7 +922,7 @@ int GenGMTCommands(char cplotmode, char cdatatype,
     sprintf(signature_str, "%s   %s:v%s %s", Hypo.signature, PNAME, PVER, CurrTimeStr());
 
     fprintf(fp_gmt,
-            "pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -X%lf -Y%lf -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
+            GMT_COMMAND_PREFIX"pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX%lf/%lf -X%lf -Y%lf -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n",
             PLOT_WIDTH, PLOT_HEIGHT, -xshift_cum, -yshift_cum,
             fn_ps_output,
             0.501, 0.501, ANNOTATION_FONT_SIZE, 0, ANNOTATION_FONT,
@@ -1396,9 +1419,15 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
     printf("GetContourInterval vtick_int R: ");
     vtick_int = GetContourInterval(vert_min, vert_max, 3, &nstep);
     fprintf(fp_gmt, "# Rect x/y in km\n");
+#if GMT_VER_5
+    fprintf(fp_gmt, "BVAL=\'-Bxa%lf+l%s -Bya%lf+l%s -B%s+t%s\'\n",
+            htick_int, horiz_label, vtick_int, vert_label,
+            chr_bounds, chr_title);
+#else
     fprintf(fp_gmt, "BVAL=\'-B%lf:%s:/%lf:%s::.%s:%s\'\n",
             htick_int, horiz_label, vtick_int, vert_label,
             chr_title, chr_bounds);
+#endif
     /* JVAL rectangular x/y */
     // set scale based on plot width
     if (*pscale < 0.0) {
@@ -1420,7 +1449,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
     if (doLatLong)
         fprintf(fp_gmt, "if [ -z \"$PLOT_LAT_LONG\" ]; then\n");
     fprintf(fp_gmt,
-            "psbasemap $JVAL $RVAL $BVAL %s -K -O >> %s.ps\n", str_shift, fn_ps_output);
+            GMT_COMMAND_PREFIX"psbasemap $JVAL $RVAL $BVAL %s -K -O >> %s.ps\n", str_shift, fn_ps_output);
     if (doLatLong)
         fprintf(fp_gmt, "fi\n");
 
@@ -1441,9 +1470,15 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
         printf("GetContourInterval vtick_int G: ");
         vtick_int = GetContourInterval(vymin, vymax, 3, &nstep);
         fprintf(fp_gmt, "# Latitude/Longitude in degrees\n");
+#if GMT_VER_5
+        fprintf(fp_gmt, "BVAL=\'-Bxa%lf+l%s -Bya%lf+l%s -B%s+t%s\'\n",
+                htick_int, horiz_label_deg, vtick_int, vert_label_deg,
+                chr_bounds, chr_title);
+#else
         fprintf(fp_gmt, "BVAL=\'-B%lf:%s:/%lf:%s::.%s:%s\'\n",
                 htick_int, horiz_label_deg, vtick_int, vert_label_deg,
                 chr_title, chr_bounds);
+#endif
         /* JVAL geographic version */
         gmt_scale = getGMTJVAL(proj_index_output, gmt_JVAL_latlong_string, *pxlen, vxmax, vxmin, *pylen, vymax, vymin);
         fprintf(fp_gmt, "# Latitude/Longitude in degrees\n");
@@ -1452,7 +1487,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
         fprintf(fp_gmt, "%s\n", gmt_JVAL);
 
         fprintf(fp_gmt,
-                "psbasemap ${JVAL} ${RVAL} ${BVAL} %s -K -O >> %s.ps\n", str_shift, fn_ps_output);
+                GMT_COMMAND_PREFIX"psbasemap ${JVAL} ${RVAL} ${BVAL} %s -K -O >> %s.ps\n", str_shift, fn_ps_output);
 
         fprintf(fp_gmt, "fi\n");
     }
@@ -1479,15 +1514,9 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
         fprintf(fp_gmt, "# Rect x/y in km\n");
         if (doLatLong)
             fprintf(fp_gmt, "if [ -z \"$PLOT_LAT_LONG\" ]; then\n");
-        if (GMT_VER_3_3_4) {
-            fprintf(fp_gmt,
-                    "xyz2grd %s -G%sgmt -I%lf/%lf $RVAL -Dkm/km/=/0.0/0.0/%s/remark -V -Zf\n",
-                    fn_gmtgrd, fn_gmtgrd, horiz_dgrid, vert_dgrid, fn_root_output);
-        } else {
-            fprintf(fp_gmt,
-                    "xyz2grd %s -G%sgmt -I%lf/%lf $RVAL -Dkm/km/=/0.0/0.0/%s/remark -V -Z -b\n",
-                    fn_gmtgrd, fn_gmtgrd, horiz_dgrid, vert_dgrid, fn_root_output);
-        }
+        fprintf(fp_gmt,
+                GMT_COMMAND_PREFIX"xyz2grd %s -G%sgmt -I%lf/%lf $RVAL -Dkm/km/=/0.0/0.0/%s/remark -V -ZTLf\n",
+                fn_gmtgrd, fn_gmtgrd, horiz_dgrid, vert_dgrid, fn_root_output);
         if (doLatLong)
             fprintf(fp_gmt, "fi\n");
 
@@ -1495,15 +1524,9 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
         if (doLatLong) {
             fprintf(fp_gmt, "# Latitude/Longitude in degrees\n");
             fprintf(fp_gmt, "if [ -n \"$PLOT_LAT_LONG\" ]; then\n");
-            if (GMT_VER_3_3_4) {
-                fprintf(fp_gmt,
-                        "xyz2grd %s -G%sgmt -I%lf/%lf ${RVAL} -Ddeg/deg/=/0.0/0.0/%s/remark -V -Zf\n",
-                        fn_gmtgrd, fn_gmtgrd, vdgridx, vdgridy, fn_root_output);
-            } else {
-                fprintf(fp_gmt,
-                        "xyz2grd %s -G%sgmt -I%lf/%lf ${RVAL} -Ddeg/deg/=/0.0/0.0/%s/remark -V -Z -b\n",
-                        fn_gmtgrd, fn_gmtgrd, vdgridx, vdgridy, fn_root_output);
-            }
+            fprintf(fp_gmt,
+                    GMT_COMMAND_PREFIX"xyz2grd %s -G%sgmt -I%lf/%lf ${RVAL} -Ddeg/deg/=/0.0/0.0/%s/remark -V -ZTLf\n",
+                    fn_gmtgrd, fn_gmtgrd, vdgridx, vdgridy, fn_root_output);
             fprintf(fp_gmt, "endif\n\n");
         }
 
@@ -1514,13 +1537,13 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
             sprintf(fn_cont, "%s.conf", fnroot_input);
             MakeConfCPT(fn_cont, fn_root_output);
             fprintf(fp_gmt,
-                    "grdimage -S-n %sgmt -C%s.conf.cpt $JVAL $RVAL $BVAL -K -O >> %s.ps\n\n",
+                    GMT_COMMAND_PREFIX"grdimage -S-n %sgmt -C%s.conf.cpt $JVAL $RVAL $BVAL -K -O >> %s.ps\n\n",
                     fn_gmtgrd, fn_root_output, fn_ps_output);
             if (no_plot_contours) {
                 fprintf(fp_gmt, "#");
             }
             fprintf(fp_gmt,
-                    "grdcontour %sgmt %s -C%s.conf.cpt -D%s $JVAL $RVAL $BVAL -K -O >> %s.ps\n\n",
+                    GMT_COMMAND_PREFIX"grdcontour %sgmt %s -C%s.conf.cpt -D%s $JVAL $RVAL $BVAL -K -O >> %s.ps\n\n",
                     fn_gmtgrd, label_contours, fn_root_output, fn_root_output, fn_ps_output);
 
         } else if (pgrid->type == GRID_MISFIT) {
@@ -1537,14 +1560,14 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
                 iFirstPlot = 0;
             }
             fprintf(fp_gmt,
-                    "grdimage -S-n %sgmt -C%s.misfit.cpt $JVAL $RVAL $BVAL -K -O >> %s.ps\n\n",
+                    GMT_COMMAND_PREFIX"grdimage -S-n %sgmt -C%s.misfit.cpt $JVAL $RVAL $BVAL -K -O >> %s.ps\n\n",
                     fn_gmtgrd, fn_root_output, fn_ps_output);
 
             if (no_plot_contours) {
                 fprintf(fp_gmt, "#");
             }
             fprintf(fp_gmt,
-                    "grdcontour %sgmt %s -C%s.misfit.cpt $JVAL $RVAL $BVAL -K -O >> %s.ps\n\n",
+                    GMT_COMMAND_PREFIX"grdcontour %sgmt %s -C%s.misfit.cpt $JVAL $RVAL $BVAL -K -O >> %s.ps\n\n",
                     fn_gmtgrd, label_contours, fn_root_output, fn_ps_output);
 
         } else {
@@ -1561,47 +1584,39 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
                         "   SCALE_FLAG=\n");
                 fprintf(fp_gmt,
                         "else\n");
-                if (GMT_VER_3_3_4) {
-                    if (pgrid->type == GRID_LIKELIHOOD) { // likelihood color table
-                        fprintf(fp_gmt,
-                                "   makecpt -Z -Chot -I -T0/1/0.1 > %s.cpt\n",
-                                fn_root_output);
-                    } else { // colortable
-                        double contour_int_cpt = contour_int;
-                        double value_min = contour_int * (floor(grid_value_min / contour_int) - 0.0);
-                        double value_max = contour_int * (0.0 + ceil(grid_value_max / contour_int));
-                        if (value_max - value_min < value_min / 1000.0) {
-                            value_min -= value_min / 100.0;
-                            value_max += value_max / 100.0;
-                            contour_int_cpt = (value_max - value_min) / 3.0;
-                        }
-                        char cpt_colortable[MAXLINE];
-                        //strcpy(cpt_colortable, "rainbow");
-                        if (value_min < -contour_int / 100.0 && value_max > contour_int / 100.0) {
-                            // value range straddles zero, set min/max for color table equal.
-                            strcpy(cpt_colortable, "seis");
-                            if (value_max < contour_int)
-                                value_max = contour_int;
-                            else if (value_min > -contour_int)
-                                value_min = -contour_int;
-                        } else {
-                            // value range positive
-                            //strcpy(cpt_colortable, "rainbow");
-                            strcpy(cpt_colortable, "seis");
-                        }
-                        char cpt_command[10 * MAXLINE];
-                        sprintf(cpt_command, "makecpt -Z -C%s -T%g/%g/%g > %s.cpt",
-                                cpt_colortable, value_min, value_max, contour_int_cpt, fn_root_output);
-                        fprintf(fp_gmt, "   %s\n", cpt_command);
-                        //if (message_flag > 0)
-                        nll_putmsg2(1, "INFO", cpt_command);
-                    }
-                } else {
+                if (pgrid->type == GRID_LIKELIHOOD) { // likelihood color table
                     fprintf(fp_gmt,
-                            "   makecpt -C%.1le -S%dc -m%f > %s.cpt\n",
-                            contour_int, nstep + 2, contour_int * (double) ((int)
-                            ((grid_value_max + grid_value_min)
-                            / (2.0 * contour_int))), fn_root_output);
+                            "   makecpt -Z -Chot -I -T0/1/0.1 > %s.cpt\n",
+                            fn_root_output);
+                } else { // colortable
+                    double contour_int_cpt = contour_int;
+                    double value_min = contour_int * (floor(grid_value_min / contour_int) - 0.0);
+                    double value_max = contour_int * (0.0 + ceil(grid_value_max / contour_int));
+                    if (value_max - value_min < value_min / 1000.0) {
+                        value_min -= value_min / 100.0;
+                        value_max += value_max / 100.0;
+                        contour_int_cpt = (value_max - value_min) / 3.0;
+                    }
+                    char cpt_colortable[MAXLINE];
+                    //strcpy(cpt_colortable, "rainbow");
+                    if (value_min < -contour_int / 100.0 && value_max > contour_int / 100.0) {
+                        // value range straddles zero, set min/max for color table equal.
+                        strcpy(cpt_colortable, "seis");
+                        if (value_max < contour_int)
+                            value_max = contour_int;
+                        else if (value_min > -contour_int)
+                            value_min = -contour_int;
+                    } else {
+                        // value range positive
+                        //strcpy(cpt_colortable, "rainbow");
+                        strcpy(cpt_colortable, "seis");
+                    }
+                    char cpt_command[10 * MAXLINE];
+                    sprintf(cpt_command, "makecpt -Z -C%s -T%g/%g/%g > %s.cpt",
+                            cpt_colortable, value_min, value_max, contour_int_cpt, fn_root_output);
+                    fprintf(fp_gmt, "   %s\n", cpt_command);
+                    //if (message_flag > 0)
+                    nll_putmsg2(1, "INFO", cpt_command);
                 }
                 fprintf(fp_gmt,
                         "   SCALE_FLAG=-L\n");
@@ -1609,14 +1624,14 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
                         "fi\n\n");
                 iFirstPlot = 0;
             }
-            fprintf(fp_gmt, "grdimage -S-n %sgmt -C%s.cpt $JVAL $RVAL $BVAL -K -O >> %s.ps\n\n",
+            fprintf(fp_gmt, GMT_COMMAND_PREFIX"grdimage -S-n %sgmt -C%s.cpt $JVAL $RVAL $BVAL -K -O >> %s.ps\n\n",
                     fn_gmtgrd, fn_root_output, fn_ps_output);
 
             if (no_plot_contours) {
                 fprintf(fp_gmt, "#");
             }
             fprintf(fp_gmt,
-                    "grdcontour %sgmt %s -C%s.cpt $JVAL $RVAL $BVAL -K -O >> %s.ps\n\n",
+                    GMT_COMMAND_PREFIX"grdcontour %sgmt %s -C%s.cpt $JVAL $RVAL $BVAL -K -O >> %s.ps\n\n",
                     fn_gmtgrd, label_contours, fn_root_output, fn_ps_output);
 
         }
@@ -1629,7 +1644,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
 
         /* draw scatter locations */
 
-        fprintf(fp_gmt, "psxy %s $JVAL $RVAL -W1/255/0/0 -Sp -m -K -O >> %s.ps\n",
+        fprintf(fp_gmt, GMT_COMMAND_PREFIX"psxy %s $JVAL $RVAL -W0.5"GMT_SCAT_WIDTH_SUFFIX"255/0/0 -Sp -m -K -O >> %s.ps\n",
                 fnscat, fn_ps_output);
 
         NumStationPhases +=
@@ -1673,7 +1688,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
             && (pgrid->type == GRID_PROB_DENSITY
             || pgrid->type == GRID_MISFIT)) {
         fprintf(fp_gmt,
-                "psxy $JVAL $RVAL -W1/0/0/0/dotted -m -K -O << END >> %s.ps\n",
+                GMT_COMMAND_PREFIX"psxy $JVAL $RVAL -W0.5"GMT_PEN_WIDTH_SUFFIX"0/0/0/dotted -m -K -O << END >> %s.ps\n",
                 fn_ps_output);
         fprintf(fp_gmt,
                 ">\n%lf %lf\n%lf %lf\n>\n%lf %lf\n%lf %lf\nEND\n\n",
@@ -1710,7 +1725,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
             magnitude = 2.0;
             if ((istat = PlotFocalMechanism(file_id,
                     PLOT_WIDTH / 10.0, magnitude, &focalMech,
-                    fp_gmt, arg_elements[0], "-W1/255/0/0 ", "-G255/0/0 ",
+                    fp_gmt, arg_elements[0], "-W0.5"GMT_PEN_WIDTH_SUFFIX"255/0/0 ", "-G255/0/0 ",
                     horiz_min, horiz_max, vert_min, vert_max, plot_scale)) < 0)
                 break;
             nplotted += istat;
@@ -1732,7 +1747,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
             convertCoordsRect(proj_index_input, proj_index_output,
                     psta->x, psta->y, &stax, &stay);
 
-            fprintf(fp_gmt, "# Station\npstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n", fn_ps_output,
+            fprintf(fp_gmt, "# Station\n"GMT_COMMAND_PREFIX"pstext $JVAL $RVAL -K -O << END >> %s.ps\n%lf %lf %d %d %d %d %s\nEND\n\n", fn_ps_output,
                     stax, stay, STA_FONT_SIZE, 0, STA_FONT, 6, psta->label);
         }
     }
@@ -1784,7 +1799,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
     /* redraw axes */
 
     fprintf(fp_gmt,
-            "psbasemap $JVAL $RVAL $BVAL -K -O >> %s.ps\n", fn_ps_output);
+            GMT_COMMAND_PREFIX"psbasemap $JVAL $RVAL $BVAL -K -O >> %s.ps\n", fn_ps_output);
     fprintf(fp_gmt, "\n");
     fprintf(fp_gmt, "\n");
 
@@ -2218,7 +2233,7 @@ int grd2GMT(int nmapfile, double xmin0, double ymin0, double xmax0, double ymax0
         sprintf(fname_temp_cpt, "%sgrd.temp.cpt", fnoutput);
         MakeTopoCPT(fname_temp_cpt);
         sprintf(fname_cpt, "%sgrd.cpt", fnoutput);
-        fprintf(fp_gmt, "grd2cpt %s -C%s -Z > %s\n", mapfile[nmapfile].name, fname_temp_cpt, fname_cpt);
+        fprintf(fp_gmt, GMT_COMMAND_PREFIX"grd2cpt %s -C%s -Z > %s\n", mapfile[nmapfile].name, fname_temp_cpt, fname_cpt);
     }
     if (fp_tmp != NULL)
         fclose(fp_tmp);
@@ -2237,7 +2252,7 @@ int grd2GMT(int nmapfile, double xmin0, double ymin0, double xmax0, double ymax0
 
     /* write gmt command */
 
-    fprintf(fp_gmt, "grdimage -S-n %s %s -C%s %s %s %s -K -O >> %s.ps\n",
+    fprintf(fp_gmt, GMT_COMMAND_PREFIX"grdimage -S-n %s %s -C%s %s %s %s -K -O >> %s.ps\n",
             mapfile[nmapfile].name, int_string, fname_cpt, int_string, gmt_JVAL_latlong_string,
             gmt_RVAL_latlong_string, fn_ps_output);
 
@@ -2424,7 +2439,7 @@ int MapLines2GMT(int nmapfile, double xmin0, double ymin0, double xmax0, double 
     if (doLatLong)
         fprintf(fp_gmt, "if [ -z \"$PLOT_LAT_LONG\" ]; then\n");
     fprintf(fp_gmt,
-            "psxy %s $JVAL $RVAL -W2/%d/%d/%d -m -K -O >> %s.ps\n",
+            GMT_COMMAND_PREFIX"psxy %s $JVAL $RVAL -W1"GMT_PEN_WIDTH_SUFFIX"%d/%d/%d -m -K -O >> %s.ps\n",
             fn_gmtxy, ired, igreen, iblue,
             /*texture,*/ fn_ps_output);
     if (doLatLong)
@@ -2433,7 +2448,7 @@ int MapLines2GMT(int nmapfile, double xmin0, double ymin0, double xmax0, double 
     if (doLatLong)
         fprintf(fp_gmt, "if [ -n \"$PLOT_LAT_LONG\" ]; then\n");
     fprintf(fp_gmt,
-            "psxy %s $JVAL $RVAL -W2/%d/%d/%d -m -K -O >> %s.ps\n",
+            GMT_COMMAND_PREFIX"psxy %s $JVAL $RVAL -W1"GMT_PEN_WIDTH_SUFFIX"%d/%d/%d -m -K -O >> %s.ps\n",
             fn_gmtlatlon, ired, igreen, iblue,
             /*texture,*/ fn_ps_output);
     if (doLatLong)
@@ -2607,8 +2622,8 @@ int PlotTraditionStats(char cdatatype, char view_type, double barlen,
         /* plot maxlimum likelihood star */
 
         fprintf(fp_io,
-                "# Maximum Likelihood\npsxy $JVAL $RVAL -W1/%s -Sa%lf -G%s -K -O << END >> %s.ps\n", GMTcolor, 0.4 * barlen / 2.54, GMTcolor, "${POSTSCRIPT_NAME}");
-        // 20110112 AJL  "# Maximum Likelihood\npsxy $JVAL $RVAL -W1/%s -Sa%lf -K -O << END >> %s.ps\n", GMTcolor, 0.25 * barlen / 2.54, "${POSTSCRIPT_NAME}");
+                "# Maximum Likelihood\n"GMT_COMMAND_PREFIX"psxy $JVAL $RVAL -W0.5"GMT_PEN_WIDTH_SUFFIX"%s -Sa%lf -G%s -K -O << END >> %s.ps\n", GMTcolor, 0.4 * barlen / 2.54, GMTcolor, "${POSTSCRIPT_NAME}");
+        // 20110112 AJL  "# Maximum Likelihood\ngmt psxy $JVAL $RVAL -W0.5p,%s -Sa%lf -K -O << END >> %s.ps\n", GMTcolor, 0.25 * barlen / 2.54, "${POSTSCRIPT_NAME}");
         if (view_type == 'Y')
             fprintf(fp_io, "%lf %lf\n", max_like_x, max_like_z);
         else if (view_type == 'H')
@@ -2625,7 +2640,7 @@ int PlotTraditionStats(char cdatatype, char view_type, double barlen,
         /* plot expectation circle */
 
         fprintf(fp_io,
-                "# Expectation\npsxy $JVAL $RVAL -W1/%s -G0 -Sc%lf -K -O << END >> %s.ps\n",
+                "# Expectation\n"GMT_COMMAND_PREFIX"psxy $JVAL $RVAL -W0.5"GMT_PEN_WIDTH_SUFFIX"%s -G0 -Sc%lf -K -O << END >> %s.ps\n",
                 GMTcolor, 0.4 * barlen / 2.54, "${POSTSCRIPT_NAME}");
         if (view_type == 'Y')
             fprintf(fp_io, "%lf %lf\n", expect_x, expect_z);
@@ -2649,7 +2664,7 @@ int PlotTraditionStats(char cdatatype, char view_type, double barlen,
                 * sizeof (Vect2D));
 
         fprintf(fp_io,
-                "# Error Ellipsoid\npsxy $JVAL $RVAL -W1/%s -m -K -O << END >> %s.ps\n>\n",
+                "# Error Ellipsoid\n"GMT_COMMAND_PREFIX"psxy $JVAL $RVAL -W0.5"GMT_PEN_WIDTH_SUFFIX"%s -m -K -O << END >> %s.ps\n>\n",
                 GMTcolor, "${POSTSCRIPT_NAME}");
 
         /* convert ellipsoid to 3 3D error ellipses */
@@ -2913,12 +2928,12 @@ void genResidualGMT(FILE* fp_out, char* xtra_args, double resid, double x, doubl
     if (resid_scaled >= 0.0) {
         resid_plot = resid_scaled < RESID_MIN ? RESID_MIN : resid_scaled;
         fprintf(fp_out,
-                "psxy $JVAL $RVAL -Sc -W8/0/0/255 %s -K -O  << END >> ${POSTSCRIPT_NAME}.ps\n%lf %lf %lf\nEND\n",
+                GMT_COMMAND_PREFIX"psxy $JVAL $RVAL -Sc -W8"GMT_PEN_WIDTH_SUFFIX"0/0/255 %s -K -O  << END >> ${POSTSCRIPT_NAME}.ps\n%lf %lf %lf\nEND\n",
                 xtra_args, x, y, fabs(resid_plot));
     } else {
         resid_plot = resid_scaled > -RESID_MIN ? -RESID_MIN : resid_scaled;
         fprintf(fp_out,
-                "psxy $JVAL $RVAL -St -W8/255/0/0 %s -K -O  << END >> ${POSTSCRIPT_NAME}.ps\n%lf %lf %lf\nEND\n",
+                GMT_COMMAND_PREFIX"psxy $JVAL $RVAL -St -W8"GMT_PEN_WIDTH_SUFFIX"255/0/0 %s -K -O  << END >> ${POSTSCRIPT_NAME}.ps\n%lf %lf %lf\nEND\n",
                 xtra_args, x, y, fabs(resid_plot));
     }
 }
