@@ -70,21 +70,17 @@ tel: +33(0)493752502  e-mail: anthony@alomax.net  web: http://www.alomax.net
 #define STA_FONT 4
 #define ANNOTATION_FONT 4
 
-#if 0
 #define HYPO_FONT_SIZE 13
 #define STA_FONT_SIZE 8
 #define ANNOTATION_FONT_SIZE 7
-#elif 0
 // TEST
-#define HYPO_FONT_SIZE 16
-#define STA_FONT_SIZE 12
-#define ANNOTATION_FONT_SIZE 7
-#else
+//#define HYPO_FONT_SIZE 16
+//#define STA_FONT_SIZE 12
+//#define ANNOTATION_FONT_SIZE 7
 // TEST
-#define HYPO_FONT_SIZE 20
-#define STA_FONT_SIZE 15
-#define ANNOTATION_FONT_SIZE 10
-#endif
+//#define HYPO_FONT_SIZE 20
+//#define STA_FONT_SIZE 15
+//#define ANNOTATION_FONT_SIZE 10
 
 
 #define MAX_GRID_VALUE    1.0e8
@@ -524,22 +520,17 @@ int GenGMTCommands(char cplotmode, char cdatatype,
 
     /* write gmt script file */
 
-    fprintf(fp_gmt, "#!/bin/csh\n#\n#\n\n");
+    fprintf(fp_gmt, "#!/usr/bin/env bash\n#\n#\n\n");
+    fprintf(fp_gmt, "set -ex\n#\n#\n\n");
 
     // gmtdefaults
-    fprintf(fp_gmt, "gmtset  PAGE_ORIENTATION portrait  X_ORIGIN 0.5  Y_ORIGIN 0.5 \n\n");
-    //fprintf(fp_gmt, "gmtset  ANNOT_FONT_SIZE_PRIMARY 8  ANNOT_FONT_SIZE_SECONDARY 6  HEADER_FONT_SIZE 12 LABEL_FONT_SIZE 10\n\n");
-    //fprintf(fp_gmt, "gmtset  ANNOT_FONT_SIZE_PRIMARY 12  ANNOT_FONT_SIZE_SECONDARY 12  HEADER_FONT_SIZE 12 LABEL_FONT_SIZE 10\n\n");
-    //fprintf(fp_gmt, "gmtset  ANNOT_FONT_SIZE_PRIMARY 14  ANNOT_FONT_SIZE_SECONDARY 14  HEADER_FONT_SIZE 14 LABEL_FONT_SIZE 14\n\n");
-    //
-    //fprintf(fp_gmt, "gmtset  ANNOT_FONT_SIZE_PRIMARY 18  ANNOT_FONT_SIZE_SECONDARY 18  HEADER_FONT_SIZE 18 LABEL_FONT_SIZE 18\n\n");
-    fprintf(fp_gmt, "gmtset  ANNOT_FONT_SIZE_PRIMARY 14  ANNOT_FONT_SIZE_SECONDARY 14  HEADER_FONT_SIZE 14 LABEL_FONT_SIZE 14\n\n");
-    fprintf(fp_gmt, "gmtset  ANNOT_FONT_PRIMARY 4  ANNOT_FONT_SECONDARY 4  HEADER_FONT 4 LABEL_FONT 4\n\n");
-    fprintf(fp_gmt, "gmtset  LABEL_OFFSET 0.1c  ANNOT_OFFSET_PRIMARY 0.1c ANNOT_OFFSET_SECONDARY 0.1c\n\n");
+    fprintf(fp_gmt, "gmtset PAGE_ORIENTATION portrait  X_ORIGIN 0.5  Y_ORIGIN 0.5 \n\n");
+    fprintf(fp_gmt, "gmtset ANNOT_FONT_SIZE_PRIMARY 14  ANNOT_FONT_SIZE_SECONDARY 14  HEADER_FONT_SIZE 14 LABEL_FONT_SIZE 14\n\n");
+    fprintf(fp_gmt, "gmtset ANNOT_FONT_PRIMARY 4  ANNOT_FONT_SECONDARY 4  HEADER_FONT 4 LABEL_FONT 4\n\n");
+    fprintf(fp_gmt, "gmtset LABEL_OFFSET 0.1c  ANNOT_OFFSET_PRIMARY 0.1c ANNOT_OFFSET_SECONDARY 0.1c\n\n");
 
-    fprintf(fp_gmt, "set POSTSCRIPT_NAME = %s\n\n", fn_root_output);
-    fprintf(fp_gmt, "unalias rm\n\n");
-    fprintf(fp_gmt, "rm -f $POSTSCRIPT_NAME.ps\n\n");
+    fprintf(fp_gmt, "POSTSCRIPT_NAME=%s\n\n", fn_root_output);
+    fprintf(fp_gmt, "\\rm -f $POSTSCRIPT_NAME.ps\n\n");
     sprintf(fn_ps_output, "$POSTSCRIPT_NAME");
 
 
@@ -552,16 +543,16 @@ int GenGMTCommands(char cplotmode, char cdatatype,
     fprintf(fp_gmt,
             "#     for X/Y plot, uncomment the folowing line:\n");
     if (!plot_lat_lon)
-        fprintf(fp_gmt, "set PLOT_LAT_LONG = 0\n");
+        fprintf(fp_gmt, "unset PLOT_LAT_LONG\n");
     else
-        fprintf(fp_gmt, "#set PLOT_LAT_LONG = 0\n");
+        fprintf(fp_gmt, "#unset PLOT_LAT_LONG\n");
     //if (doLatLong) {
     fprintf(fp_gmt,
             "#     for LAT/LONG plot, uncomment the folowing line:\n");
     if (plot_lat_lon)
-        fprintf(fp_gmt, "set PLOT_LAT_LONG = 1\n");
+        fprintf(fp_gmt, "PLOT_LAT_LONG=yes\n");
     else
-        fprintf(fp_gmt, "#set PLOT_LAT_LONG = 1\n");
+        fprintf(fp_gmt, "#PLOT_LAT_LONG=yes\n");
     //}
     fprintf(fp_gmt,
             "# ========================================================\n");
@@ -1394,7 +1385,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
 
     /* RVAL rectangular x/y */
     fprintf(fp_gmt, "# Rect x/y in km\n");
-    fprintf(fp_gmt, "set RVAL = \'-R%lf/%lf/%lf/%lf/-9999/9999\'\n",
+        fprintf(fp_gmt, "RVAL=\'-R%lf/%lf/%lf/%lf/-9999/9999\'\n",
             horiz_min, horiz_max, vert_min, vert_max);
     if (message_flag > 0)
         fprintf(stdout, "RVAL: RECT/X: %lf/%lf RECTY:%lf/%lf\n",
@@ -1405,7 +1396,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
     printf("GetContourInterval vtick_int R: ");
     vtick_int = GetContourInterval(vert_min, vert_max, 3, &nstep);
     fprintf(fp_gmt, "# Rect x/y in km\n");
-    fprintf(fp_gmt, "set BVAL = \'-B%lf:%s:/%lf:%s::.%s:%s\'\n",
+    fprintf(fp_gmt, "BVAL=\'-B%lf:%s:/%lf:%s::.%s:%s\'\n",
             htick_int, horiz_label, vtick_int, vert_label,
             chr_title, chr_bounds);
     /* JVAL rectangular x/y */
@@ -1422,25 +1413,25 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
     *pylen = (vert_max - vert_min) * plot_scale;
 
     fprintf(fp_gmt, "# Rect x/y in km\n");
-    fprintf(fp_gmt, "set JVAL = \'-Jx%lf/%lf -Jz%lf\'\n", plot_scale,
+    fprintf(fp_gmt, "JVAL=\'-Jx%lf/%lf -Jz%lf\'\n", plot_scale,
             plot_scale * yscalefact, plot_scale * zscalefact);
     fprintf(fp_gmt, "\n");
 
     if (doLatLong)
-        fprintf(fp_gmt, "if (! $PLOT_LAT_LONG) then\n");
+        fprintf(fp_gmt, "if [ -z \"$PLOT_LAT_LONG\" ]; then\n");
     fprintf(fp_gmt,
             "psbasemap $JVAL $RVAL $BVAL %s -K -O >> %s.ps\n", str_shift, fn_ps_output);
     if (doLatLong)
-        fprintf(fp_gmt, "endif\n");
+        fprintf(fp_gmt, "fi\n");
 
 
     if (doLatLong) {
-        fprintf(fp_gmt, "if ($PLOT_LAT_LONG) then\n");
+        fprintf(fp_gmt, "if [ -n \"$PLOT_LAT_LONG\" ]; then\n");
         /* RVAL geographic version */
         fprintf(fp_gmt, "# Latitude/Longitude in degrees\n");
         sprintf(gmt_RVAL_latlong_string, "\'-R%lf/%lf/%lf/%lf\'",
                 vxmin, vxmax, vymin, vymax);
-        fprintf(fp_gmt, "set RVAL = %s\n", gmt_RVAL_latlong_string);
+        fprintf(fp_gmt, "RVAL=%s\n", gmt_RVAL_latlong_string);
         if (message_flag > 0)
             fprintf(stdout, "   => LONG/X: %lf/%lf  LAT/Y:%lf/%lf\n",
                 vxmin, vxmax, vymin, vymax);
@@ -1450,20 +1441,20 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
         printf("GetContourInterval vtick_int G: ");
         vtick_int = GetContourInterval(vymin, vymax, 3, &nstep);
         fprintf(fp_gmt, "# Latitude/Longitude in degrees\n");
-        fprintf(fp_gmt, "set BVAL = \'-B%lf:%s:/%lf:%s::.%s:%s\'\n",
+        fprintf(fp_gmt, "BVAL=\'-B%lf:%s:/%lf:%s::.%s:%s\'\n",
                 htick_int, horiz_label_deg, vtick_int, vert_label_deg,
                 chr_title, chr_bounds);
         /* JVAL geographic version */
         gmt_scale = getGMTJVAL(proj_index_output, gmt_JVAL_latlong_string, *pxlen, vxmax, vxmin, *pylen, vymax, vymin);
         fprintf(fp_gmt, "# Latitude/Longitude in degrees\n");
-        sprintf(gmt_JVAL, "set JVAL = \'%s -Jz%lf\'",
+        sprintf(gmt_JVAL, "JVAL=\'%s -Jz%lf\'",
                 gmt_JVAL_latlong_string, gmt_scale * zscalefact);
         fprintf(fp_gmt, "%s\n", gmt_JVAL);
 
         fprintf(fp_gmt,
                 "psbasemap ${JVAL} ${RVAL} ${BVAL} %s -K -O >> %s.ps\n", str_shift, fn_ps_output);
 
-        fprintf(fp_gmt, "endif\n");
+        fprintf(fp_gmt, "fi\n");
     }
 
     fprintf(fp_gmt, "\n");
@@ -1487,7 +1478,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
 
         fprintf(fp_gmt, "# Rect x/y in km\n");
         if (doLatLong)
-            fprintf(fp_gmt, "if (! $PLOT_LAT_LONG) then\n");
+            fprintf(fp_gmt, "if [ -z \"$PLOT_LAT_LONG\" ]; then\n");
         if (GMT_VER_3_3_4) {
             fprintf(fp_gmt,
                     "xyz2grd %s -G%sgmt -I%lf/%lf $RVAL -Dkm/km/=/0.0/0.0/%s/remark -V -Zf\n",
@@ -1498,12 +1489,12 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
                     fn_gmtgrd, fn_gmtgrd, horiz_dgrid, vert_dgrid, fn_root_output);
         }
         if (doLatLong)
-            fprintf(fp_gmt, "endif\n\n");
+            fprintf(fp_gmt, "fi\n");
 
         /* commented out line giving geographic version of xyz2grd */
         if (doLatLong) {
             fprintf(fp_gmt, "# Latitude/Longitude in degrees\n");
-            fprintf(fp_gmt, "if ($PLOT_LAT_LONG) then\n");
+            fprintf(fp_gmt, "if [ -n \"$PLOT_LAT_LONG\" ]; then\n");
             if (GMT_VER_3_3_4) {
                 fprintf(fp_gmt,
                         "xyz2grd %s -G%sgmt -I%lf/%lf ${RVAL} -Ddeg/deg/=/0.0/0.0/%s/remark -V -Zf\n",
@@ -1516,7 +1507,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
             fprintf(fp_gmt, "endif\n\n");
         }
 
-        fprintf(fp_gmt, "set SCALE_FLAG = \n\n");
+        fprintf(fp_gmt, "SCALE_FLAG=\n\n");
 
         if (pgrid->type == GRID_PROB_DENSITY) {
 
@@ -1563,13 +1554,11 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
                 contour_int = GetContourInterval((double) grid_value_min,
                         (double) grid_value_max, NUM_COLORS, &nstep);
                 fprintf(fp_gmt,
-                        "if (-e Grid2GMT.cpt) then\n");
+                        "if  [-f Grid2GMT.cpt ]; then\n");
                 fprintf(fp_gmt,
-                        "   unalias cp\n");
+                        "   \\cp  Grid2GMT.cpt %s.cpt\n", fn_root_output);
                 fprintf(fp_gmt,
-                        "   cp  Grid2GMT.cpt %s.cpt\n", fn_root_output);
-                fprintf(fp_gmt,
-                        "   set SCALE_FLAG = \n");
+                        "   SCALE_FLAG=\n");
                 fprintf(fp_gmt,
                         "else\n");
                 if (GMT_VER_3_3_4) {
@@ -1615,9 +1604,9 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
                             / (2.0 * contour_int))), fn_root_output);
                 }
                 fprintf(fp_gmt,
-                        "   set SCALE_FLAG = -L\n");
+                        "   SCALE_FLAG=-L\n");
                 fprintf(fp_gmt,
-                        "endif\n\n");
+                        "fi\n\n");
                 iFirstPlot = 0;
             }
             fprintf(fp_gmt, "grdimage -S-n %sgmt -C%s.cpt $JVAL $RVAL $BVAL -K -O >> %s.ps\n\n",
@@ -1785,11 +1774,11 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
 
     /* run auxilliary gmt script */
 
-    fprintf(fp_gmt, "if (-e Grid2GMT.%c.gmt) then\n", file_id);
+    fprintf(fp_gmt, "if [ -f Grid2GMT.%c.gmt ]; then\n", file_id);
     fprintf(fp_gmt, "   echo  'Running auxilliary GMT script: Grid2GMT.%c.gmt'\n",
             file_id);
     fprintf(fp_gmt, "   source  Grid2GMT.%c.gmt\n", file_id);
-    fprintf(fp_gmt, "endif\n\n");
+    fprintf(fp_gmt, "fi\n\n");
 
 
     /* redraw axes */
@@ -2248,24 +2237,9 @@ int grd2GMT(int nmapfile, double xmin0, double ymin0, double xmax0, double ymax0
 
     /* write gmt command */
 
-    //	if (doLatLong)
-    //		fprintf(fp_gmt, "if (! $PLOT_LAT_LONG) then\n");
     fprintf(fp_gmt, "grdimage -S-n %s %s -C%s %s %s %s -K -O >> %s.ps\n",
             mapfile[nmapfile].name, int_string, fname_cpt, int_string, gmt_JVAL_latlong_string,
             gmt_RVAL_latlong_string, fn_ps_output);
-    //	if (doLatLong)
-    //		fprintf(fp_gmt, "endif\n");
-    /*
-            if (doLatLong) {
-                    fprintf(fp_gmt, "if ($PLOT_LAT_LONG) then\n");
-                    fprintf(fp_gmt,
-    "psxy %s ${JVAL} ${RVAL} -W2/%d/%d/%d -m -K -O >> %s.ps\n",
-                            fn_gmtlatlon, ired, igreen, iblue,
-                            //texture,
-                            fn_ps_output);
-                    fprintf(fp_gmt, "endif\n");
-            }
-     */
 
     fprintf(fp_gmt, "\n");
 
@@ -2448,22 +2422,22 @@ int MapLines2GMT(int nmapfile, double xmin0, double ymin0, double xmax0, double 
         strcpy(texture, "solid");
 
     if (doLatLong)
-        fprintf(fp_gmt, "if (! $PLOT_LAT_LONG) then\n");
+        fprintf(fp_gmt, "if [ -z \"$PLOT_LAT_LONG\" ]; then\n");
     fprintf(fp_gmt,
             "psxy %s $JVAL $RVAL -W2/%d/%d/%d -m -K -O >> %s.ps\n",
             fn_gmtxy, ired, igreen, iblue,
             /*texture,*/ fn_ps_output);
     if (doLatLong)
-        fprintf(fp_gmt, "endif\n");
+        fprintf(fp_gmt, "fi\n\n");
 
     if (doLatLong)
-        fprintf(fp_gmt, "if ($PLOT_LAT_LONG) then\n");
+        fprintf(fp_gmt, "if [ -n \"$PLOT_LAT_LONG\" ]; then\n");
     fprintf(fp_gmt,
             "psxy %s $JVAL $RVAL -W2/%d/%d/%d -m -K -O >> %s.ps\n",
             fn_gmtlatlon, ired, igreen, iblue,
             /*texture,*/ fn_ps_output);
     if (doLatLong)
-        fprintf(fp_gmt, "endif\n");
+        fprintf(fp_gmt, "fi\n\n");
 
 
     return (0);
