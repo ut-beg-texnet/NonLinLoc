@@ -184,6 +184,8 @@ int NLLoc
             = iSaveAlberto4Sum = iSaveFmamp = iSaveNLLocOctree = iSaveNone = 0;
     // 20170811 AJL - added to allow saving of expectation hypocenter results instead of maximum likelihood
     iSaveNLLocExpectation = 0;
+    // 20220131 AJL - added
+    iSaveNLLocEvent_JSON = 0;
 
     // GNU C library extensions to support memory streams (function open_memstream).
     char *bp_memory_stream = NULL;
@@ -208,7 +210,7 @@ int NLLoc
     if (fp_control != NULL) {
         if ((is_nll_control_json_file = is_nll_control_json(fp_control))) {
             // read nll-control JSON into array of NLLoc control file lines
-            param_line_array = read_nll_control_json(fp_control, &n_param_lines);
+            param_line_array = json_read_nll_control(fp_control, &n_param_lines);
             if (fp_control != NULL) {
                 fclose(fp_control);
                 NumFilesOpen--;

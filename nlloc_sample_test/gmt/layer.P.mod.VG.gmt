@@ -4,7 +4,7 @@
 
 gmtset  PAGE_ORIENTATION portrait  X_ORIGIN 0.5  Y_ORIGIN 0.5 
 
-gmtset  ANNOT_FONT_SIZE_PRIMARY 18  ANNOT_FONT_SIZE_SECONDARY 18  HEADER_FONT_SIZE 18 LABEL_FONT_SIZE 18
+gmtset  ANNOT_FONT_SIZE_PRIMARY 14  ANNOT_FONT_SIZE_SECONDARY 14  HEADER_FONT_SIZE 14 LABEL_FONT_SIZE 14
 
 gmtset  ANNOT_FONT_PRIMARY 4  ANNOT_FONT_SECONDARY 4  HEADER_FONT 4 LABEL_FONT 4
 
@@ -25,7 +25,7 @@ set PLOT_LAT_LONG = 0
 #set PLOT_LAT_LONG = 1
 # ========================================================
 
-psbasemap -R0.5/1.0/0.5/1.0 -Bf10 -JX20.000000/28.700000 -K > $POSTSCRIPT_NAME.ps
+psbasemap -R0.5/1.0/0.5/1.0 -Bf10N -JX20.000000/28.700000 -K > $POSTSCRIPT_NAME.ps
 
 # Rect x/y in km
 set RVAL = '-R0.000000/400.000000/-5.000000/100.000000/-9999/9999'
@@ -45,7 +45,7 @@ if (-e Grid2GMT.cpt) then
    cp  Grid2GMT.cpt gmt/layer.P.mod.VG.cpt
    set SCALE_FLAG = 
 else
-   makecpt -Z -Crainbow -T0.12/0.19/0.005 > gmt/layer.P.mod.VG.cpt
+   makecpt -Z -Cseis -T0.12/0.19/0.005 > gmt/layer.P.mod.VG.cpt
    set SCALE_FLAG = -L
 endif
 
@@ -63,8 +63,8 @@ psbasemap $JVAL $RVAL $BVAL -K -O >> $POSTSCRIPT_NAME.ps
 
 psscale -Cgmt/layer.P.mod.VG.cpt -D10.000000/0.750000/14.0/0.5h -B:"Cell Transit Time (sec)": -X-1.750000 -Y-2.250000 $SCALE_FLAG -K -O >> $POSTSCRIPT_NAME.ps
 
-pstext -R0.5/1.0/0.5/1.0 -Bf10 -JX20.000000/28.700000 -X-0.000000 -Y-1.500000 -O << END >> $POSTSCRIPT_NAME.ps
-0.501000 0.501000 10 0 4 1    Grid2GMT:v7.00.09 29Jun2020 12h37m09
+pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX20.000000/28.700000 -X-0.000000 -Y-1.500000 -O << END >> $POSTSCRIPT_NAME.ps
+0.501000 0.501000 10 0 4 1    Grid2GMT:v7.00.13 13May2022 09h14m06
 END
 
 echo "Finished!  View output:"

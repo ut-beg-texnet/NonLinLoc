@@ -1,6 +1,6 @@
 NLLOC "./loc/alaska.20181130.182011.grid0" "LOCATED" "Location completed."
 PUBLIC_ID None
-SIGNATURE "NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.09(29Jun2020)   run:29Jun2020 12h37m20"
+SIGNATURE "NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.13(17Jan2022)   run:13May2022 09h14m11"
 COMMENT "2018-11-30 Mww7.0 Southern Alaska (NonLinLoc Sample Location)"
 GRID  201 201 106  -100 -100 -5  1 1 1 PROB_DENSITY
 SEARCH OCTREE nInitial 400 nEvaluated 20008 smallestNodeSide 0.312500/0.312500/0.410156 oct_tree_integral 1.323182e+02 scatter_volume 1.323182e+02
@@ -38,7 +38,7 @@ AK_KTH_--    ?    BHZ  ? P      0 20181130 1820   38.6484 GAU  1.20e-01 -1.00e+0
 AK_CAST_--   ?    BHZ  ? P      ? 20181130 1820   39.1484 GAU  1.80e-01 -1.00e+00  1.01e+01  1.60e-01    1.0000 >    0.0000    0.0000    0.0000 -104.1740  271.2800   -0.6110    0.0000   0.00 359.0  -1.0  0     0.0000    0.0000
 NP0521       ?    HNZ  ? S      -0 20181130 1820   49.6350 GAU  4.00e-02 -1.00e+00  1.03e+01  5.00e-03    1.0000 >    0.0000    0.0000    0.0000 -100000000000000000000.0000 -100000000000000000000.0000 -100000000000000000000.0000    0.0000   0.00 359.0  -1.0  0     0.0000    0.0000
 AK_RAG_--    ?    BHZ  ? P      0 20181130 1820   51.8284 GAU  4.00e-02 -1.00e+00  1.39e+01  2.00e-02    1.0000 >    0.0000    0.0000    0.0000  293.2037  -56.4555   -0.7520    0.0000   0.00 359.0  -1.0  0     0.0000    0.0000
-AK_MCK_--    ?    BHZ  ? P      -0 20181130 1820   42.7684 GAU  1.20e-01 -1.00e+00  1.16e+01  2.56e+00    1.0000 >    0.0000    0.0000    0.0000   52.5517  304.9713   -0.6180    0.0000   0.00 359.0  -1.0  0     0.0000    0.0000
+AK_MCK_--    ?    BHZ  ? P      -0 20181130 1820   42.7684 GAU  1.20e-01 -1.00e+00  1.16e+01  2.56e+00    1.0000 >    0.0000    0.0000    0.0000   52.5517  304.9713   -0.6180    0.0000   0.00 359.0  -1.0  0     0.0000    0.0000
 END_PHASE
 END_NLLOC
 

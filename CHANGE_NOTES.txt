@@ -521,7 +521,11 @@ New version 7.00 posted to web =================================
 
 20211208 NLLoc - Added: LOCHYPOUT->FILENAME_PUBLIC_ID_DEC_SEC format; appends event public ID to hr/min/sec component of output event filename.
 
+20220129 NLLoc - HYPOINVERSE_Y2000_ARC: Added: reading of preferred magnitude into NLL amp mag.
 
+20220129 NLLoc - HYPOINVERSE_Y2000_ARC: Added: reading of Event identification number into NLL public_id.
+
+20220131 NLLoc - LOCHYPOUT: Added: SAVE_NLLOC_JSON to support JSON output of location results (20220513: WARNING: under development).
 
 
 

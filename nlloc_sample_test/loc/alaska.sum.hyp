@@ -1,6 +1,6 @@
 NLLOC "./loc/alaska.20181130.172935.grid0" "LOCATED" "Location completed."
 PUBLIC_ID None
-SIGNATURE "NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.09(29Jun2020)   run:29Jun2020 12h37m19"
+SIGNATURE "NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.13(17Jan2022)   run:13May2022 09h14m10"
 COMMENT "2018-11-30 Mww7.0 Southern Alaska (NonLinLoc Sample Location)"
 GRID  201 201 106  -100 -100 -5  1 1 1 PROB_DENSITY
 SEARCH OCTREE nInitial 400 nEvaluated 20008 smallestNodeSide 0.156250/0.156250/0.205078 oct_tree_integral 4.811845e+01 scatter_volume 4.811845e+01
@@ -20,7 +20,7 @@ END_NLLOC
 
 NLLOC "./loc/alaska.20181130.173543.grid0" "LOCATED" "Location completed."
 PUBLIC_ID None
-SIGNATURE "NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.09(29Jun2020)   run:29Jun2020 12h37m19"
+SIGNATURE "NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.13(17Jan2022)   run:13May2022 09h14m10"
 COMMENT "2018-11-30 Mww7.0 Southern Alaska (NonLinLoc Sample Location)"
 GRID  201 201 106  -100 -100 -5  1 1 1 PROB_DENSITY
 SEARCH OCTREE nInitial 400 nEvaluated 20000 smallestNodeSide 0.156250/0.156250/0.205078 oct_tree_integral 1.017775e+02 scatter_volume 1.010403e+02
@@ -40,7 +40,7 @@ END_NLLOC
 
 NLLOC "./loc/alaska.20181130.175512.grid0" "LOCATED" "Location completed."
 PUBLIC_ID None
-SIGNATURE "NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.09(29Jun2020)   run:29Jun2020 12h37m19"
+SIGNATURE "NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.13(17Jan2022)   run:13May2022 09h14m10"
 COMMENT "2018-11-30 Mww7.0 Southern Alaska (NonLinLoc Sample Location)"
 GRID  201 201 106  -100 -100 -5  1 1 1 PROB_DENSITY
 SEARCH OCTREE nInitial 400 nEvaluated 20008 smallestNodeSide 0.156250/0.156250/0.205078 oct_tree_integral 9.690469e+01 scatter_volume 9.655524e+01
@@ -60,7 +60,7 @@ END_NLLOC
 
 NLLOC "./loc/alaska.20181130.180013.grid0" "LOCATED" "Location completed."
 PUBLIC_ID None
-SIGNATURE "NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.09(29Jun2020)   run:29Jun2020 12h37m20"
+SIGNATURE "NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.13(17Jan2022)   run:13May2022 09h14m11"
 COMMENT "2018-11-30 Mww7.0 Southern Alaska (NonLinLoc Sample Location)"
 GRID  201 201 106  -100 -100 -5  1 1 1 PROB_DENSITY
 SEARCH OCTREE nInitial 400 nEvaluated 20008 smallestNodeSide 0.156250/0.156250/0.205078 oct_tree_integral 8.173754e+01 scatter_volume 8.173754e+01
@@ -80,7 +80,7 @@ END_NLLOC
 
 NLLOC "./loc/alaska.20181130.181045.grid0" "LOCATED" "Location completed."
 PUBLIC_ID None
-SIGNATURE "NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.09(29Jun2020)   run:29Jun2020 12h37m20"
+SIGNATURE "NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.13(17Jan2022)   run:13May2022 09h14m11"
 COMMENT "2018-11-30 Mww7.0 Southern Alaska (NonLinLoc Sample Location)"
 GRID  201 201 106  -100 -100 -5  1 1 1 PROB_DENSITY
 SEARCH OCTREE nInitial 400 nEvaluated 20008 smallestNodeSide 0.156250/0.156250/0.205078 oct_tree_integral 8.192446e+01 scatter_volume 8.192446e+01
@@ -100,7 +100,7 @@ END_NLLOC
 
 NLLOC "./loc/alaska.20181130.182011.grid0" "LOCATED" "Location completed."
 PUBLIC_ID None
-SIGNATURE "NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.09(29Jun2020)   run:29Jun2020 12h37m20"
+SIGNATURE "NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.13(17Jan2022)   run:13May2022 09h14m11"
 COMMENT "2018-11-30 Mww7.0 Southern Alaska (NonLinLoc Sample Location)"
 GRID  201 201 106  -100 -100 -5  1 1 1 PROB_DENSITY
 SEARCH OCTREE nInitial 400 nEvaluated 20008 smallestNodeSide 0.312500/0.312500/0.410156 oct_tree_integral 1.323182e+02 scatter_volume 1.323182e+02
@@ -120,7 +120,7 @@ END_NLLOC
 
 NLLOC "./loc/alaska.20181130.182148.grid0" "LOCATED" "Location completed."
 PUBLIC_ID None
-SIGNATURE "NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.09(29Jun2020)   run:29Jun2020 12h37m20"
+SIGNATURE "NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.13(17Jan2022)   run:13May2022 09h14m11"
 COMMENT "2018-11-30 Mww7.0 Southern Alaska (NonLinLoc Sample Location)"
 GRID  201 201 106  -100 -100 -5  1 1 1 PROB_DENSITY
 SEARCH OCTREE nInitial 400 nEvaluated 20008 smallestNodeSide 0.156250/0.156250/0.205078 oct_tree_integral 9.498760e+01 scatter_volume 9.498760e+01

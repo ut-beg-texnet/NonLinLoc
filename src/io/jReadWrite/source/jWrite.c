@@ -12,6 +12,7 @@
 #include <string.h>	// memset()
 #include <stdint.h>
 
+#define JW_GLOBAL_CONTROL_STRUCT
 #include "jWrite.h"
 
 
@@ -55,7 +56,7 @@ void jwPush( JWC_DECL enum jwNodeType nodeType );
 // - initialise with user string buffer of length buflen
 // - isPretty=JW_PRETTY adds \n and spaces to prettify output (else JW_COMPACT)
 //
-void jwOpen( JWC_DECL char *buffer, unsigned int buflen, 
+void jwOpen( JWC_DECL char *buffer, unsigned int buflen,
 				   enum jwNodeType rootType, int isPretty )
 {
 	memset( buffer, 0, buflen );	// zap the whole destination buffer
@@ -256,7 +257,7 @@ char *jwErrorToString( int err )
 {
 	switch( err )
 	{
-	case JWRITE_OK:         return "OK"; 
+	case JWRITE_OK:         return "OK";
 	case JWRITE_BUF_FULL:   return "output buffer full";
 	case JWRITE_NOT_ARRAY:	return "tried to write Array value into Object";
 	case JWRITE_NOT_OBJECT:	return "tried to write Object key/value into Array";

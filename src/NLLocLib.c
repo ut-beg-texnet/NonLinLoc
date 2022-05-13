@@ -982,6 +982,59 @@ int SaveLocation(HypoDesc* hypo, int ngrid, char* fnobs, char *fnout, int numArr
         }
     }
 
+
+    // 20220131 AJL - added to support JSON output of location results
+    if (iSaveNLLocEvent_JSON) {
+
+#ifdef _GNU_SOURCE
+
+        printf("DEBUG: iSaveNLLocEvent_JSON\n");
+        // write NLLoc hypocenter to memory stream, convert stream to JSON
+
+        // GNU C library extensions to support memory streams (function open_memstream).
+        char *bp_memory_stream = NULL;
+        size_t memory_stream_size;
+        FILE *fp_memory_stream = NULL;
+        fp_memory_stream = open_memstream(&bp_memory_stream, &memory_stream_size);
+        if (fp_memory_stream == NULL) {
+            nll_puterr("ERROR: Cannot write NLLoc hypocenter-phase file to JSON: GNU C library extensions needed to support memory streams (function open_memstream).");
+        } else {
+            // write location to memory stream
+            if ((istat = WriteLocation(fp_memory_stream, hypo, Arrival,
+                    NumArrivals + numArrivalsReject, NULL, isave_phases, 1, 0,
+                    LocGrid + ngrid, 0)) < 0) {
+                nll_puterr("ERROR: writing location to memory stream, Cannot write NLLoc hypocenter-phase file to JSON.");
+            } else {
+                printf("DEBUG: iSaveNLLocEvent_JSON: wrote location to memory stream\n");
+                // convert to JSON
+                sprintf(frootname, "%s.loc", fnout);
+                sprintf(fname, "%s.hyp.json", frootname);
+                FILE *fp_json_out = NULL;
+                if ((fp_json_out = fopen(fname, "w")) == NULL) {
+                    nll_puterr2("ERROR: opening hypocenter JSON output file", fname);
+                } else {
+                    fflush(fp_memory_stream);
+                    rewind(fp_memory_stream);
+                    printf("DEBUG: iSaveNLLocEvent_JSON: json_write_NLL_location\n");
+                    json_write_NLL_location(bp_memory_stream, memory_stream_size, fp_json_out);
+                    fclose(fp_json_out);
+                }
+
+                // send message
+
+            }
+
+            // cleanup
+            fclose(fp_memory_stream);
+
+        }
+
+#else
+        nll_puterr("ERROR: Cannot write NLLoc hypocenter-phase file to JSON: GNU C library extensions needed to support memory streams (function open_memstream(); see compiler define _GNU_SOURCE).");
+#endif
+
+    }
+
     if (iSaveNLLocSum) {
         /* write NLLoc hypocenter to summary file */
         if ((istat = WriteLocation(pSumFileHypNLLoc[ngrid],
@@ -1354,6 +1407,10 @@ int GetObservations(FILE* fp_obs, char* ftype_obs, char* fn_grids,
     while ((istat = GetNextObs(phypo, fp_obs, arrival + nobs, ftype_obs, ntry++ == 0)) != EOF) {
 
 
+        if (istat == OBS_FILE_INTERNAL_ERROR) {
+            nll_putmsg(1, "ERROR: internal error reading observation file.");
+            break;
+        }
         if (istat == OBS_FILE_FORMAT_ERROR) {
             nll_putmsg(1, "ERROR: format error in observation file.");
             break;
@@ -2651,7 +2708,7 @@ int GetNextObs(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, char* ftype_
         // INGV json format 20211012
         // assumes a single event in each input file
 
-        istat = jReadNextArrival_INGV(phypo, fp_obs, arrival, nfirst);
+        istat = json_read_next_arrival_INGV(phypo, fp_obs, arrival, nfirst);
         if (istat < 1) {
             return (OBS_FILE_END_OF_INPUT);
         }
@@ -3059,9 +3116,11 @@ int GetNextObs(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, char* ftype_
                 strncpy(chrtmp, line + 41, 5);
                 chrtmp[5] = '\0';
                 //printf("%s", line);
-                //printf("chrtmp=|%s| arrival->sec=%f", chrtmp, arrival->sec);
-                if (strchr(chrtmp, '.') == NULL)
+                //printf("chrtmp=|%s| arrival->sec=%f\n", chrtmp, arrival->sec);
+                //printf("chrtmp[4]=|%c|\n", chrtmp[4]);
+                if (strchr(chrtmp, '.') == NULL) {
                     arrival->sec /= 100.0;
+                }
                 //printf(" -> arrival->sec=%f\n", arrival->sec);
                 // END - 20090126 AJL bug fix
                 istat += ReadFortranReal(line, 30, 5, &psec);
@@ -3080,10 +3139,12 @@ int GetNextObs(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, char* ftype_
                 strncpy(chrtmp, line + 29, 5);
                 chrtmp[5] = '\0';
                 //printf("%s", line);
-                //printf("chrtmp=|%s| arrival->sec=%f", chrtmp, arrival->sec);
-                if (strchr(chrtmp, '.') == NULL)
+                //printf("chrtmp=|%s| arrival->sec=%f\n", chrtmp, psec);
+                //printf("chrtmp[4]=|%c|\n", chrtmp[4]);
+                if (strchr(chrtmp, '.') == NULL) {
                     psec /= 100.0;
-                //printf(" -> arrival->sec=%f\n", arrival->sec);
+                }
+                //printf(" -> psec=%f\n", psec);
                 // END - 20090126 AJL bug fix
                 // check for P second >= 60.0 - not needed (?)
                 if (psec >= 60.0 && arrival->sec < 60.0)
@@ -3125,6 +3186,18 @@ int GetNextObs(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, char* ftype_
         if (ReadFortranInt(line, 1, 4, &idummy) == 1 && idummy > 0) {
             strcpy(HypoInverseArchiveSumHdr, line);
             //printf("HypoInverseArchiveSumHdr:\n|%s|\n", HypoInverseArchiveSumHdr);
+            // 20220129 AJL - added reading of preferred magnitude as NLL amp mag.
+            // read magnitude
+            // 148 3 F3.2 Preferred magnitude, chosen by the Hypoinverse PRE command.
+            // 151 4 F4.1 Total of the preferred mag weights (~ number of readings).
+            //  fprintf(fpio, "X%3.0lf%4.0lf", 100.0 * amp_mag, 10.0 * amp_mag_wt);
+            sscanf(HypoInverseArchiveSumHdr + 147, "%3lf", &phypo->amp_mag);
+            phypo->amp_mag /= 100.0;
+            // 20220129 AJL - added reading of Event identification number as NLL public_id.
+            // 137 10 I10 Event identification number
+            strncpy(chrtmp, HypoInverseArchiveSumHdr + 136, 11);
+            chrtmp[10] = '\0';
+            sscanf(chrtmp, "%s", phypo->public_id);
             return (OBS_FILE_SKIP_INPUT_LINE);
         }
 
@@ -3175,9 +3248,11 @@ int GetNextObs(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, char* ftype_
             strncpy(chrtmp, line + 29, 5);
             chrtmp[5] = '\0';
             //printf("%s", line);
-            //printf("chrtmp=|%s| arrival->sec=%f", chrtmp, arrival->sec);
-            if (strchr(chrtmp, '.') == NULL)
+            //printf("chrtmp=|%s| arrival->sec=%f\n", chrtmp, arrival->sec);
+            //printf("chrtmp[4]=|%c|\n", chrtmp[4]);
+            if (strchr(chrtmp, '.') == NULL) {
                 arrival->sec /= 100.0;
+            }
             //printf(" -> arrival->sec=%f\n", arrival->sec);
             // END - 20090126 AJL bug fix
             istat += ReadFortranInt(line, 17, 1, &arrival->quality);
@@ -8075,7 +8150,7 @@ double CalcSolutionQuality_EDT(int num_arrivals, ArrivalDesc *arrival,
     ot_weight = 0.0L;
     ot_error_2 = 0.0L;
     num_otime_error = 0;
-//#define TEST_COUNT_ONLY_USED_ARRIVALS
+    //#define TEST_COUNT_ONLY_USED_ARRIVALS
 #ifdef TEST_COUNT_ONLY_USED_ARRIVALS
     int num_arrivals_used = 0;
 #endif
@@ -9718,7 +9793,7 @@ int ReadNLLoc_Input(FILE* fp_input, char** param_line_array, int n_param_lines) 
     char *line;
     char *fgets_return;
 
-    int flag_control = 0, flag_outfile = 0, flag_grid = 0, flag_search = 0, flag_prior = 0,
+    int flag_control = 0, flag_outfile = 0, flag_grid = 0, flag_search = 0, flag_prior = 0, flag_posterior = 0,
             flag_method = 0, flag_comment = 0, flag_signature = 0,
             flag_hyptype = 0, flag_gauss = 0, flag_gauss2 = 0, flag_trans = 0, flag_comp = 0,
             flag_phstat = 0, flag_phase_id = 0, flag_sta_wt = 0, flag_qual2err = 0,
@@ -9726,6 +9801,9 @@ int ReadNLLoc_Input(FILE* fp_input, char** param_line_array, int n_param_lines) 
             flag_topo_surface = 0, flag_time_delay_surface = 0, flag_elev_corr = 0,
             flag_otime = 0, flag_angles = 0, flag_source = 0;
     int flag_include_file = 1;
+
+    int ok_search_pdf = 1;
+
 
     char **param_lines;
 
@@ -9890,9 +9968,12 @@ patch below fixes this problem.
 
         if (strcmp(param, "LOCPOSTERIOR") == 0) {
             if ((istat = GetNLLoc_PdfGrid(strchr(line, ' '), PDF_GRID_POSTERIOR)) < 0)
-                nll_puterr("ERROR: reading NLLoc search posterior PDF.");
-            else
-                flag_prior = 1;
+                if (istat == -9) {
+                    ok_search_pdf = 0;
+                } else {
+                    nll_puterr("ERROR: reading NLLoc search posterior PDF.");
+                } else
+                flag_posterior = 1;
         }
 
 
@@ -10208,6 +10289,10 @@ patch below fixes this problem.
         sprintf(MsgStr, "INFO: no Search Prior (LOCPRIOR) values read.");
         nll_putmsg(2, MsgStr);
     }
+    if (!flag_posterior) {
+        sprintf(MsgStr, "INFO: no Search Prior (LOCPOSTERIOR) values read.");
+        nll_putmsg(2, MsgStr);
+    }
     if (!flag_mag) {
         sprintf(MsgStr, "INFO: no Magnitude Calculation (LOCMAG) params read.");
         nll_putmsg(2, MsgStr);
@@ -10278,7 +10363,7 @@ patch below fixes this problem.
 
 
 
-    return (test_search_pdf *
+    return (test_search_pdf * ok_search_pdf *
             flag_include_file * flag_control * flag_outfile * flag_grid *
             flag_search *
             flag_method * flag_gauss * flag_qual2err * flag_trans - 1);
@@ -10498,12 +10583,16 @@ int GetNLLoc_PdfGrid(char* line1, int prior_type) {
         searchPdfGrid->max_total_other_weight = -1.0; // default
         searchPdfGrid->max_count_other = -1; // default   // 20211031 AJL - added
         searchPdfGrid->max_se3 = -1.0; // default
-        istat = sscanf(line1, "%*s %s %lf %lf %lf %lf %d",
+        searchPdfGrid->max_mag_diff = -1.0; // default
+        searchPdfGrid->min_mag = -999; // default
+        istat = sscanf(line1, "%*s %s %lf %lf %lf %lf %d %lf %lf",
                 searchPdfGrid->grid_file_path, &(searchPdfGrid->default_value),
-                &(searchPdfGrid->coherence_min), &(searchPdfGrid->max_total_other_weight), &(searchPdfGrid->max_se3), &(searchPdfGrid->max_count_other));
-        sprintf(MsgStr, "LOCPRIOR/LOCPOSTERIOR:  Type: %s  GridFile: %s  DefaultValue: %e  CoherenceMin: %f  MaxOtherWeight: %f  MaxSE3: %f  MaxNother: %d",
+                &(searchPdfGrid->coherence_min), &(searchPdfGrid->max_total_other_weight), &(searchPdfGrid->max_se3), &(searchPdfGrid->max_count_other),
+                &(searchPdfGrid->max_mag_diff), &(searchPdfGrid->min_mag));
+        sprintf(MsgStr, "LOCPRIOR/LOCPOSTERIOR:  Type: %s  GridFile: %s  DefaultValue: %e  CoherenceMin: %f  MaxOtherWeight: %f  MaxSE3: %f  MaxNother: %d  MaxMagDiff: %f  MinMag: %f",
                 grid_type, searchPdfGrid->grid_file_path, searchPdfGrid->default_value,
-                searchPdfGrid->coherence_min, searchPdfGrid->max_total_other_weight, searchPdfGrid->max_se3, searchPdfGrid->max_count_other);
+                searchPdfGrid->coherence_min, searchPdfGrid->max_total_other_weight, searchPdfGrid->max_se3, searchPdfGrid->max_count_other,
+                searchPdfGrid->max_mag_diff, searchPdfGrid->min_mag);
         nll_putmsg(3, MsgStr);
         sprintf(MsgStr, ""); // 20210527 AJL - Bug Fix: TODO: somewhere this message is printed!
         ierr = 0;
@@ -10540,6 +10629,20 @@ int GetNLLoc_PdfGrid(char* line1, int prior_type) {
                     } else {
                         found_valid_stream_coherences = 0;
                     }
+                    // check min_mag
+                    static HypoDesc hypo_self;
+                    if (ReadHypoDesc(file_line, &hypo_self) < -1) {
+                        nll_puterr2("ERROR: opening or reading self event hypo file", file_line);
+                    }
+                    //printf("DEBUG: searchPdfGrid->min_mag %f hypo_self.amp_mag %f\n", searchPdfGrid->min_mag, hypo_self.amp_mag);
+                    if (searchPdfGrid->min_mag > -99 && fabs(hypo_self.amp_mag - MAGNITUDE_NULL) > 0.01) {
+                        if (hypo_self.amp_mag < searchPdfGrid->min_mag) {
+                            sprintf(MsgStr, "INFO: GetNLLoc_PdfGrid: amp_mag: %f < searchPdfGrid->min_mag %f  %s : EVENT IGNORED",
+                                    hypo_self.amp_mag, searchPdfGrid->min_mag, file_line);
+                            nll_putmsg(1, MsgStr);
+                            return (-9);
+                        }
+                    }
                     if (found_valid_stream_coherences) {
                         numPdfGridFiles = 0;
                         // include self if posterior
@@ -10551,18 +10654,34 @@ int GetNLLoc_PdfGrid(char* line1, int prior_type) {
                         }
                         // next lines are coherence and oct-tree file root for each child
                         while (fscanf(fp_coherence_test, "%lf %s", &(coherence[numPdfGridFiles]), file_line) > 1) {
-                            // check se3
-                            if (searchPdfGrid->max_se3 > 0.0) {
-                                FILE *fpio_tmp = NULL;
-                                double se3 = -1.0;
-                                ReadHypSe3(&fpio_tmp, file_line, &se3);
-                                if (se3 > searchPdfGrid->max_se3) {
-                                    printf(MsgStr, "INFO: GetNLLoc_PdfGrid: se3: %f > searchPdfGrid->max_se3 %f  %s : IGNORED\n",
-                                            se3, searchPdfGrid->max_se3, file_line);
-                                    nll_putmsg(3, MsgStr);
-                                    continue;
+                            // check hypo filters
+                            static HypoDesc hypo_other;
+                            if (searchPdfGrid->max_se3 > 0.0 || searchPdfGrid->max_mag_diff > 0.0) {
+                                if (ReadHypoDesc(file_line, &hypo_other) < -1) {
+                                    nll_puterr2("ERROR: opening or reading other event hypo file", file_line);
+                                }
+                                // check se3
+                                if (searchPdfGrid->max_se3 > 0.0) {
+                                    if (hypo_other.ellipsoid.len3 > searchPdfGrid->max_se3) {
+                                        sprintf(MsgStr, "INFO: GetNLLoc_PdfGrid: se3: %f > searchPdfGrid->max_se3 %f  %s : IGNORED OTHER",
+                                                hypo_other.ellipsoid.len3, searchPdfGrid->max_se3, file_line);
+                                        nll_putmsg(3, MsgStr);
+                                        continue;
+                                    }
+                                }
+                                // check max_mag_diff
+                                //printf("DEBUG: searchPdfGrid->max_mag_diff %f hypo_self.amp_mag %f\n", searchPdfGrid->max_mag_diff, hypo_self.amp_mag);
+                                if (searchPdfGrid->max_mag_diff > 0.0
+                                        && fabs(hypo_other.amp_mag - MAGNITUDE_NULL) > 0.01 && fabs(hypo_self.amp_mag - MAGNITUDE_NULL) > 0.01) {
+                                    if (fabs(hypo_other.amp_mag - hypo_self.amp_mag) > searchPdfGrid->max_mag_diff) {
+                                        sprintf(MsgStr, "INFO: GetNLLoc_PdfGrid: amp_mag diff: %f-%f > searchPdfGrid->max_mag_diff %f  %s : IGNORED OTHER",
+                                                hypo_self.amp_mag, hypo_other.amp_mag, searchPdfGrid->min_mag, file_line);
+                                        nll_putmsg(3, MsgStr);
+                                        continue;
+                                    }
                                 }
                             }
+                            // check coherence min
                             if (coherence[numPdfGridFiles] >= searchPdfGrid->coherence_min) {
                                 strcpy(fn_pdf_grid[numPdfGridFiles], file_line);
                                 strcat(fn_pdf_grid[numPdfGridFiles], ".octree");
@@ -10783,7 +10902,7 @@ int GetNLLoc_PdfGrid(char* line1, int prior_type) {
             sprintf(MsgStr, "INFO: LOCPOSTERIOR is active: LOCMETH maximum_number_3D_grids reset to 0");
             nll_putmsg(1, MsgStr);
         }
-        */
+         */
     }
 
     return (0);
@@ -10819,6 +10938,8 @@ int GetNLLoc_HypOutTypes(char* line1) {
             iSaveNLLocExpectation = 1;
         else if (strcmp(hyp_type, "SAVE_NLLOC_OCTREE") == 0)
             iSaveNLLocOctree = 1;
+        else if (strcmp(hyp_type, "SAVE_NLLOC_JSON") == 0) // 20220131 AJL - added to support JSON output of location results
+            iSaveNLLocEvent_JSON = 1;
         else if (strcmp(hyp_type, "SAVE_HYPO71_ALL") == 0)
             iSaveHypo71Event = iSaveHypo71Sum = 1;
         else if (strcmp(hyp_type, "SAVE_HYPO71_SUM") == 0)

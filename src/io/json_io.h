@@ -40,8 +40,9 @@ e-mail: anthony@alomax.net  web: http://www.alomax.net
 /* function declarations */
 /*------------------------------------------------------------/ */
 
-int jReadNextArrival_INGV(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, int nfirst);
-char **read_nll_control_json(FILE* fp_control, int *pn_param_lines);
+int json_read_next_arrival_INGV(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, int nfirst);
+char **json_read_nll_control(FILE* fp_control, int *pn_param_lines);
+int json_write_NLL_location(char *file_str_loc_in, size_t stream_size, FILE *fp_json_out);
 
 /*------------------------------------------------------------/ */
 

@@ -4,7 +4,7 @@
 
 gmtset  PAGE_ORIENTATION portrait  X_ORIGIN 0.5  Y_ORIGIN 0.5 
 
-gmtset  ANNOT_FONT_SIZE_PRIMARY 18  ANNOT_FONT_SIZE_SECONDARY 18  HEADER_FONT_SIZE 18 LABEL_FONT_SIZE 18
+gmtset  ANNOT_FONT_SIZE_PRIMARY 14  ANNOT_FONT_SIZE_SECONDARY 14  HEADER_FONT_SIZE 14 LABEL_FONT_SIZE 14
 
 gmtset  ANNOT_FONT_PRIMARY 4  ANNOT_FONT_SECONDARY 4  HEADER_FONT 4 LABEL_FONT 4
 
@@ -25,24 +25,24 @@ set PLOT_LAT_LONG = 0
 #set PLOT_LAT_LONG = 1
 # ========================================================
 
-psbasemap -R0.5/1.0/0.5/1.0 -Bf10 -JX20.000000/28.700000 -K > $POSTSCRIPT_NAME.ps
+psbasemap -R0.5/1.0/0.5/1.0 -Bf10N -JX20.000000/28.700000 -K > $POSTSCRIPT_NAME.ps
 
-pstext -R0.5/1.0/0.5/1.0 -Bf10 -JX20.000000/28.700000 -K -O << END >> $POSTSCRIPT_NAME.ps
-0.750000 0.980000 17 0 4 2 2018-11-30 Mww7.0 Southern Alaska (NonLinLoc Sample Location)
+pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX20.000000/28.700000 -K -O << END >> $POSTSCRIPT_NAME.ps
+0.750000 0.980000 15 0 4 2 2018-11-30 Mww7.0 Southern Alaska (NonLinLoc Sample Location)
 END
 
-pstext -R0.5/1.0/0.5/1.0 -Bf10 -JX20.000000/28.700000 -K -O << END >> $POSTSCRIPT_NAME.ps
+pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX20.000000/28.700000 -K -O << END >> $POSTSCRIPT_NAME.ps
 0.750000 0.970000 20 0 4 2 2018 11 30  17:29:29.0730  Lat: 61.336  Long: -149.949  Z: 44.94km  RMS: 0.25s  Mag: -9.9
 END
 
-pstext -R0.5/1.0/0.5/1.0 -Bf10 -JX20.000000/28.700000 -K -O << END >> $POSTSCRIPT_NAME.ps
+pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX20.000000/28.700000 -K -O << END >> $POSTSCRIPT_NAME.ps
 0.750000 0.960000 20 0 4 2 PDF scatter sample
 END
 
 # Rect x/y in km
 set RVAL = '-R-100.000000/100.000000/-5.000000/100.000000/-9999/9999'
 # Rect x/y in km
-set BVAL = '-B50.000000:X(km):/20.000000:Z(km)::.:WEnS'
+set BVAL = '-B50.000000:X(km):/20.000000:Z(km)::.:WenS'
 # Rect x/y in km
 set JVAL = '-Jx0.051230/-0.051230 -Jz-0.051230'
 
@@ -404,7 +404,7 @@ psbasemap $JVAL $RVAL $BVAL -K -O >> $POSTSCRIPT_NAME.ps
 # Rect x/y in km
 set RVAL = '-R-5.000000/100.000000/-100.000000/100.000000/-9999/9999'
 # Rect x/y in km
-set BVAL = '-B20.000000:Z(km):/50.000000:Y(km)::.:wENS'
+set BVAL = '-B20.000000:Z(km):/50.000000:Y(km)::.:wENs'
 # Rect x/y in km
 set JVAL = '-Jx0.051230/0.051230 -Jz0.051230'
 
@@ -425,8 +425,8 @@ endif
 psbasemap $JVAL $RVAL $BVAL -K -O >> $POSTSCRIPT_NAME.ps
 
 
-pstext -R0.5/1.0/0.5/1.0 -Bf10 -JX20.000000/28.700000 -X-12.710187 -Y-9.843384 -O << END >> $POSTSCRIPT_NAME.ps
-0.501000 0.501000 10 0 4 1 NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.09(29Jun2020)   run:29Jun2020 12h37m19   Grid2GMT:v7.00.09 29Jun2020 12h37m21
+pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX20.000000/28.700000 -X-12.710187 -Y-9.843384 -O << END >> $POSTSCRIPT_NAME.ps
+0.501000 0.501000 10 0 4 1 NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.13(17Jan2022)   run:13May2022 09h14m10   Grid2GMT:v7.00.13 13May2022 09h14m12
 END
 
 echo "Finished!  View output:"

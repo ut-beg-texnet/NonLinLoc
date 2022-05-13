@@ -158,7 +158,7 @@ Generic Control Statements
   the source code of the GMT plotting package
 |    7. The ``TRANS_MERC`` Transverse Mercator projection is adapted from
   the source code of the GMT plotting package
-|    8. The ``AZIMUTHAL_EQUIDIST`` Transverse Mercator projection is adapted from
+|    8. The ``AZIMUTHAL_EQUIDIST`` Projection is adapted from
   the source code of the GMT plotting package
 
 | **MAPLINE - Geographic Maplines**

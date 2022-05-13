@@ -1,0 +1,433 @@
+#!/bin/csh
+#
+#
+
+gmtset  PAGE_ORIENTATION portrait  X_ORIGIN 0.5  Y_ORIGIN 0.5 
+
+gmtset  ANNOT_FONT_SIZE_PRIMARY 14  ANNOT_FONT_SIZE_SECONDARY 14  HEADER_FONT_SIZE 14 LABEL_FONT_SIZE 14
+
+gmtset  ANNOT_FONT_PRIMARY 4  ANNOT_FONT_SECONDARY 4  HEADER_FONT 4 LABEL_FONT 4
+
+gmtset  LABEL_OFFSET 0.1c  ANNOT_OFFSET_PRIMARY 0.1c ANNOT_OFFSET_SECONDARY 0.1c
+
+set POSTSCRIPT_NAME = gmt/alaska.20181130.172935.grid0.loc.LS
+
+unalias rm
+
+rm -f $POSTSCRIPT_NAME.ps
+
+# ========================================================
+# Optional X/Y or LAT/LONG plotting
+# NOTE: LAT/LONG plotting works only for unrotated, Horizontal section (H) plots
+#     for X/Y plot, uncomment the folowing line:
+set PLOT_LAT_LONG = 0
+#     for LAT/LONG plot, uncomment the folowing line:
+#set PLOT_LAT_LONG = 1
+# ========================================================
+
+psbasemap -R0.5/1.0/0.5/1.0 -Bf10N -JX20.000000/28.700000 -K > $POSTSCRIPT_NAME.ps
+
+pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX20.000000/28.700000 -K -O << END >> $POSTSCRIPT_NAME.ps
+0.750000 0.980000 15 0 4 2 2018-11-30 Mww7.0 Southern Alaska (NonLinLoc Sample Location)
+END
+
+pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX20.000000/28.700000 -K -O << END >> $POSTSCRIPT_NAME.ps
+0.750000 0.970000 20 0 4 2 2018 11 30  17:29:29.0730  Lat: 61.336  Long: -149.949  Z: 44.94km  RMS: 0.25s  Mag: -9.9
+END
+
+pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX20.000000/28.700000 -K -O << END >> $POSTSCRIPT_NAME.ps
+0.750000 0.960000 20 0 4 2 PDF scatter sample
+END
+
+# Rect x/y in km
+set RVAL = '-R-100.000000/100.000000/-5.000000/100.000000/-9999/9999'
+# Rect x/y in km
+set BVAL = '-B50.000000:X(km):/20.000000:Z(km)::.:WenS'
+# Rect x/y in km
+set JVAL = '-Jx0.051230/-0.051230 -Jz-0.051230'
+
+psbasemap $JVAL $RVAL $BVAL -X1.750000 -Y3.750000 -K -O >> $POSTSCRIPT_NAME.ps
+
+psxy loc/alaska.20181130.172935.grid0.loc.scat.XZ $JVAL $RVAL -W1/255/0/0 -Sp -m -K -O >> $POSTSCRIPT_NAME.ps
+# Maximum Likelihood
+psxy $JVAL $RVAL -W1/0/0/255 -Sa0.125984 -G0/0/255 -K -O << END >> ${POSTSCRIPT_NAME}.ps
+2.734380 44.936500
+END
+
+
+if (-e Grid2GMT.Y.gmt) then
+   echo  'Running auxilliary GMT script: Grid2GMT.Y.gmt'
+   source  Grid2GMT.Y.gmt
+endif
+
+psbasemap $JVAL $RVAL $BVAL -K -O >> $POSTSCRIPT_NAME.ps
+
+
+# Rect x/y in km
+set RVAL = '-R-100.000000/100.000000/-100.000000/100.000000/-9999/9999'
+# Rect x/y in km
+set BVAL = '-B50.000000:X(km):/50.000000:Y(km)::.:WeNs'
+# Rect x/y in km
+set JVAL = '-Jx0.051230/0.051230 -Jz0.051230'
+
+if (! $PLOT_LAT_LONG) then
+psbasemap $JVAL $RVAL $BVAL -X0.000000 -Y6.093384 -K -O >> $POSTSCRIPT_NAME.ps
+endif
+if ($PLOT_LAT_LONG) then
+# Latitude/Longitude in degrees
+set RVAL = '-R-151.797171/-148.098522/60.090125/61.884417'
+# Latitude/Longitude in degrees
+set BVAL = '-B1.000000:Long(deg):/0.500000:Lat(deg)::.:WeNs'
+# Latitude/Longitude in degrees
+set JVAL = '-JL-150.000000/61.000000/60.000000/62.000000/10.245902 -Jz5.710275'
+psbasemap ${JVAL} ${RVAL} ${BVAL} -X0.000000 -Y6.093384 -K -O >> $POSTSCRIPT_NAME.ps
+endif
+
+psxy loc/alaska.20181130.172935.grid0.loc.scat.XY $JVAL $RVAL -W1/255/0/0 -Sp -m -K -O >> $POSTSCRIPT_NAME.ps
+# Maximum Likelihood
+psxy $JVAL $RVAL -W1/0/0/255 -Sa0.125984 -G0/0/255 -K -O << END >> ${POSTSCRIPT_NAME}.ps
+2.734380 37.421900
+END
+
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+14.081400 9.933200 15 0 4 6 AK_RC01_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-39.808900 51.881700 15 0 4 6 AK_SSN_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+46.149100 66.290900 15 0 4 6 AT_PMR_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+56.695300 86.374000 15 0 4 6 AK_GHO_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+82.308400 46.996300 15 0 4 6 AK_KNK_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-62.880300 -25.261000 15 0 4 6 AK_CAPN_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-12.255500 -54.382200 15 0 4 6 AK_SLK_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+87.964600 91.041200 15 0 4 6 AK_SAW_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+90.558500 -14.624500 15 0 4 6 AK_PWL_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-80.307700 110.139900 15 0 4 6 AK_SKN_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-108.418800 34.130600 15 0 4 6 AV_SPCG_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-115.596800 31.483100 15 0 4 6 AV_SPCP_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-13.573900 156.687900 15 0 4 6 AK_CUT_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-118.743000 24.319200 15 0 4 6 AV_SPCR_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+30.448900 -99.665200 15 0 4 6 AK_SWD_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+140.688900 95.575900 15 0 4 6 AK_SCM_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-131.972100 -45.192500 15 0 4 6 AV_RDT_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+157.664000 -9.963500 15 0 4 6 AK_GLI_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+58.750800 204.816200 15 0 4 6 AK_WAT7_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+116.170300 178.173600 15 0 4 6 AK_WAT6_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-41.697100 -139.956600 15 0 4 6 AK_BRSE_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-156.214900 -53.709500 15 0 4 6 AV_RDWB_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-50.956300 -138.792700 15 0 4 6 AK_BRLK_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+185.510900 -25.520900 15 0 4 6 AK_FID_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-93.112500 -148.433800 15 0 4 6 AK_HOM_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-111.368100 213.196700 15 0 4 6 AK_PPLA_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-70.041000 -163.665200 15 0 4 6 AK_CNP_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+192.670000 -62.150100 15 0 4 6 AK_HIN_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+217.037000 61.620700 15 0 4 6 AK_KLU_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-170.594700 -101.039000 15 0 4 6 AV_ILNE_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+227.502000 21.734500 15 0 4 6 AK_DIV_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-171.494400 -112.184100 15 0 4 6 AV_ILS_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-175.384400 -109.077200 15 0 4 6 AV_ILSW_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-14.440600 273.146100 15 0 4 6 AK_TRF_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+233.034200 -42.718800 15 0 4 6 AK_EYAK_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+132.668900 233.965700 15 0 4 6 AK_DHY_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-100000000000000000000.000000 -100000000000000000000.000000 15 0 4 6 NP040_D0
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+329.630300 64.794500 15 0 4 6 AK_GLB_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+56.997400 268.646000 15 0 4 6 AK_RND_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-45.940100 284.884600 15 0 4 6 AK_KTH_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-104.174000 271.280000 15 0 4 6 AK_CAST_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+52.551700 304.971300 15 0 4 6 AK_MCK_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+291.843500 8.425900 15 0 4 6 AK_BMR_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+288.612200 -35.120100 15 0 4 6 AK_GOAT_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-190.861300 -176.695100 15 0 4 6 AV_AU22_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-195.372400 -175.189100 15 0 4 6 AV_AUL_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+293.203700 -56.455500 15 0 4 6 AK_RAG_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-194.754500 -179.919200 15 0 4 6 AV_AUJA_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-195.870100 -177.283200 15 0 4 6 AV_AUCH_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-195.116900 -180.625500 15 0 4 6 AV_AUSB_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-196.808700 -177.690900 15 0 4 6 AV_AUWS_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+229.723400 227.500300 15 0 4 6 AK_PAX_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-302.741600 25.053900 15 0 4 6 AT_SVW2_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-113.875600 323.398100 15 0 4 6 AK_CHUM_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+-48.204800 345.970500 15 0 4 6 AK_BPAW_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+316.507300 -60.208200 15 0 4 6 AK_HMT_--
+END
+
+# Station
+pstext $JVAL $RVAL -S4,0 -G255 -K -O << END >> $POSTSCRIPT_NAME.ps
+34.133900 353.995600 15 0 4 6 AK_BWN_--
+END
+
+if (! $PLOT_LAT_LONG) then
+psxy gmt/map.alaska_coasts.xy.xy $JVAL $RVAL -W2/0/0/0 -m -K -O >> $POSTSCRIPT_NAME.ps
+endif
+if ($PLOT_LAT_LONG) then
+psxy gmt/map.alaska_coasts.xy.latlon $JVAL $RVAL -W2/0/0/0 -m -K -O >> $POSTSCRIPT_NAME.ps
+endif
+if (! $PLOT_LAT_LONG) then
+psxy gmt/map.alaska_rivers.xy.xy $JVAL $RVAL -W2/0/0/255 -m -K -O >> $POSTSCRIPT_NAME.ps
+endif
+if ($PLOT_LAT_LONG) then
+psxy gmt/map.alaska_rivers.xy.latlon $JVAL $RVAL -W2/0/0/255 -m -K -O >> $POSTSCRIPT_NAME.ps
+endif
+if (! $PLOT_LAT_LONG) then
+psxy gmt/map.alaska.xy.xy $JVAL $RVAL -W2/0/0/0 -m -K -O >> $POSTSCRIPT_NAME.ps
+endif
+if ($PLOT_LAT_LONG) then
+psxy gmt/map.alaska.xy.latlon $JVAL $RVAL -W2/0/0/0 -m -K -O >> $POSTSCRIPT_NAME.ps
+endif
+if (-e Grid2GMT.H.gmt) then
+   echo  'Running auxilliary GMT script: Grid2GMT.H.gmt'
+   source  Grid2GMT.H.gmt
+endif
+
+psbasemap $JVAL $RVAL $BVAL -K -O >> $POSTSCRIPT_NAME.ps
+
+
+# Rect x/y in km
+set RVAL = '-R-5.000000/100.000000/-100.000000/100.000000/-9999/9999'
+# Rect x/y in km
+set BVAL = '-B20.000000:Z(km):/50.000000:Y(km)::.:wENs'
+# Rect x/y in km
+set JVAL = '-Jx0.051230/0.051230 -Jz0.051230'
+
+psbasemap $JVAL $RVAL $BVAL -X10.960187 -Y0.000000 -K -O >> $POSTSCRIPT_NAME.ps
+
+psxy loc/alaska.20181130.172935.grid0.loc.scat.ZY $JVAL $RVAL -W1/255/0/0 -Sp -m -K -O >> $POSTSCRIPT_NAME.ps
+# Maximum Likelihood
+psxy $JVAL $RVAL -W1/0/0/255 -Sa0.125984 -G0/0/255 -K -O << END >> ${POSTSCRIPT_NAME}.ps
+44.936500 37.421900
+END
+
+
+if (-e Grid2GMT.X.gmt) then
+   echo  'Running auxilliary GMT script: Grid2GMT.X.gmt'
+   source  Grid2GMT.X.gmt
+endif
+
+psbasemap $JVAL $RVAL $BVAL -K -O >> $POSTSCRIPT_NAME.ps
+
+
+pstext -R0.5/1.0/0.5/1.0 -Bf10N -JX20.000000/28.700000 -X-12.710187 -Y-9.843384 -O << END >> $POSTSCRIPT_NAME.ps
+0.501000 0.501000 10 0 4 1 NonLinLoc - ALomax Scientific   obs:./obs/2018-11-30-mww70-southern-alaska.obs   NLLoc:v7.00.13(17Jan2022)   run:13May2022 09h03m14   Grid2GMT:v7.00.13 13May2022 09h03m15
+END
+
+echo "Finished!  View output:"
+echo "   ${PS_VIEWER} $POSTSCRIPT_NAME.ps"

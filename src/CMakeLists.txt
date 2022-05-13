@@ -6,14 +6,14 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.15)
 
 PROJECT(NonLinLoc)
 set(CMAKE_BUILD_TYPE Release)
-###set(CMAKE_BUILD_TYPE Debug)
+###DEBUG#set(CMAKE_BUILD_TYPE Debug)
 
 # If you want to build the library in ${CMAKE_CURRENT_SOURCE_DIR}/lib
 #set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
 # If you want to move the binaries in ${CMAKE_CURRENT_SOURCE_DIR}/bin
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
-###set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin_debug)
+###DEBUG#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin_debug)
 
 # Bring the include directory with its headers into the project
 include_directories(
@@ -34,8 +34,14 @@ add_compile_options(-fcommon)
 #   fmemopen, open_memstream -  open memory as stream (required to pass observations file lines as parameters
 #   to a function call to NLLoc() and to run NLLoc_func_test)
 #add_compile_options(-D _GNU_SOURCE)
+#
+# Alternatively, in the make environment, set:
+# export CFLAGS='-D _GNU_SOURCE'
+# before running: rm CMakeCache.txt; cmake .
 
 
+# 20211110 AJL - New fix implemented, see https://github.com/alomax/NonLinLoc/issues/7
+#   This fix probably supersedes the following:
 # 20210511 AJL - Possible bug fix for Loc2ddct compile errors on older(?) compilers "relocation truncated to fit: R_X86_64_PC32 against symbol"
 # https://stackoverflow.com/questions/57331990/c-compiling-relocation-truncated-to-fit-r-x86-64-pc32-against-symbol
 # These compile/link options not needed if following define used in Loc2ddct.c
@@ -107,6 +113,12 @@ target_link_libraries(LocSum GRID_LIB_OBJS m)
 #
 add_executable(Time2EQ Time2EQ1.c)
 target_link_libraries(Time2EQ GRID_LIB_OBJS m)
+
+# --------------------------------------------------------------------------
+# NLLoc_func_test
+#
+add_executable(NLLoc_func_test NLLoc_func_test.c)
+target_link_libraries(NLLoc_func_test ${OBJS0} m)
 
 # --------------------------------------------------------------------------
 # hypoe2hyp

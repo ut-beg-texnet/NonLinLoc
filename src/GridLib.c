@@ -363,7 +363,7 @@ int GetSource(char* in_line, SourceDesc *srce_in, int num_sources) {
         if (ierr < 0 || istat != 12)
             return (-1);
     } else {
-        nll_puterr2("ERROR: unrecognized coordinate type:", in_line);
+        nll_puterr2("ERROR: unrecognized coordinate type", in_line);
         return (-1);
     }
 
@@ -2276,7 +2276,7 @@ int OpenGrid3dFile(char *fname, FILE **fp_grid, FILE **fp_hdr,
     if (psrce != NULL && (strncmp(file_type, "time", 4) == 0
             || strncmp(file_type, "angle", 4) == 0)) {
         fscanf(*fp_hdr, "%s %lf %lf %lf\n",
-            psrce->label, &(psrce->x), &(psrce->y), &(psrce->z));
+                psrce->label, &(psrce->x), &(psrce->y), &(psrce->z));
         psrce->is_coord_xyz = 1;
     }
 
@@ -3533,7 +3533,7 @@ int GetHypLoc(FILE *fpio, const char* filein, HypoDesc* phypo,
             sprintf(fn_in, "%s", filein);
         if ((fpio = fopen(fn_in, "r")) == NULL) {
             nll_puterr2("ERROR: opening hypocenter file", fn_in);
-            return (-1);
+            return (-2);
         }
         NumFilesOpen++;
         ifile = 1;
@@ -5510,43 +5510,32 @@ int ReadHypStatistics(FILE **pfpio, char* fnroot_in,
 
 }
 
-/** function to read expectation and covariance from a hyp file */
+/** function to read hypocenter description from a single event hyp file */
 
-int ReadHypSe3(FILE **pfpio, char* fnroot_in, double *pse3) {
+int ReadHypoDesc(char* fnroot_in, HypoDesc *phypo) {
 
     char fn_in[FILENAME_MAX];
-    static HypoDesc hypo;
-
+    FILE *fp_io;
 
     /* open hypocenter file if necessary */
 
-    if (*pfpio == NULL) {
-        sprintf(fn_in, "%s.hyp", fnroot_in);
-        if ((*pfpio = fopen(fn_in, "r")) == NULL) {
-            nll_puterr("ERROR: opening hypocenter file.");
-            return (EOF);
-        }
-        NumFilesOpen++;
+    sprintf(fn_in, "%s.hyp", fnroot_in);
+    if ((fp_io = fopen(fn_in, "r")) == NULL) {
+        nll_puterr2("ERROR: opening hypocenter file:", fnroot_in);
+        return (-1);
     }
+    NumFilesOpen++;
 
 
-    /* read next hypocenter */
-
+    // read next hypocenter
     ArrivalDesc* parrivals;
     int *pnarrivals = NULL;
-    *pse3 = -1.0;
-    if (GetHypLoc(*pfpio, fnroot_in, &hypo, parrivals, pnarrivals, 0, NULL, 0) != EOF) {
-        *pse3 = hypo.ellipsoid.len3;
-        return (0);
-    }
+    int istat = GetHypLoc(fp_io, fnroot_in, phypo, parrivals, pnarrivals, 0, NULL, 0);
 
-
-    /* end of file */
-
-    fclose(*pfpio);
+    fclose(fp_io);
     NumFilesOpen--;
 
-    return (EOF);
+    return (istat);     // -1 if error opening hypo file, EOF if EOF error reading hypo file, 0 otherwise
 
 }
 

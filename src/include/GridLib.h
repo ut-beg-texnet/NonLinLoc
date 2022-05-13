@@ -218,6 +218,7 @@ EXTERN_TXT int nll_mode;
 #define OBS_FILE_END_OF_INPUT   -55066
 #define OBS_FILE_TWO_ARRIVALS_READ   -55077
 #define OBS_FILE_FORMAT_ERROR  -55099
+#define OBS_FILE_INTERNAL_ERROR  -55199
 
 #define GRID_NOT_INSIDE    -55111
 
@@ -853,7 +854,7 @@ int WriteArrival(FILE*, ArrivalDesc*, int);
 int WriteArrivalHypo(FILE*, ArrivalDesc*, int);
 int ReadHypStatistics(FILE **, char*, Vect3D*, Vect3D*,
         Mtrx3D*, Ellipsoid3D*, ArrivalDesc*, int*);
-int ReadHypSe3(FILE **pfpio, char* fnroot_in, double *pse3);
+int ReadHypoDesc(char* fnroot_in, HypoDesc *phypo);
 int ReadFocalMech(FILE **pfpio, char* fnroot_in, FocalMech* pfocalMech,
         ArrivalDesc* parrivals, int *pnarrivals);
 int ReadFirstMotionArrivals(FILE **pfpio, char* fnroot_in, ArrivalDesc* parrivals, int *pnarrivals);

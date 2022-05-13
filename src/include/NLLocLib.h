@@ -197,6 +197,13 @@ typedef struct {
     //   in a local minimum within this event pdf (especially if LOC_SEARCH init_num_cells_x/y/z are too few). When this trapping occurs, some NLL-coherence events may cluster far from
     //   any events in SSST reference events (LOC_PATH), with unusual epicenter or depth.
     //   May typically have same or similar value as COHERENCE_MAX_DIST
+    double max_mag_diff;  // 20220339 AJL - added
+    // maximum magnitude difference to include other event in pdf stack (-1 to disable).
+    //   Excludes events that are not likely to have waveform similarity with target due to differences in spectral peak.
+    //   May help avoid false high correlation due to filtering or clipping.
+    double min_mag;  // 20220339 AJL - added
+    // minimum magnitude to process event (-999 to disable).
+    //   Enables not processing smaller magnitude events, e.g. for avoiding possible noisy waveforms or for speeding up testing.
     double *weight;  // array of nGrids weights (function of coherence and coherence_min) for each corresponding tree3D
     // arrivals storage
     ArrivalDesc** first_motion_arrivals; // arrivals with first-motion readings
@@ -326,6 +333,8 @@ iSaveHypoInvSum, iSaveHypoInvY2KArc, iSaveAlberto4Sum, iSaveFmamp,
 iSaveSnapSum, iCalcSedOrigin, iSaveDecSec, iSavePublicID, iSaveNone;
 // 20170811 AJL - added to allow saving of expectation hypocenter results instead of maximum likelihood
 EXTERN_TXT int iSaveNLLocExpectation;
+// 20220131 AJL - added to support JSON output of location results
+EXTERN_TXT int iSaveNLLocEvent_JSON;
 
 
 // Arrival prior weighting flag (NLL_FORMAT_VER_2)
