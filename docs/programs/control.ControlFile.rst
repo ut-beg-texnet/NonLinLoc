@@ -68,11 +68,6 @@ Generic Control Statements
  `MAPLINE`` and their parameters must be the same for all programs
   runs for a g*n location project.
 
-```INCLUDE`` <#_generic_include_>`__ -
-```CONTROL`` <#_generic_control_>`__ - ```TRANS`` <#_generic_trans_>`__
-- ```MAPLINE`` <#_generic_mapline_>`__ - ``` `` <#_generic_maptrans_>`__
-- ```MAPGRID`` <#_generic_mapgrid_>`__
-
 | **INCLUDE - Include**
 | *optional*, *repeatable*
 | Syntax 1: ``INCLUDE`` ``includeFile``
@@ -221,12 +216,6 @@ Vel2Grid Program
 ----------------
 
 
-```VGOUT`` <#_Vel2Grid_vgout_>`__ - ```VGTYPE`` <#_Vel2Grid_vgtype_>`__
-- ```VGGRID`` <#_Vel2Grid_vgrid_>`__ - ```LAYER`` <#_Vel2Grid_layer_>`__
-- ```2DTO3DTRANS`` <#_Vel2Grid_2d3dtrans_>`__ -
-```VERTEX`` <#_Vel2Grid_vertex_>`__ - ```EDGE`` <#_Vel2Grid_edge_>`__ -
-```POLYGON2`` <#_Vel2Grid_polygon2_>`
-
 
 | **VGOUT - Output File Root Name**
 | *required*, *non-repeatable*
@@ -353,9 +342,6 @@ Vel2Grid3D Program
 ------------------
 
 
-```VGINP`` <#_Vel2Grid3D_vginp_>`__ -
-```VGCLIP`` <#_Vel2Grid3D_vgclip_>`
-
 
 | **VGINP - Input Velocity Model File**
 | *required*, *non-repeatable*
@@ -387,11 +373,6 @@ Vel2Grid3D Program
 Grid2Time Program
 -----------------
 
-
-```GTFILES`` <#_Grid2Time_gtfiles_>`__ -
-```GTMODE`` <#_Grid2Time_gtmode_>`__ -
-```GTSRCE`` <#_Grid2Time_gtsrce_>`__ -
-```GT_PLFD`` <#_Grid2Time_gt_plfd_>`
 
 
 | **GTFILES - Input and Output File Root Name**
@@ -492,13 +473,6 @@ where *label* is a source label ( *i.e.* a station or N_S_L_C codes code), *grid
 Time2EQ Program
 ---------------
 
-
-```EQFILES`` <#_Time2EQ_eqfiles_>`__ -
-```EQEVENT`` <#_Time2EQ_eqevent_>`__ - ```EQSTA`` <#_Time2EQ_eqsta_>`__
-- ```EQSRCE`` <#_Time2EQ_eqsrce_>`__ -
-```EQMECH`` <#_Time2EQ_eqmech_>`__ - ```EQMODE`` <#_Time2EQ_eqmode_>`__
-- ```EQQUAL2ERR`` <#_Time2EQ_eqqual2err_>`__ -
-```EQVPVS`` <#_Time2EQ_eqvpvs_>`
 
 
 | **EQFILES - Input and Output File Root Name**
@@ -667,25 +641,6 @@ Time2EQ Program
 NLLoc Program
 -------------
 
-
-```LOCSIG`` <#_NLLoc_locsig_>`__ - ```LOCCOM`` <#_NLLoc_loccom_>`__ -
-```LOCSRCE`` <#_NLLoc_gtsrce_>`__ - ```LOCFILES`` <#_NLLoc_locfiles_>`__
-- ```LOCHYPOUT`` <#_NLLoc_lochypout_>`__ -
-```LOCSEARCH`` <#_NLLoc_locsearch_>`__ -
-```LOCMETH`` <#_NLLoc_locmeth_>`__ - ```LOCGAU`` <#_NLLoc_locgau_>`__ -
-```LOCGAU2`` <#_NLLoc_locgau2_>`__ -
-```LOCPHASEID`` <#_NLLoc_locphaseid_>`__ -
-```LOCQUAL2ERR`` <#_NLLoc_locqual2err_>`__ -
-```LOCGRID`` <#_NLLoc_locgrid_>`__ -
-```LOCPHSTAT`` <#_NLLoc_locphstat_>`__ -
-```LOCANGLES`` <#_NLLoc_locangles_>`__ -
-```LOCMAG`` <#_NLLoc_locmag_>`__ - ```LOCCMP`` <#_NLLoc_loccmp_>`__ -
-```LOCALIAS`` <#_NLLoc_localias_>`__ -
-```LOCEXCLUDE`` <#_NLLoc_locexclude_>`__ -
-```LOCDELAY`` <#_NLLoc_locdelay_>`__ -
-```LOCELEVCORR`` <#_NLLoc_elevcorr_>`__ -
-```LOCTOPO_SURFACE`` <#_NLLoc_topo_surface_>`__ -
-```LOCSTAWT`` <#_NLLoc_stawt_>`
 
 
 | **LOCSIG - Signature text**
@@ -1270,6 +1225,32 @@ NLLoc Program
   sets automatic cutoff distance: equal to the mean distance between all
   pairs of stations used for location.
 
+| **LOCPOSTERIOR - Posterior pdf grids to use to drive location search instead of LOCMETH algorithm**
+| *optional*, *non-repeatable*
+| Syntax 1: ``LOCPOSTERIOR`` ``Type GridFile DefaultValue CoherenceMin MaxOtherWeight MaxSE3 MaxNother MaxMagDiff MinMag``
+| The location search will use pdf values from the specified grid(s) to drive the location search.
+|    ``Type`` (*choice*: ``OCT_TREE GRID``) type of grid file(s)
+|    ``GridFile`` (*string*) grid file path to use with weight 1.0, or *.stream_coherences files specifying one or more grid file paths and corresponding coherence values to map to stacking weights.
+|    ``DefaultValue`` (*float*) default pdf value to use if no value available in grid file (e.g. 1e-30)
+|    ``CoherenceMin`` (*float*) minimum coherence to use for mapping coherence to NLL-cohernce pdf stack weight
+|    ``MaxOtherWeight`` (*float*) maximum total of coherence weight for other events; if exceeded, other event coherences normalized to sum to this value; recommended value is -1.0, disabled.
+|    ``MaxSE3`` (*float*) maximum event se3 (ellipsoid.len3) to include event in pdf stack. Use negative value to disable this check.
+  Excludes events with poor location constraint and large pdf extent. Such event pdf's would only contribute noise to stack, 
+  but due to potentially high complexity of stack pdf, including such pdf's may cause oct-tree search to get trapped
+  in a local minimum within this event pdf (especially if LOC_SEARCH init_num_cells_x/y/z are too few). When this trapping occurs, some 
+  NLL-coherence events may cluster far from any events in SSST reference events (LOC_PATH), with unusual epicenter or depth.
+  May typically have same or similar value as maximum distance in km between epicenters used to obtain cross-correlation coherences.
+|    ``MaxNother`` (*float*) maximum number of other events to include in pdf stack, Use negative value for no limit.
+  limit processing time and number of files open when a large number of events have high coherency. 
+  Recommended value is -1.0, no limit.
+|    ``MaxMagDiff`` (*float*) maximum magnitude difference to include other event in pdf stack (-1.0 to disable).
+  Excludes events that are not likely to have waveform similarity with target due to differences in spectral peak.
+  May help avoid false high correlation due to filtering or clipping. 
+  Recommended value is -1.0, disabled.
+|    ``MinMag`` (*float*) minimum magnitude to process event (-999 to disable).
+  Enables not processing smaller magnitude events, e.g. for avoiding possible noisy waveforms or for speeding up testing.
+  Recommended value is -999, disabled.
+
 
 
 Loc2ssst Program
@@ -1305,7 +1286,7 @@ where *label* is a source label ( *i.e.* a station or N_S_L_C code code), *gridT
  These parameters should be identical to NLLoc Program->LOCMETH used to generate NLLoc *.hyp files specified in LSLOCFILES.
 | See NLLoc Program->LOCMETH for syntax.
 
-  **LOCPHASEID - Phase Identifier Mapping**
+| **LOCPHASEID - Phase Identifier Mapping**
 | *required*, *non-repeatable*
 | Specifies the mapping of phase codes in the phase/observation file (
   *i.e.* ``pg`` or ``Sn`` ) to standardized phase codes ( *i.e.* ``P``

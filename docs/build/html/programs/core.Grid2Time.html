@@ -1,18 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<html lang="en">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>1.1.3. Grid2Time - 3D model grid to travel-time and angles grids &#8212; NonLinLoc Doc 7.00 documentation</title>
-    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="1.1.4. Time2EQ - travel-time grid to synthetic observations" href="core.Time2EQ.html" />
@@ -31,7 +33,8 @@
           <a href="core.Vel2Grid3D.html" title="1.1.2. Vel2Grid3D - velocity model description to 3D model grid"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">NonLinLoc Doc 7.00 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../programs.html" accesskey="U">1. NonLinLoc Programs</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../programs.html" accesskey="U"><span class="section-number">1. </span>NonLinLoc Programs</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.1.3. </span>Grid2Time - 3D model grid to travel-time and angles grids</a></li> 
       </ul>
     </div>  
 
@@ -43,8 +46,8 @@
   <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="section" id="grid2time-3d-model-grid-to-travel-time-and-angles-grids">
-<h1>1.1.3. Grid2Time - 3D model grid to travel-time and angles grids<a class="headerlink" href="#grid2time-3d-model-grid-to-travel-time-and-angles-grids" title="Permalink to this headline">¶</a></h1>
+<section id="grid2time-3d-model-grid-to-travel-time-and-angles-grids">
+<h1><span class="section-number">1.1.3. </span>Grid2Time - 3D model grid to travel-time and angles grids<a class="headerlink" href="#grid2time-3d-model-grid-to-travel-time-and-angles-grids" title="Permalink to this headline">¶</a></h1>
 <p>Given a velocity model grid, <strong>Grid2Time</strong> calculates the travel-time
 from a source point in a 3D grid to all other points in the grid.
 Optionally, the program also estimates the take-off angles for rays from
@@ -55,8 +58,8 @@ Algorithm &lt;#_angles_algorithm_&gt;`__</span></a> - <a href="#id11"><span clas
 program-Input &lt;#_running_&gt;`__</span></a> - <a href="#id13"><span class="problematic" id="id14">`Output &lt;#_output_&gt;`__</span></a> - <a href="#id15"><span class="problematic" id="id16">`Processing and
 Display of results &lt;#_processing_&gt;`__</span></a> - <a class="reference external" href="./index.html">[NonLinLoc
 Home]</a></p>
-<div class="color"></div><div class="section" id="overview">
-<h2>1.1.3.1. Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<div class="color"></div><section id="overview">
+<h2><span class="section-number">1.1.3.1. </span>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>The Grid2Time program calculates the travel-times between a station and
 all nodes of an <em>x,y,z</em> spatial grid using the Eikonal finite-difference
 scheme of <a class="reference external" href="./references.html">Podvin and Lecomte (1991)</a>. The results
@@ -79,9 +82,9 @@ intersects the (usually downgoing) ray paths to the regional stations.</p>
 positive Z = down). Distance units are kilometers, and many input/output
 distance quantities can be expressed in rectangular or geographic
 (latitude and logitude) coordinates.</p>
-<div class="color"></div></div>
-<div class="section" id="podvin-and-lecomte-eikonal-finite-difference-algorithm">
-<h2>1.1.3.2. Podvin and Lecomte, Eikonal, Finite-difference Algorithm<a class="headerlink" href="#podvin-and-lecomte-eikonal-finite-difference-algorithm" title="Permalink to this headline">¶</a></h2>
+<div class="color"></div></section>
+<section id="podvin-and-lecomte-eikonal-finite-difference-algorithm">
+<h2><span class="section-number">1.1.3.2. </span>Podvin and Lecomte, Eikonal, Finite-difference Algorithm<a class="headerlink" href="#podvin-and-lecomte-eikonal-finite-difference-algorithm" title="Permalink to this headline">¶</a></h2>
 <p>The travel times between a station and all nodes of a 3D grid are
 calculated using the Eikonal finite-difference scheme of <a class="reference external" href="./references.html">Podvin and
 Lecomte (1991)</a>. The algorithm is implemented in
@@ -102,9 +105,9 @@ shaped velocity contrasts.</em></p>
 the obtained time field, this method provides a very fast tool for a
 large spectrum of seismic and seismological problems.</em></p>
 </div></blockquote>
-<div class="color"></div></div>
-<div class="section" id="take-off-angles-algorithm">
-<h2>1.1.3.3. Take-Off Angles Algorithm<a class="headerlink" href="#take-off-angles-algorithm" title="Permalink to this headline">¶</a></h2>
+<div class="color"></div></section>
+<section id="take-off-angles-algorithm">
+<h2><span class="section-number">1.1.3.3. </span>Take-Off Angles Algorithm<a class="headerlink" href="#take-off-angles-algorithm" title="Permalink to this headline">¶</a></h2>
 <p>The take-off angles at a node for the first-arrival ray to the source
 are estimated from the gradients of travel-time at the node. Two
 gradients are estimated for each axis direction <em>x, y, z</em> - one
@@ -119,8 +122,9 @@ the direction opposite to the vector gradient of travel-time.</p>
 <p>A crude quality factor <em>Q:sub:`axis`</em> between 0 and 10 is determined
 from the ratio</p>
 <blockquote>
-<div><em>Q:sub:`axis`</em> = (20 <em>G:sub:`low`</em> <em>G:sub:`high`</em>) /
-(<em>G:sub:`low`</em><sup>2</sup> + <em>G:sub:`high`</em><sup>2</sup>)</div></blockquote>
+<div><p><em>Q:sub:`axis`</em> = (20 <em>G:sub:`low`</em> <em>G:sub:`high`</em>) /
+(<em>G:sub:`low`</em><sup>2</sup> + <em>G:sub:`high`</em><sup>2</sup>)</p>
+</div></blockquote>
 <p>If <em>Q:sub:`axis`</em> &lt; 0 (i.e. the two gradients have opposite sign),
 <em>Q:sub:`axis`</em> is set equal to 0. If <em>Q:sub:`axis`</em> = 10 then the
 two gradients have the same magnitude and sign. A final quality for the
@@ -128,13 +132,14 @@ take-off angles is determined from the weighted average of the qualities
 along each axis, where the weighting is given by the magnitude of the
 mean gradient along each axis,</p>
 <blockquote>
-<div><em>Q</em> = (|*G:sub:<a href="#id1"><span class="problematic" id="id2">`</span></a>x`*| <em>Q:sub:`x`</em> + |<em>G:sub:`y`</em>|
+<div><p><em>Q</em> = (|*G:sub:<a href="#id1"><span class="problematic" id="id2">`</span></a>x`*| <em>Q:sub:`x`</em> + |<em>G:sub:`y`</em>|
 <em>Q:sub:`y`</em> + |<em>G:sub:`z`</em>| <em>Q:sub:`z`</em>) /
 (|*G:sub:<a href="#id3"><span class="problematic" id="id4">`</span></a>x`*| + |<em>G:sub:`y`</em>| +
-|<em>G:sub:`z`</em>|).</div></blockquote>
-<div class="color"></div></div>
-<div class="section" id="running-the-program-input">
-<h2>1.1.3.4. Running the program - Input<a class="headerlink" href="#running-the-program-input" title="Permalink to this headline">¶</a></h2>
+|<em>G:sub:`z`</em>|).</p>
+</div></blockquote>
+<div class="color"></div></section>
+<section id="running-the-program-input">
+<h2><span class="section-number">1.1.3.4. </span>Running the program - Input<a class="headerlink" href="#running-the-program-input" title="Permalink to this headline">¶</a></h2>
 <p>Synopsis: <code class="docutils literal notranslate"><span class="pre">Grid2Time</span> <span class="pre">InputControlFile</span></code></p>
 <p>The Grid2Time program takes a single argument <code class="docutils literal notranslate"><span class="pre">InputControlFile</span></code> which
 specifies the complete path and filename for an <a class="reference external" href="./control.html">Input Control
@@ -147,41 +152,42 @@ Control File must contain the <code class="docutils literal notranslate"><span c
 Transformation) statements.</p>
 <p>In addition, the Grid2Time program requires:</p>
 <ol class="arabic simple">
-<li>A 2D or a 3D velocity model <a href="#id23"><span class="problematic" id="id24">`3D Grid &lt;./formats.html#_grid_&gt;`__</span></a> file
+<li><p>A 2D or a 3D velocity model <a href="#id23"><span class="problematic" id="id24">`3D Grid &lt;./formats.html#_grid_&gt;`__</span></a> file
 created using <a class="reference external" href="./Vel2Grid.html">Vel2Grid</a> or other software. One
 velocity model grid is required for each wave type (i.e. P or S).
-Note that a 3D Grid file may specify a 2D model.</li>
+Note that a 3D Grid file may specify a 2D model.</p></li>
 </ol>
 <p>The names, locations and other information for these files is specified
 in the <a href="#id25"><span class="problematic" id="id26">`Grid2Time Statements section &lt;./control.html#_Grid2Time_&gt;`__</span></a> of
 the Input Control File.</p>
-<div class="color"></div></div>
-<div class="section" id="output">
-<h2>1.1.3.5. Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h2>
+<div class="color"></div></section>
+<section id="output">
+<h2><span class="section-number">1.1.3.5. </span>Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h2>
 <p>The travel-times and take-off angles throughout a grid are written to a
 separate <a href="#id27"><span class="problematic" id="id28">`3D Grid File &lt;formats.html#_grid_&gt;`__</span></a> for each phase at each
 station. For a descrition of the naming convention for these grid files,
 see the <code class="docutils literal notranslate"><span class="pre">`GTFILES</span></code> &lt;./control.html#_Grid2Time_gtfiles_&gt;`__ statement
 in the Grid2Time Statements section of the Input Control File.</p>
-<div class="color"></div></div>
-<div class="section" id="processing-and-display-of-results">
-<h2>1.1.3.6. Processing and Display of results<a class="headerlink" href="#processing-and-display-of-results" title="Permalink to this headline">¶</a></h2>
+<div class="color"></div></section>
+<section id="processing-and-display-of-results">
+<h2><span class="section-number">1.1.3.6. </span>Processing and Display of results<a class="headerlink" href="#processing-and-display-of-results" title="Permalink to this headline">¶</a></h2>
 <p>The travel-time and angles grid results for a single source can be
 post-processed with the program <a class="reference external" href="./Grid2GMT.html">Grid2GMT</a> to
 produce a GMT command script for plotting with the <a class="reference external" href="http://gmt.soest.hawaii.edu/">GMT plotting
 package</a>.</p>
 <div class="color"></div><p>Back to <a class="reference external" href="./index.html">the NonLinLoc site Home page</a>.</p>
 <p><em>Anthony Lomax</em></p>
-</div>
-</div>
+</section>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">1.1.3. Grid2Time - 3D model grid to travel-time and angles grids</a><ul>
 <li><a class="reference internal" href="#overview">1.1.3.1. Overview</a></li>
@@ -196,10 +202,10 @@ package</a>.</p>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="core.Vel2Grid3D.html"
-                        title="previous chapter">1.1.2. Vel2Grid3D - velocity model description to 3D model grid</a></p>
+                        title="previous chapter"><span class="section-number">1.1.2. </span>Vel2Grid3D - velocity model description to 3D model grid</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="core.Time2EQ.html"
-                        title="next chapter">1.1.4. Time2EQ - travel-time grid to synthetic observations</a></p>
+                        title="next chapter"><span class="section-number">1.1.4. </span>Time2EQ - travel-time grid to synthetic observations</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -208,17 +214,15 @@ package</a>.</p>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -236,12 +240,13 @@ package</a>.</p>
           <a href="core.Vel2Grid3D.html" title="1.1.2. Vel2Grid3D - velocity model description to 3D model grid"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">NonLinLoc Doc 7.00 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../programs.html" >1. NonLinLoc Programs</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../programs.html" ><span class="section-number">1. </span>NonLinLoc Programs</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.1.3. </span>Grid2Time - 3D model grid to travel-time and angles grids</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Anthony Lomax.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
     </div>
   </body>
 </html>

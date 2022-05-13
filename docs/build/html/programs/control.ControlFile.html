@@ -1,18 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<html lang="en">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>1.3.1. NonLinLoc Software Package Control File &#8212; NonLinLoc Doc 7.00 documentation</title>
-    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="prev" title="1.1.8. Loc2ssst - generate SSST corrections on a to 3D grid for NLLoc locations" href="core.Loc2ssst.html" /> 
@@ -27,7 +29,8 @@
           <a href="core.Loc2ssst.html" title="1.1.8. Loc2ssst - generate SSST corrections on a to 3D grid for NLLoc locations"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">NonLinLoc Doc 7.00 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../programs.html" accesskey="U">1. NonLinLoc Programs</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../programs.html" accesskey="U"><span class="section-number">1. </span>NonLinLoc Programs</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.3.1. </span>NonLinLoc Software Package Control File</a></li> 
       </ul>
     </div>  
 
@@ -36,8 +39,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="nonlinloc-software-package-control-file">
-<h1>1.3.1. NonLinLoc Software Package Control File<a class="headerlink" href="#nonlinloc-software-package-control-file" title="Permalink to this headline">¶</a></h1>
+  <section id="nonlinloc-software-package-control-file">
+<h1><span class="section-number">1.3.1. </span>NonLinLoc Software Package Control File<a class="headerlink" href="#nonlinloc-software-package-control-file" title="Permalink to this headline">¶</a></h1>
 <p><a class="reference internal" href="core.NLLoc.html#overview"><span class="std std-ref">Overview</span></a> -
 <a class="reference internal" href="#definitions"><span class="std std-ref">Definitions</span></a> -
 <a class="reference internal" href="#generic-control-statements"><span class="std std-ref">Generic Control Statements</span></a> -
@@ -47,8 +50,8 @@
 <a class="reference internal" href="#time2eq-program"><span class="std std-ref">Time2EQ Program</span></a> -
 <a class="reference internal" href="#nlloc-program"><span class="std std-ref">NLLoc Program</span></a> -
 <a class="reference internal" href="#loc2ssst-program"><span class="std std-ref">Loc2ssst Program</span></a></p>
-<div class="section" id="overview">
-<h2>1.3.1.1. Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<section id="overview">
+<h2><span class="section-number">1.3.1.1. </span>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
 <div class="line">The various NonLinLoc programs all use the same control file syntax
  and share some “generic” control statements. The control statements
@@ -64,9 +67,9 @@
  with <code class="docutils literal notranslate"><span class="pre">#</span></code> in the first column are ignored. Use <code class="docutils literal notranslate"><span class="pre">#</span></code> in the first
  column for comments and to “comment out” a statement.</div>
 </div>
-</div>
-<div class="section" id="definitions">
-<h2>1.3.1.2. Definitions<a class="headerlink" href="#definitions" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="definitions">
+<h2><span class="section-number">1.3.1.2. </span>Definitions<a class="headerlink" href="#definitions" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
 <div class="line"><strong>Statement Priority</strong></div>
 <div class="line"><em>required</em> - must be present in control file to run the coressponding
@@ -97,29 +100,25 @@ control statement is not present in the control file</div>
 parameters</div>
 <div class="line">VERY_LARGE_DOUBLE - a large floating point value (typically 1.0e+30)</div>
 </div>
-</div>
-<div class="section" id="generic-control-statements">
-<h2>1.3.1.3. Generic Control Statements<a class="headerlink" href="#generic-control-statements" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="generic-control-statements">
+<h2><span class="section-number">1.3.1.3. </span>Generic Control Statements<a class="headerlink" href="#generic-control-statements" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
 <div class="line">The generic control file statements may be used by one or more of the
  programs in the NonLinLoc package. The statements <code class="docutils literal notranslate"><span class="pre">TRANS</span></code> and
 <cite>MAPLINE`</cite> and their parameters must be the same for all programs
  runs for a g*n location project.</div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">`INCLUDE</span></code> &lt;#_generic_include_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`CONTROL</span></code> &lt;#_generic_control_&gt;`__ - <code class="docutils literal notranslate"><span class="pre">`TRANS</span></code> &lt;#_generic_trans_&gt;`__
-- <code class="docutils literal notranslate"><span class="pre">`MAPLINE</span></code> &lt;#_generic_mapline_&gt;`__ - <code class="docutils literal notranslate"><span class="pre">`</span> <span class="pre">``</span> <span class="pre">&lt;#_generic_maptrans_&gt;`__</span>
-<span class="pre">-</span> <span class="pre">```MAPGRID</span></code> &lt;#_generic_mapgrid_&gt;`__</p>
 <div class="line-block">
 <div class="line"><strong>INCLUDE - Include</strong></div>
 <div class="line"><em>optional</em>, <em>repeatable</em></div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">INCLUDE</span></code> <code class="docutils literal notranslate"><span class="pre">includeFile</span></code></div>
 <div class="line">Inserts text from another file at current positon in control file.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">includeFile</span></code> (<em>string</em>) path and name of file to include</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">includeFile</span></code> (<em>string</em>) path and name of file to include</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. This statement is implemented only for NonLinLoc programs
+<div class="line">   1. This statement is implemented only for NonLinLoc programs
 Vel2Grid, Grid2Time, Time2EQ and NLLoc.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;2. The included text must contain only valid NonLinLoc control
+<div class="line">   2. The included text must contain only valid NonLinLoc control
  statements, blank lines or comment lines, but may not have another
 <cite>INCLUDE`</cite> statement.</div>
 </div>
@@ -128,12 +127,12 @@ Vel2Grid, Grid2Time, Time2EQ and NLLoc.</div>
 <div class="line"><em>required</em>, <em>non-repeatable</em></div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">CONTROL</span></code> <code class="docutils literal notranslate"><span class="pre">messageFlag</span> <span class="pre">randomNumberSeed</span></code></div>
 <div class="line">Sets various general program control parameters.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">messageFlag</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">-1</span></code>, default:<code class="docutils literal notranslate"><span class="pre">1</span></code>) sets the
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">messageFlag</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">-1</span></code>, default:<code class="docutils literal notranslate"><span class="pre">1</span></code>) sets the
 verbosity level for messages printed to the terminal ( <code class="docutils literal notranslate"><span class="pre">-1</span></code> =
 completely silent, <code class="docutils literal notranslate"><span class="pre">0</span></code> = error messages only, <code class="docutils literal notranslate"><span class="pre">1</span></code> = <code class="docutils literal notranslate"><span class="pre">0</span></code> +
 higher-level warning and progress messages, <code class="docutils literal notranslate"><span class="pre">2</span></code> and higher = <code class="docutils literal notranslate"><span class="pre">1</span></code> +
 lower-level warning and progress messages + information messages, …)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">randomNumberSeed</span></code> (<em>integer</em>) integer seed value for generating
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">randomNumberSeed</span></code> (<em>integer</em>) integer seed value for generating
 random number sequences (used by program NLLoc to generate Metropolis
 samples and by program Time2EQ to generate noisy time picks)</div>
 </div>
@@ -154,51 +153,51 @@ samples and by program Time2EQ to generate noisy time picks)</div>
 <cite>SDC`</cite>, <code class="docutils literal notranslate"><span class="pre">LAMBERT</span></code>, <code class="docutils literal notranslate"><span class="pre">TRANS_MERC</span></code> and <code class="docutils literal notranslate"><span class="pre">AZIMUTHAL_EQUIDIST</span></code> options make transformations
  of geographic coordinates into a Cartesian/rectangular system. The
 <cite>NONE`</cite> transformation performs no geographic conversion.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">latOrig</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">-90.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">90.0</span></code>) latitude in
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">latOrig</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">-90.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">90.0</span></code>) latitude in
 decimal degrees of the rectangular coordinates origin</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">longOrig</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">-180.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">180.0</span></code>) longitude
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">longOrig</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">-180.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">180.0</span></code>) longitude
 in decimal degrees of the rectangular coordinates origin</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">rotAngle</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">-360.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">360.0</span></code>) rotation
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">rotAngle</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">-360.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">360.0</span></code>) rotation
 angle of geographic north in degrees clockwise relative to the
 rectangular coordinates system Y-axis</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">refEllipsoid</span></code> (<em>choice</em>:
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">refEllipsoid</span></code> (<em>choice</em>:
 <cite>WGS-84 GRS-80 WGS-72 Australian Krasovsky International Hayford-1909 Clarke-1880 Clarke-1866 Airy Bessel Hayford-1830 Sphere`</cite>)
  reference ellipsoid name</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">latOrig</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">-90.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">90.0</span></code>) latitude in
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">latOrig</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">-90.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">90.0</span></code>) latitude in
 decimal degrees of the rectangular coordinates origin</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">longOrig</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">-180.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">180.0</span></code>) longitude
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">longOrig</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">-180.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">180.0</span></code>) longitude
 in decimal degrees of the rectangular coordinates origin</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">firstStdParal</span> <span class="pre">secondStdParal</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">-90.0</span></code>,
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">firstStdParal</span> <span class="pre">secondStdParal</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">-90.0</span></code>,
 max:<code class="docutils literal notranslate"><span class="pre">90.0</span></code>) first and second standard parallels (meridians) in
 decimal degrees</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">rotAngle</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">-360.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">360.0</span></code>) rotation
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">rotAngle</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">-360.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">360.0</span></code>) rotation
 angle of geographic north in degrees clockwise relative to the
 rectangular coordinates system Y-axis</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. `` rotAngle                ` = <code class="docutils literal notranslate"><span class="pre">0</span></code> gives
+<div class="line">   1. `` rotAngle                ` = <code class="docutils literal notranslate"><span class="pre">0</span></code> gives
  North along the positive Y-axis,
 ` rotAngle                ` = <code class="docutils literal notranslate"><span class="pre">-30</span></code> gives
  North along the axis 30 deg counterclockwise from the positive Y-axis
  of the rotated, rectangular system.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;2. The <code class="docutils literal notranslate"><span class="pre">GLOBAL</span></code> mode uses a “spherical earth”,
+<div class="line">   2. The <code class="docutils literal notranslate"><span class="pre">GLOBAL</span></code> mode uses a “spherical earth”,
 longitude,latitude,depth coordinate system (positive X = East,
 positive Y = North, positive Z = down). Longitude and latitude units
 are degrees, depth is in kilometers, most input/output distance
 quantities are expressed in geographic ( longitude,latitude,depth)
 coordinates, most, but not all, horizontal distances are in degrees.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;3. The <code class="docutils literal notranslate"><span class="pre">SIMPLE</span></code> transformation only corrects longitudinal
+<div class="line">   3. The <code class="docutils literal notranslate"><span class="pre">SIMPLE</span></code> transformation only corrects longitudinal
  distances as a function of latitude <strong>Algorithm:</strong>
 ` x = (long - longOrig) * 111.111 * cos(lat_radians);                     y = (lat - latOrig) * 111.111;                     lat = latOrig + y / 111.111;                     long = longOrig + x / (111.111 * cos(lat_radians));                `</div>
-<div class="line">&nbsp;&nbsp;&nbsp;4. The <code class="docutils literal notranslate"><span class="pre">NONE</span></code> transformation performs no geographic conversion,
+<div class="line">   4. The <code class="docutils literal notranslate"><span class="pre">NONE</span></code> transformation performs no geographic conversion,
 The input, cartesian/rectangular XYZ coordinates are used throughout</div>
-<div class="line">&nbsp;&nbsp;&nbsp;5. The <code class="docutils literal notranslate"><span class="pre">SDC</span></code> transformation is a “Short Distance Conversion”
+<div class="line">   5. The <code class="docutils literal notranslate"><span class="pre">SDC</span></code> transformation is a “Short Distance Conversion”
 projection indended for use with very small study regions. For
 algorithm details see <code class="docutils literal notranslate"><span class="pre">MAP_TRANS_SDC</span></code> in GridLib.c</div>
-<div class="line">&nbsp;&nbsp;&nbsp;6. The <code class="docutils literal notranslate"><span class="pre">LAMBERT</span></code> Lambert Conformal Conic projection is adapted from
+<div class="line">   6. The <code class="docutils literal notranslate"><span class="pre">LAMBERT</span></code> Lambert Conformal Conic projection is adapted from
 the source code of the GMT plotting package</div>
-<div class="line">&nbsp;&nbsp;&nbsp;7. The <code class="docutils literal notranslate"><span class="pre">TRANS_MERC</span></code> Transverse Mercator projection is adapted from
+<div class="line">   7. The <code class="docutils literal notranslate"><span class="pre">TRANS_MERC</span></code> Transverse Mercator projection is adapted from
 the source code of the GMT plotting package</div>
-<div class="line">&nbsp;&nbsp;&nbsp;8. The <code class="docutils literal notranslate"><span class="pre">AZIMUTHAL_EQUIDIST</span></code> Transverse Mercator projection is adapted from
+<div class="line">   8. The <code class="docutils literal notranslate"><span class="pre">AZIMUTHAL_EQUIDIST</span></code> Projection is adapted from
 the source code of the GMT plotting package</div>
 </div>
 <div class="line-block">
@@ -206,21 +205,21 @@ the source code of the GMT plotting package</div>
 <div class="line"><em>optional</em>, <em>repeatable</em></div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">MAPLINE</span></code> <code class="docutils literal notranslate"><span class="pre">formatType</span> <span class="pre">name</span> <span class="pre">red</span> <span class="pre">green</span> <span class="pre">blue</span> <span class="pre">lineStyle</span></code></div>
 <div class="line">Specifies a file and drawing parameters for geographic line data.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">formatType</span></code> (<em>choice</em>:
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">formatType</span></code> (<em>choice</em>:
 <cite>GMT_LATLON GMT_LONLAT XY_LONLAT GMT_LONLATDEPTH GMT_LONLATELEV_M GMT_GRD`</cite>)
  line file format or GMT grd file format</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">name</span></code> (<em>string</em>) full path and file name</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">red</span> <span class="pre">green</span> <span class="pre">blue</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">1.0</span></code>) red,
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">name</span></code> (<em>string</em>) full path and file name</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">red</span> <span class="pre">green</span> <span class="pre">blue</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">1.0</span></code>) red,
 green and blue intensities (0.0-1.0) (not implemented)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">lineStyle</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">SOLID</span> <span class="pre">DASHED</span> <span class="pre">DOTTED</span> <span class="pre">DASHDOT</span></code>) line
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">lineStyle</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">SOLID</span> <span class="pre">DASHED</span> <span class="pre">DOTTED</span> <span class="pre">DASHDOT</span></code>) line
 style (not implemented)</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. All formats except <code class="docutils literal notranslate"><span class="pre">GMT_GRD</span></code> specify 2D or 3D line files. Use
+<div class="line">   1. All formats except <code class="docutils literal notranslate"><span class="pre">GMT_GRD</span></code> specify 2D or 3D line files. Use
 <cite>GMT_GRD`</cite> to specify GMT grd files, these will be plotted as a
  background image with a green-greyscale by default. If a GMT cpt file
  exists with the same path and name as the GMT grd file, but ending
  with “.cpt”, it will be used to determine the color scale.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;2. A GMT grid (<code class="docutils literal notranslate"><span class="pre">GMT_GRD</span></code>) cannot be used with a rotated
+<div class="line">   2. A GMT grid (<code class="docutils literal notranslate"><span class="pre">GMT_GRD</span></code>) cannot be used with a rotated
 coordinate system.</div>
 </div>
 <div class="line-block">
@@ -232,9 +231,9 @@ coordinate system.</div>
 <cite>TRANS`</cite> by <code class="docutils literal notranslate"><span class="pre">MAPTRANS</span></code>).</div>
 <div class="line"><br /></div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. <code class="docutils literal notranslate"><span class="pre">MAPTRANS</span></code> specifies the transformation for Grid2GMT output to
+<div class="line">   1. <code class="docutils literal notranslate"><span class="pre">MAPTRANS</span></code> specifies the transformation for Grid2GMT output to
 GMT plotting.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;2. <code class="docutils literal notranslate"><span class="pre">MAPTRANS</span></code> superseeds any other <code class="docutils literal notranslate"><span class="pre">TRANS</span></code> statement in the
+<div class="line">   2. <code class="docutils literal notranslate"><span class="pre">MAPTRANS</span></code> superseeds any other <code class="docutils literal notranslate"><span class="pre">TRANS</span></code> statement in the
 control file for Grid2GMT output.</div>
 </div>
 <div class="line-block">
@@ -243,49 +242,44 @@ control file for Grid2GMT output.</div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">MAPGRID</span></code>
 <cite>xNum yNum zNum xOrig yOrig zOrig dx dy dz gridType`</cite></div>
 <div class="line">Specifies the size and type of the 3D GMT plotting grid.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">xNum</span> <span class="pre">yNum</span> <span class="pre">zNum</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">2</span></code>) number of grid nodes in
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">xNum</span> <span class="pre">yNum</span> <span class="pre">zNum</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">2</span></code>) number of grid nodes in
 the x, y and z directions</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">xOrig</span> <span class="pre">yOrig</span> <span class="pre">zOrig</span></code> (<em>float</em>) x, y and z location of the grid
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">xOrig</span> <span class="pre">yOrig</span> <span class="pre">zOrig</span></code> (<em>float</em>) x, y and z location of the grid
 origin in km relative to the geographic origin.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">dx</span> <span class="pre">dy</span> <span class="pre">dz</span></code> (<em>float</em>) grid node spacing in kilometers along the x,
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">dx</span> <span class="pre">dy</span> <span class="pre">dz</span></code> (<em>float</em>) grid node spacing in kilometers along the x,
 y and z axes</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">gridType</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">XXX</span></code>) grid type (ignored).</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">gridType</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">XXX</span></code>) grid type (ignored).</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. The 3D grid dimensions are in kilometers with Z positive down
+<div class="line">   1. The 3D grid dimensions are in kilometers with Z positive down
 (left-handed coordinate system).</div>
-<div class="line">&nbsp;&nbsp;&nbsp;2. The grid is <em>dx*(xNum-1)</em> km long in the x direction, and
+<div class="line">   2. The grid is <em>dx*(xNum-1)</em> km long in the x direction, and
 similarly for y and z.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;3. <code class="docutils literal notranslate"><span class="pre">MAPGRID</span></code> specifies the plot region for GRid2GMT output to GMT
+<div class="line">   3. <code class="docutils literal notranslate"><span class="pre">MAPGRID</span></code> specifies the plot region for GRid2GMT output to GMT
 plotting. <code class="docutils literal notranslate"><span class="pre">MAPGRID</span></code> superseeds any other <code class="docutils literal notranslate"><span class="pre">xxxGRID</span></code> statements in
 the control file.</div>
 </div>
-</div>
-<div class="section" id="vel2grid-program">
-<h2>1.3.1.4. Vel2Grid Program<a class="headerlink" href="#vel2grid-program" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">`VGOUT</span></code> &lt;#_Vel2Grid_vgout_&gt;`__ - <code class="docutils literal notranslate"><span class="pre">`VGTYPE</span></code> &lt;#_Vel2Grid_vgtype_&gt;`__
-- <code class="docutils literal notranslate"><span class="pre">`VGGRID</span></code> &lt;#_Vel2Grid_vgrid_&gt;`__ - <code class="docutils literal notranslate"><span class="pre">`LAYER</span></code> &lt;#_Vel2Grid_layer_&gt;`__
-- <code class="docutils literal notranslate"><span class="pre">`2DTO3DTRANS</span></code> &lt;#_Vel2Grid_2d3dtrans_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`VERTEX</span></code> &lt;#_Vel2Grid_vertex_&gt;`__ - <code class="docutils literal notranslate"><span class="pre">`EDGE</span></code> &lt;#_Vel2Grid_edge_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`POLYGON2</span></code> &lt;#_Vel2Grid_polygon2_&gt;`</p>
+</section>
+<section id="vel2grid-program">
+<h2><span class="section-number">1.3.1.4. </span>Vel2Grid Program<a class="headerlink" href="#vel2grid-program" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
 <div class="line"><strong>VGOUT - Output File Root Name</strong></div>
 <div class="line"><em>required</em>, <em>non-repeatable</em></div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">VGOUT</span></code> <code class="docutils literal notranslate"><span class="pre">fileRoot</span></code></div>
 <div class="line">Specifies the directory path and file <em>root</em> name (no extension) for
 the output velocity grid.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">fileRoot</span></code> (<em>string</em>) full or relative path and file <em>root</em> name
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">fileRoot</span></code> (<em>string</em>) full or relative path and file <em>root</em> name
 (no extension) for output</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. The 3D velocity grid ouput files have names of the form:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">fileRoot.waveType.mod</span></code>.*FileExtension*</div>
-<div class="line">&nbsp;&nbsp;&nbsp;where <em>FileExtension</em> is <code class="docutils literal notranslate"><span class="pre">.buf</span></code> or <code class="docutils literal notranslate"><span class="pre">.hdr</span></code> .</div>
+<div class="line">   1. The 3D velocity grid ouput files have names of the form:</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">fileRoot.waveType.mod</span></code>.*FileExtension*</div>
+<div class="line">   where <em>FileExtension</em> is <code class="docutils literal notranslate"><span class="pre">.buf</span></code> or <code class="docutils literal notranslate"><span class="pre">.hdr</span></code> .</div>
 </div>
 <div class="line-block">
 <div class="line"><strong>VGTYPE - Wave Type</strong></div>
 <div class="line"><em>required</em>, <em>repeatable</em></div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">VGTYPE</span></code> <code class="docutils literal notranslate"><span class="pre">waveType</span></code></div>
 <div class="line">Specifies the physical wave type for a velocity grid.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">waveType</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">S</span></code>) wave type</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">waveType</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">S</span></code>) wave type</div>
 </div>
 <div class="line-block">
 <div class="line"><strong>VGGRID - Grid Description</strong></div>
@@ -293,24 +287,24 @@ the output velocity grid.</div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">VGGRID</span></code>
 <cite>xNum yNum zNum xOrig yOrig zOrig dx dy dz gridType`</cite></div>
 <div class="line">Specifies the size and type of the 3D velocity grid.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">xNum</span> <span class="pre">yNum</span> <span class="pre">zNum</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">2</span></code>) number of grid nodes in
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">xNum</span> <span class="pre">yNum</span> <span class="pre">zNum</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">2</span></code>) number of grid nodes in
 the x, y and z directions</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">xOrig</span> <span class="pre">yOrig</span> <span class="pre">zOrig</span></code> (<em>float</em>) x, y and z location of the grid
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">xOrig</span> <span class="pre">yOrig</span> <span class="pre">zOrig</span></code> (<em>float</em>) x, y and z location of the grid
 origin in km relative to the geographic origin.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">dx</span> <span class="pre">dy</span> <span class="pre">dz</span></code> (<em>float</em>) grid node spacing in kilometers along the x,
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">dx</span> <span class="pre">dy</span> <span class="pre">dz</span></code> (<em>float</em>) grid node spacing in kilometers along the x,
 y and z axes</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">gridType</span></code> (<em>choice</em>:
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">gridType</span></code> (<em>choice</em>:
 <cite>VELOCITY VELOCITY_METERS SLOWNESS VEL2 SLOW2 SLOW_2_METERS SLOW_LEN`</cite>)
  physical quantity to store on grid ( <code class="docutils literal notranslate"><span class="pre">VELOCITY</span></code> = km/s,
 <cite>VELOCITY_METERS`</cite> = m/s, <code class="docutils literal notranslate"><span class="pre">SLOWNESS</span></code> = s/km, <code class="docutils literal notranslate"><span class="pre">VEL2</span></code> = vel**2,
 <cite>SLOW2`</cite> = (s/km)**2, <code class="docutils literal notranslate"><span class="pre">SLOW_2_METERS</span></code> = slow**2 ((s/m)**2),
 <cite>SLOW_LEN`</cite> = slow*dx (sec)).</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. The 3D grid dimensions are in kilometers with Z positive down
+<div class="line">   1. The 3D grid dimensions are in kilometers with Z positive down
 (left-handed coordinate system).</div>
-<div class="line">&nbsp;&nbsp;&nbsp;2. The grid is <em>dx*(xNum-1)</em> km long in the x direction, and
+<div class="line">   2. The grid is <em>dx*(xNum-1)</em> km long in the x direction, and
 similarly for y and z.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;3. For a 2D grid xNum=2 and xOrig=yOrig=0.0 since a 2D grid
+<div class="line">   3. For a 2D grid xNum=2 and xOrig=yOrig=0.0 since a 2D grid
 represents a 1D model and is invariant with respect to translations in
 x or y.</div>
 </div>
@@ -319,32 +313,32 @@ x or y.</div>
 <div class="line"><em>optional</em>, <em>repeatable</em></div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">LAYER</span></code> <code class="docutils literal notranslate"><span class="pre">depth</span> <span class="pre">VpTop</span> <span class="pre">VpGrad</span> <span class="pre">VsTop</span> <span class="pre">VsGrad</span> <span class="pre">rhoTop</span> <span class="pre">rhoGrad</span></code></div>
 <div class="line">Specifies a constant or gradient velocity layer.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">depth</span></code> (<em>float</em>) depth to top of layer (use negative values for
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">depth</span></code> (<em>float</em>) depth to top of layer (use negative values for
 layers above z=0)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">VpTop</span> <span class="pre">VsTop</span> <span class="pre">rhoTop</span></code> (<em>float</em>) P velocity, and S velocity in km/s
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">VpTop</span> <span class="pre">VsTop</span> <span class="pre">rhoTop</span></code> (<em>float</em>) P velocity, and S velocity in km/s
 and density in kg/m**3 at the top of the layer.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">VpGrad</span> <span class="pre">VsGrad</span> <span class="pre">rhoGrad</span></code> (<em>float</em>) Linear P velocity and S
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">VpGrad</span> <span class="pre">VsGrad</span> <span class="pre">rhoGrad</span></code> (<em>float</em>) Linear P velocity and S
 velocity gradients in km/s/km and density gradient in kg/m**3/km
 increasing directly downwards from the top of the layer.</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. Multiple layers must be specified in order of increasing depth
+<div class="line">   1. Multiple layers must be specified in order of increasing depth
 of top of layer.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;2. The layer with the deepest top extends implicitly to infinite
+<div class="line">   2. The layer with the deepest top extends implicitly to infinite
 depth.</div>
 </div>
 <div class="line-block">
 <div class="line"><strong>2DTO3DTRANS - Velocity Model - 2D model to 3D model transformation</strong></div>
 <div class="line"><em>optional</em>, <em>non-repeatable</em></div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">2DTO3DTRANS</span></code> <code class="docutils literal notranslate"><span class="pre">xOrig</span> <span class="pre">yOrig</span> <span class="pre">rotation</span></code></div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">xOrig</span> <span class="pre">yOrig</span></code> (<em>float</em>) x and y coordinates in kilometers of the
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">xOrig</span> <span class="pre">yOrig</span></code> (<em>float</em>) x and y coordinates in kilometers of the
 center of rotation in the 3D model.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">rotation</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">-360.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">360.0</span></code>) rotation
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">rotation</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">-360.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">360.0</span></code>) rotation
 angle in degreees COUNTERCLOCKWISE.</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. The 2D to 3D transformation is applied after the general
+<div class="line">   1. The 2D to 3D transformation is applied after the general
  geographic transformation specified by the Generic control statement
 <cite>TRANS`</cite> .</div>
-<div class="line">&nbsp;&nbsp;&nbsp;2. With `` rotation                ` =0 the
+<div class="line">   2. With `` rotation                ` =0 the
 2D model section will be parallel to the <em>x</em> direction in the 3D
 model, and the 2D model will be extended along the <em>y</em> direction in
 the 3D model.</div>
@@ -354,63 +348,61 @@ the 3D model.</div>
 <div class="line"><em>optional</em>, <em>repeatable</em></div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">VERTEX</span></code> <code class="docutils literal notranslate"><span class="pre">id_num</span> <span class="pre">zloc</span> <span class="pre">xloc</span> <span class="pre">yloc</span></code></div>
 <div class="line">Specifies a vertex in 2D or 3D space.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">id_num</span></code> (<em>integer</em>) vertex identification number (must be
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">id_num</span></code> (<em>integer</em>) vertex identification number (must be
 unique)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">zloc</span> <span class="pre">xloc</span> <span class="pre">yloc</span></code> (<em>float</em>) z (positive DOWN), x and y location in
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">zloc</span> <span class="pre">xloc</span> <span class="pre">yloc</span></code> (<em>float</em>) z (positive DOWN), x and y location in
 kilometers of vertex ( <em>yloc</em> ignored for 2D models)</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. A single vertex may be used in the definitions of multiple edges
+<div class="line">   1. A single vertex may be used in the definitions of multiple edges
 (see EDGE).</div>
 </div>
 <div class="line-block">
 <div class="line"><strong>EDGE - Velocity Model - Edge</strong></div>
 <div class="line"><em>optional</em>, <em>repeatable</em></div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">EDGE</span></code> <code class="docutils literal notranslate"><span class="pre">id_num</span> <span class="pre">vertex1</span> <span class="pre">vertex2</span></code></div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">id_num</span></code> (<em>integer</em>) edge identification number (must be unique)</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">id_num</span></code> (<em>integer</em>) edge identification number (must be unique)</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. A single edge may be used in the definitions of multiple 2D
+<div class="line">   1. A single edge may be used in the definitions of multiple 2D
 polygons (see POLYGON2).</div>
 </div>
 <div class="line-block">
 <div class="line"><strong>POLYGON2 - Velocity Model - 2D polygon</strong></div>
 <div class="line"><em>optional</em>, <em>repeatable</em></div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">POLYGON2</span></code> <code class="docutils literal notranslate"><span class="pre">id_num</span> <span class="pre">n_edges</span> <span class="pre">depth</span> <span class="pre">Vp_top</span> <span class="pre">Vp_grad</span> <span class="pre">Vs_top</span> <span class="pre">Vs_grad</span> <span class="pre">p_top</span> <span class="pre">p_grad</span>&#160;&#160; <span class="pre">[NEW_LINE]</span>&#160; <span class="pre">edge1,</span> <span class="pre">edge2,</span> <span class="pre">...</span></code></div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">id_num</span></code> (<em>integer</em>) polygon identification number (must be
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">id_num</span></code> (<em>integer</em>) polygon identification number (must be
 unique)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">n_edges</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>) the number of edges defining
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">n_edges</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>) the number of edges defining
 this polygon</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">depth</span></code> (<em>float</em>) reference depth for velocity and density (use
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">depth</span></code> (<em>float</em>) reference depth for velocity and density (use
 negative values for depths above z=0)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">VpTop</span> <span class="pre">VsTop</span> <span class="pre">rhoTop</span></code> (<em>float</em>) P velocity, and S velocity in km/s
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">VpTop</span> <span class="pre">VsTop</span> <span class="pre">rhoTop</span></code> (<em>float</em>) P velocity, and S velocity in km/s
  and density in kg/m**3 at the reference depth (
 <a href="#id1"><span class="problematic" id="id2">`</span></a>depth                    ` ).</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">VpGrad</span> <span class="pre">VsGrad</span> <span class="pre">rhoGrad</span></code> (<em>float</em>) Linear P velocity and S
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">VpGrad</span> <span class="pre">VsGrad</span> <span class="pre">rhoGrad</span></code> (<em>float</em>) Linear P velocity and S
  velocity gradients in km/s/km and density gradient in kg/m**3/km
  increasing directly downwards from the reference depth (
 <a href="#id3"><span class="problematic" id="id4">`</span></a>depth                    ` ).</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">edge1,</span> <span class="pre">edge2,</span> <span class="pre">...</span></code> (<em>integer</em>) new line containing list of edge
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">edge1,</span> <span class="pre">edge2,</span> <span class="pre">...</span></code> (<em>integer</em>) new line containing list of edge
 indexes defining this polygon</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. A 2D polygon may share edges with other 2D polygons.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;2. The reference depth (
+<div class="line">   1. A 2D polygon may share edges with other 2D polygons.</div>
+<div class="line">   2. The reference depth (
 ` depth                ` ) may be above,
  within, or below the polygon.</div>
 </div>
-</div>
-<div class="section" id="vel2grid3d-program">
-<h2>1.3.1.5. Vel2Grid3D Program<a class="headerlink" href="#vel2grid3d-program" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">`VGINP</span></code> &lt;#_Vel2Grid3D_vginp_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`VGCLIP</span></code> &lt;#_Vel2Grid3D_vgclip_&gt;`</p>
+</section>
+<section id="vel2grid3d-program">
+<h2><span class="section-number">1.3.1.5. </span>Vel2Grid3D Program<a class="headerlink" href="#vel2grid3d-program" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
 <div class="line"><strong>VGINP - Input Velocity Model File</strong></div>
 <div class="line"><em>required</em>, <em>non-repeatable</em></div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">VGINP</span></code> <code class="docutils literal notranslate"><span class="pre">inputFile</span> <span class="pre">fileType</span> <span class="pre">params</span></code></div>
 <div class="line">Specifies the path/name, type and optional parameters of the input
 velocity model file.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">inputFile</span></code> (<em>string</em>) full or relative path and filename</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">fileType</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">SIMUL2K</span> <span class="pre">FDTOMO</span></code>) File type of input 3D
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">inputFile</span></code> (<em>string</em>) full or relative path and filename</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">fileType</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">SIMUL2K</span> <span class="pre">FDTOMO</span></code>) File type of input 3D
 velocity models defined by interpolation between control point nodes.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">params</span></code> (<em>float</em>) For FDTOMO type requires: orig_x orig_y
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">params</span></code> (<em>float</em>) For FDTOMO type requires: orig_x orig_y
 orig_z num_x num_y num_z d_x d_y d_z</div>
 </div>
 <div class="line-block">
@@ -419,23 +411,19 @@ orig_z num_x num_y num_z d_x d_y d_z</div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">VGCLIP</span></code> <code class="docutils literal notranslate"><span class="pre">Vmin</span> <span class="pre">Vmax</span></code></div>
 <div class="line">Sets minimum and maximum clip limits for the output velocity values,
 or controls sharpening of velocity difference an interface</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">Vmin</span> <span class="pre">Vmax</span></code> (<em>float</em>) minimum and maximum clip limits for the
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">Vmin</span> <span class="pre">Vmax</span></code> (<em>float</em>) minimum and maximum clip limits for the
 output velocity values.</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. If Vmin &lt; Vmax: sets minimum and maximum clip limits for the
+<div class="line">   1. If Vmin &lt; Vmax: sets minimum and maximum clip limits for the
 output velocity values.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;2. IVmin &gt; Vmax: sharpens velocity difference across an interface
+<div class="line">   2. IVmin &gt; Vmax: sharpens velocity difference across an interface
 (such as the Moho): if velocity at node below current input node is &gt;
 Vmax: set the NLL grid point velocity equal to the velocity of the
 deepest overlying input node with velocity &lt; Vmax.</div>
 </div>
-</div>
-<div class="section" id="grid2time-program">
-<h2>1.3.1.6. Grid2Time Program<a class="headerlink" href="#grid2time-program" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">`GTFILES</span></code> &lt;#_Grid2Time_gtfiles_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`GTMODE</span></code> &lt;#_Grid2Time_gtmode_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`GTSRCE</span></code> &lt;#_Grid2Time_gtsrce_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`GT_PLFD</span></code> &lt;#_Grid2Time_gt_plfd_&gt;`</p>
+</section>
+<section id="grid2time-program">
+<h2><span class="section-number">1.3.1.6. </span>Grid2Time Program<a class="headerlink" href="#grid2time-program" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
 <div class="line"><strong>GTFILES - Input and Output File Root Name</strong></div>
 <div class="line"><em>required</em>, <em>non-repeatable</em></div>
@@ -444,27 +432,27 @@ deepest overlying input node with velocity &lt; Vmax.</div>
 <div class="line">Specifies the directory path and file <em>root</em> name (no extension), and
 the wave type identifier for the input velocity grid and output time
 grids.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">ttimeFileRoot</span></code> (<em>string</em>) full or relative path and file <em>root</em>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">ttimeFileRoot</span></code> (<em>string</em>) full or relative path and file <em>root</em>
 name (no extension) for input velocity grid (generated by program
 Vel2Grid)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">outputFileRoot</span></code> (<em>string</em>) full or relative path and file <em>root</em>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">outputFileRoot</span></code> (<em>string</em>) full or relative path and file <em>root</em>
 name (no extension) for output travel-time and take-off angle grids</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">waveType</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">S</span></code>) wave type</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">iSwapBytesOnInput</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">1</span></code>,
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">waveType</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">S</span></code>) wave type</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">iSwapBytesOnInput</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">1</span></code>,
 default:<code class="docutils literal notranslate"><span class="pre">0</span></code>) flag to indicate if hi and low bytes of input
 velocity grid file should be swapped</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. The
+<div class="line">   1. The
 <a href="#id5"><span class="problematic" id="id6">`</span></a>ttimeFileRoot                    ` and
 <a href="#id7"><span class="problematic" id="id8">`</span></a>outputFileRoot                    ` are
  appended with
 <a href="#id9"><span class="problematic" id="id10">`</span></a>.                         waveType                    `</div>
-<div class="line">&nbsp;&nbsp;&nbsp;2. The 3D time grid ouput files have names of the form:</div>
+<div class="line">   2. The 3D time grid ouput files have names of the form:</div>
 </div>
 <blockquote>
-<div><dl class="docutils">
-<dt><a href="#id11"><span class="problematic" id="id12">`</span></a>outputFileRoot.waveType                             .                             label                        `</dt>
-<dd>. <em>gridType</em> . <em>FileExtension</em></dd>
+<div><dl class="simple">
+<dt><a href="#id11"><span class="problematic" id="id12">`</span></a>outputFileRoot.waveType                             .                             label                        `</dt><dd><p>. <em>gridType</em> . <em>FileExtension</em></p>
+</dd>
 </dl>
 </div></blockquote>
 <p>where <em>label</em> is a source label ( <em>i.e.</em> a station or N_S_L_C codes code), <em>gridType</em> is
@@ -474,12 +462,12 @@ velocity grid file should be swapped</div>
 <div class="line"><em>required</em>, <em>non-repeatable</em></div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">GTMODE</span></code> <code class="docutils literal notranslate"><span class="pre">gridMode</span> <span class="pre">angleMode</span></code></div>
 <div class="line">Specifies several program run modes.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">gridMode</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">GRID3D</span> <span class="pre">GRID2D</span></code>) grid type (
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">gridMode</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">GRID3D</span> <span class="pre">GRID2D</span></code>) grid type (
 <a href="#id13"><span class="problematic" id="id14">`</span></a>GRID3D                        ` for a
  3D, Nx*Ny*Nz grid or
 <a href="#id15"><span class="problematic" id="id16">`</span></a>GRID2D                        ` for a
  2D, 2*Ny*Nz grid)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">angleMode</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">ANGLES_YES</span> <span class="pre">ANGLES_NO</span> <span class="pre">ANGLES_INCLINATION</span></code>) sets if take-off
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">angleMode</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">ANGLES_YES</span> <span class="pre">ANGLES_NO</span> <span class="pre">ANGLES_INCLINATION</span></code>) sets if take-off
 angles are calculated and an angles grid is output ( <code class="docutils literal notranslate"><span class="pre">ANGLES_YES</span></code>
 for angles calulcation or <code class="docutils literal notranslate"><span class="pre">ANGLES_NO</span></code> for no angles calculation,
 or <code class="docutils literal notranslate"><span class="pre">ANGLES_INCLINATION</span></code> for inclination angle calculation only with full precision)</div>
@@ -499,24 +487,24 @@ supported: <code class="docutils literal notranslate"><span class="pre">XYZ</spa
 degrees for latitude/longitude), <code class="docutils literal notranslate"><span class="pre">LATLONDM</span></code> (degrees + decimal
 minutes for latitude/longitude) and <code class="docutils literal notranslate"><span class="pre">LATLONDS</span></code> (degrees + minutes +
 decimal seconds for latitude/longitude).</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">label</span></code> (<em>string</em>) source label ( <em>i.e.</em> a station or N_S_L_C codes code: <code class="docutils literal notranslate"><span class="pre">ABC</span></code>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">label</span></code> (<em>string</em>) source label ( <em>i.e.</em> a station or N_S_L_C codes code: <code class="docutils literal notranslate"><span class="pre">ABC</span></code>
 )</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">xSrce</span> <span class="pre">ySrce</span></code> (<em>float</em>) x and y grid positions relative to
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">xSrce</span> <span class="pre">ySrce</span></code> (<em>float</em>) x and y grid positions relative to
 geographic origin in kilometers for source</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">zSrce</span></code> (<em>float</em>) z grid position (depth, positive DOWN) in
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">zSrce</span></code> (<em>float</em>) z grid position (depth, positive DOWN) in
 kilometers for source</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">elev</span></code> (<em>float</em>) elevation above z grid position (positive UP) in
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">elev</span></code> (<em>float</em>) elevation above z grid position (positive UP) in
 kilometers for source</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">latSrce</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">-90.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">90.0</span></code>) latitude in
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">latSrce</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">-90.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">90.0</span></code>) latitude in
 decimal degrees for source (pos = North)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">longSrce</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">-180.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">180.0</span></code>) longitude
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">longSrce</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">-180.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">180.0</span></code>) longitude
 in decimal degrees for source (pos = East)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">latDegSrce</span> <span class="pre">latMinSrce</span> <span class="pre">latSecSrce</span></code> (<em>float</em>) latitude degrees,
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">latDegSrce</span> <span class="pre">latMinSrce</span> <span class="pre">latSecSrce</span></code> (<em>float</em>) latitude degrees,
 minutes and seconds for source</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">longDegSrce</span> <span class="pre">longMinSrce</span> <span class="pre">longSecSrce</span></code> (<em>float</em>) longitude
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">longDegSrce</span> <span class="pre">longMinSrce</span> <span class="pre">longSecSrce</span></code> (<em>float</em>) longitude
 degrees, minutes and seconds for source</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">latDir</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">S</span></code>) geographic direction</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">longDir</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">W</span> <span class="pre">E</span></code>) geographic direction</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">latDir</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">S</span></code>) geographic direction</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">longDir</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">W</span> <span class="pre">E</span></code>) geographic direction</div>
 </div>
 <div class="line-block">
 <div class="line"><strong>GT_PLFD - Podvin and Lecomte Finite Difference</strong></div>
@@ -525,27 +513,21 @@ difference, must not be present otherwise</div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">GT_PLFD</span></code> <code class="docutils literal notranslate"><span class="pre">hs_eps_init</span> <span class="pre">message_flag</span></code></div>
 <div class="line">Selects Podvin and Lecomte finite difference method and specifies
 method parameters.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">hs_eps_init</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>) fraction (typically
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">hs_eps_init</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>) fraction (typically
 1.0E-3) defining the tolerated model inhomogeneity for exact
 initialization. A tolerance larger than 0.01 will potentially create
 errors larger than those involved by the F.D. scheme without any exact
 initialization.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">message_flag</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">2</span></code>) Message flag
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">message_flag</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">2</span></code>) Message flag
 (0:silent, 1:few messages, 2:verbose) A negative value inhibits
 “clever” initialization.</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. See Podvin and Lecomte finite difference source code and Podvin
+<div class="line">   1. See Podvin and Lecomte finite difference source code and Podvin
 and Lecomte, 1991 for more information.</div>
 </div>
-</div>
-<div class="section" id="time2eq-program">
-<h2>1.3.1.7. Time2EQ Program<a class="headerlink" href="#time2eq-program" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">`EQFILES</span></code> &lt;#_Time2EQ_eqfiles_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`EQEVENT</span></code> &lt;#_Time2EQ_eqevent_&gt;`__ - <code class="docutils literal notranslate"><span class="pre">`EQSTA</span></code> &lt;#_Time2EQ_eqsta_&gt;`__
-- <code class="docutils literal notranslate"><span class="pre">`EQSRCE</span></code> &lt;#_Time2EQ_eqsrce_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`EQMECH</span></code> &lt;#_Time2EQ_eqmech_&gt;`__ - <code class="docutils literal notranslate"><span class="pre">`EQMODE</span></code> &lt;#_Time2EQ_eqmode_&gt;`__
-- <code class="docutils literal notranslate"><span class="pre">`EQQUAL2ERR</span></code> &lt;#_Time2EQ_eqqual2err_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`EQVPVS</span></code> &lt;#_Time2EQ_eqvpvs_&gt;`</p>
+</section>
+<section id="time2eq-program">
+<h2><span class="section-number">1.3.1.7. </span>Time2EQ Program<a class="headerlink" href="#time2eq-program" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
 <div class="line"><strong>EQFILES - Input and Output File Root Name</strong></div>
 <div class="line"><em>required</em>, <em>non-repeatable</em></div>
@@ -553,13 +535,13 @@ and Lecomte, 1991 for more information.</div>
 <div class="line">Specifies the directory path and file <em>root</em> name (no extension) for
 the input time grids, and the path and filename for the output
 phase/observation file.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">ttimeFileRoot</span></code> (<em>string</em>) full or relative path and file <em>root</em>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">ttimeFileRoot</span></code> (<em>string</em>) full or relative path and file <em>root</em>
 name (no extension) for input time grids (generated by program
 Grid2Time)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">outputFileName</span></code> (<em>string</em>) full or relative path and name for
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">outputFileName</span></code> (<em>string</em>) full or relative path and name for
 output phase/observation file</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. The `` ttimeFileRoot                `
+<div class="line">   1. The `` ttimeFileRoot                `
 should not include the standardized phase code ( <em>i.e.</em> <code class="docutils literal notranslate"><span class="pre">P</span></code> or <code class="docutils literal notranslate"><span class="pre">S</span></code>
 ).</div>
 </div>
@@ -567,12 +549,12 @@ should not include the standardized phase code ( <em>i.e.</em> <code class="docu
 <div class="line"><strong>EQEVENT - Hypocenter parameters</strong></div>
 <div class="line"><em>optional</em>, <em>repeatable</em></div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">EQEVENT</span></code> <code class="docutils literal notranslate"><span class="pre">label</span> <span class="pre">xEvent</span> <span class="pre">yEvent</span> <span class="pre">zEvent</span> <span class="pre">originSeconds</span></code></div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">label</span></code> (<em>string</em>) event identification label</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">xEvent</span> <span class="pre">yEvent</span> <span class="pre">zEvent</span></code> (<em>float</em>) x, y and z grid coordinates of
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">label</span></code> (<em>string</em>) event identification label</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">xEvent</span> <span class="pre">yEvent</span> <span class="pre">zEvent</span></code> (<em>float</em>) x, y and z grid coordinates of
 hypocenter</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">originSeconds</span></code> (<em>float</em>) origin time in seconds</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">originSeconds</span></code> (<em>float</em>) origin time in seconds</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. The the origin time
+<div class="line">   1. The the origin time
 ` originSeconds                ` is added to
  the travel-time read from the time grid to get the synthetic phase
  time.</div>
@@ -584,10 +566,10 @@ hypocenter</div>
 <cite>label phase errorType error errorReportType errorReport probActive`</cite></div>
 <div class="line">Specifies a station or N_S_L_C code, phase and timing error to use to generate a
 synthetic phase reading.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">label</span></code> (<em>string</em>) station or N_S_L_C code label ( <em>i.e.</em> <code class="docutils literal notranslate"><span class="pre">NN_STA</span></code>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">label</span></code> (<em>string</em>) station or N_S_L_C code label ( <em>i.e.</em> <code class="docutils literal notranslate"><span class="pre">NN_STA</span></code>
 )</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">phase</span></code> (<em>string</em>) phase type ( <em>i.e.</em> <code class="docutils literal notranslate"><span class="pre">P</span></code> or <code class="docutils literal notranslate"><span class="pre">S</span></code> )</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">errorType</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">GAU</span> <span class="pre">BOX</span> <span class="pre">FIX</span> <span class="pre">NONE</span></code>) calculated random
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">phase</span></code> (<em>string</em>) phase type ( <em>i.e.</em> <code class="docutils literal notranslate"><span class="pre">P</span></code> or <code class="docutils literal notranslate"><span class="pre">S</span></code> )</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">errorType</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">GAU</span> <span class="pre">BOX</span> <span class="pre">FIX</span> <span class="pre">NONE</span></code>) calculated random
  timing error type ( <code class="docutils literal notranslate"><span class="pre">GAU</span></code> for normal deviate with zero mean and
  variance = <code class="docutils literal notranslate"><span class="pre">error</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">`</span> <span class="pre">,</span>
  <span class="pre">or</span> <span class="pre">``BOX</span></code> for boxcar deviate with zero mean and width = 2 *
@@ -596,22 +578,22 @@ synthetic phase reading.</div>
 <cite>error                    ` , or ``NONE`</cite>
  for time error/static =
 <a href="#id17"><span class="problematic" id="id18">`</span></a>0.0                    ` )</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">error</span></code> (<em>float</em>) error magnitude in seconds</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">errorReportType</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">GAU</span></code>) timing error type to write
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">error</span></code> (<em>float</em>) error magnitude in seconds</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">errorReportType</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">GAU</span></code>) timing error type to write
 to output phase/observation file <em>Err</em> field (The current version of
 NLLoc recognizes only <code class="docutils literal notranslate"><span class="pre">GAU</span></code> )</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">errorReport</span></code> (<em>float</em>) error magnitude in seconds to write to
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">errorReport</span></code> (<em>float</em>) error magnitude in seconds to write to
 output phase/observation file <em>ErrMag</em> field.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">probActive</span></code> (<em>float</em>, default:<code class="docutils literal notranslate"><span class="pre">1.0</span></code>) Probability (0-1) that
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">probActive</span></code> (<em>float</em>, default:<code class="docutils literal notranslate"><span class="pre">1.0</span></code>) Probability (0-1) that
 a time for this station/phase should be created.</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. The `` label                ` and
+<div class="line">   1. The `` label                ` and
 ` phase                ` when concatenated to
  the `` ttimeFileRoot                ` (i.e.
 ` ttimeFileRoot.label.phase                ` )
  should correspond to the path and root name of an existing,
  travel-time grid file.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;2. The error is calculated stochastically and added to the
+<div class="line">   2. The error is calculated stochastically and added to the
  travel-time. Use
 ` error                     = 0.0                `
  to obtain exact synthetic travel-times.</div>
@@ -630,24 +612,24 @@ a time for this station/phase should be created.</div>
 latitude/longitude), <code class="docutils literal notranslate"><span class="pre">LATLONDM</span></code> (degrees + decimal minutes for
 latitude/longitude) and <code class="docutils literal notranslate"><span class="pre">LATLONDS</span></code> (degrees + minutes + decimal
 seconds for latitude/longitude).</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">label</span></code> (<em>string</em>) source label ( <em>i.e.</em> a station or N_S_L_C code <code class="docutils literal notranslate"><span class="pre">NN_STA</span></code>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">label</span></code> (<em>string</em>) source label ( <em>i.e.</em> a station or N_S_L_C code <code class="docutils literal notranslate"><span class="pre">NN_STA</span></code>
 )</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">xSrce</span> <span class="pre">ySrce</span></code> (<em>float</em>) x and y grid positions relative to
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">xSrce</span> <span class="pre">ySrce</span></code> (<em>float</em>) x and y grid positions relative to
 geographic origin in kilometers for source</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">zSrce</span></code> (<em>float</em>) z grid position (depth, positive DOWN) in
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">zSrce</span></code> (<em>float</em>) z grid position (depth, positive DOWN) in
 kilometers for source</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">elev</span></code> (<em>float</em>) elevation above z grid position (positive UP) in
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">elev</span></code> (<em>float</em>) elevation above z grid position (positive UP) in
 kilometers for source</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">latSrce</span></code> (<em>float</em>) latitude in decimal degrees for source (pos =
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">latSrce</span></code> (<em>float</em>) latitude in decimal degrees for source (pos =
 North)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">longSrce</span></code> (<em>float</em>) longitude in decimal degrees for source (pos
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">longSrce</span></code> (<em>float</em>) longitude in decimal degrees for source (pos
 = East)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">latDegSrce</span> <span class="pre">latMinSrce</span> <span class="pre">latSecSrce</span></code> (<em>float</em>) latitude degrees,
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">latDegSrce</span> <span class="pre">latMinSrce</span> <span class="pre">latSecSrce</span></code> (<em>float</em>) latitude degrees,
 minutes and seconds for source</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">longDegSrce</span> <span class="pre">longMinSrce</span> <span class="pre">longSecSrce</span></code> (<em>float</em>) longitude
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">longDegSrce</span> <span class="pre">longMinSrce</span> <span class="pre">longSecSrce</span></code> (<em>float</em>) longitude
 degrees, minutes and seconds for source</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">latDir</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">S</span></code>) geographic direction</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">longDir</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">W</span> <span class="pre">E</span></code>) geographic direction</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">latDir</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">S</span></code>) geographic direction</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">longDir</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">W</span> <span class="pre">E</span></code>) geographic direction</div>
 </div>
 <div class="line-block">
 <div class="line"><strong>EQMECH - Event mechanism description</strong></div>
@@ -655,22 +637,22 @@ degrees, minutes and seconds for source</div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">EQMECH</span></code> <code class="docutils literal notranslate"><span class="pre">mechType</span> <span class="pre">strike</span> <span class="pre">dip</span> <span class="pre">rake</span></code></div>
 <div class="line">Specifies the mechanism parameters for synthetic first motion
 calculations.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">mechType</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">DOUBLE</span> <span class="pre">ISO</span> <span class="pre">NONE</span></code>, default:<code class="docutils literal notranslate"><span class="pre">NONE</span></code>)
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">mechType</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">DOUBLE</span> <span class="pre">ISO</span> <span class="pre">NONE</span></code>, default:<code class="docutils literal notranslate"><span class="pre">NONE</span></code>)
 source mechanism type ( <code class="docutils literal notranslate"><span class="pre">DOUBLE</span></code> for double couple, or <code class="docutils literal notranslate"><span class="pre">ISO</span></code> for
 isotropic/explosion, or <code class="docutils literal notranslate"><span class="pre">NONE</span></code> for no first motion calculation)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">strike</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">360.0</span></code>) strike of
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">strike</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">360.0</span></code>) strike of
  fault plane in degrees (0,360) clockwise from North in the Geographic
  reference frame (any
 <cite>rotAngle                    ` specified
  in the generic control statement ``GTSRCE`</cite> will be added to
 <a href="#id19"><span class="problematic" id="id20">`</span></a>strike                    ` ).</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">dip</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">90.0</span></code>) dip of the fault
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">dip</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">90.0</span></code>) dip of the fault
 plane in degrees (0,90) down from the horizontal.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">rake</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">-180.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">180.0</span></code>) angle in
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">rake</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">-180.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">180.0</span></code>) angle in
 degrees (-180,180) on the fault plane between the strike direction and
 the slip direction.</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. The the origin time
+<div class="line">   1. The the origin time
 ` originSeconds                ` is added to
  the travel-time read from the time grid to get the synthetic phase
  time.</div>
@@ -683,7 +665,7 @@ the slip direction.</div>
 or from multiple sources to single station. The phase labels in the
 output phase/observation file are set to the station labels or to the
 source labels, depending on the mode.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">mode</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">SRCE_TO_STA</span> <span class="pre">STA_TO_SRCE</span></code>,
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">mode</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">SRCE_TO_STA</span> <span class="pre">STA_TO_SRCE</span></code>,
 default:<code class="docutils literal notranslate"><span class="pre">SRCE_TO_STA</span></code>) <code class="docutils literal notranslate"><span class="pre">SRCE_TO_STA</span></code> for single sources to
 multiple stations or <code class="docutils literal notranslate"><span class="pre">STA_TO_SRCE</span></code> for single station to multiple
 sources.</div>
@@ -696,7 +678,7 @@ sources.</div>
  phase/observations in HYPO71 file format (which does not include time
  uncertainties) ( <em>i.e.</em> time uncertainties in seconds ( <em>i.e.</em>
 <cite>0.01`</cite> or <code class="docutils literal notranslate"><span class="pre">0.5</span></code> ) to quality <code class="docutils literal notranslate"><span class="pre">0,1,2,3</span></code> or <code class="docutils literal notranslate"><span class="pre">4</span></code> ).</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">Err0</span> <span class="pre">...</span> <span class="pre">ErrN</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>) one time uncertainty
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">Err0</span> <span class="pre">...</span> <span class="pre">ErrN</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>) one time uncertainty
 value for each quality level that may be output to the
 phase/observation file. Synthetic errors less than or equal to the
 first value <em>Err0</em> are output with quality <code class="docutils literal notranslate"><span class="pre">0</span></code> , less than or equal
@@ -708,7 +690,7 @@ to the second are output with <code class="docutils literal notranslate"><span c
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">EQVPVS</span></code> <code class="docutils literal notranslate"><span class="pre">VpVsRatio</span></code></div>
 <div class="line">Specifies the P velocity to S velocity ratio to calculate S phase
 travel-times.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">VpVsRatio</span></code> (<em>float</em>) P velocity to S velocity ratio. If
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">VpVsRatio</span></code> (<em>float</em>) P velocity to S velocity ratio. If
 <a href="#id21"><span class="problematic" id="id22">`</span></a>VpVsRatio                    ` &gt; 0.0 then
  only P phase travel-times grids are read and
 <a href="#id23"><span class="problematic" id="id24">`</span></a>VpVsRatio                    ` is used to
@@ -716,41 +698,23 @@ travel-times.</div>
 <a href="#id25"><span class="problematic" id="id26">`</span></a>VpVsRatio                    ` &lt; 0.0 then
  S phase travel-times grids are used.</div>
 </div>
-</div>
-<div class="section" id="nlloc-program">
-<h2>1.3.1.8. NLLoc Program<a class="headerlink" href="#nlloc-program" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">`LOCSIG</span></code> &lt;#_NLLoc_locsig_&gt;`__ - <code class="docutils literal notranslate"><span class="pre">`LOCCOM</span></code> &lt;#_NLLoc_loccom_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`LOCSRCE</span></code> &lt;#_NLLoc_gtsrce_&gt;`__ - <code class="docutils literal notranslate"><span class="pre">`LOCFILES</span></code> &lt;#_NLLoc_locfiles_&gt;`__
-- <code class="docutils literal notranslate"><span class="pre">`LOCHYPOUT</span></code> &lt;#_NLLoc_lochypout_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`LOCSEARCH</span></code> &lt;#_NLLoc_locsearch_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`LOCMETH</span></code> &lt;#_NLLoc_locmeth_&gt;`__ - <code class="docutils literal notranslate"><span class="pre">`LOCGAU</span></code> &lt;#_NLLoc_locgau_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`LOCGAU2</span></code> &lt;#_NLLoc_locgau2_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`LOCPHASEID</span></code> &lt;#_NLLoc_locphaseid_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`LOCQUAL2ERR</span></code> &lt;#_NLLoc_locqual2err_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`LOCGRID</span></code> &lt;#_NLLoc_locgrid_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`LOCPHSTAT</span></code> &lt;#_NLLoc_locphstat_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`LOCANGLES</span></code> &lt;#_NLLoc_locangles_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`LOCMAG</span></code> &lt;#_NLLoc_locmag_&gt;`__ - <code class="docutils literal notranslate"><span class="pre">`LOCCMP</span></code> &lt;#_NLLoc_loccmp_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`LOCALIAS</span></code> &lt;#_NLLoc_localias_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`LOCEXCLUDE</span></code> &lt;#_NLLoc_locexclude_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`LOCDELAY</span></code> &lt;#_NLLoc_locdelay_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`LOCELEVCORR</span></code> &lt;#_NLLoc_elevcorr_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`LOCTOPO_SURFACE</span></code> &lt;#_NLLoc_topo_surface_&gt;`__ -
-<code class="docutils literal notranslate"><span class="pre">`LOCSTAWT</span></code> &lt;#_NLLoc_stawt_&gt;`</p>
+</section>
+<section id="nlloc-program">
+<h2><span class="section-number">1.3.1.8. </span>NLLoc Program<a class="headerlink" href="#nlloc-program" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
 <div class="line"><strong>LOCSIG - Signature text</strong></div>
 <div class="line"><em>optional</em>, <em>non-repeatable</em></div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">LOCSIG</span></code> <code class="docutils literal notranslate"><span class="pre">signature</span></code></div>
 <div class="line">Identification of an individual, institiution or other entity -
 written in some output files.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">signature</span></code> (<em>line</em>) signature text</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">signature</span></code> (<em>line</em>) signature text</div>
 </div>
 <div class="line-block">
 <div class="line"><strong>LOCCOM - Comment text</strong></div>
 <div class="line"><em>optional</em>, <em>non-repeatable</em></div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">LOCCOM</span></code> <code class="docutils literal notranslate"><span class="pre">comment</span></code></div>
 <div class="line">Comment about location run - written in some output files.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">comment</span></code> (<em>line</em>) comment text</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">comment</span></code> (<em>line</em>) comment text</div>
 </div>
 <div class="line-block">
 <div class="line"><strong>LOCSRCE - Source Description</strong></div>
@@ -774,18 +738,18 @@ reading.)</div>
 <div class="line">Specifies the directory path and filename for the phase/observation
 files, and the file <em>root</em> names (no extension) for the input time
 grids and the output files.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">obsFiles</span></code> (<em>string</em>) full or relative path and name for
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">obsFiles</span></code> (<em>string</em>) full or relative path and name for
 phase/observations files, mulitple files may be specified with
 standard UNIX “wild-card” characters ( <code class="docutils literal notranslate"><span class="pre">*</span></code> and <code class="docutils literal notranslate"><span class="pre">?</span></code> )</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">obsFileType</span></code> (<em>choice</em>:
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">obsFileType</span></code> (<em>choice</em>:
 <cite>NLLOC_OBS HYPO71 HYPOELLIPSE NEIC CSEM_ALERT SIMULPS HYPOCENTER HYPODD SEISAN NORDIC NCSN_Y2K_5 NCEDC_UCB ETH_LOC RENASS_WWW RENASS_DEP INGV_BOLL INGV_BOLL_LOCAL INGV_ARCH`</cite>)
  format type for phase/observations files (see Phase File Formats)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">ttimeFileRoot</span></code> (<em>string</em>) full or relative path and file <em>root</em>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">ttimeFileRoot</span></code> (<em>string</em>) full or relative path and file <em>root</em>
 name (no extension) for input time grids (generated by program
 Grid2Time, edu.sc.seis.TauP.TauP_Table_NLL, or other software.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">outputFileRoot</span></code> (<em>string</em>) full or relative path and file <em>root</em>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">outputFileRoot</span></code> (<em>string</em>) full or relative path and file <em>root</em>
 name (no extension) for output files</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">iSwapBytes</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">1</span></code>,
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">iSwapBytes</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">1</span></code>,
 default:<code class="docutils literal notranslate"><span class="pre">0</span></code>) flag to indicate if hi and low bytes of input time
 grid files should be swapped. Allows reading of travel-time grids from
 different computer architecture platforms during TRANS GLOBAL mode
@@ -796,7 +760,7 @@ location.</div>
 <div class="line"><em>optional</em>, <em>non-repeatable</em></div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">LOCHYPOUT</span></code> <code class="docutils literal notranslate"><span class="pre">fileType1</span> <span class="pre">...</span> <span class="pre">...</span> <span class="pre">...</span> <span class="pre">...</span> <span class="pre">...</span></code></div>
 <div class="line">Specifies the filetypes to be used for output.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">fileType1</span> <span class="pre">...</span> <span class="pre">fileTypeN</span></code> (<em>choice</em>:
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">fileType1</span> <span class="pre">...</span> <span class="pre">fileTypeN</span></code> (<em>choice</em>:
 <cite>SAVE_NLLOC_ALL SAVE_NLLOC_SUM NLL_FORMAT_VER_2 FILENAME_DEC_SEC SAVE_NLLOC_EXPECTATION SAVE_NLLOC_OCTREE SAVE_FMAMP SAVE_HYPOELL_ALL SAVE_HYPOELL_SUM SAVE_HYPO71_ALL SAVE_HYPO71_SUM SAVE_HYPOINV_SUM SAVE_HYPOINVERSE_Y2000_ARC SAVE_NLLOC_OCTREE`</cite>,
  default:<code class="docutils literal notranslate"><span class="pre">SAVE_NLLOC_ALL</span> <span class="pre">SAVE_HYPOINVERSE_Y2000_ARC</span></code>) File format
  types to be output: <code class="docutils literal notranslate"><span class="pre">SAVE_NLLOC_ALL</span></code> = save summary and event files
@@ -826,7 +790,7 @@ location.</div>
  Archive file ; <code class="docutils literal notranslate"><span class="pre">SAVE_HYPOINVERSE_Y2000_ARC</span></code> = save summary file only
  of type HypoInverse Y2000 Archive file ;</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. The HypoInverse Archive format serves as input to the program
+<div class="line">   1. The HypoInverse Archive format serves as input to the program
 FPFIT (Reasenberg <em>et al.</em> , 1985) for grid-search determination of
 focal mechanism solutions.</div>
 </div>
@@ -841,70 +805,70 @@ focal mechanism solutions.</div>
 <div class="line">Specifies the search type and search parameters. The possible search
 types are <code class="docutils literal notranslate"><span class="pre">GRID</span></code> (grid search), <code class="docutils literal notranslate"><span class="pre">MET</span></code> (Metropolis), and <code class="docutils literal notranslate"><span class="pre">OCT</span></code>
 (Octtree).</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">numSamplesDraw</span></code> (<em>integer</em>) specifies the number of scatter
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">numSamplesDraw</span></code> (<em>integer</em>) specifies the number of scatter
  samples to draw from each saved PDF grid ( <em>i.e.</em> grid with
 <cite>gridType                    ` =
 `PROB_DENSITY`</cite> and
 <cite>saveFlag                    ` = ``SAVE`</cite>
  ) No samples are drawn if
 <a href="#id27"><span class="problematic" id="id28">`</span></a>saveFlag                    ` &lt; 0.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">numSamples</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>) total number of accepted
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">numSamples</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>) total number of accepted
 samples to obtain</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">numLearn</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>) number of accepted samples
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">numLearn</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>) number of accepted samples
 for learning stage of search</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">numEquil</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>) number of accepted samples
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">numEquil</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>) number of accepted samples
 for equilibration stage of search</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">numBeginSave</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>) number of accepted
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">numBeginSave</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>) number of accepted
 samples after which to begin saving stage of search, denotes end of
 equilibration stage</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">numSkip</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">1</span></code>) number of accepted samples to
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">numSkip</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">1</span></code>) number of accepted samples to
  skip between saves (
 <cite>numSkip                    ` = ``1`</cite>
  saves every accepted sample)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">stepInit</span></code> (<em>float</em>) initial step size in km for the learning
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">stepInit</span></code> (<em>float</em>) initial step size in km for the learning
  stage ( <code class="docutils literal notranslate"><span class="pre">stepInit</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">`</span> <span class="pre">&lt;</span>
 <span class="pre">`0.0</span></code> gives automatic step size selection. If the search takes too
  long, the initial step size may be too large; this may be the case if
  the search region is very large relative to the volume of the high
  confidence region for the locations.)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">stepMin</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>) minimum step size allowed
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">stepMin</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>) minimum step size allowed
 during any search stage (This parameter should not be critical, set it
 to a low value.)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">stepFact</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>) step factor for scaling step
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">stepFact</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>) step factor for scaling step
 size during equilibration stage (Try a value of 8.0 to start.)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">probMin</span></code> (<em>float</em>) minimum value of the maximum probability
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">probMin</span></code> (<em>float</em>) minimum value of the maximum probability
 (likelihood) that must be found by the end of learning stage, if this
 value is not reached the search is aborted (This parameters allows the
 filtering of locations outside of the search grid and locations with
 large residuals.)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">initNumCells_x</span> <span class="pre">initNumCells_y</span> <span class="pre">initNumCells_z</span></code> (<em>integer</em>)
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">initNumCells_x</span> <span class="pre">initNumCells_y</span> <span class="pre">initNumCells_z</span></code> (<em>integer</em>)
 initial number of octtree cells in the x, y, and z directions</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">minNodeSize</span></code> (<em>float</em>) smallest octtree node side length to
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">minNodeSize</span></code> (<em>float</em>) smallest octtree node side length to
 process, the octree search is terminated after a node with a side
 smaller than this length is generated</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">maxNumNodes</span></code> (<em>integer</em>) total number of nodes to process</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">numScatter</span></code> (<em>integer</em>) the number of scatter samples to draw
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">maxNumNodes</span></code> (<em>integer</em>) total number of nodes to process</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">numScatter</span></code> (<em>integer</em>) the number of scatter samples to draw
 from the octtree results</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">useStationsDensity</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">1</span></code>,
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">useStationsDensity</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">1</span></code>,
 default:<code class="docutils literal notranslate"><span class="pre">0</span></code>) flag, if 1 weights oct-tree cell probability values
 used for subdivide decision in proportion to number of stations in
 oct-tree cell; gives higher search priority to cells containing
 stations, stablises convergence to local events when global search
 used with dense cluster of local stations</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">stopOnMinNodeSize</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">1</span></code>,
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">stopOnMinNodeSize</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">1</span></code>,
 default:<code class="docutils literal notranslate"><span class="pre">1</span></code>) flag, if 1, stop search when first min_node_size
 reached, if 0 stop subdividing a given cell when min_node_size
 reached</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. See NLLoc Program Oct-Tree Algorithm , Grid-Search Algorithm and
+<div class="line">   1. See NLLoc Program Oct-Tree Algorithm , Grid-Search Algorithm and
 Metropolis Sampling Algorithm for more information.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;2. Samples are saved to a binary, event Scatter file (see Scatter
+<div class="line">   2. Samples are saved to a binary, event Scatter file (see Scatter
 file formats ). For the grid-search, because the samples are drawn
 stochastically, the number of samples actually obtained my differ
 slightly from the requested number.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;3. If a large number of samples are saved, the spatial density of
+<div class="line">   3. If a large number of samples are saved, the spatial density of
 samples will be proportional to the PDF.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;4. The scatter samples are useful for plotting the PDF as a
+<div class="line">   4. The scatter samples are useful for plotting the PDF as a
 transparent “cloud” and for relatively compact disk storage of the
 PDF.</div>
 </div>
@@ -914,7 +878,7 @@ PDF.</div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">LOCMETH</span></code>
 <cite>method maxDistStaGrid minNumberPhases maxNumberPhases minNumberSphases VpVsRatio maxNum3DGridMemory minDistStaGrid iRejectDuplicateArrivals`</cite></div>
 <div class="line">Specifies the location method (algorithm) and method parameters.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">method</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">GAU_ANALYTIC</span> <span class="pre">EDT</span> <span class="pre">EDT_OT_WT</span> <span class="pre">EDT_OT_WT_ML</span></code>)
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">method</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">GAU_ANALYTIC</span> <span class="pre">EDT</span> <span class="pre">EDT_OT_WT</span> <span class="pre">EDT_OT_WT_ML</span></code>)
  location method/algorithm ( <code class="docutils literal notranslate"><span class="pre">GAU_ANALYTIC</span></code> = the inversion approach
  of Tarantola and Valette (1982) with L2-RMS likelihood function.
 <cite>EDT`</cite> = Equal Differential Time likelihood function cast into the
@@ -926,43 +890,43 @@ PDF.</div>
  origin-time weighting applied using a grid-search, maximum-likelihood
  estimate of the origin time. Less efficient than EDT_OT_WT which
  uses simple statistical estimate of the origin time.)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">maxDistStaGrid</span></code> (<em>float</em>) maximum distance in km between a
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">maxDistStaGrid</span></code> (<em>float</em>) maximum distance in km between a
 station and the center of the initial search grid; phases from
 stations beyond this distance will not be used for event location</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">minNumberPhases</span></code> (<em>integer</em>) minimum number of phases that must
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">minNumberPhases</span></code> (<em>integer</em>) minimum number of phases that must
 be accepted before event will be located</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">maxNumberPhases</span></code> (<em>integer</em>) maximum number of accepted phases
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">maxNumberPhases</span></code> (<em>integer</em>) maximum number of accepted phases
  that will be used for event location; only the first
 <a href="#id29"><span class="problematic" id="id30">`</span></a>maxNumberPhases                    ` read
  from the phase/observations file are used for location</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">minNumberSphases</span></code> (<em>integer</em>) minimum number of S phases that
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">minNumberSphases</span></code> (<em>integer</em>) minimum number of S phases that
 must be accepted before event will be located</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">VpVsRatio</span></code> (<em>float</em>) P velocity to S velocity ratio. If
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">VpVsRatio</span></code> (<em>float</em>) P velocity to S velocity ratio. If
 <a href="#id31"><span class="problematic" id="id32">`</span></a>VpVsRatio                    ` &gt; 0.0 then
  only P phase travel-times grids are read and
 <a href="#id33"><span class="problematic" id="id34">`</span></a>VpVsRatio                    ` is used to
  calculate S phase travel-times. If
 <a href="#id35"><span class="problematic" id="id36">`</span></a>VpVsRatio                    ` &lt; 0.0 then
  S phase travel-times grids are used.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">maxNum3DGridMemory</span></code> (<em>integer</em>) maximum number of 3D travel-time
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">maxNum3DGridMemory</span></code> (<em>integer</em>) maximum number of 3D travel-time
  grids to attempt to read into memory for Metropolis-Gibbs search. This
  helps to avoid time-consuming memory swapping that occurs if the total
  size of grids read exceeds the real memory of the computer. 3D grids
  not in memory are read directly from disk. If
 <a href="#id37"><span class="problematic" id="id38">`</span></a>maxNum3DGridMemory                    ` &lt;
  0 then NLLoc attempts to read all grids into memory.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">minDistStaGrid</span></code> (<em>float</em>) minimum distance in km between a
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">minDistStaGrid</span></code> (<em>float</em>) minimum distance in km between a
 station and the center of the initial search grid; phases from
 stations closer than this distance will not be used for event location</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">iRejectDuplicateArrivals</span></code> (<em>int</em>) flag indicating if duplicate
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">iRejectDuplicateArrivals</span></code> (<em>int</em>) flag indicating if duplicate
 arrivals used for location (1=reject, 0=use if time diff &lt; sigma / 2);
 duplicate arrivals have same station label and phase name</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. See NLLoc Program Inversion Approach for more information on the
+<div class="line">   1. See NLLoc Program Inversion Approach for more information on the
 <cite>GAU_ANALYTIC`</cite> method.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;2. See NLLoc Program EDT likelihood function for more information
+<div class="line">   2. See NLLoc Program EDT likelihood function for more information
 on the <code class="docutils literal notranslate"><span class="pre">EDT</span></code> method.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;3. Phases that are not used for location are written to output
+<div class="line">   3. Phases that are not used for location are written to output
 files and are used for calculating average residuals.</div>
 </div>
 <div class="line-block">
@@ -975,13 +939,14 @@ files and are used for calculating average residuals.</div>
  Valette, 1982 ):</div>
 </div>
 <blockquote>
-<div><a href="#id39"><span class="problematic" id="id40">`</span></a>Covariance                         ij                         =                         SigmaTime                         2                         exp(-0.5(Dist                         2                         ij                         )/                         CorrLen                         2                         )                    `</div></blockquote>
+<div><p><a href="#id39"><span class="problematic" id="id40">`</span></a>Covariance                         ij                         =                         SigmaTime                         2                         exp(-0.5(Dist                         2                         ij                         )/                         CorrLen                         2                         )                    `</p>
+</div></blockquote>
 <div class="line-block">
 <div class="line">where <code class="docutils literal notranslate"><span class="pre">Dist</span></code> is the distance in km between stations <code class="docutils literal notranslate"><span class="pre">i</span></code> and <code class="docutils literal notranslate"><span class="pre">j</span></code>
 .</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">SigmaTime</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>) typical error in seconds for
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">SigmaTime</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>) typical error in seconds for
 travel-time to one station due to model errors</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">CorrLen</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>) correllaton length that
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">CorrLen</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>) correllaton length that
 controls covariance between stations ( <em>i.e.</em> may be related to a
 characteristic scale length of the medium if variations on this scale
 are not included in the velocity model)</div>
@@ -1001,11 +966,11 @@ error is a percentage of the travel-time. Preliminary results using
 LOCGAU2 indicate that this way of setting travel-time errors gives
 visible improvement in hypocenter clustering. (can currently only be
 used with the EDT location methods)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">SigmaTfraction</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">1.0</span></code>) fraction
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">SigmaTfraction</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">1.0</span></code>) fraction
 of of travel-time to use as error</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">SigmaTmin</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>) minimum trave-time error in
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">SigmaTmin</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>) minimum trave-time error in
 seconds</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">SigmaTmax</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>) maximum trave-time error in
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">SigmaTmax</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>) maximum trave-time error in
 seconds</div>
 </div>
 <div class="line-block">
@@ -1015,17 +980,17 @@ seconds</div>
 <div class="line">Specifies the mapping of phase codes in the phase/observation file (
 <em>i.e.</em> <code class="docutils literal notranslate"><span class="pre">pg</span></code> or <code class="docutils literal notranslate"><span class="pre">Sn</span></code> ) to standardized phase codes ( <em>i.e.</em> <code class="docutils literal notranslate"><span class="pre">P</span></code>
 or <code class="docutils literal notranslate"><span class="pre">S</span></code> ).</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">stdPhase</span></code> (<em>string</em>) standardized phase code (used to generate
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">stdPhase</span></code> (<em>string</em>) standardized phase code (used to generate
 time-grid file names)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">phaseCode1</span> <span class="pre">...</span> <span class="pre">phaseCodeN</span></code> (<em>string</em>) one or more phase codes
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">phaseCode1</span> <span class="pre">...</span> <span class="pre">phaseCodeN</span></code> (<em>string</em>) one or more phase codes
 that may be present in a phase/observation file that should be mapped
 to the <code class="docutils literal notranslate"><span class="pre">stdPhase</span></code>.</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. In the current version of NLLoc, it is assumed for some
+<div class="line">   1. In the current version of NLLoc, it is assumed for some
 processing (such as the calculation of average P and S station
 residuals) that the standardized phase codes are <code class="docutils literal notranslate"><span class="pre">P</span></code> and <code class="docutils literal notranslate"><span class="pre">S</span></code> .
 Thus it is important to use these codes, if possible.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;2. A phase/observation file code will be used unchanged if no
+<div class="line">   2. A phase/observation file code will be used unchanged if no
 <cite>LOCPHASEID`</cite> statement is specified, or the code is not present in
  any <code class="docutils literal notranslate"><span class="pre">LOCPHASEID</span></code> statement.</div>
 </div>
@@ -1038,16 +1003,16 @@ otherwise</div>
 <div class="line">Specifies the mapping of phase pick qualities phase/observation file (
 <em>i.e.</em> <code class="docutils literal notranslate"><span class="pre">0,1,2,3</span></code> or <code class="docutils literal notranslate"><span class="pre">4</span></code> ) to time uncertainties in seconds (
 <em>i.e.</em> <code class="docutils literal notranslate"><span class="pre">0.01</span></code> or <code class="docutils literal notranslate"><span class="pre">0.5</span></code> ).</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">Err0</span> <span class="pre">...</span> <span class="pre">ErrN</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>) one time uncertainty
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">Err0</span> <span class="pre">...</span> <span class="pre">ErrN</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>) one time uncertainty
 value for each quality level that may be used in a phase/observation
 file. The first value <em>Err0</em> is assigned to picks with quality <code class="docutils literal notranslate"><span class="pre">0</span></code> ,
 the second to picks with quality <code class="docutils literal notranslate"><span class="pre">1</span></code> , etc.</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. NLLoc requires Gaussian timing error estimates in seconds for
+<div class="line">   1. NLLoc requires Gaussian timing error estimates in seconds for
 the data (phase picks), the <code class="docutils literal notranslate"><span class="pre">LOCQUAL2ERR</span></code> statement allows a
 conversion of commonly used integer quality codes to <em>float</em> time
 values.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;2. Use a large, positive value ( <em>i.e.</em> <code class="docutils literal notranslate"><span class="pre">99999.9</span></code> ) to indicate a
+<div class="line">   2. Use a large, positive value ( <em>i.e.</em> <code class="docutils literal notranslate"><span class="pre">99999.9</span></code> ) to indicate a
 phase pick that should have zero weight (infinite uncertainty).</div>
 </div>
 <div class="line-block">
@@ -1058,21 +1023,21 @@ phase pick that should have zero weight (infinite uncertainty).</div>
 <div class="line">Specifies the size and other parameters of an initial or nested 3D
 search grid. The order of <code class="docutils literal notranslate"><span class="pre">LOCGRID</span></code> statements is critical (see
 Notes).</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">xNum</span> <span class="pre">yNum</span> <span class="pre">zNum</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">2</span></code>) number of grid nodes in
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">xNum</span> <span class="pre">yNum</span> <span class="pre">zNum</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">2</span></code>) number of grid nodes in
 the x, y and z directions</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">xOrig</span> <span class="pre">yOrig</span> <span class="pre">zOrig</span></code> (<em>float</em>) x, y and z location of the grid
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">xOrig</span> <span class="pre">yOrig</span> <span class="pre">zOrig</span></code> (<em>float</em>) x, y and z location of the grid
 origin in km relative to the geographic origin. Use a large, negative
 value ( <em>i.e.</em> <code class="docutils literal notranslate"><span class="pre">-1.0e30</span></code> ) to indicate automatic positioning of grid
 along corressponding direction (valid for nested grids only, may not
 be used for initial grid).</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">dx</span> <span class="pre">dy</span> <span class="pre">dz</span></code> (<em>float</em>) grid node spacing in kilometers along the x,
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">dx</span> <span class="pre">dy</span> <span class="pre">dz</span></code> (<em>float</em>) grid node spacing in kilometers along the x,
 y and z axes</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">gridType</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">MISFIT</span> <span class="pre">PROB_DENSITY</span></code>) statistical
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">gridType</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">MISFIT</span> <span class="pre">PROB_DENSITY</span></code>) statistical
 quantity to calculate on grid</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">saveFlag</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">SAVE</span> <span class="pre">NO_SAVE</span></code>) specifies if the results
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">saveFlag</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">SAVE</span> <span class="pre">NO_SAVE</span></code>) specifies if the results
 of the search over this grid should be saved to disk</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. The order of <code class="docutils literal notranslate"><span class="pre">LOCGRID</span></code> statements is critical: the first
+<div class="line">   1. The order of <code class="docutils literal notranslate"><span class="pre">LOCGRID</span></code> statements is critical: the first
 <cite>LOCGRID`</cite> is the initial search grid which may not have automatic
  positionig along any axes. The succeeding <code class="docutils literal notranslate"><span class="pre">LOCGRID</span></code> statements may
  specify automatic positioning along one or more axes (
@@ -1084,11 +1049,11 @@ of the search over this grid should be saved to disk</div>
  boundary of the initial grid so that it is contained inside of the
  initial grid; if this is not possible the location will be terminated
  prematurely.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;2. With automatic positioning (
+<div class="line">   2. With automatic positioning (
 ` xOrig, yOrig, zOrig                ` =
 <cite>-1.0e30`</cite> ), a grid is shifted in x/y/z so that it is centered on
  the minimum misfit hypocenter x/y/z of the preceeding grid.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;3. Each search over a grid with
+<div class="line">   3. Each search over a grid with
 ` gridType                ` = <code class="docutils literal notranslate"><span class="pre">PROB_DENSITY</span></code>
  is time consuming and should generally only be used for a nested grid
  on which the full PDF is required and will be saved to disk. Use
@@ -1096,11 +1061,11 @@ of the search over this grid should be saved to disk</div>
  the initial grid, for larger nested grids, and for smaller nested
  grids in maximum-likelihood hypocenter searches ( <em>i.e.</em> where the PDF
  is not if interest).</div>
-<div class="line">&nbsp;&nbsp;&nbsp;4. The 3D grid dimensions are in kilometers with Z positive down
+<div class="line">   4. The 3D grid dimensions are in kilometers with Z positive down
 (left-handed coordinate system).</div>
-<div class="line">&nbsp;&nbsp;&nbsp;5. The grid is <em>dx*(xNum-1)</em> km long in the x direction, and
+<div class="line">   5. The grid is <em>dx*(xNum-1)</em> km long in the x direction, and
 similarly for y and z.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;6. For 2D velocity and travel-time grids LOCGRID should be 3D and
+<div class="line">   6. For 2D velocity and travel-time grids LOCGRID should be 3D and
 positioned absolutely in space, thus xNum &gt;&gt; 2 and xOrig and zOrig are
 in general != 0.0</div>
 </div>
@@ -1113,26 +1078,26 @@ in general != 0.0</div>
 calculation of average P and S station residuals. The average
 residuals are saved to a summary, phase statistics file (see Phase
 Statistics file formats ).</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">RMS_Max</span></code> (<em>float</em>, default:<code class="docutils literal notranslate"><span class="pre">VERY_LARGE_DOUBLE</span></code>) the maximum
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">RMS_Max</span></code> (<em>float</em>, default:<code class="docutils literal notranslate"><span class="pre">VERY_LARGE_DOUBLE</span></code>) the maximum
 allowed hypocenter RMS in seconds</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">NRdgs_Min</span></code> (<em>integer</em>, default:<code class="docutils literal notranslate"><span class="pre">-1</span></code>) the minimum allowed
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">NRdgs_Min</span></code> (<em>integer</em>, default:<code class="docutils literal notranslate"><span class="pre">-1</span></code>) the minimum allowed
 hypocenter number of readings</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">Gap_Max</span></code> (<em>float</em>, default:<code class="docutils literal notranslate"><span class="pre">VERY_LARGE_DOUBLE</span></code>) the maximum
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">Gap_Max</span></code> (<em>float</em>, default:<code class="docutils literal notranslate"><span class="pre">VERY_LARGE_DOUBLE</span></code>) the maximum
 allowed hypocenter gap in degrees</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">P_ResidualMax</span> <span class="pre">S_ResidualMax</span></code> (<em>float</em>,
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">P_ResidualMax</span> <span class="pre">S_ResidualMax</span></code> (<em>float</em>,
 default:<code class="docutils literal notranslate"><span class="pre">VERY_LARGE_DOUBLE</span></code>) the maximum allowed residual in
 seconds for a P or S phase</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">Ell_Len3_Max</span></code> (<em>float</em>, default:<code class="docutils literal notranslate"><span class="pre">VERY_LARGE_DOUBLE</span></code>) the
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">Ell_Len3_Max</span></code> (<em>float</em>, default:<code class="docutils literal notranslate"><span class="pre">VERY_LARGE_DOUBLE</span></code>) the
 maximum allowed ellipsoid major semi-axis length (km)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">Hypo_Depth_Min</span> <span class="pre">Hypo_Depth_Max</span></code> (<em>float</em>,
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">Hypo_Depth_Min</span> <span class="pre">Hypo_Depth_Max</span></code> (<em>float</em>,
 default:<code class="docutils literal notranslate"><span class="pre">VERY_LARGE_DOUBLE</span></code>) the minimum and maximum allowed
 maximum likelihood hypocenter depth (km)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">Hypo_Dist_Max</span></code> (<em>float</em>, default:<code class="docutils literal notranslate"><span class="pre">VERY_LARGE_DOUBLE</span></code>) the
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">Hypo_Dist_Max</span></code> (<em>float</em>, default:<code class="docutils literal notranslate"><span class="pre">VERY_LARGE_DOUBLE</span></code>) the
 maximum allowed maximum likelihood hypocenter distance (km)</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. Because the maximum residual cutoff is abrupt, it should be
+<div class="line">   1. Because the maximum residual cutoff is abrupt, it should be
 chosen and used with care.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;2. In the current version of NLLoc, it is assumed in the
+<div class="line">   2. In the current version of NLLoc, it is assumed in the
 calculation of average P and S station residuals that the standardized
 phase codes are <code class="docutils literal notranslate"><span class="pre">P</span></code> and <code class="docutils literal notranslate"><span class="pre">S</span></code> . Thus it is important to use these
 codes, if possible.</div>
@@ -1144,11 +1109,11 @@ codes, if possible.</div>
 <div class="line">Specifies whether to determine take-off angles for the maximum
 likelihood hypocenter and sets minimum quality cutoff for saving
 angles and corresponding phases to the HypoInverse Archive file .</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">angleMode</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">ANGLES_YES</span> <span class="pre">ANGLES_NO</span></code>,
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">angleMode</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">ANGLES_YES</span> <span class="pre">ANGLES_NO</span></code>,
 default:<code class="docutils literal notranslate"><span class="pre">ANGLES_YES</span></code>) sets if take-off angles are read from angles
 grid files and output to locations files. ( <code class="docutils literal notranslate"><span class="pre">ANGLES_YES</span></code> for angles
 determination or <code class="docutils literal notranslate"><span class="pre">ANGLES_NO</span></code> for no angles determination)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">qualtiyMin</span></code> (<em>integer</em>, default:<code class="docutils literal notranslate"><span class="pre">5</span></code>) sets the minimum
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">qualtiyMin</span></code> (<em>integer</em>, default:<code class="docutils literal notranslate"><span class="pre">5</span></code>) sets the minimum
  quality (see Take-Off Angles Algorithm ) for writing take-off angles
  and corresponding phase to the HypoInverse Archive file . ( <code class="docutils literal notranslate"><span class="pre">0</span></code> to
 <cite>10`</cite> )</div>
@@ -1164,28 +1129,30 @@ magnitude types are:</div>
 Boore (1987)),</div>
 </div>
 <blockquote>
-<div><em>M:sub:`L`</em> = log(<em>A f</em>) +<em>n</em>log(<em>r</em>/100)
-+<em>K</em>(<em>r</em>-100) + 3.0 +<em>S</em>,</div></blockquote>
+<div><p><em>M:sub:`L`</em> = log(<em>A f</em>) +<em>n</em>log(<em>r</em>/100)
++<em>K</em>(<em>r</em>-100) + 3.0 +<em>S</em>,</p>
+</div></blockquote>
 <div class="line-block">
 <div class="line"><br /></div>
 <div class="line"><code class="docutils literal notranslate"><span class="pre">MD_FMAG</span></code> (Duration magnitude<em>M:sub:`L`</em>fromLahr, J.C., (1989)
 HYPOELLIPSE),</div>
 </div>
 <blockquote>
-<div><em>MD</em> = <em>C:sub:`1`</em> + <em>C:sub:`2`</em>log(<em>Fc</em>) + <em>C:sub:`3`r</em>
-+ <em>C:sub:`4`z</em> + <em>C:sub:`5`</em>[log(<em>Fc</em>))<sup>2</sup>,</div></blockquote>
+<div><p><em>MD</em> = <em>C:sub:`1`</em> + <em>C:sub:`2`</em>log(<em>Fc</em>) + <em>C:sub:`3`r</em>
++ <em>C:sub:`4`z</em> + <em>C:sub:`5`</em>[log(<em>Fc</em>))<sup>2</sup>,</p>
+</div></blockquote>
 <div class="line-block">
 <div class="line"><br /></div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">f</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>) scaling factor to convert<em>A</em>to
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">f</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>) scaling factor to convert<em>A</em>to
 an equivalent Wood-Anderson amplitude.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">n</span></code> (<em>float</em>) <em>n</em> from Hutton and Boore (1987), related to
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">n</span></code> (<em>float</em>) <em>n</em> from Hutton and Boore (1987), related to
 geometrical spreading.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">K</span></code> (<em>float</em>) <em>K</em> from Hutton and Boore (1987).</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">Ro</span></code> (<em>float</em>, default:<code class="docutils literal notranslate"><span class="pre">100</span></code>) Optional <em>Reference distance</em>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">K</span></code> (<em>float</em>) <em>K</em> from Hutton and Boore (1987).</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">Ro</span></code> (<em>float</em>, default:<code class="docutils literal notranslate"><span class="pre">100</span></code>) Optional <em>Reference distance</em>
 (km) from Hutton and Boore (1987).</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">Mo</span></code> (<em>float</em>, default:<code class="docutils literal notranslate"><span class="pre">3.0</span></code>) Optional <em>Reference magnitude</em>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">Mo</span></code> (<em>float</em>, default:<code class="docutils literal notranslate"><span class="pre">3.0</span></code>) Optional <em>Reference magnitude</em>
 from Hutton and Boore (1987).</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">c1</span> <span class="pre">c2</span> <span class="pre">c3</span> <span class="pre">c4</span> <span class="pre">c5</span></code> (<em>float</em>) <em>c1 c2 c3 c4 c5</em> from Lahr, J.C.,
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">c1</span> <span class="pre">c2</span> <span class="pre">c3</span> <span class="pre">c4</span> <span class="pre">c5</span></code> (<em>float</em>) <em>c1 c2 c3 c4 c5</em> from Lahr, J.C.,
 (1989) HYPOELLIPSE</div>
 </div>
 <div class="line-block">
@@ -1193,24 +1160,24 @@ from Hutton and Boore (1987).</div>
 <div class="line"><em>optional</em>, <em>repeatable</em></div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">LOCCMP</span></code>
 <cite>label inst comp ampFactor sta_corr_ml_hb sta_corr_fd_fmag`</cite></div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">label</span></code> (<em>string</em>) station or N_S_L_C code label ( <em>i.e.</em> <code class="docutils literal notranslate"><span class="pre">NN_STA</span></code>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">label</span></code> (<em>string</em>) station or N_S_L_C code label ( <em>i.e.</em> <code class="docutils literal notranslate"><span class="pre">NN_STA</span></code>
 )</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">inst</span></code> (<em>string</em>) instrument identification ( <em>i.e.</em>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">inst</span></code> (<em>string</em>) instrument identification ( <em>i.e.</em>
 <cite>SP, BRB, VBB`</cite> ) If <em>inst</em> begins with <code class="docutils literal notranslate"><span class="pre">*</span></code>, then arrival is taken
  as having no absolute timing (can currently only be used with the EDT
  location methods)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">comp</span></code> (<em>string</em>) component identification ( <em>i.e.</em>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">comp</span></code> (<em>string</em>) component identification ( <em>i.e.</em>
 <cite>Z, N, E, H`</cite> )</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">ampFactor</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>) amplitude factor, amplitude
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">ampFactor</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>) amplitude factor, amplitude
  read from phase file is multiplied by
 <a href="#id41"><span class="problematic" id="id42">`</span></a>ampFactor                    ` to obtain
  the amplitude used for magnitude calculation.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">sta_corr_ml_hb</span></code> (<em>float</em>) <code class="docutils literal notranslate"><span class="pre">ML_HB</span></code> station correction, from
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">sta_corr_ml_hb</span></code> (<em>float</em>) <code class="docutils literal notranslate"><span class="pre">ML_HB</span></code> station correction, from
 Hutton and Boore (1987)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">sta_corr_fd_fmag</span></code> (<em>float</em>) <code class="docutils literal notranslate"><span class="pre">FD_FMAG</span></code> station correction, from
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">sta_corr_fd_fmag</span></code> (<em>float</em>) <code class="docutils literal notranslate"><span class="pre">FD_FMAG</span></code> station correction, from
 Lahr, J.C., (1989) HYPOELLIPSE</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. Component specific paramaters are applied to all phase
+<div class="line">   1. Component specific paramaters are applied to all phase
 observations with matching label, instrument and component. Use <code class="docutils literal notranslate"><span class="pre">?</span></code>
 or <code class="docutils literal notranslate"><span class="pre">*</span></code> to disable matching of label, instrument or component.</div>
 </div>
@@ -1223,24 +1190,24 @@ or <code class="docutils literal notranslate"><span class="pre">*</span></code> 
 end dates of validity of the alias. Allows (1) station codes that vary
 over time or in different pick files to be homogenized to match codes
 in time grid files, and (2) allows selection of station data by time.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">code</span></code> (<em>string</em>) station code (or station name or source label)
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">code</span></code> (<em>string</em>) station code (or station name or source label)
 as read from the phase/observation files, or from the result of
 another alias evaluation</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">alias</span></code> (<em>string</em>) new station code which will replace
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">alias</span></code> (<em>string</em>) new station code which will replace
 <a href="#id43"><span class="problematic" id="id44">`</span></a>code                    ` if the relevant
  phase pick time falls within the start and end dates of validity of
  the alias</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">yearStart</span> <span class="pre">monthStart</span> <span class="pre">dayStart</span></code> (<em>integer</em>) year (including
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">yearStart</span> <span class="pre">monthStart</span> <span class="pre">dayStart</span></code> (<em>integer</em>) year (including
  century), month and day of start date of validity of the alias (
 <cite>0 0 0`</cite> = no start date)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">yearEnd</span> <span class="pre">monthEnd</span> <span class="pre">dayEnd</span></code> (<em>integer</em>) year (including century),
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">yearEnd</span> <span class="pre">monthEnd</span> <span class="pre">dayEnd</span></code> (<em>integer</em>) year (including century),
 month and day of end date of validity of the alias ( <code class="docutils literal notranslate"><span class="pre">9999</span> <span class="pre">99</span> <span class="pre">99</span></code> =
 no end date)</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. In NLLoc, the alias evaluation is applied recursively,
+<div class="line">   1. In NLLoc, the alias evaluation is applied recursively,
 regardless of the order of the <code class="docutils literal notranslate"><span class="pre">LOCALIAS</span></code> statements. Thus, when
 selecting and specifying alias names, beware of infinite recursion.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;2. A trailing underscore “_” in an alias will only be used for
+<div class="line">   2. A trailing underscore “_” in an alias will only be used for
 time grid identification, not for output. This allows, for example, a
 station name <code class="docutils literal notranslate"><span class="pre">ABC</span></code> to be aliases to the name <code class="docutils literal notranslate"><span class="pre">ABC_</span></code> to enforce
 certain dates of validity for the station, this requires that the time
@@ -1251,12 +1218,12 @@ NLLoc output, the code <code class="docutils literal notranslate"><span class="p
 <div class="line"><strong>LOCEXCLUDE - Exclude Observations</strong></div>
 <div class="line"><em>optional</em>, <em>repeatable</em> (<strong>ver 2.0</strong>)</div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">LOCEXCLUDE</span></code> <code class="docutils literal notranslate"><span class="pre">name</span> <span class="pre">phase</span></code></div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">name</span></code> (<em>string</em>) station or N_S_L_C code label ( <em>i.e.</em> <code class="docutils literal notranslate"><span class="pre">NN_STA</span></code>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">name</span></code> (<em>string</em>) station or N_S_L_C code label ( <em>i.e.</em> <code class="docutils literal notranslate"><span class="pre">NN_STA</span></code>
 ) identifier after application of any alias</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">phase</span></code> (<em>string</em>) phase code beofore mapping by <code class="docutils literal notranslate"><span class="pre">LOCPHASEID</span></code> (
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">phase</span></code> (<em>string</em>) phase code beofore mapping by <code class="docutils literal notranslate"><span class="pre">LOCPHASEID</span></code> (
 <cite>P`</cite> , <code class="docutils literal notranslate"><span class="pre">S</span></code> , <code class="docutils literal notranslate"><span class="pre">PN</span></code> , etc).</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. Excluded station/phase observations are weighted to 0 and so
+<div class="line">   1. Excluded station/phase observations are weighted to 0 and so
 will not be used for location. The residual is calculated for these
 observations and they are written to output files, if a travel-time is
 available.</div>
@@ -1267,14 +1234,14 @@ available.</div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">LOCDELAY</span></code> <code class="docutils literal notranslate"><span class="pre">code</span> <span class="pre">phase</span> <span class="pre">numReadings</span> <span class="pre">delay</span></code></div>
 <div class="line">Specifies P and S delays (station corrections) to be subtracted from
 observed P and S times.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">code</span></code> (<em>string</em>) station or N_S_L_C code code (after all alias evaluations)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">phase</span></code> (<em>string</em>) phase type ( <code class="docutils literal notranslate"><span class="pre">P</span></code> or <code class="docutils literal notranslate"><span class="pre">S</span></code> )</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">numReadings</span></code> (<em>integer</em>) number of residuals used to calculate
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">code</span></code> (<em>string</em>) station or N_S_L_C code code (after all alias evaluations)</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">phase</span></code> (<em>string</em>) phase type ( <code class="docutils literal notranslate"><span class="pre">P</span></code> or <code class="docutils literal notranslate"><span class="pre">S</span></code> )</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">numReadings</span></code> (<em>integer</em>) number of residuals used to calculate
 mean residual/delay (not used by NLLoc, included for compatibility
 with the format of a summary, phase statistics file)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">delay</span></code> (<em>float</em>) delay in seconds, subtracted from observed time</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">delay</span></code> (<em>float</em>) delay in seconds, subtracted from observed time</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. The body of a summary, phase statistics file (see Phase
+<div class="line">   1. The body of a summary, phase statistics file (see Phase
  Statistics file formats ) can be used directly as a set of
 <cite>LOCDELAY`</cite> statements. Thus the average phase residuals from a run
  of NLLoc can be used as the station corrections for later runs of
@@ -1288,12 +1255,12 @@ with the format of a summary, phase statistics file)</div>
 vertical ray from elev 0 to the elevation of the station. This control
 statement is mean to be used in GLOBAL mode with TauP or other time
 grids which use elevation 0 for the station elevation.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">flag</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">1</span></code>, default:<code class="docutils literal notranslate"><span class="pre">0</span></code>)
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">flag</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">1</span></code>, default:<code class="docutils literal notranslate"><span class="pre">0</span></code>)
 flag to set activation of simple elevation correction (0=NO, 1=Yes)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">velP</span></code> (<em>float</em>) sets the P velocity to use for calculation of
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">velP</span></code> (<em>float</em>) sets the P velocity to use for calculation of
 the elevation correction for P type phases (last leg of phase is P or
 p)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">velS</span></code> (<em>float</em>) sets the S velocity to use for calculation of
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">velS</span></code> (<em>float</em>) sets the S velocity to use for calculation of
 the elevation correction for S type phases (last leg of phase is S or
 s)</div>
 </div>
@@ -1303,22 +1270,22 @@ s)</div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">LOCTOPO_SURFACE</span></code> <code class="docutils literal notranslate"><span class="pre">gmtGrdFile</span>&#160; <span class="pre">flagDumpDecimation</span></code></div>
 <div class="line">Uses a topographic surface file in GMT grid2xyz ascii or binary format
 to mask prior search volume to the half-space below the topography.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">gmtGrdFile</span></code> (<em>string</em>) path and file name of a GMT grid2xyz
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">gmtGrdFile</span></code> (<em>string</em>) path and file name of a GMT grid2xyz
 ascii (*.asc) or binary (*.bin and *.bin.hdr) file(s) defining the
 topographic surface in coordinates lat(deg)/long(deg)/elev(m)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">flagDumpDecimation</span></code> (<em>integer</em>) if
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">flagDumpDecimation</span></code> (<em>integer</em>) if
 <a href="#id45"><span class="problematic" id="id46">`</span></a>flagDumpDecimation                    ` &gt;
  0 write surface data to x-y-z-elev file using decimation factor
 <a href="#id47"><span class="problematic" id="id48">`</span></a>flagDumpDecimation                    <a href="#id49"><span class="problematic" id="id50">`</span></a>.
  Output file is in NLL Scatter file format; this format can be plotted
  in SeismicityViewer.</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. Important: For binary grd file, filename must end in .bin and
+<div class="line">   1. Important: For binary grd file, filename must end in .bin and
 there must be the associated .bin.hdr ascii header file in the same
 directory</div>
-<div class="line">&nbsp;&nbsp;&nbsp;2. To convert topo.grd to GMT ascii grid format, use:
+<div class="line">   2. To convert topo.grd to GMT ascii grid format, use:
 <cite>grdinfo topo.grd &gt; topo.grd.asc ; grd2xyz topo.grd -Z &gt;&gt; topo.grd.asc`</cite></div>
-<div class="line">&nbsp;&nbsp;&nbsp;3. To convert topo.grd to GMT binary grid format, use:
+<div class="line">   3. To convert topo.grd to GMT binary grid format, use:
 <cite>grdinfo topo.grd &gt; topo.grd.bin.hdr ; grd2xyz topo.grd -ZTLd &gt; topo.grd.bin`</cite></div>
 </div>
 <div class="line-block">
@@ -1332,31 +1299,59 @@ regions such as Europe and North America and few or no stations in
 regions such as oceans. The relative weight for station <em>i</em> is:</div>
 </div>
 <blockquote>
-<div><em>wieght:sub:`i`</em> = 1.0 / [ SUM<sub>j</sub>
-exp(-dist<sup>2</sup>/cutoffDist:sup:<cite>2</cite> ]</div></blockquote>
+<div><p><em>wieght:sub:`i`</em> = 1.0 / [ SUM<sub>j</sub>
+exp(-dist<sup>2</sup>/cutoffDist:sup:<cite>2</cite> ]</p>
+</div></blockquote>
 <div class="line-block">
 <div class="line">where <em>j</em> is a station used for location and <em>dist</em> is the
 epicentral/great-circle distance between stations <em>i</em> and <em>j</em>.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">flag</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">1</span></code>, default:<code class="docutils literal notranslate"><span class="pre">0</span></code>)
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">flag</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">1</span></code>, default:<code class="docutils literal notranslate"><span class="pre">0</span></code>)
 flag to set activation of station distribution weighting (0=NO, 1=Yes)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">cutoffDist</span></code> (<em>float</em>) sets the cutoff distance for weighting
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">cutoffDist</span></code> (<em>float</em>) sets the cutoff distance for weighting
  calculation.
 <cite>cutoffDist                    ` &lt; ``0.0`</cite>
  sets automatic cutoff distance: equal to the mean distance between all
  pairs of stations used for location.</div>
 </div>
+<div class="line-block">
+<div class="line"><strong>LOCPOSTERIOR - Posterior pdf grids to use to drive location search instead of LOCMETH algorithm</strong></div>
+<div class="line"><em>optional</em>, <em>non-repeatable</em></div>
+<div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">LOCPOSTERIOR</span></code> <code class="docutils literal notranslate"><span class="pre">Type</span> <span class="pre">GridFile</span> <span class="pre">DefaultValue</span> <span class="pre">CoherenceMin</span> <span class="pre">MaxOtherWeight</span> <span class="pre">MaxSE3</span> <span class="pre">MaxNother</span> <span class="pre">MaxMagDiff</span> <span class="pre">MinMag</span></code></div>
+<div class="line">The location search will use pdf values from the specified grid(s) to drive the location search.</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">Type</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">OCT_TREE</span> <span class="pre">GRID</span></code>) type of grid file(s)</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">GridFile</span></code> (<em>string</em>) grid file path to use with weight 1.0, or <a href="#id51"><span class="problematic" id="id52">*</span></a>.stream_coherences files specifying one or more grid file paths and corresponding coherence values to map to stacking weights.</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">DefaultValue</span></code> (<em>float</em>) default pdf value to use if no value available in grid file (e.g. 1e-30)</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">CoherenceMin</span></code> (<em>float</em>) minimum coherence to use for mapping coherence to NLL-cohernce pdf stack weight</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">MaxOtherWeight</span></code> (<em>float</em>) maximum total of coherence weight for other events; if exceeded, other event coherences normalized to sum to this value; recommended value is -1.0, disabled.</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">MaxSE3</span></code> (<em>float</em>) maximum event se3 (ellipsoid.len3) to include event in pdf stack. Use negative value to disable this check.
+Excludes events with poor location constraint and large pdf extent. Such event pdf’s would only contribute noise to stack,
+but due to potentially high complexity of stack pdf, including such pdf’s may cause oct-tree search to get trapped
+in a local minimum within this event pdf (especially if LOC_SEARCH init_num_cells_x/y/z are too few). When this trapping occurs, some
+NLL-coherence events may cluster far from any events in SSST reference events (LOC_PATH), with unusual epicenter or depth.
+May typically have same or similar value as maximum distance in km between epicenters used to obtain cross-correlation coherences.</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">MaxNother</span></code> (<em>float</em>) maximum number of other events to include in pdf stack, Use negative value for no limit.
+limit processing time and number of files open when a large number of events have high coherency.
+Recommended value is -1.0, no limit.</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">MaxMagDiff</span></code> (<em>float</em>) maximum magnitude difference to include other event in pdf stack (-1.0 to disable).
+Excludes events that are not likely to have waveform similarity with target due to differences in spectral peak.
+May help avoid false high correlation due to filtering or clipping.
+Recommended value is -1.0, disabled.</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">MinMag</span></code> (<em>float</em>) minimum magnitude to process event (-999 to disable).
+Enables not processing smaller magnitude events, e.g. for avoiding possible noisy waveforms or for speeding up testing.
+Recommended value is -999, disabled.</div>
 </div>
-<div class="section" id="loc2ssst-program">
-<h2>1.3.1.9. Loc2ssst Program<a class="headerlink" href="#loc2ssst-program" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="loc2ssst-program">
+<h2><span class="section-number">1.3.1.9. </span>Loc2ssst Program<a class="headerlink" href="#loc2ssst-program" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
 <div class="line"><strong>LSOUT - Output File Root Name</strong></div>
 <div class="line"><em>required</em>, <em>non-repeatable</em></div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">LSOUT</span> <span class="pre">outputFileRoot</span></code></div>
-<div class="line">| &nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">outputFileRoot</span></code> (<em>string</em>) full or relative path and file <em>root</em> name (no extension) for output ssst and updated travel-time grids</div>
+<div class="line">|    <code class="docutils literal notranslate"><span class="pre">outputFileRoot</span></code> (<em>string</em>) full or relative path and file <em>root</em> name (no extension) for output ssst and updated travel-time grids</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. For the updated travel-time grids, the  <cite>outputFileRoot</cite> is appended with <cite>_ssst_corr</cite></div>
-<div class="line">&nbsp;&nbsp;&nbsp;2. The  <cite>outputFileRoot</cite> is appended with <cite>.waveType</cite></div>
-<div class="line">&nbsp;&nbsp;&nbsp;3. The 3D time grid ouput files have names of the form:
+<div class="line">   1. For the updated travel-time grids, the  <cite>outputFileRoot</cite> is appended with <cite>_ssst_corr</cite></div>
+<div class="line">   2. The  <cite>outputFileRoot</cite> is appended with <cite>.waveType</cite></div>
+<div class="line">   3. The 3D time grid ouput files have names of the form:
 <cite>outputFileRoot.waveType.label</cite>.*gridType*.*FileExtension*</div>
 </div>
 <p>where <em>label</em> is a source label ( <em>i.e.</em> a station or N_S_L_C code code), <em>gridType</em> is
@@ -1365,46 +1360,45 @@ flag to set activation of station distribution weighting (0=NO, 1=Yes)</div>
 <div class="line"><strong>LSLOCFILES - Input and Output File Root Name</strong></div>
 <div class="line"><em>required</em>, <em>non-repeatable</em></div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">LSLOCFILES</span></code>
-<code class="docutils literal notranslate"><span class="pre">inputFileRoot</span></code> (<em>string</em>) full or relative path and file name (with .hyp extension and optional wild-cards) specifying input NLLoc <a href="#id51"><span class="problematic" id="id52">*</span></a>.hyp files</div>
+<code class="docutils literal notranslate"><span class="pre">inputFileRoot</span></code> (<em>string</em>) full or relative path and file name (with .hyp extension and optional wild-cards) specifying input NLLoc <a href="#id53"><span class="problematic" id="id54">*</span></a>.hyp files</div>
 </div>
 <div class="line-block">
 <div class="line"><strong>LOCFILES - Input and Output File Root Name</strong></div>
 <div class="line"><em>required</em>, <em>non-repeatable</em></div>
 <div class="line">Specifies the directory path and filename for the phase/observation
 files, and the file <em>root</em> names (no extension) for the input time
-grids. These parameters should be identical to NLLoc Program-&gt;LOCFILES used to generate NLLoc <a href="#id53"><span class="problematic" id="id54">*</span></a>.hyp files specified in LSLOCFILES.</div>
+grids. These parameters should be identical to NLLoc Program-&gt;LOCFILES used to generate NLLoc <a href="#id55"><span class="problematic" id="id56">*</span></a>.hyp files specified in LSLOCFILES.</div>
 <div class="line">See NLLoc Program-&gt;LOCFILES for syntax.</div>
 </div>
 <div class="line-block">
 <div class="line"><strong>LOCMETH - Location Method</strong></div>
 <div class="line"><em>required</em>, <em>non-repeatable</em></div>
 <div class="line">Specifies the location method (algorithm) and method parameters.
-These parameters should be identical to NLLoc Program-&gt;LOCMETH used to generate NLLoc <a href="#id55"><span class="problematic" id="id56">*</span></a>.hyp files specified in LSLOCFILES.</div>
+These parameters should be identical to NLLoc Program-&gt;LOCMETH used to generate NLLoc <a href="#id57"><span class="problematic" id="id58">*</span></a>.hyp files specified in LSLOCFILES.</div>
 <div class="line">See NLLoc Program-&gt;LOCMETH for syntax.</div>
 </div>
-<blockquote>
-<div><strong>LOCPHASEID - Phase Identifier Mapping</strong></div></blockquote>
 <div class="line-block">
+<div class="line"><strong>LOCPHASEID - Phase Identifier Mapping</strong></div>
 <div class="line"><em>required</em>, <em>non-repeatable</em></div>
 <div class="line">Specifies the mapping of phase codes in the phase/observation file (
 <em>i.e.</em> <code class="docutils literal notranslate"><span class="pre">pg</span></code> or <code class="docutils literal notranslate"><span class="pre">Sn</span></code> ) to standardized phase codes ( <em>i.e.</em> <code class="docutils literal notranslate"><span class="pre">P</span></code>
-or <code class="docutils literal notranslate"><span class="pre">S</span></code> ). These parameters should be identical to NLLoc Program-&gt;LOCPHASEID used to generate NLLoc <a href="#id57"><span class="problematic" id="id58">*</span></a>.hyp files specified in LSLOCFILES.</div>
+or <code class="docutils literal notranslate"><span class="pre">S</span></code> ). These parameters should be identical to NLLoc Program-&gt;LOCPHASEID used to generate NLLoc <a href="#id59"><span class="problematic" id="id60">*</span></a>.hyp files specified in LSLOCFILES.</div>
 <div class="line">See NLLoc Program-&gt;LOCPHASEID for syntax.</div>
 </div>
 <div class="line-block">
 <div class="line"><strong>LSPARAMS - General parameters</strong></div>
 <div class="line"><em>required</em>, <em>non-repeatable</em></div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">LSPARAMS</span></code> <code class="docutils literal notranslate"><span class="pre">CharDist</span> <span class="pre">WeightFloor</span> <span class="pre">UseRejected</span></code></div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">CharDist</span></code> (<a href="#id59"><span class="problematic" id="id60">*</span></a>float*`) Characteristic event-station distance for weighting contribution of an event to SSST correction for a station calculation.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">WeightFloor</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>) Small value added to events-node weights so ssst values at large event-node distance remain non-zero (station static).</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">UseRejected</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">1</span></code>, default:<code class="docutils literal notranslate"><span class="pre">0</span></code>) flag to indicate that NLL REJECTED locations should be accepted for SSST processing.</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">CharDist</span></code> (<a href="#id61"><span class="problematic" id="id62">*</span></a>float*`) Characteristic event-station distance for weighting contribution of an event to SSST correction for a station calculation.</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">WeightFloor</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">0.0</span></code>) Small value added to events-node weights so ssst values at large event-node distance remain non-zero (station static).</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">UseRejected</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">1</span></code>, default:<code class="docutils literal notranslate"><span class="pre">0</span></code>) flag to indicate that NLL REJECTED locations should be accepted for SSST processing.</div>
 </div>
 <div class="line-block">
 <div class="line"><strong>LSMODE - Program Modes</strong></div>
 <div class="line"><em>required</em>, <em>non-repeatable</em></div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">LSMODE</span></code> <code class="docutils literal notranslate"><span class="pre">angleMode</span></code></div>
 <div class="line">Specifies angles run modes.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">angleMode</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">ANGLES_YES</span> <span class="pre">ANGLES_NO</span> <span class="pre">ANGLES_INCLINATION</span></code>) sets if take-off
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">angleMode</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">ANGLES_YES</span> <span class="pre">ANGLES_NO</span> <span class="pre">ANGLES_INCLINATION</span></code>) sets if take-off
 angles are calculated and an angles grid is output ( <code class="docutils literal notranslate"><span class="pre">ANGLES_YES</span></code>
 for angles calulcation or <code class="docutils literal notranslate"><span class="pre">ANGLES_NO</span></code> for no angles calculation,
 or <code class="docutils literal notranslate"><span class="pre">ANGLES_INCLINATION</span></code> for inclination angle calculation only with full precision)</div>
@@ -1415,22 +1409,22 @@ or <code class="docutils literal notranslate"><span class="pre">ANGLES_INCLINATI
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">LSGRID</span></code>
 <cite>xNum yNum zNum xOrig yOrig zOrig dx dy dz gridType`</cite></div>
 <div class="line">Specifies the size and other parameters of the 3D grid to save ssst time corrections.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">xNum</span> <span class="pre">yNum</span> <span class="pre">zNum</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">2</span></code>) number of grid nodes in
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">xNum</span> <span class="pre">yNum</span> <span class="pre">zNum</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">2</span></code>) number of grid nodes in
 the x, y and z directions</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">xOrig</span> <span class="pre">yOrig</span> <span class="pre">zOrig</span></code> (<em>float</em>) x, y and z location of the grid
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">xOrig</span> <span class="pre">yOrig</span> <span class="pre">zOrig</span></code> (<em>float</em>) x, y and z location of the grid
 origin in km relative to the geographic origin. Use a large, negative
 value ( <em>i.e.</em> <code class="docutils literal notranslate"><span class="pre">-1.0e30</span></code> ) to indicate automatic positioning of grid
 along corressponding direction (valid for nested grids only, may not
 be used for initial grid).</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">dx</span> <span class="pre">dy</span> <span class="pre">dz</span></code> (<em>float</em>) grid node spacing in kilometers along the x,
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">dx</span> <span class="pre">dy</span> <span class="pre">dz</span></code> (<em>float</em>) grid node spacing in kilometers along the x,
 y and z axes</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">gridType</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">SSST_TIMECORR</span></code>) statistical quantity to calculate on grid</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">gridType</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">SSST_TIMECORR</span></code>) statistical quantity to calculate on grid</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. The 3D grid dimensions are in kilometers with Z positive down
+<div class="line">   1. The 3D grid dimensions are in kilometers with Z positive down
 (left-handed coordinate system).</div>
-<div class="line">&nbsp;&nbsp;&nbsp;2. The grid is <em>dx*(xNum-1)</em> km long in the x direction, and
+<div class="line">   2. The grid is <em>dx*(xNum-1)</em> km long in the x direction, and
 similarly for y and z.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;3. For 2D velocity and travel-time grids LSGRID should be 3D and
+<div class="line">   3. For 2D velocity and travel-time grids LSGRID should be 3D and
 positioned absolutely in space, thus xNum &gt;&gt; 2 and xOrig and zOrig are
 in general != 0.0</div>
 </div>
@@ -1440,22 +1434,22 @@ in general != 0.0</div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">LSOUTGRID</span></code>
 <cite>xNum yNum zNum xOrig yOrig zOrig dx dy dz gridType`</cite></div>
 <div class="line">Specifies the size and other parameters of the 3D grid to save updated travel-times.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">xNum</span> <span class="pre">yNum</span> <span class="pre">zNum</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">2</span></code>) number of grid nodes in
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">xNum</span> <span class="pre">yNum</span> <span class="pre">zNum</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">2</span></code>) number of grid nodes in
 the x, y and z directions</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">xOrig</span> <span class="pre">yOrig</span> <span class="pre">zOrig</span></code> (<em>float</em>) x, y and z location of the grid
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">xOrig</span> <span class="pre">yOrig</span> <span class="pre">zOrig</span></code> (<em>float</em>) x, y and z location of the grid
 origin in km relative to the geographic origin. Use a large, negative
 value ( <em>i.e.</em> <code class="docutils literal notranslate"><span class="pre">-1.0e30</span></code> ) to indicate automatic positioning of grid
 along corressponding direction (valid for nested grids only, may not
 be used for initial grid).</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">dx</span> <span class="pre">dy</span> <span class="pre">dz</span></code> (<em>float</em>) grid node spacing in kilometers along the x,
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">dx</span> <span class="pre">dy</span> <span class="pre">dz</span></code> (<em>float</em>) grid node spacing in kilometers along the x,
 y and z axes</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">gridType</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">TIME</span></code>) statistical quantity to calculate on grid</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">gridType</span></code> (<em>choice</em>: <code class="docutils literal notranslate"><span class="pre">TIME</span></code>) statistical quantity to calculate on grid</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. The 3D grid dimensions are in kilometers with Z positive down
+<div class="line">   1. The 3D grid dimensions are in kilometers with Z positive down
 (left-handed coordinate system).</div>
-<div class="line">&nbsp;&nbsp;&nbsp;2. The grid is <em>dx*(xNum-1)</em> km long in the x direction, and
+<div class="line">   2. The grid is <em>dx*(xNum-1)</em> km long in the x direction, and
 similarly for y and z.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;3. For 2D velocity and travel-time grids LSOUTGRID should be 3D and
+<div class="line">   3. For 2D velocity and travel-time grids LSOUTGRID should be 3D and
 positioned absolutely in space, thus xNum &gt;&gt; 2 and xOrig and zOrig are
 in general != 0.0</div>
 </div>
@@ -1468,26 +1462,26 @@ in general != 0.0</div>
 calculation of average P and S station residuals. The average
 residuals are saved to a summary, phase statistics file (see Phase
 Statistics file formats ).</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">RMS_Max</span></code> (<em>float</em>, default:<code class="docutils literal notranslate"><span class="pre">VERY_LARGE_DOUBLE</span></code>) the maximum
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">RMS_Max</span></code> (<em>float</em>, default:<code class="docutils literal notranslate"><span class="pre">VERY_LARGE_DOUBLE</span></code>) the maximum
 allowed hypocenter RMS in seconds</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">NRdgs_Min</span></code> (<em>integer</em>, default:<code class="docutils literal notranslate"><span class="pre">-1</span></code>) the minimum allowed
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">NRdgs_Min</span></code> (<em>integer</em>, default:<code class="docutils literal notranslate"><span class="pre">-1</span></code>) the minimum allowed
 hypocenter number of readings</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">Gap_Max</span></code> (<em>float</em>, default:<code class="docutils literal notranslate"><span class="pre">VERY_LARGE_DOUBLE</span></code>) the maximum
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">Gap_Max</span></code> (<em>float</em>, default:<code class="docutils literal notranslate"><span class="pre">VERY_LARGE_DOUBLE</span></code>) the maximum
 allowed hypocenter gap in degrees</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">P_ResidualMax</span> <span class="pre">S_ResidualMax</span></code> (<em>float</em>,
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">P_ResidualMax</span> <span class="pre">S_ResidualMax</span></code> (<em>float</em>,
 default:<code class="docutils literal notranslate"><span class="pre">VERY_LARGE_DOUBLE</span></code>) the maximum allowed residual in
 seconds for a P or S phase</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">Ell_Len3_Max</span></code> (<em>float</em>, default:<code class="docutils literal notranslate"><span class="pre">VERY_LARGE_DOUBLE</span></code>) the
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">Ell_Len3_Max</span></code> (<em>float</em>, default:<code class="docutils literal notranslate"><span class="pre">VERY_LARGE_DOUBLE</span></code>) the
 maximum allowed ellipsoid major semi-axis length (km)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">Hypo_Depth_Min</span> <span class="pre">Hypo_Depth_Max</span></code> (<em>float</em>,
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">Hypo_Depth_Min</span> <span class="pre">Hypo_Depth_Max</span></code> (<em>float</em>,
 default:<code class="docutils literal notranslate"><span class="pre">VERY_LARGE_DOUBLE</span></code>) the minimum and maximum allowed
 maximum likelihood hypocenter depth (km)</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">Hypo_Dist_Max</span></code> (<em>float</em>, default:<code class="docutils literal notranslate"><span class="pre">VERY_LARGE_DOUBLE</span></code>) the
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">Hypo_Dist_Max</span></code> (<em>float</em>, default:<code class="docutils literal notranslate"><span class="pre">VERY_LARGE_DOUBLE</span></code>) the
 maximum allowed maximum likelihood hypocenter distance (km)</div>
 <div class="line">Notes:</div>
-<div class="line">&nbsp;&nbsp;&nbsp;1. Because the maximum residual cutoff is abrupt, it should be
+<div class="line">   1. Because the maximum residual cutoff is abrupt, it should be
 chosen and used with care.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;2. In the current version of NLLoc, it is assumed in the
+<div class="line">   2. In the current version of NLLoc, it is assumed in the
 calculation of average P and S station residuals that the standardized
 phase codes are <code class="docutils literal notranslate"><span class="pre">P</span></code> and <code class="docutils literal notranslate"><span class="pre">S</span></code> . Thus it is important to use these
 codes, if possible.</div>
@@ -1497,19 +1491,20 @@ codes, if possible.</div>
 <div class="line"><em>optional</em>, <em>non-repeatable</em></div>
 <div class="line">Syntax 1: <code class="docutils literal notranslate"><span class="pre">LSSTATIONS</span> <span class="pre">sta1,sta2,...</span></code></div>
 <div class="line">Specifies a set of station or N_S_L_C codes to be included for ssst processing. If not present, all stations with travel-time grids and arrivals will be processed.</div>
-<div class="line">&nbsp;&nbsp;&nbsp;<code class="docutils literal notranslate"><span class="pre">sta1,sta2,...</span></code> (<em>string</em>) comma separated list without whitespce of stations to use for ssst processing</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">sta1,sta2,...</span></code> (<em>string</em>) comma separated list without whitespce of stations to use for ssst processing</div>
 <div class="line"><br /></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">1.3.1. NonLinLoc Software Package Control File</a><ul>
 <li><a class="reference internal" href="#overview">1.3.1.1. Overview</a></li>
@@ -1527,7 +1522,7 @@ codes, if possible.</div>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="core.Loc2ssst.html"
-                        title="previous chapter">1.1.8. Loc2ssst - generate SSST corrections on a  to 3D grid for NLLoc locations</a></p>
+                        title="previous chapter"><span class="section-number">1.1.8. </span>Loc2ssst - generate SSST corrections on a  to 3D grid for NLLoc locations</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -1536,17 +1531,15 @@ codes, if possible.</div>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -1561,12 +1554,13 @@ codes, if possible.</div>
           <a href="core.Loc2ssst.html" title="1.1.8. Loc2ssst - generate SSST corrections on a to 3D grid for NLLoc locations"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">NonLinLoc Doc 7.00 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../programs.html" >1. NonLinLoc Programs</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../programs.html" ><span class="section-number">1. </span>NonLinLoc Programs</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.3.1. </span>NonLinLoc Software Package Control File</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Anthony Lomax.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
     </div>
   </body>
 </html>

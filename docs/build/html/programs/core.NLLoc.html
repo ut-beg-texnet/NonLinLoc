@@ -1,18 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<html lang="en">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>1.1.5. NLLoc - Non-linear, earthquake location program &#8212; NonLinLoc Doc 7.00 documentation</title>
-    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="1.1.6. LocSum - combine location results" href="core.LocSum.html" />
@@ -31,7 +33,8 @@
           <a href="core.Time2EQ.html" title="1.1.4. Time2EQ - travel-time grid to synthetic observations"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">NonLinLoc Doc 7.00 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../programs.html" accesskey="U">1. NonLinLoc Programs</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../programs.html" accesskey="U"><span class="section-number">1. </span>NonLinLoc Programs</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.1.5. </span>NLLoc - Non-linear, earthquake location program</a></li> 
       </ul>
     </div>  
 
@@ -43,8 +46,8 @@
   <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="section" id="nlloc-non-linear-earthquake-location-program">
-<h1>1.1.5. NLLoc - Non-linear, earthquake location program<a class="headerlink" href="#nlloc-non-linear-earthquake-location-program" title="Permalink to this headline">¶</a></h1>
+<section id="nlloc-non-linear-earthquake-location-program">
+<h1><span class="section-number">1.1.5. </span>NLLoc - Non-linear, earthquake location program<a class="headerlink" href="#nlloc-non-linear-earthquake-location-program" title="Permalink to this headline">¶</a></h1>
 <p><strong>NLLoc</strong> performs earthquake locations in 3D models using non-linear
 search techniques.</p>
 <div class="color"></div><p><a href="#id2"><span class="problematic" id="id3">`Overview &lt;#_overview_&gt;`__</span></a> - <a href="#id4"><span class="problematic" id="id5">`Inversion Approach &lt;#_inversion_&gt;`__</span></a> -
@@ -54,8 +57,8 @@ Sampling &lt;NLLoc.html#_octtree_&gt;`__</span></a> - <a href="#id10"><span clas
 program-Input &lt;#_running_&gt;`__</span></a> - <a href="#id16"><span class="problematic" id="id17">`Output &lt;#_output_&gt;`__</span></a> - <a href="#id18"><span class="problematic" id="id19">`Processing and
 Display of results &lt;#_processing_&gt;`__</span></a> - <a class="reference external" href="index.html">[NonLinLoc
 Home]</a></p>
-<div class="color"></div><div class="section" id="overview">
-<h2>1.1.5.1. Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<div class="color"></div><section id="overview">
+<h2><span class="section-number">1.1.5.1. </span>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>The NLLoc program produces a <strong>misfit function</strong>, <strong>“optimal”
 hypocenters</strong>, an estimate of the <strong>posterior probability density
 function</strong> (PDF) for the spatial, <em>x,y,z</em> hypocenter location, and other
@@ -145,9 +148,9 @@ with linear locations `(Lomax,et al., 2000) &lt;./references.html&gt;`__</strong
 Encyclopedia of Complexity and System Science `(Lomax, et al.,
 2009) &lt;./references.html&gt;`__</strong> for further information on the NonLinLoc
 location algorithms.</p>
-<div class="color"></div></div>
-<div class="section" id="inversion-approach">
-<h2>1.1.5.2. Inversion Approach<a class="headerlink" href="#inversion-approach" title="Permalink to this headline">¶</a></h2>
+<div class="color"></div></section>
+<section id="inversion-approach">
+<h2><span class="section-number">1.1.5.2. </span>Inversion Approach<a class="headerlink" href="#inversion-approach" title="Permalink to this headline">¶</a></h2>
 <p>The earthquake location algorithm implemented in the program NLLoc
 <a class="reference external" href="./references.html">(Lomax, et al., 2000)</a> follows the probabilistic
 formulation of inversion presented in <a class="reference external" href="references.html">Tarantola and Valette
@@ -172,8 +175,8 @@ solution can be expressed as a <strong>posterior density function (PDF)</strong>
 <p><a class="reference internal" href="programs/Image6.gif"><img alt="image1" src="programs/Image6.gif" style="width: 206px; height: 42px;" /></a>, (2)</p>
 <p>where m<sub>p</sub>(<strong>p</strong>) and m<sub>d</sub>(<strong>d</strong>) are null information
 density functions specifying the state of total ignorance.</p>
-<div class="section" id="gaussian-error-assumption-l2-rms-likelihood-function">
-<h3>1.1.5.2.1. Gaussian Error Assumption - L2-RMS likelihood function<a class="headerlink" href="#gaussian-error-assumption-l2-rms-likelihood-function" title="Permalink to this headline">¶</a></h3>
+<section id="gaussian-error-assumption-l2-rms-likelihood-function">
+<h3><span class="section-number">1.1.5.2.1. </span>Gaussian Error Assumption - L2-RMS likelihood function<a class="headerlink" href="#gaussian-error-assumption-l2-rms-likelihood-function" title="Permalink to this headline">¶</a></h3>
 <p>For the case of earthquake location, the unknown parameters are the
 hypocentral coordinates x = (<em>x</em>, <em>y</em>, <em>z</em>) and the origin time <em>T</em>, the
 observed data is a set of arrival times t, and the theoretical relation
@@ -190,8 +193,8 @@ and Valette, 1982</a>; <a class="reference external" href="references.html">Mose
 <p><a class="reference internal" href="programs/Image7.gif"><img alt="image2" src="programs/Image7.gif" style="width: 258px; height: 49px;" /></a> (3)</p>
 <p>In this expression <em>K</em> is a normalisation factor, <em>r</em>(<strong>x</strong>) is a
 density function of prior information on the model parameters, and
-<em>g</em>(<strong>x</strong>) is an L2 misfit function.&nbsp;<a class="reference internal" href="programs/Image8.gif"><img alt="image3" src="programs/Image8.gif" style="width: 16px; height: 26px;" /></a> is the vector of
-observed arrival times <strong>t</strong> minus their weighted mean,&nbsp;<a class="reference internal" href="programs/Image9.gif"><img alt="image4" src="programs/Image9.gif" style="width: 13px; height: 21px;" /></a>is
+<em>g</em>(<strong>x</strong>) is an L2 misfit function. <a class="reference internal" href="programs/Image8.gif"><img alt="image3" src="programs/Image8.gif" style="width: 16px; height: 26px;" /></a> is the vector of
+observed arrival times <strong>t</strong> minus their weighted mean, <a class="reference internal" href="programs/Image9.gif"><img alt="image4" src="programs/Image9.gif" style="width: 13px; height: 21px;" /></a>is
 the vector of theoretical travel times <strong>h</strong> minus their weighted mean,
 where the weights <em>w:sub:`i`</em> are given by</p>
 <p><a class="reference internal" href="programs/Image10.gif"><img alt="image5" src="programs/Image10.gif" style="width: 221px; height: 34px;" /></a> (4)</p>
@@ -218,9 +221,9 @@ structure. Estimating these travel time errors is difficult and often
 not attempted. When the model used for location is a poor approximation
 to the “true” structure (as is often the case with layered model
 approximations), the absolute location uncertainties can be very large.</p>
-</div>
-<div class="section" id="complete-non-linear-location-pdf">
-<h3>1.1.5.2.2. Complete, Non-linear Location - PDF<a class="headerlink" href="#complete-non-linear-location-pdf" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="complete-non-linear-location-pdf">
+<h3><span class="section-number">1.1.5.2.2. </span>Complete, Non-linear Location - PDF<a class="headerlink" href="#complete-non-linear-location-pdf" title="Permalink to this headline">¶</a></h3>
 <p>The NLLoc grid-search algotithm systematically determines the posterior
 probability density function <em>s</em>(<strong>x</strong>) or the “misfit” function
 <em>g</em>(<strong>x</strong>) over a 3D, <em>x,y,z</em> spacial grid. The NLLoc Metropolis-Gibbs
@@ -248,9 +251,9 @@ Statistics &lt;formats.html#_location_phsstat_&gt;`__</span></a> file), and for
 calculating location confidence contour levels (see
 <a href="#id28"><span class="problematic" id="id29">`Output &lt;#_output_&gt;`__</span></a> below), and “Traditional” Gaussian estimators
 (see below).</p>
-</div>
-<div class="section" id="maximum-likelihood-hypocentre">
-<h3>1.1.5.2.3. Maximum likelihood hypocentre<a class="headerlink" href="#maximum-likelihood-hypocentre" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="maximum-likelihood-hypocentre">
+<h3><span class="section-number">1.1.5.2.3. </span>Maximum likelihood hypocentre<a class="headerlink" href="#maximum-likelihood-hypocentre" title="Permalink to this headline">¶</a></h3>
 <p>The maximum likelihood (or minimum misfit) point of the complete,
 non-linear location PDF is selected as an “optimal” hypocentre. The
 significance and uncertainty of this maximum likelihood hypocentre
@@ -267,9 +270,9 @@ of average phase residuals (output to a <a href="#id38"><span class="problematic
 Statistics &lt;formats.html#_location_phsstat_&gt;`__</span></a> file), and for magnitude
 calculation. The ray take-off angles can be used for a first-motion
 fault plane determination.</p>
-</div>
-<div class="section" id="gaussian-estimators">
-<h3>1.1.5.2.4. Gaussian estimators<a class="headerlink" href="#gaussian-estimators" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="gaussian-estimators">
+<h3><span class="section-number">1.1.5.2.4. </span>Gaussian estimators<a class="headerlink" href="#gaussian-estimators" title="Permalink to this headline">¶</a></h3>
 <div class="line-block">
 <div class="line">“Traditional” gaussian or normal estimators, such as the expectation
 <em>E</em>(<strong>x</strong>) and covariance matrix <strong>C</strong> may be obtained from the
@@ -292,9 +295,9 @@ cases, the covariance matrix is then given by</div>
 </div>
 <p>The Gaussian estimators are output to the NNLoc, ASCII <a href="#id40"><span class="problematic" id="id41">`Hypocenter-Phase
 File &lt;formats.html#_location_hypphs_&gt;`__</span></a> (<code class="docutils literal notranslate"><span class="pre">STATISTICS</span></code> line).</p>
-</div>
-<div class="section" id="confidence-ellipsoid">
-<h3>1.1.5.2.5. Confidence Ellipsoid<a class="headerlink" href="#confidence-ellipsoid" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="confidence-ellipsoid">
+<h3><span class="section-number">1.1.5.2.5. </span>Confidence Ellipsoid<a class="headerlink" href="#confidence-ellipsoid" title="Permalink to this headline">¶</a></h3>
 <div class="line-block">
 <div class="line">The 68% confidence ellipsoid can be obtained from singular value
 decomposition (SVD) of the covariance matrix <strong>C</strong>, following Press
@@ -312,18 +315,18 @@ of freedom.</p>
 indicators of the uncertainties in the location only in the case where
 the complete, non-linear PDF has a single maximum and has an ellipsoidal
 form.</p>
-<div class="color"></div></div>
-</div>
-<div class="section" id="the-equal-differential-time-edt-likelihood-function">
-<h2>1.1.5.3. The Equal Differential Time (EDT) likelihood function<a class="headerlink" href="#the-equal-differential-time-edt-likelihood-function" title="Permalink to this headline">¶</a></h2>
+<div class="color"></div></section>
+</section>
+<section id="the-equal-differential-time-edt-likelihood-function">
+<h2><span class="section-number">1.1.5.3. </span>The Equal Differential Time (EDT) likelihood function<a class="headerlink" href="#the-equal-differential-time-edt-likelihood-function" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="../edt/edt.html">EDT description page</a></p>
-<div class="color"></div></div>
-<div class="section" id="oct-tree-importance-sampling-algorithm">
-<h2>1.1.5.4. Oct-Tree Importance Sampling Algorithm<a class="headerlink" href="#oct-tree-importance-sampling-algorithm" title="Permalink to this headline">¶</a></h2>
+<div class="color"></div></section>
+<section id="oct-tree-importance-sampling-algorithm">
+<h2><span class="section-number">1.1.5.4. </span>Oct-Tree Importance Sampling Algorithm<a class="headerlink" href="#oct-tree-importance-sampling-algorithm" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="../octtree/OctTree.html">Oct-Tree description page</a></p>
-<div class="color"></div></div>
-<div class="section" id="grid-search-algorithm">
-<h2>1.1.5.5. Grid-Search Algorithm<a class="headerlink" href="#grid-search-algorithm" title="Permalink to this headline">¶</a></h2>
+<div class="color"></div></section>
+<section id="grid-search-algorithm">
+<h2><span class="section-number">1.1.5.5. </span>Grid-Search Algorithm<a class="headerlink" href="#grid-search-algorithm" title="Permalink to this headline">¶</a></h2>
 <p>The grid-search algorithm performs successively finer, systematic
 grid-searches within a spatial, <em>x,y,z</em> volume to obtain a misfit
 function, an optimal hypocenter and an estimate of the posterior
@@ -331,27 +334,27 @@ probability density function (<a href="#id42"><span class="problematic" id="id43
 hypocenter location.</p>
 <p>Advantages:</p>
 <ol class="arabic simple">
-<li>Does not require partial derivatives, thus can be used with
-complicated, 3D velocity structures</li>
-<li>Systematic, deterministic coverage of search region</li>
-<li>Accurate recovery of very irregular (non-ellipsoidal) PDF’s with
-multiple minima</li>
-<li>Efficiently reads into memory 2D planes of 3D travel-time grid files,
+<li><p>Does not require partial derivatives, thus can be used with
+complicated, 3D velocity structures</p></li>
+<li><p>Systematic, deterministic coverage of search region</p></li>
+<li><p>Accurate recovery of very irregular (non-ellipsoidal) PDF’s with
+multiple minima</p></li>
+<li><p>Efficiently reads into memory 2D planes of 3D travel-time grid files,
 thus can be used with large number of observations and large 3D
-travel-time grids</li>
-<li>Results can be used to obtain confidence contours</li>
+travel-time grids</p></li>
+<li><p>Results can be used to obtain confidence contours</p></li>
 </ol>
 <p>Drawbacks:</p>
 <ol class="arabic simple">
-<li>Very time consuming relative to stochastic and linear location
-techniques</li>
-<li>Relative to the size of the most significant region of the PDF, the
+<li><p>Very time consuming relative to stochastic and linear location
+techniques</p></li>
+<li><p>Relative to the size of the most significant region of the PDF, the
 final search grids may be too large (giving low resolution) or too
-small (giving truncation of the PDF)</li>
-<li>Requires careful selection of grid size and node spacing</li>
+small (giving truncation of the PDF)</p></li>
+<li><p>Requires careful selection of grid size and node spacing</p></li>
 </ol>
-<div class="section" id="procedure">
-<h3>1.1.5.5.1. Procedure<a class="headerlink" href="#procedure" title="Permalink to this headline">¶</a></h3>
+<section id="procedure">
+<h3><span class="section-number">1.1.5.5.1. </span>Procedure<a class="headerlink" href="#procedure" title="Permalink to this headline">¶</a></h3>
 <p>The Grid-Search location is based on a nested grid search using one or
 more location grids as specified by
 <a href="#id44"><span class="problematic" id="id45">`LOCGRID &lt;control.html#_NLLoc_locgrid_&gt;`__</span></a> statements in the Input
@@ -392,10 +395,10 @@ any one time. This approach is used by the grid-search algorithm. Sheets
 of data with a given <em>x</em> index are read from the 3D travel-time grid
 files as large blocks of bytes, which is very fast in comparison to
 reading the same number of data values individually.</p>
-<div class="color"></div></div>
-</div>
-<div class="section" id="metropolis-gibbs-sampling-algorithm">
-<h2>1.1.5.6. Metropolis-Gibbs Sampling Algorithm<a class="headerlink" href="#metropolis-gibbs-sampling-algorithm" title="Permalink to this headline">¶</a></h2>
+<div class="color"></div></section>
+</section>
+<section id="metropolis-gibbs-sampling-algorithm">
+<h2><span class="section-number">1.1.5.6. </span>Metropolis-Gibbs Sampling Algorithm<a class="headerlink" href="#metropolis-gibbs-sampling-algorithm" title="Permalink to this headline">¶</a></h2>
 <p>The Metropolis-Gibbs algorithm performs a directed random walk within a
 spatial, <em>x,y,z</em> volume to obtain a set of samples that follow the 3D
 <a href="#id48"><span class="problematic" id="id49">`PDF &lt;NLLoc.html#_inversion_&gt;`__</span></a> for the earthquake location. The
@@ -403,27 +406,27 @@ samples give and estimate of the optimal hypocenter and an image of the
 posterior probability density function (PDF) for hypocenter location.</p>
 <p>Advantages:</p>
 <ol class="arabic simple">
-<li>Does not require partial derivatives, thus can be used with
-complicated, 3D velocity structures</li>
-<li>Accurate recovery of moderately irregular (non-ellipsoidal) PDF’s
-with a single minimum</li>
-<li>Only only moderately slower (about 10 times slower) than linearised,
+<li><p>Does not require partial derivatives, thus can be used with
+complicated, 3D velocity structures</p></li>
+<li><p>Accurate recovery of moderately irregular (non-ellipsoidal) PDF’s
+with a single minimum</p></li>
+<li><p>Only only moderately slower (about 10 times slower) than linearised,
 iterative location techniques, and is much faster (about 100 times
-faster) than the grid-search</li>
-<li>Results can be used to obtain confidence contours</li>
+faster) than the grid-search</p></li>
+<li><p>Results can be used to obtain confidence contours</p></li>
 </ol>
 <p>Drawbacks:</p>
 <ol class="arabic simple">
-<li>Stochastic coverage of search region - may miss important features</li>
-<li>Inconsistent recovery of very irregular (non-ellipsoidal) PDF’s with
-multiple minima</li>
-<li>Requires careful selection of sampling parameters</li>
-<li>Attempts to read full 3D travel-time grid files into memory, thus may
+<li><p>Stochastic coverage of search region - may miss important features</p></li>
+<li><p>Inconsistent recovery of very irregular (non-ellipsoidal) PDF’s with
+multiple minima</p></li>
+<li><p>Requires careful selection of sampling parameters</p></li>
+<li><p>Attempts to read full 3D travel-time grid files into memory, thus may
 run very slowly with large number of observations and large 3D
-travel-time grids</li>
+travel-time grids</p></li>
 </ol>
-<div class="section" id="id1">
-<h3>1.1.5.6.1. Procedure<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<section id="id1">
+<h3><span class="section-number">1.1.5.6.1. </span>Procedure<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>The Metropolis-Gibbs search proceedure to obtain samples of a PDF is
 based on the algorithm of <a class="reference external" href="references.html">Metropolis et al. (1953)</a>
 for the simulation of the distribution of a set of atoms at a given
@@ -462,10 +465,10 @@ irregular structure of the PDF. The NonLinLoc Metropolis-Gibbs sampler
 uses three distinct sampling stages to determine adaptively an optimal
 step size <em>l</em> for the walk:</p>
 <ol class="arabic simple">
-<li>A <strong>learning</strong> stage where the step size is fixed and relatively
+<li><p>A <strong>learning</strong> stage where the step size is fixed and relatively
 large. The walk can explore globally the search volume and migrate
-towards regions of high likelihood. “Accepted” samples are not saved.</li>
-<li>An <strong>equilibration</strong> stage where the step size <em>l</em> is adjusted in
+towards regions of high likelihood. “Accepted” samples are not saved.</p></li>
+<li><p>An <strong>equilibration</strong> stage where the step size <em>l</em> is adjusted in
 proportion to the standard deviations (<em>s:sub:`x`</em>, <em>s:sub:`y`</em>,
 <em>s:sub:`z`</em>) of the spatial distribution of all previously
 “accepted” samples obtained after the middle of the learning stage.
@@ -478,13 +481,13 @@ sets <em>l</em> in proportion to the cell size required to tile with
 <em>N:sub:`s`</em> cells the rectangular volume with sides <em>s:sub:`x`</em>,
 <em>s:sub:`y`</em> and <em>s:sub:`z`</em>. The walk can continue to migrate
 towards or may begin to explore regions of high likelihood.
-“Accepted” samples are not saved.</li>
-<li>A <strong>saving</strong> stage where the step size <em>l</em> is fixed at its final
+“Accepted” samples are not saved.</p></li>
+<li><p>A <strong>saving</strong> stage where the step size <em>l</em> is fixed at its final
 value from the equilibration stage. The walk can continue to explore
 regions of high likelihood. “Accepted” samples are assumed to follow
 the location PDF and can be saved, but there may be a waiting time of
 several samples between saves to insure the independence of saved
-samples.</li>
+samples.</p></li>
 </ol>
 <p><img alt="image12" src="programs/MetStages.gif" /></p>
 <p>It is important to set the parameters for the directed walk so that (1)
@@ -496,14 +499,14 @@ size has been obtained to accurately explore and image the PDF.</p>
 <p>The NonLinLoc Metropolis-Gibbs sampling algorithm is initialised as
 follows:</p>
 <ol class="arabic simple">
-<li>The walk location is set at the <em>x</em>,<em>y</em> position of the station
+<li><p>The walk location is set at the <em>x</em>,<em>y</em> position of the station
 with the earliest arrival time and non-zero weight, at the mean depth
-of the search region.</li>
-<li>If the initial step <em>l</em> size is not specified, it is set to the cell
+of the search region.</p></li>
+<li><p>If the initial step <em>l</em> size is not specified, it is set to the cell
 size required to tile with <em>N:sub:`s`</em> cells the plane formed by
 the two longest sides of the initial search region. <em>N:sub:`s`</em> is
 the total number of samples to be accepted during the saving stage,
-including samples that are skipped between saves.</li>
+including samples that are skipped between saves.</p></li>
 </ol>
 <p>The rejection by the algorithm of new walk locations for a large number
 of consecutive tries (the order of 1000 tries) may indicate that the
@@ -521,10 +524,10 @@ annealing. This variable parameter could be set to increase the
 effective size of the PDF during the learning and equilibration stages
 so that the region of high likelihood is located efficiently, and then
 set to 1 during the saving stage so that the true PDF is imaged.</p>
-<div class="color"></div></div>
-</div>
-<div class="section" id="running-the-program-input">
-<h2>1.1.5.7. Running the program - Input<a class="headerlink" href="#running-the-program-input" title="Permalink to this headline">¶</a></h2>
+<div class="color"></div></section>
+</section>
+<section id="running-the-program-input">
+<h2><span class="section-number">1.1.5.7. </span>Running the program - Input<a class="headerlink" href="#running-the-program-input" title="Permalink to this headline">¶</a></h2>
 <p>Synopsis: <code class="docutils literal notranslate"><span class="pre">NLLoc</span> <span class="pre">InputControlFile</span></code></p>
 <p>The NLLoc program takes a single argument <em>``InputControlFile``</em> which
 specifies the complete path and filename for an <a class="reference external" href="control.html">Input Control
@@ -537,28 +540,28 @@ must contain the <code class="docutils literal notranslate"><span class="pre">CO
 statements.</p>
 <p>In addition, the NLLoc program requires:</p>
 <ol class="arabic simple">
-<li>A file or files containing sets of seismic phase arrival times for
+<li><p>A file or files containing sets of seismic phase arrival times for
 each event. These arrival times can be can be specified in a number
 of <a href="#id54"><span class="problematic" id="id55">`Phase formats &lt;formats.html#_phase_&gt;`__</span></a>, including those of the
-HYPO71/HYPOELLIPSE and SEISAN software, and the RéNaSS DEP format.</li>
-<li>Files containing a 2D or a 3D <strong>Travel-time grid</strong> created by the
+HYPO71/HYPOELLIPSE and SEISAN software, and the RéNaSS DEP format.</p></li>
+<li><p>Files containing a 2D or a 3D <strong>Travel-time grid</strong> created by the
 program <a class="reference external" href="Grid2Time.html">Grid2Time</a> for each phase type at each
 station. If a constant Vp/Vs ratio is used, then only P travel-time
-grids are required for each station.</li>
+grids are required for each station.</p></li>
 </ol>
 <p>The names, locations and other information for these files is specified
 in the <a href="#id56"><span class="problematic" id="id57">`NLLoc Statements section &lt;control.html#_NLLoc_&gt;`__</span></a> of the Input
 Control File.</p>
-<div class="color"></div></div>
-<div class="section" id="output">
-<h2>1.1.5.8. Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h2>
+<div class="color"></div></section>
+<section id="output">
+<h2><span class="section-number">1.1.5.8. </span>Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h2>
 <p>The location results can be output for <strong>single event</strong> and <strong>summary</strong>
 (all events) as:</p>
 <ol class="arabic simple">
-<li>A <a href="#id58"><span class="problematic" id="id59">`3D Grid &lt;formats.html#_grid_&gt;`__</span></a> containing <strong>misfit values</strong> or
+<li><p>A <a href="#id58"><span class="problematic" id="id59">`3D Grid &lt;formats.html#_grid_&gt;`__</span></a> containing <strong>misfit values</strong> or
 <strong>PDF:sup:`*` (probability dentsity function)</strong> values throughout
-the search volume (Grid-search only).</li>
-<li>An ASCII <a href="#id60"><span class="problematic" id="id61">`Hypocenter-Phase File &lt;formats.html#_location_hypphs_&gt;`__</span></a>
+the search volume (Grid-search only).</p></li>
+<li><p>An ASCII <a href="#id60"><span class="problematic" id="id61">`Hypocenter-Phase File &lt;formats.html#_location_hypphs_&gt;`__</span></a>
 containing <strong>hypocentral coordinates and origin time</strong> for the best
 <strong>(minimum misfit / maximum likelihood)</strong> point in the the search
 volume and an associated <strong>phase list</strong><sup>!</sup> containing station
@@ -566,12 +569,12 @@ and phase identifiers, phase times, residuals, take-off angles and
 other station/phase information. This file contains other
 information, including the <strong>hypocentral coordinates and
 uncertainty</strong><sup>*</sup> given by the traditional (Gaussian/Normal)
-<strong>expectation</strong> and <strong>covariance matrix</strong> measures of the PDF.</li>
-<li>A <a href="#id62"><span class="problematic" id="id63">`binary Scatter file &lt;formats.html#_location_scat_&gt;`__</span></a><sup>*!</sup>
-containing samples drawn from the PDF</li>
-<li>An ASCII <a href="#id64"><span class="problematic" id="id65">`Confidence
+<strong>expectation</strong> and <strong>covariance matrix</strong> measures of the PDF.</p></li>
+<li><p>A <a href="#id62"><span class="problematic" id="id63">`binary Scatter file &lt;formats.html#_location_scat_&gt;`__</span></a><sup>*!</sup>
+containing samples drawn from the PDF</p></li>
+<li><p>An ASCII <a href="#id64"><span class="problematic" id="id65">`Confidence
 Levels &lt;formats.html#_location_conf_&gt;`__</span></a><sup>*!</sup> giving the value
-of the PDF corresponding to confidence levels from 0.1 to 1.0</li>
+of the PDF corresponding to confidence levels from 0.1 to 1.0</p></li>
 </ol>
 <div class="line-block">
 <div class="line"><sup>*</sup> these output types are only generated for grids where the
@@ -581,24 +584,24 @@ PDF is calculated.</div>
 <p>The location results can also be output as <strong>summary</strong> (all events)
 files containing:</p>
 <ol class="arabic simple">
-<li>A <a href="#id66"><span class="problematic" id="id67">`3D Grid &lt;formats.html#_grid_&gt;`__</span></a> header file describing the search
-volume</li>
-<li>ASCII <a href="#id68"><span class="problematic" id="id69">`Phase Statistics &lt;formats.html#_location_phsstat_&gt;`__</span></a> giving
-the mean residuals for P and S phases at each station</li>
-<li>An expanded, <a href="#id70"><span class="problematic" id="id71">`quasi-HYPOELLIPSE
-format &lt;formats.html#_location_qhypell_&gt;`__</span></a></li>
-<li>The <a href="#id72"><span class="problematic" id="id73">`HypoInverse Archive &lt;formats.html#_location_hypinv_&gt;`__</span></a> format
+<li><p>A <a href="#id66"><span class="problematic" id="id67">`3D Grid &lt;formats.html#_grid_&gt;`__</span></a> header file describing the search
+volume</p></li>
+<li><p>ASCII <a href="#id68"><span class="problematic" id="id69">`Phase Statistics &lt;formats.html#_location_phsstat_&gt;`__</span></a> giving
+the mean residuals for P and S phases at each station</p></li>
+<li><p>An expanded, <a href="#id70"><span class="problematic" id="id71">`quasi-HYPOELLIPSE
+format &lt;formats.html#_location_qhypell_&gt;`__</span></a></p></li>
+<li><p>The <a href="#id72"><span class="problematic" id="id73">`HypoInverse Archive &lt;formats.html#_location_hypinv_&gt;`__</span></a> format
 which serves as input to the program <a class="reference external" href="references.html">FPFIT (Reasenberg *et al.*,
 1985)</a> for grid-search determination of focal
-mechanism solutions.</li>
+mechanism solutions.</p></li>
 </ol>
 <p>Single event and summary files are only saved for specific nested
 search-grids as specified in the
 <a href="#id74"><span class="problematic" id="id75">`LOCGRID &lt;control.html#_NLLoc_locgrid_&gt;`__</span></a> statement in the Input
 Control File.</p>
-<div class="color"></div></div>
-<div class="section" id="processing-and-display-of-results">
-<h2>1.1.5.9. Processing and Display of results<a class="headerlink" href="#processing-and-display-of-results" title="Permalink to this headline">¶</a></h2>
+<div class="color"></div></section>
+<section id="processing-and-display-of-results">
+<h2><span class="section-number">1.1.5.9. </span>Processing and Display of results<a class="headerlink" href="#processing-and-display-of-results" title="Permalink to this headline">¶</a></h2>
 <p>The location results for one or more events can be combined with the
 program <a class="reference external" href="LocSum.html">LocSum</a> to produce
 <a href="#id76"><span class="problematic" id="id77">`output &lt;LocSum.html#_output_&gt;`__</span></a> such as a comprehensive, summary
@@ -616,16 +619,17 @@ plotting misfit, PDF and location “cloud” results using the <a class="refere
 plotting package</a>.</p>
 <div class="color"></div><p>Back to <a class="reference external" href="index.html">the NonLinLoc site Home page</a>.</p>
 <p><em>Anthony Lomax</em></p>
-</div>
-</div>
+</section>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">1.1.5. NLLoc - Non-linear, earthquake location program</a><ul>
 <li><a class="reference internal" href="#overview">1.1.5.1. Overview</a></li>
@@ -656,10 +660,10 @@ plotting package</a>.</p>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="core.Time2EQ.html"
-                        title="previous chapter">1.1.4. Time2EQ - travel-time grid to synthetic observations</a></p>
+                        title="previous chapter"><span class="section-number">1.1.4. </span>Time2EQ - travel-time grid to synthetic observations</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="core.LocSum.html"
-                        title="next chapter">1.1.6. LocSum - combine location results</a></p>
+                        title="next chapter"><span class="section-number">1.1.6. </span>LocSum - combine location results</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -668,17 +672,15 @@ plotting package</a>.</p>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -696,12 +698,13 @@ plotting package</a>.</p>
           <a href="core.Time2EQ.html" title="1.1.4. Time2EQ - travel-time grid to synthetic observations"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">NonLinLoc Doc 7.00 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../programs.html" >1. NonLinLoc Programs</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../programs.html" ><span class="section-number">1. </span>NonLinLoc Programs</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.1.5. </span>NLLoc - Non-linear, earthquake location program</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Anthony Lomax.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
     </div>
   </body>
 </html>

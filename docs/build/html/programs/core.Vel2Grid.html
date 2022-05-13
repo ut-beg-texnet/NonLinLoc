@@ -1,18 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<html lang="en">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>1.1.1. Vel2Grid - velocity model description to 3D model grid &#8212; NonLinLoc Doc 7.00 documentation</title>
-    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="1.1.2. Vel2Grid3D - velocity model description to 3D model grid" href="core.Vel2Grid3D.html" />
@@ -31,7 +33,8 @@
           <a href="../programs.html" title="1. NonLinLoc Programs"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">NonLinLoc Doc 7.00 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../programs.html" accesskey="U">1. NonLinLoc Programs</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../programs.html" accesskey="U"><span class="section-number">1. </span>NonLinLoc Programs</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.1.1. </span>Vel2Grid - velocity model description to 3D model grid</a></li> 
       </ul>
     </div>  
 
@@ -43,22 +46,22 @@
   <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="section" id="vel2grid-velocity-model-description-to-3d-model-grid">
-<h1>1.1.1. Vel2Grid - velocity model description to 3D model grid<a class="headerlink" href="#vel2grid-velocity-model-description-to-3d-model-grid" title="Permalink to this headline">¶</a></h1>
+<section id="vel2grid-velocity-model-description-to-3d-model-grid">
+<h1><span class="section-number">1.1.1. </span>Vel2Grid - velocity model description to 3D model grid<a class="headerlink" href="#vel2grid-velocity-model-description-to-3d-model-grid" title="Permalink to this headline">¶</a></h1>
 <p>Given a velocity model description, <strong>Vel2Grid</strong> generates a 3D model
 Grid header and buffer files containing velocities, slownesses or other
 model specification.</p>
-<div class="section" id="overview">
-<h2>1.1.1.1. Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<section id="overview">
+<h2><span class="section-number">1.1.1.1. </span>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>The Vel2Grid program converts analytic or other velocity model
 specifications into a <a href="#id1"><span class="problematic" id="id2">`3D Grid &lt;./formats.html#_grid_&gt;`__</span></a> file
 containing velocity or slowness values.</p>
 <p>The Vel2Grid program uses a “flat earth”, rectangular, left-handed,
 <em>x,y,z,t</em> coordinate system (positive X = East, positive Y = North,
 positive Z = down). Distance units are kilometers.</p>
-</div>
-<div class="section" id="running-the-program-input">
-<h2>1.1.1.2. Running the program - Input<a class="headerlink" href="#running-the-program-input" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="running-the-program-input">
+<h2><span class="section-number">1.1.1.2. </span>Running the program - Input<a class="headerlink" href="#running-the-program-input" title="Permalink to this headline">¶</a></h2>
 <p>Synopsis: <code class="docutils literal notranslate"><span class="pre">Vel2Grid</span> <span class="pre">InputControlFile</span></code></p>
 <p>The Vel2Grid program takes a single argument <code class="docutils literal notranslate"><span class="pre">InputControlFile</span></code> which
 specifies the complete path and filename for an <a class="reference external" href="./control.html">Input Control
@@ -74,10 +77,10 @@ Statements &lt;./control.html#_Vel2Grid_&gt;`__</span></a> in the Input Control 
 specify a layered model or a 3D velocity model. The velocity model can
 be specified in the control file by:</p>
 <ol class="arabic simple">
-<li>A set of <code class="docutils literal notranslate"><span class="pre">`LAYER</span></code> &lt;./control.html#_Vel2Grid_layer_&gt;`__ statements
+<li><p>A set of <code class="docutils literal notranslate"><span class="pre">`LAYER</span></code> &lt;./control.html#_Vel2Grid_layer_&gt;`__ statements
 defining a horizontally layered model with constant or
-constant-gradient velocity and density in each layer.</li>
-<li>A set of <code class="docutils literal notranslate"><span class="pre">`VERTEX</span></code> &lt;./control.html#_Vel2Grid_vertex_&gt;`__,
+constant-gradient velocity and density in each layer.</p></li>
+<li><p>A set of <code class="docutils literal notranslate"><span class="pre">`VERTEX</span></code> &lt;./control.html#_Vel2Grid_vertex_&gt;`__,
 <code class="docutils literal notranslate"><span class="pre">`EDGE</span></code> &lt;./control.html#_Vel2Grid_edge_&gt;`__, and
 <code class="docutils literal notranslate"><span class="pre">`POLYGON2</span></code> &lt;./control.html#_Vel2Grid_polygon2_&gt;`__ statements
 defining a 2D polygon model and a
@@ -86,33 +89,34 @@ to convert this 2D model into a 3D model. Optionally, there may be a
 set of <code class="docutils literal notranslate"><span class="pre">`LAYER</span></code> &lt;./control.html#_Vel2Grid_layer_&gt;`__ statements
 defining a horizontally layered background model. This background
 model must be defined if the transformed 2D polygon model does not
-completeley fill the requested 3D grid.</li>
+completeley fill the requested 3D grid.</p></li>
 </ol>
-</div>
-<div class="section" id="output">
-<h2>1.1.1.3. Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="output">
+<h2><span class="section-number">1.1.1.3. </span>Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h2>
 <p>The velocity or slowness values throughout the requested grid are
 written to a new <a href="#id9"><span class="problematic" id="id10">`3D Grid File &lt;formats.html#_grid_&gt;`__</span></a>. For a
 descrition of the naming convention for these grid files, see the
 <code class="docutils literal notranslate"><span class="pre">`VGOUT</span></code> &lt;./control.html#_Vel2Grid_vgout_&gt;`__ statement in the
 Vel2Grid Statements section of the Input Control File.</p>
-</div>
-<div class="section" id="processing-and-display-of-results">
-<h2>1.1.1.4. Processing and Display of results<a class="headerlink" href="#processing-and-display-of-results" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="processing-and-display-of-results">
+<h2><span class="section-number">1.1.1.4. </span>Processing and Display of results<a class="headerlink" href="#processing-and-display-of-results" title="Permalink to this headline">¶</a></h2>
 <p>The 3D model grids can be post-processed with the program
 <a class="reference external" href="./Grid2GMT.html">Grid2GMT</a> to produce a GMT command script for
 plotting with the <a class="reference external" href="http://gmt.soest.hawaii.edu">GMT plotting
 package</a>.</p>
-</div>
-</div>
+</section>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">1.1.1. Vel2Grid - velocity model description to 3D model grid</a><ul>
 <li><a class="reference internal" href="#overview">1.1.1.1. Overview</a></li>
@@ -125,10 +129,10 @@ package</a>.</p>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="../programs.html"
-                        title="previous chapter">1. NonLinLoc Programs</a></p>
+                        title="previous chapter"><span class="section-number">1. </span>NonLinLoc Programs</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="core.Vel2Grid3D.html"
-                        title="next chapter">1.1.2. Vel2Grid3D - velocity model description to 3D model grid</a></p>
+                        title="next chapter"><span class="section-number">1.1.2. </span>Vel2Grid3D - velocity model description to 3D model grid</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -137,17 +141,15 @@ package</a>.</p>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -165,12 +167,13 @@ package</a>.</p>
           <a href="../programs.html" title="1. NonLinLoc Programs"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">NonLinLoc Doc 7.00 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../programs.html" >1. NonLinLoc Programs</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../programs.html" ><span class="section-number">1. </span>NonLinLoc Programs</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.1.1. </span>Vel2Grid - velocity model description to 3D model grid</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Anthony Lomax.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
     </div>
   </body>
 </html>
