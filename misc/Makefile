@@ -75,7 +75,7 @@ OBJS5 = alberto2hyp.o $(GRID_LIB_OBJS)
 alberto2hyp_ : $(BINDIR)/alberto2hyp
 $(BINDIR)/alberto2hyp : $(OBJS5)
 	${CC} $(OBJS5) $(CCFLAGS) -o $(BINDIR)/alberto2hyp -lm
-alberto2hyp.o : alberto2hyp.c ${SRC_PATH}/include/GridLib.h
+alberto2hyp.o : alberto2hyp.c ${SRC_PATH}/include/GridLib.h ingv_list2hyp.o
 	${CC} $(CCFLAGS) -c alberto2hyp.c
 # --------------------------------------------------------------------------
 
