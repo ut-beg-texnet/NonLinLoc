@@ -43,7 +43,7 @@
 
 
 
-#include "../src/GridLib.h"
+#include "../src/include/GridLib.h"
 
 
 /* defines */
