@@ -59,11 +59,15 @@ int read_vel_mod_input(FILE* fp_input, char* param, char* line, int istat, int i
     }
 
     if (strcmp(param, "LAYER") == 0) { /* read layer desc */
-        if ((istat = get_model_layer(model_layer, num_layers,
-                strchr(line, ' '))) < 0)
-            fprintf(stderr, "ERROR: reading model layer.\n");
-        else
-            num_layers++;
+        if (num_layers == MAX_LAYERS) {
+            fprintf(stderr, "ERROR: reading model layer: maximum number of layers (%d) exceeded.\n", MAX_LAYERS);
+        } else {
+            if ((istat = get_model_layer(model_layer, num_layers,
+                    strchr(line, ' '))) < 0)
+                fprintf(stderr, "ERROR: reading model layer.\n");
+            else
+                num_layers++;
+        }
     }
 
     if (strcmp(param, "ROUGH") == 0) { /* read rough bndry desc */
