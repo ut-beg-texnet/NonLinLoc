@@ -637,10 +637,15 @@ int get_transform(int n_proj, char* in_line) {
 
         map_itype[n_proj] = MAP_TRANS_TM;
         int use_false_easting = 0;
-        istat = sscanf(in_line, "%s %s %lf %lf %lf %d",
+        // set default values for false easting and scale factor for backwards
+        // compatibility, if not given on TRANS line
+        map_false_easting[n_proj] = 500000;
+        map_scale_factor[n_proj] = 1.0;
+        istat = sscanf(in_line, "%s %s %lf %lf %lf %d %ld %lf",
                 map_trans_type[n_proj], map_ref_ellipsoid[n_proj],
                 &map_orig_lat[n_proj], &map_orig_long[n_proj],
-                &map_rot[n_proj], &use_false_easting);
+                &map_rot[n_proj], &use_false_easting,
+                &map_false_easting[n_proj], &map_scale_factor[n_proj]);
 
         ierr = 0;
         if (checkRangeDouble("TRANS",
@@ -665,16 +670,21 @@ int get_transform(int n_proj, char* in_line) {
         }
 
         // initialize projection
-        vtm(n_proj, map_orig_long[n_proj], map_orig_lat[n_proj], use_false_easting);
+        vtm(n_proj, map_orig_long[n_proj], map_orig_lat[n_proj], use_false_easting,
+            map_false_easting[n_proj], map_scale_factor[n_proj]);
 
         sprintf(MapProjStr[n_proj],
-                "TRANSFORM  %s RefEllipsoid %s  LatOrig %lf  LongOrig %lf  RotCW %lf  UseFalseEasting %d",
+                "TRANSFORM  %s RefEllipsoid %s  LatOrig %lf  LongOrig %lf  RotCW %lf  UseFalseEasting %d  FalseEasting %ld  ScaleFactor %lf",
                 map_trans_type[n_proj], map_ref_ellipsoid[n_proj],
                 map_orig_lat[n_proj], map_orig_long[n_proj],
-                map_rot[n_proj], use_false_easting);
+                map_rot[n_proj], use_false_easting, map_false_easting[n_proj],
+                map_scale_factor[n_proj]);
         nll_putmsg(3, MapProjStr[n_proj]);
 
-        if (ierr < 0 || (istat != 5 && istat != 6)) {
+        // 5: old, when omitting UseFalseEasting
+        // 6: old, when specifying UseFalseEasting
+        // 8: new, when specifying UseFalseEasting, FalseEasting and ScaleFactor
+        if (ierr < 0 || (istat != 5 && istat != 6 && istat != 8)) {
             nll_puterr("ERROR: reading TRANS_MERC transformation parameters");
             return (-1);
         }
