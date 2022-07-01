@@ -710,7 +710,8 @@ EXTERN_TXT int map_itype[NUM_PROJ_MAX]; /* int id of projection */
 EXTERN_TXT char MapProjStr[NUM_PROJ_MAX][2 * MAXLINE]; /* string description of proj params */
 EXTERN_TXT char map_ref_ellipsoid[NUM_PROJ_MAX][MAXLINE]; /* name of reference ellipsoid */
 /* general map parameters */
-EXTERN_TXT double map_orig_lat[NUM_PROJ_MAX], map_orig_long[NUM_PROJ_MAX], map_rot[NUM_PROJ_MAX];
+EXTERN_TXT double map_orig_lat[NUM_PROJ_MAX], map_orig_long[NUM_PROJ_MAX], map_rot[NUM_PROJ_MAX], map_scale_factor[NUM_PROJ_MAX];
+EXTERN_TXT long map_false_easting[NUM_PROJ_MAX];
 EXTERN_TXT double map_cosang[NUM_PROJ_MAX], map_sinang[NUM_PROJ_MAX]; /* rotation */
 /* LAMBERT projection parameters */
 EXTERN_TXT double map_lambert_1st_std_paral[NUM_PROJ_MAX], map_lambert_2nd_std_paral[NUM_PROJ_MAX];

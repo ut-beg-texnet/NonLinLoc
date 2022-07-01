@@ -324,7 +324,9 @@ double *lon, *lat, x, y;
 struct TRANS_MERCATOR {
     BOOLEAN north_pole; /* TRUE if projection is on northern hemisphere, FALSE on southern */
 
-    int use_false_easting;  // flag to apply false easting (500km added to X when converting geog->UTM, and v.v.)
+    int use_false_easting;  // flag to apply false easting
+    long false_easting;  // false easting to use (e.g. many UTM systems use 500km added to X when converting geog->UTM, and v.v.)
+    double map_scale_factor; // map scale factor
     double central_meridian; // Central meridian for projection
     double y_central_parralel; // y offset of central parallel
     double t_e2;
@@ -333,8 +335,6 @@ struct TRANS_MERCATOR {
 
 };
 struct TRANS_MERCATOR TransverseMercator[NUM_PROJ_MAX];
-
-double map_scale_factor = 1.0;
 
 /*
  *	TRANSFORMATION ROUTINES FOR THE Transverse Mercator Projection (TM)
@@ -381,7 +381,7 @@ int map_init_tm(int n_proj) {
     return (search);
 }*/
 
-void vtm(int n_proj, double lon0, double lat0, int use_false_easting) {
+void vtm(int n_proj, double lon0, double lat0, int use_false_easting, long false_easting, double map_scale_factor) {
     /* Set up an TM projection */
     double e1;
 
@@ -397,6 +397,8 @@ void vtm(int n_proj, double lon0, double lat0, int use_false_easting) {
     TransverseMercator[n_proj].t_ic4 = (1097.0 * pow(e1, 4.0) / 512.0);
     TransverseMercator[n_proj].central_meridian = lon0;
     TransverseMercator[n_proj].use_false_easting = use_false_easting;
+    TransverseMercator[n_proj].false_easting = false_easting;
+    TransverseMercator[n_proj].map_scale_factor = map_scale_factor;
 
     // get y offset of central parallel (use lat0 = 0.0 for standard TM w/o offset)
     double lon, lat, x, y;
@@ -421,7 +423,7 @@ double lon, lat, *x, *y;
             + TransverseMercator[n_proj].t_c3 * sin(4.0 * lat) - TransverseMercator[n_proj].t_c4 * sin(6.0 * lat));
     if (fabs(lat) == M_PI_2) {
         *x = 0.0;
-        *y = map_scale_factor * M;
+        *y = TransverseMercator[n_proj].map_scale_factor * M;
     } else {
         N = EQ_RAD[n_proj] / d_sqrt(1.0 - ECC2[n_proj] * pow(sin(lat), 2.0));
         tan_lat = tan(lat);
@@ -433,11 +435,11 @@ double lon, lat, *x, *y;
         A2 = A * A;
         A3 = A2 * A;
         A5 = A3 * A2;
-        *x = map_scale_factor * N * (A + (1.0 - T + C) * (A3 * 0.16666666666666666667)
+        *x = TransverseMercator[n_proj].map_scale_factor * N * (A + (1.0 - T + C) * (A3 * 0.16666666666666666667)
                 + (5.0 - 18.0 * T + T2 + 72.0 * C - 58.0 * TransverseMercator[n_proj].t_e2) * (A5 * 0.00833333333333333333));
         A3 *= A;
         A5 *= A;
-        *y = map_scale_factor * (M + N * tan(lat) * (0.5 * A2 + (5.0 - T + 9.0 * C + 4.0 * C * C) * (A3 * 0.04166666666666666667)
+        *y = TransverseMercator[n_proj].map_scale_factor * (M + N * tan(lat) * (0.5 * A2 + (5.0 - T + 9.0 * C + 4.0 * C * C) * (A3 * 0.04166666666666666667)
                 + (61.0 - 58.0 * T + T2 + 600.0 * C - 330.0 * TransverseMercator[n_proj].t_e2) * (A5 * 0.00138888888888888889)));
     }
 
@@ -446,7 +448,7 @@ double lon, lat, *x, *y;
 
     // correct for false easting
     if (TransverseMercator[n_proj].use_false_easting) {
-        *x += 500000.0;
+        *x += TransverseMercator[n_proj].false_easting;
     }
 }
 
@@ -460,13 +462,13 @@ double *lon, *lat, x, y;
 
     // correct for false easting
     if (TransverseMercator[n_proj].use_false_easting) {
-        x -= 500000.0;
+        x -= TransverseMercator[n_proj].false_easting;
     }
 
     /* Convert TM x/y to lon/lat */
     double M, mu, phi1, C1, C12, T1, T12, tmp, tmp2, N1, R1, D, D2, D3, D5, cos_phi1, tan_phi1;
 
-    M = y / map_scale_factor;
+    M = y / TransverseMercator[n_proj].map_scale_factor;
     mu = M / (EQ_RAD[n_proj] * TransverseMercator[n_proj].t_c1);
     phi1 = mu + TransverseMercator[n_proj].t_ic1 * sin(2.0 * mu) + TransverseMercator[n_proj].t_ic2 * sin(4.0 * mu)
             + TransverseMercator[n_proj].t_ic3 * sin(6.0 * mu) + TransverseMercator[n_proj].t_ic4 * sin(8.0 * mu);
@@ -480,7 +482,7 @@ double *lon, *lat, x, y;
     tmp2 = d_sqrt(tmp);
     N1 = EQ_RAD[n_proj] / tmp2;
     R1 = EQ_RAD[n_proj] * (1.0 - ECC2[n_proj]) / (tmp * tmp2);
-    D = x / (N1 * map_scale_factor);
+    D = x / (N1 * TransverseMercator[n_proj].map_scale_factor);
     D2 = D * D;
     D3 = D2 * D;
     D5 = D3 * D2;
@@ -576,8 +578,8 @@ double *lon, *lat, x, y;
 // utm init function
 // created by ALomax to enable setting of north_pole flag
 
-void vutm(int n_proj, double lon0, int lat0, int use_false_easting) {
-    vtm(n_proj, lon0, lat0, use_false_easting);
+void vutm(int n_proj, double lon0, int lat0, int use_false_easting, long false_easting, double map_scale_factor) {
+    vtm(n_proj, lon0, lat0, use_false_easting, false_easting, map_scale_factor);
     TransverseMercator[n_proj].north_pole = lat0 >= 0.0 ? 1 : 0;
 }
 
