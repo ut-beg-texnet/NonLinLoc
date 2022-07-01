@@ -74,12 +74,11 @@ int main(int argc, char *argv[]) {
     SetConstants();
 
 // emulate https://epsg.io/25832
-// false easting should be 500000 for correct results, but hard coded to 0 right now
-// scale factor should be 0.9996 for correct results, but is hard coded to 1.0 right now
 #define EARTH_ELLIPSOID "GRS-80"
 #define MAP_ORIG_LAT 0.0
 #define MAP_ORIG_LON 9.0
 #define ROTATION_ANGLE 0.0
+#define USE_FALSE_EASTING 1
 #define FALSE_EASTING 500000
 #define SCALE_FACTOR 0.9996
 
@@ -87,8 +86,8 @@ int main(int argc, char *argv[]) {
     char trans[num_projections][999];
 
     int n = 0;
-    sprintf(trans[n++], "TRANS_MERC %s %f  %f  %f %d %f ",
-            EARTH_ELLIPSOID, MAP_ORIG_LAT, MAP_ORIG_LON, ROTATION_ANGLE, FALSE_EASTING, SCALE_FACTOR);
+    sprintf(trans[n++], "TRANS_MERC %s %f  %f  %f %d %d %f ",
+            EARTH_ELLIPSOID, MAP_ORIG_LAT, MAP_ORIG_LON, ROTATION_ANGLE, USE_FALSE_EASTING, FALSE_EASTING, SCALE_FACTOR);
 
     for (int n_proj = 0; n_proj < num_projections; n_proj++) {
         get_transform(n_proj, trans[n_proj]);
