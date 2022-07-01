@@ -100,7 +100,7 @@ Generic Control Statements
 | Syntax 3: ``TRANS`` ``NONE``
 | Syntax 4: ``TRANS`` ``SDC latOrig longOrig rotAngle``
 | Syntax 5: ``TRANS`` ``LAMBERT refEllipsoid latOrig longOrig firstStdParal secondStdParal rotAngle``
-| Syntax 6: ``TRANS`` ``TRANS_MERC refEllipsoid latOrig longOrig rotAngle``
+| Syntax 6: ``TRANS`` ``TRANS_MERC refEllipsoid latOrig longOrig rotAngle [useFalseEasting] [falseEasting mapScaleFactor]``
 | Syntax 7: ``TRANS`` ``AZIMUTHAL_EQUIDIST refEllipsoid latOrig longOrig rotAngle``
 | Sets geographic to working coordinates transformation parameters. The
  `GLOBAL`` option sets spherical regional/teleseismic mode, with no
@@ -129,6 +129,13 @@ Generic Control Statements
 |    ``rotAngle`` (*float*, min:\ ``-360.0``, max:\ ``360.0``) rotation
   angle of geographic north in degrees clockwise relative to the
   rectangular coordinates system Y-axis
+|    ``useFalseEasting`` (*choice*: `0 1``) whether to use
+  false easting in UTM coordinates or not
+|    ``falseEasting`` (*int*) false easting in meters to use in UTM coordinates,
+  defaults to ``500000`` (500km) if not specified and ``useFalseEasting`` is
+  switched on
+|    ``mapScaleFactor`` (*float*) map scale factor to use in UTM coordinate
+  conversion, defaults to ``1.0`` if not specified
 | Notes:
 |    1. `` rotAngle                ` = ``0`` gives
   North along the positive Y-axis,
