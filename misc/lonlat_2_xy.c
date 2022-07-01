@@ -80,12 +80,15 @@ int main(int argc, char *argv[]) {
 #define MAP_ORIG_LAT 0.0
 #define MAP_ORIG_LON 9.0
 #define ROTATION_ANGLE 0.0
+#define FALSE_EASTING 500000
+#define SCALE_FACTOR 0.9996
 
     int num_projections = 1;
     char trans[num_projections][999];
 
     int n = 0;
-    sprintf(trans[n++], "TRANS_MERC %s %f  %f  %f ", EARTH_ELLIPSOID, MAP_ORIG_LAT, MAP_ORIG_LON, ROTATION_ANGLE);
+    sprintf(trans[n++], "TRANS_MERC %s %f  %f  %f %d %f ",
+            EARTH_ELLIPSOID, MAP_ORIG_LAT, MAP_ORIG_LON, ROTATION_ANGLE, FALSE_EASTING, SCALE_FACTOR);
 
     for (int n_proj = 0; n_proj < num_projections; n_proj++) {
         get_transform(n_proj, trans[n_proj]);
@@ -107,8 +110,12 @@ int main(int argc, char *argv[]) {
         }
         double xrect, yrect;
         latlon2rect(n_proj, TEST_ORIG_LAT, TEST_ORIG_LON, &xrect, &yrect);
-        printf("X: %f\n", xrect);
-        printf("Y: %f\n", yrect);
+        printf("X (in m): %.2f\n", xrect * 1000);
+        printf("Y (in m): %.2f\n", yrect * 1000);
+        double dlat, dlon;
+        rect2latlon(n_proj, xrect, yrect, &dlat, &dlon);
+        printf("delta lon (lon/lat -> X/Y -> lon/lat): %g\n", TEST_ORIG_LON - dlon);
+        printf("delta lat (lon/lat -> X/Y -> lon/lat): %g\n", TEST_ORIG_LAT - dlat);
     }
     printf("\n");
 
