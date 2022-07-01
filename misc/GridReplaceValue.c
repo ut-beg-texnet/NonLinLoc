@@ -157,7 +157,7 @@ grid_out.iSwapBytes = 0;
 		printf("ix = %d/%d\r", ix, grid_in.numx);
 		for (iy = 0; iy < grid_in.numy; iy++) {
 			for (iz = 0; iz < grid_in.numz; iz++) {
-				val = ReadGrid3dValue(fp_grid_in, ix, iy, iz, &grid_in);
+				val = ReadGrid3dValue(fp_grid_in, ix, iy, iz, &grid_in), 0;
 				if (val >= old_value_minus_tolerance && val <= old_value_plus_tolerance) {
 					grid_out.array[ix][iy][iz] = new_value;
 					nreplaced++;

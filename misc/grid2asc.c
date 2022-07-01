@@ -145,7 +145,7 @@ int DumpToASCII(int argc, char *argv[])
 	for (ix = 0; ix < grid_in.numx; ix++) {
 		for (iy = 0; iy < grid_in.numy; iy++) {
 			for (iz = 0; iz < grid_in.numz; iz++) {
-				val = ReadGrid3dValue(fp_grid_in, ix, iy, iz, &grid_in);
+				val = ReadGrid3dValue(fp_grid_in, ix, iy, iz, &grid_in, 0);
 				printf("%f ", val);
 			}
 			printf("\n");
