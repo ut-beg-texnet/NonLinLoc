@@ -683,8 +683,9 @@ int get_transform(int n_proj, char* in_line) {
 
         // 5: old, when omitting UseFalseEasting
         // 6: old, when specifying UseFalseEasting
+        // 7: new, when specifying UseFalseEasting, FalseEasting but not ScaleFactor
         // 8: new, when specifying UseFalseEasting, FalseEasting and ScaleFactor
-        if (ierr < 0 || (istat != 5 && istat != 6 && istat != 8)) {
+        if (ierr < 0 || (istat != 5 && istat != 6 && istat != 7 && istat != 8)) {
             nll_puterr("ERROR: reading TRANS_MERC transformation parameters");
             return (-1);
         }

@@ -100,7 +100,7 @@ Generic Control Statements
 | Syntax 3: ``TRANS`` ``NONE``
 | Syntax 4: ``TRANS`` ``SDC latOrig longOrig rotAngle``
 | Syntax 5: ``TRANS`` ``LAMBERT refEllipsoid latOrig longOrig firstStdParal secondStdParal rotAngle``
-| Syntax 6: ``TRANS`` ``TRANS_MERC refEllipsoid latOrig longOrig rotAngle [useFalseEasting] [falseEasting mapScaleFactor]``
+| Syntax 6: ``TRANS`` ``TRANS_MERC refEllipsoid latOrig longOrig rotAngle [useFalseEasting] [falseEasting] [mapScaleFactor]``
 | Syntax 7: ``TRANS`` ``AZIMUTHAL_EQUIDIST refEllipsoid latOrig longOrig rotAngle``
 | Sets geographic to working coordinates transformation parameters. The
  `GLOBAL`` option sets spherical regional/teleseismic mode, with no
