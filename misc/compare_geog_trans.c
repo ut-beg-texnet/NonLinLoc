@@ -52,7 +52,7 @@ e-mail: anthony@alomax.net  web: http://www.alomax.net
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "gridlib.h"
+#include "../src/include/GridLib.h"
 
 
 /** program to test geo.h function calls

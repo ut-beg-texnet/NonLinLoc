@@ -41,7 +41,7 @@ tel: +33(0)493752502  e-mail: anthony@alomax.net  web: http://www.alomax.net
 
 
 
-#include "../src/GridLib.h"
+#include "../src/include/GridLib.h"
 
 
 /* defines */
