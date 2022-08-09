@@ -404,6 +404,7 @@ void vtm(int n_proj, double lon0, double lat0, int use_false_easting, long false
     double lon, lat, x, y;
     lon = lon0;
     lat = lat0;
+    TransverseMercator[n_proj].y_central_parralel = 0;
     tm(n_proj, lon, lat, &x, &y);
     TransverseMercator[n_proj].y_central_parralel = y;
 }
