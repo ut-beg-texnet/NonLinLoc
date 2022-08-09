@@ -328,7 +328,7 @@ struct TRANS_MERCATOR {
     long false_easting;  // false easting to use (e.g. many UTM systems use 500km added to X when converting geog->UTM, and v.v.)
     double map_scale_factor; // map scale factor
     double central_meridian; // Central meridian for projection
-    double y_central_parralel; // y offset of central parallel
+    double y_central_parallel; // y offset of central parallel
     double t_e2;
     double t_c1, t_c2, t_c3, t_c4;
     double t_ic1, t_ic2, t_ic3, t_ic4;
@@ -404,9 +404,9 @@ void vtm(int n_proj, double lon0, double lat0, int use_false_easting, long false
     double lon, lat, x, y;
     lon = lon0;
     lat = lat0;
-    TransverseMercator[n_proj].y_central_parralel = 0;
+    TransverseMercator[n_proj].y_central_parallel = 0;
     tm(n_proj, lon, lat, &x, &y);
-    TransverseMercator[n_proj].y_central_parralel = y;
+    TransverseMercator[n_proj].y_central_parallel = y;
 }
 
 void tm(n_proj, lon, lat, x, y)
@@ -445,7 +445,7 @@ double lon, lat, *x, *y;
     }
 
     // correct for TM x offset of central parallel
-    *y -= TransverseMercator[n_proj].y_central_parralel;
+    *y -= TransverseMercator[n_proj].y_central_parallel;
 
     // correct for false easting
     if (TransverseMercator[n_proj].use_false_easting) {
@@ -459,7 +459,7 @@ double *lon, *lat, x, y;
 {
 
     // correct for TM x offset of central parallel
-    y += TransverseMercator[n_proj].y_central_parralel;
+    y += TransverseMercator[n_proj].y_central_parallel;
 
     // correct for false easting
     if (TransverseMercator[n_proj].use_false_easting) {

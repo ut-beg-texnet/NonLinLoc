@@ -86,7 +86,7 @@ int main(int argc, char *argv[]) {
     char trans[999];
 
     printf("Enter transformation string (the part after 'TRANS '): ");
-    scanf("%[^\n]", &trans);
+    scanf("%[^\n]", trans);
     //sprintf(trans[n++], "TRANS_MERC %s %f  %f  %f %d %d %f ",
     //        EARTH_ELLIPSOID, MAP_ORIG_LAT, MAP_ORIG_LON, ROTATION_ANGLE, USE_FALSE_EASTING, FALSE_EASTING, SCALE_FACTOR);
 
