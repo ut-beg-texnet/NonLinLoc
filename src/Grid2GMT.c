@@ -52,6 +52,8 @@ tel: +33(0)493752502  e-mail: anthony@alomax.net  web: http://www.alomax.net
 #include "GridLib.h"
 #include "GridGraphLib.h"
 
+//#define GMT_VER_5        // define this macro to generate GMT 5.x compatible script
+
 #ifdef GMT_VER_5
     #define GMT_COMMAND_PREFIX "gmt "
     #define GMT_PEN_WIDTH_SUFFIX "p,"
