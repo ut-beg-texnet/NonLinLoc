@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 1999-2020 Anthony Lomax <anthony@alomax.net, http://www.alomax.net>
+ * Copyright (C) 1999-2022 Anthony Lomax <anthony@alomax.net, http://www.alomax.net>
+ * Copyright (C) 2022 Sean Li-Shin Ho <sean.li.shin.ho@gmail.com, https://blog.clam.moe>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
