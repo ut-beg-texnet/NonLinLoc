@@ -39,6 +39,12 @@ add_compile_options(-fcommon)
 # export CFLAGS='-D _GNU_SOURCE'
 # before running: rm CMakeCache.txt; cmake .
 
+# 20220921 Sean Ho - Uncomment the following if you want Grid2GMT to generate scripts compatible with gmt 5.x or 6.x
+#add_compile_options(-D GMT_VER_5)
+#
+# Alternatively, in the make environment, set:
+# export CFLAGS='-D GMT_VER_5'
+# before running: rm CMakeCache.txt; cmake .
 
 # 20211110 AJL - New fix implemented, see https://github.com/alomax/NonLinLoc/issues/7
 #   This fix probably supersedes the following:

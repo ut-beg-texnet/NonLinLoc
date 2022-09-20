@@ -47,6 +47,19 @@ cmake .
 make
 ```
 
+To build program compatible with GMT 5.x or 6.x:
+edit CMakeLists.txt to uncomment following line:
+```
+add_compile_options(-D GMT_VER_5)
+```
+then:
+```
+cd src
+rm CMakeCache.txt
+cmake .
+make
+```
+
 Thanks to Gilles Celli (European Center for Geodynamics and Seismology) for creating and debugging the NonLinLoc CMake build system.
 
 
