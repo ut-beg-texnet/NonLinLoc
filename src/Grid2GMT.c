@@ -1580,7 +1580,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
                 contour_int = GetContourInterval((double) grid_value_min,
                         (double) grid_value_max, NUM_COLORS, &nstep);
                 fprintf(fp_gmt,
-                        "if  [-f Grid2GMT.cpt ]; then\n");
+                        "if  [ -f Grid2GMT.cpt ]; then\n");
                 fprintf(fp_gmt,
                         "   \\cp  Grid2GMT.cpt %s.cpt\n", fn_root_output);
                 fprintf(fp_gmt,
