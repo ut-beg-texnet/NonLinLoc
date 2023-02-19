@@ -536,7 +536,7 @@ int GenGMTCommands(char cplotmode, char cdatatype,
 #ifdef GMT_VER_5
     fprintf(fp_gmt, GMT_COMMAND_PREFIX"gmtset FONT_ANNOT_PRIMARY 14  FONT_ANNOT_SECONDARY 14  FONT_TITLE 14\n\n");
     fprintf(fp_gmt, GMT_COMMAND_PREFIX"gmtset PS_PAGE_ORIENTATION portrait  MAP_ORIGIN_X 0.5  MAP_ORIGIN_Y 0.5 \n\n");
-    fprintf(fp_gmt, GMT_COMMAND_PREFIX"gmtset FONT_ANNOT_PRIMARY 8  FONT_ANNOT_SECONDARY 6  FONT_HEADING 12  FONT_LABEL 10\n\n");
+    fprintf(fp_gmt, GMT_COMMAND_PREFIX"gmtset FONT_ANNOT_PRIMARY 8  FONT_ANNOT_SECONDARY 6  FONT_LABEL 10\n\n"); // "FONT_HEADING 12" is diabled due to he option only supports GMT 6.x
     fprintf(fp_gmt, GMT_COMMAND_PREFIX"gmtset MAP_LABEL_OFFSET 0.1c  MAP_ANNOT_OFFSET_PRIMARY 0.1c MAP_ANNOT_OFFSET_SECONDARY 0.1c\n\n");
     fprintf(fp_gmt, GMT_COMMAND_PREFIX"gmtset GMT_VERBOSE i\n\n");
 #else
