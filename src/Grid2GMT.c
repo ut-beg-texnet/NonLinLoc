@@ -1589,7 +1589,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
                         "else\n");
                 if (pgrid->type == GRID_LIKELIHOOD) { // likelihood color table
                     fprintf(fp_gmt,
-                            "   makecpt -Z -Chot -I -T0/1/0.1 > %s.cpt\n",
+                            "   "GMT_COMMAND_PREFIX"makecpt -Z -Chot -I -T0/1/0.1 > %s.cpt\n",
                             fn_root_output);
                 } else { // colortable
                     double contour_int_cpt = contour_int;
@@ -1615,7 +1615,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
                         strcpy(cpt_colortable, "seis");
                     }
                     char cpt_command[10 * MAXLINE];
-                    sprintf(cpt_command, "makecpt -Z -C%s -T%g/%g/%g > %s.cpt",
+                    sprintf(cpt_command, GMT_COMMAND_PREFIX"makecpt -Z -C%s -T%g/%g/%g > %s.cpt",
                             cpt_colortable, value_min, value_max, contour_int_cpt, fn_root_output);
                     fprintf(fp_gmt, "   %s\n", cpt_command);
                     //if (message_flag > 0)
