@@ -8,6 +8,11 @@ If you use the NonLinLoc package in your work, please cite the following papers:
 
 - Lomax A., Michelini A., Curtis A. (2014) Earthquake Location, Direct, Global-Search Methods. In: Meyers R. (eds) Encyclopedia of Complexity and Systems Science. Springer, New York, NY. [https://doi.org/10.1007/978-3-642-27737-5_150-2](https://doi.org/10.1007/978-3-642-27737-5_150-2)
 
+If you use NLL-SSST-coherence or any of its components, please cite:
+
+- Lomax, A. & Savvaidis, A. (2022) High-Precision Earthquake Location Using Source-Specific Station Terms and Inter-Event Waveform Similarity. Journal of Geophysical Research: Solid Earth, 127, e2021JB023190. [https://doi.org/10.1029/2021JB023190}(https://doi.org/10.1029/2021JB023190)
+
+
 For other A. Lomax NonLinLoc publications, see [http://alomax.net/pub_list.html](http://alomax.net/pub_list.html)
 
 
