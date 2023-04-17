@@ -42,7 +42,7 @@ tel: +33(0)493752502  e-mail: anthony@alomax.net  web: http://www.alomax.net
 
 
 
-#include "../src/GridLib.h"
+#include "../src/include/GridLib.h"
 
 
 // defines
@@ -131,6 +131,7 @@ int DumpToASCII(int argc, char *argv[])
 		grid_in.numx, grid_in.numy, grid_in.numz,
 		grid_in.origx, grid_in.origy, grid_in.origz,
 		grid_in.dx, grid_in.dy, grid_in.dz, grid_in.chr_type);
+	printf("%s\n", grid_in.mapProjStr);
 
 	if (grid_in.type == GRID_TIME || grid_in.type == GRID_TIME_2D
 		   || grid_in.type == GRID_ANGLE || grid_in.type == GRID_ANGLE_2D)

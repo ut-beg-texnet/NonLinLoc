@@ -37,7 +37,7 @@ export CCFLAGS = -O3 $(CCFLAGS_BASIC)
 #export CCFLAGS= -pg $(CCFLAGS_BASIC)
 #
 # debug - gdb, valgrind, ...
-export CCFLAGS = $(CCFLAGS_BASIC) -g
+#export CCFLAGS = $(CCFLAGS_BASIC) -g
 # gdb:
 # gdb --args exe_name
 # gdb-apple --args exe_name
@@ -47,7 +47,7 @@ export CCFLAGS = $(CCFLAGS_BASIC) -g
 
 
 
-all : HypDiff_ alberto2hyp_ ingv_list2hyp_ hypoinv2hyp_ diffTime_ MergeFpfit_ MergeFmamp_ isc_isf2hyp_ hyp2bull_ GridProc_ compare_geog_trans_ lonlat_2_xy_
+all : HypDiff_ alberto2hyp_ ingv_list2hyp_ hypoinv2hyp_ diffTime_ MergeFpfit_ MergeFmamp_ isc_isf2hyp_ hyp2bull_ GridProc_ compare_geog_trans_ lonlat_2_xy_ grid2asc_
 
 #GRID_LIB_OBJS=${SRC_PATH}/GridLib.o ${SRC_PATH}/util.o ${SRC_PATH}/geo.o ${SRC_PATH}/octtree/octtree.o ${SRC_PATH}/alomax_matrix/alomax_matrix.o ${SRC_PATH}/alomax_matrix/alomax_matrix_svd.o ${SRC_PATH}/matrix_statistics/matrix_statistics.o ${SRC_PATH}/vector/vector.o ${SRC_PATH}/ran1/ran1.o ${SRC_PATH}/map_project.o
 GRID_LIB_OBJS=../src/CMakeFiles/GRID_LIB_OBJS.dir/GridLib.c.o ../src/CMakeFiles/GRID_LIB_OBJS.dir/util.c.o ../src/CMakeFiles/GRID_LIB_OBJS.dir/geo.c.o ../src/CMakeFiles/GRID_LIB_OBJS.dir/octtree/octtree.c.o ../src/CMakeFiles/GRID_LIB_OBJS.dir/alomax_matrix/alomax_matrix.c.o ../src/CMakeFiles/GRID_LIB_OBJS.dir/alomax_matrix/eigv.c.o ../src/CMakeFiles/GRID_LIB_OBJS.dir/alomax_matrix/alomax_matrix_svd.c.o ../src/CMakeFiles/GRID_LIB_OBJS.dir/matrix_statistics/matrix_statistics.c.o ../src/CMakeFiles/GRID_LIB_OBJS.dir/vector/vector.c.o ../src/CMakeFiles/GRID_LIB_OBJS.dir/ran1/ran1.c.o ../src/CMakeFiles/GRID_LIB_OBJS.dir/map_project.c.o
@@ -328,6 +328,17 @@ lonlat_2_xy.o : lonlat_2_xy.c ${SRC_PATH}/include/GridLib.h
 	${CC} $(CCFLAGS) -c lonlat_2_xy.c
 # --------------------------------------------------------------------------
 
+
+# --------------------------------------------------------------------------
+# grid2asc
+#
+OBJS25 = grid2asc.o ${GRID_LIB_OBJS}
+grid2asc_ : ${BINDIR}/grid2asc
+${BINDIR}/grid2asc : ${OBJS25}
+	${CC} ${OBJS25} ${CCFLAGS} -o ${BINDIR}/grid2asc -lm
+grid2asc.o : grid2asc.c ${SRC_PATH}/include/GridLib.h
+	${CC} $(CCFLAGS) -c grid2asc.c
+# --------------------------------------------------------------------------
 
 
 # --------------------------------------------------------------------------

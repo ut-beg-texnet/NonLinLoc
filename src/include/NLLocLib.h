@@ -234,7 +234,8 @@ EXTERN_TXT int NumEventsLocated;
 EXTERN_TXT int NumLocationsCompleted;
 
 // 20200107 AJL  #define MAX_NUM_OBS_FILES 10000
-#define MAX_NUM_OBS_FILES 20000  // 20200107 AJL
+//#define MAX_NUM_OBS_FILES 20000  // 20200107 AJL
+#define MAX_NUM_OBS_FILES 30000  // 20221218 AJL
 EXTERN_TXT int NumObsFiles;
 
 /* number of arrivals read from obs file */

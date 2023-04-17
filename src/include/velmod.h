@@ -104,10 +104,11 @@ struct layer {
 };
 
 // 20220530 AJL #define MAX_LAYERS 100
-#define MAX_LAYERS 20000   // 20220530 AJL
+// 20230105 AJL #define MAX_LAYERS 20000   // 20220530 AJL
+#define MAX_LAYERS 200000   // 20230105 AJL
 EXTERN_TXT struct layer model_layer[MAX_LAYERS];
 EXTERN_TXT int num_layers; /* number of layers read in */
-#define LAYEROFFSET 99000	/* base offset for layer model element id */
+#define LAYEROFFSET 99000000	/* base offset for layer model element id */
 
 
 /* surface model */

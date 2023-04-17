@@ -51,6 +51,9 @@ EXTERN_TXT char prog_copyright[MAXLINE];
 EXTERN_TXT int message_flag;
 EXTERN_TXT char MsgStr[100 * MAXLINE];
 
+/*** function to copy file by Jan Wiszniowski 2022-01-31*/
+void copy_file(char* in_name, char* out_name);
+
 
 /*** function to display command usage */
 void disp_usage(const char * , const char *);

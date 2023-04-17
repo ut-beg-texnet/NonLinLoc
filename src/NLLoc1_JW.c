@@ -68,8 +68,6 @@ tel: +33(0)493752502  e-mail: anthony@alomax.net  web: http://www.alomax.net
 #include "otime_limit.h"
 #include "NLLocLib.h"
 
-#include "json_io.h"
-
 #ifdef CUSTOM_ETH
 #include "custom_eth/eth_functions.h"
 #endif
@@ -104,7 +102,7 @@ int NLLoc
     int n_file_root_count = 1;
     char fn_root_out[FILENAME_MAX], fname[FILENAME_MAX], fn_root_out_last[FILENAME_MAX];
     char sourcefname[FILENAME_MAX], targetfname[FILENAME_MAX];
-    char sys_command[2 * FILENAME_MAX];
+    char sys_command[MAXLINE_LONG];
     char *chr;
     FILE *fp_obs = NULL, *fpio;
 
@@ -127,7 +125,7 @@ int NLLoc
     NumEvents = NumEventsLocated = NumLocationsCompleted = 0;
     NumCompDesc = 0;
     NumLocAlias = 0;
-    NumLocExclude = NumLocInclude = 0;
+    NumLocExclude = 0;
     NumTimeDelays = 0;
     NumPhaseID = 0;
     DistStaGridMax = 0.0;
@@ -147,10 +145,6 @@ int NLLoc
     iRejectDuplicateArrivals = 1;
     strcpy(fn_root_out_last, "");
     ;
-
-    // Search prior or posteriour PDF
-    iUseSearchPrior = 0;
-    iUseSearchPosterior = 0;
 
     // Arrival prior weighting  (NLL_FORMAT_VER_2)
     iUseArrivalPriorWeights = 1;
@@ -172,7 +166,7 @@ int NLLoc
 
     // GLOBAL
     NumSources = 0;
-    NumStationPhases = 0;
+    NumStations = 0;
 
     // Gauss2
     iUseGauss2 = 0;
@@ -185,8 +179,6 @@ int NLLoc
             = iSaveAlberto4Sum = iSaveFmamp = iSaveNLLocOctree = iSaveNone = 0;
     // 20170811 AJL - added to allow saving of expectation hypocenter results instead of maximum likelihood
     iSaveNLLocExpectation = 0;
-    // 20220131 AJL - added
-    iSaveNLLocEvent_JSON = 0;
 
     // GNU C library extensions to support memory streams (function open_memstream).
     char *bp_memory_stream = NULL;
@@ -195,7 +187,7 @@ int NLLoc
 
     if (fn_control_main != NULL) {
         strcpy(fn_control, fn_control_main);
-        if ((fp_control = fopen(fn_control, "r")) == NULL) {
+        if ((fp_control = fopen(fn_control, "rb")) == NULL) {
             nll_puterr("FATAL ERROR: opening control file.");
             return_value = EXIT_ERROR_FILEIO;
             goto cleanup_return;
@@ -204,24 +196,6 @@ int NLLoc
         }
     } else {
         fp_control = NULL;
-    }
-
-    // test if control file is nll-control JSON
-    int is_nll_control_json_file = 0;
-    if (fp_control != NULL) {
-        if ((is_nll_control_json_file = is_nll_control_json(fp_control))) {
-            // read nll-control JSON into array of NLLoc control file lines
-            param_line_array = json_read_nll_control(fp_control, &n_param_lines);
-            if (fp_control != NULL) {
-                fclose(fp_control);
-                NumFilesOpen--;
-            }
-            if (param_line_array == NULL) {
-                nll_puterr("FATAL ERROR: reading nll-control JSON file.");
-                return_value = EXIT_ERROR_FILEIO;
-                goto cleanup_return;
-            }
-        }
     }
 
 
@@ -271,9 +245,30 @@ int NLLoc
         }
         fclose(fp_memory_stream);
         //
-        fp_obs = fmemopen(bp_memory_stream, memory_stream_size, "r");
+        fp_obs = fmemopen(bp_memory_stream, memory_stream_size, "rb");
 
         NumObsFiles = 1;
+#elif defined (WIN32)
+		size_t memory_stream_size;
+		FILE *fp_memory_stream = NULL;
+		
+		// read lines into memory file stream
+		fp_memory_stream = fopen("./Cache/nll_temp_obs.dat","wb");
+		if (fp_memory_stream == NULL) {
+			nll_puterr("FATAL ERROR: Cannot pass observations file lines as string array to NLLoc function: GNU C library extensions needed to support memory streams (function open_memstream).");
+			return_value = EXIT_ERROR_MEMORY;
+			goto cleanup_return;
+	}
+		for (n = 0; n < n_obs_lines; n++) {
+			fprintf(fp_memory_stream, "%s", obs_line_array[n]);
+			/*DEBUG*///printf("%s", obs_line_array[n]);
+		}
+		fclose(fp_memory_stream);
+		//
+		fp_obs = fopen("./Cache/nll_temp_obs.dat", "rb");;
+
+		NumObsFiles = 1;
+
 #else
         nll_puterr("FATAL ERROR: Cannot pass observations file lines as string array to NLLoc function: GNU C library extensions needed to support memory streams (function open_memstream(); see compiler define _GNU_SOURCE).");
         return_value = EXIT_ERROR_MEMORY;
@@ -382,7 +377,7 @@ int NLLoc
         // check if observations are read from file(s)
         if ((n_obs_lines <= 0)) {
             /* open observation file */
-            if ((fp_obs = fopen(fn_loc_obs[nObsFile], "r")) == NULL) {
+            if ((fp_obs = fopen(fn_loc_obs[nObsFile], "rb")) == NULL) {
                 nll_puterr2("ERROR: opening observations file",
                         fn_loc_obs[nObsFile]);
                 continue;
@@ -391,7 +386,7 @@ int NLLoc
             }
             /* extract info from filename */
             if ((istat = ExtractFilenameInfo(fn_loc_obs[nObsFile], ftype_obs)) < 0)
-                nll_puterr("WARNING: error extracting information from filename.");
+                nll_puterr("WARNING: error extractng information from filename.");
         }
 
 
@@ -414,17 +409,6 @@ int NLLoc
                 nll_putmsg(1, MsgStr);
             }
 
-            // initialize hypo fields that may be modified when reading observations
-            Hypocenter.amp_mag = MAGNITUDE_NULL;
-            Hypocenter.num_amp_mag = 0;
-            Hypocenter.dur_mag = MAGNITUDE_NULL;
-            Hypocenter.num_dur_mag = 0;
-            strcpy(Hypocenter.public_id, "None");
-            Hypocenter.focMech.dipDir = 0.0;
-            Hypocenter.focMech.dipAng = 0.0;
-            Hypocenter.focMech.rake = 0.0;
-            Hypocenter.focMech.misfit = 0.0;
-            Hypocenter.focMech.nObs = -1;
 
             /* read next set of observations */
 
@@ -448,7 +432,7 @@ int NLLoc
 
             nll_putmsg(2, "");
             // AJL 20040720 SetOutName(Arrival + 0, fn_path_output, fn_root_out, fn_root_out_last, 1);
-            SetOutName(Arrival + 0, fn_path_output, fn_root_out, fn_root_out_last, iSaveDecSec, iSavePublicID, Hypocenter.public_id, &n_file_root_count);
+            SetOutName(Arrival + 0, fn_path_output, fn_root_out, fn_root_out_last, iSaveDecSec, &n_file_root_count);
             //strcpy(fn_root_out_last, fn_root_out); /* save filename */
             sprintf(MsgStr,
                     "... %d observations read, %d will be used for location (%s).",
@@ -500,10 +484,9 @@ int NLLoc
             // station distribution weighting
             if (iSetStationDistributionWeights || iSaveNLLocSum || octtreeParams.use_stations_density) {
                 //printf(">>>>>>>>>>> NumStations %d, NumArrivals %d, numArrivalsReject %d\n", NumStations, NumArrivals, numArrivalsReject);
-                int i_check_station_has_XYZ_coords = 0;
-                NumStationPhases = addToStationList(StationPhaseList, NumStationPhases, Arrival, NumArrivalsRead, 0, i_check_station_has_XYZ_coords);
+                NumStations = addToStationList(StationList, NumStations, Arrival, NumArrivalsRead);
                 if (iSetStationDistributionWeights)
-                    setStationDistributionWeights(StationPhaseList, NumStationPhases, Arrival, NumArrivals);
+                    setStationDistributionWeights(StationList, NumStations, Arrival, NumArrivals);
 
             }
 
@@ -635,7 +618,7 @@ cleanup:
         for (ngrid = 0; ngrid < NumLocGrids; ngrid++) {
             if (LocGridSave[ngrid]) {
                 sprintf(fname, "%s.sum.grid%d.loc.stat", fn_path_output, ngrid);
-                if ((fpio = fopen(fname, "w")) == NULL) {
+                if ((fpio = fopen(fname, "wb")) == NULL) {
                     nll_puterr2(
                             "ERROR: opening cumulative phase statistics output file", fname);
                     return_value = EXIT_ERROR_FILEIO;
@@ -666,7 +649,7 @@ cleanup:
                 /**/
                 // write delays only
                 sprintf(fname, "%s.sum.grid%d.loc.stat_totcorr", fn_path_output, ngrid);
-                if ((fpio = fopen(fname, "w")) == NULL) {
+                if ((fpio = fopen(fname, "wb")) == NULL) {
                     nll_puterr2(
                             "ERROR: opening total phase corrections output file", fname);
                     return_value = EXIT_ERROR_FILEIO;
@@ -695,15 +678,15 @@ cleanup:
         for (ngrid = 0; ngrid < NumLocGrids; ngrid++)
             if (LocGridSave[ngrid]) {
                 sprintf(fname, "%s.sum.grid%d.loc.stations", fn_path_output, ngrid);
-                if ((fpio = fopen(fname, "w")) == NULL) {
+                if ((fpio = fopen(fname, "wb")) == NULL) {
                     nll_puterr2(
-                            "ERROR: opening station list output file", fname);
+                            "ERROR: opening cumulative phase statistics output file", fname);
                     return_value = EXIT_ERROR_FILEIO;
                     goto cleanup_return;
                 } else {
                     NumFilesOpen++;
                 }
-                WriteStationList(fpio, StationPhaseList, NumStationPhases);
+                WriteStationList(fpio, StationList, NumStations);
                 fclose(fpio);
                 // save to last
                 /* Modified Jan Wiszniowski 2022-02-02
@@ -754,24 +737,12 @@ cleanup_return:
         free_surface(model_surface + n);
     }
 
+
     if (bp_memory_stream != NULL) {
         free(bp_memory_stream);
         bp_memory_stream = NULL;
     }
 
-    // clean up memory allocations in read_nll_control_json
-    if (is_nll_control_json_file) {
-        for (int i = 0; i < n_param_lines; i++) {
-            if (param_line_array[i] != NULL) {
-                free(param_line_array[i]);
-            }
-        }
-        n_param_lines = 0;
-        if (param_line_array != NULL) {
-            free(param_line_array);
-        }
-        param_line_array = NULL;
-    }
 
     return (return_value);
 

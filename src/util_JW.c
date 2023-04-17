@@ -44,19 +44,21 @@
 #endif
 
 #include "util.h"
-
+FILE* NLL_Message_Stream = NULL;
+FILE* NLL_Error_Stream = NULL;
 
 /*** function to copy file by Jan Wiszniowski 2022-01-31*/
 void copy_file(char* in_name, char* out_name)
 {
-#if defined(WIN32) || defined(WIN64)
+#ifdef _GNU_SOURCE
+    static char* RF = "r"
+    static char* WF = "w"
+#elif defined (WIN32)
     static char* RF = "rb";
     static char* WF = "wb";
 #else
-    static char* RF = "r";
-    static char* WF = "w";
+#error SYSTEM???
 #endif
-
 
     FILE* in_file = NULL;
     FILE* out_file = NULL;
@@ -66,7 +68,7 @@ void copy_file(char* in_name, char* out_name)
     if (in_file == NULL) {
         return;
     }
-    out_file = fopen(out_name, WF);
+    out_file = fopen(out_name, RF);
     if (out_file == NULL) {
         fclose(in_file);
         return;
@@ -79,12 +81,11 @@ void copy_file(char* in_name, char* out_name)
     fclose(out_file);
 }
 
-
 /*** function to display correct command line usage */
 
 void disp_usage(const char * progname, const char * options)
 {
-	fprintf(stderr, "Usage: %s %s\n", progname, options);
+	if (NLL_Error_Stream) fprintf(NLL_Error_Stream, "Usage: %s %s\n", progname, options);
 }
 
 
@@ -93,8 +94,10 @@ void disp_usage(const char * progname, const char * options)
 
 void nll_puterr(const char *pm)
 {
-	fprintf(stderr, "%s: %s\n", prog_name, pm);
-        fflush(stderr);
+	if (NLL_Error_Stream) {
+		fprintf(NLL_Error_Stream, "[0]%s: %s\n", prog_name, pm);
+		fflush(NLL_Error_Stream);
+	}
 }
 
 
@@ -103,8 +106,10 @@ void nll_puterr(const char *pm)
 
 void nll_puterr2(const char *pmessage1, const char *pmessage2)
 {
-	fprintf(stderr, "%s: %s: %s\n", prog_name, pmessage1, pmessage2);
-        fflush(stderr);
+	if (NLL_Error_Stream) {
+		fprintf(NLL_Error_Stream, "[0]%s: %s: %s\n", prog_name, pmessage1, pmessage2);
+		fflush(NLL_Error_Stream);
+	}
 }
 
 
@@ -113,8 +118,7 @@ void nll_puterr2(const char *pmessage1, const char *pmessage2)
 
 void nll_putmsg(int imsg_level, const char *pm)
 {
-	if (message_flag >= imsg_level)
-		fprintf(stdout, "%s\n", pm);
+	if (NLL_Message_Stream)	fprintf(NLL_Message_Stream, "[%d]%s\n", imsg_level+1, pm);
 }
 
 
@@ -123,8 +127,7 @@ void nll_putmsg(int imsg_level, const char *pm)
 
 void nll_putmsg2(int imsg_level, const char *pmessage1, const char *pmessage2)
 {
-	if (message_flag >= imsg_level)
-		fprintf(stdout, "%s: %s\n", pmessage1, pmessage2);
+	if (NLL_Message_Stream) fprintf(NLL_Message_Stream, "[%d]%s: %s\n", imsg_level+1, pmessage1, pmessage2);
 }
 
 

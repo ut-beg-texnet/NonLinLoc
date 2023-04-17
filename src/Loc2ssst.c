@@ -58,12 +58,14 @@ also: (gcc (GCC) 4.4.4 20100630 (Red Hat 4.4.4-10)   Kernel: 2.6.32.26-175.fc12.
 // 20170210 AJL - reset to 50k
 #define MAX_NUM_INPUT_FILES 50000
 
+// 20221020 AJL - replaced X_MAX_NUM_ARRIVALS with this defined constant so larger numbers of phases can be processed
+#define MAX_NUM_ARRIVALS_LOC2SSST 20000
 
 /* globals */
 
 // station list
 int NumStationPhases;
-SourceDesc StationPhaseList[X_MAX_NUM_ARRIVALS];
+SourceDesc StationPhaseList[MAX_NUM_ARRIVALS_LOC2SSST];
 // station/phase ssst grids
 GridDesc ssst_grid_template;
 GridDesc ssst_time_grid_template;
@@ -72,7 +74,7 @@ int NumLocNodes;
 LocNode *LocNodeArray[MAX_NUM_INPUT_FILES];
 // PhsNode array
 int NumPhsNodes;
-PhsNode *PhsNodeArray[X_MAX_NUM_ARRIVALS];
+PhsNode *PhsNodeArray[MAX_NUM_ARRIVALS_LOC2SSST];
 
 // station list input line can be very long
 #define MAX_LEN_STATION_LINE 64000
@@ -90,6 +92,7 @@ typedef struct {
     double RMSMax;
     int NRdgsMin;
     double GapMax, PResidualMax, SResidualMax, EllLen3Max;
+    double DepthMin, DepthMax;  // 20221116 AJL - added to support filtering of events (phases) by hypocenter depth
 }
 LS_Phstat;
 LS_Phstat PhsStat;
@@ -152,6 +155,8 @@ int main(int argc, char** argv) {
     PhsStat.PResidualMax = 1.0e6;
     PhsStat.SResidualMax = 1.0e6;
     PhsStat.EllLen3Max = 1.0e6;
+    PhsStat.DepthMin = -1.0e6;
+    PhsStat.DepthMax = 1.0e6;
 
     // read control file
     // 20210511 AJL - Bug fix: changed to strncpy from strlcpy which is not available in Linux.
@@ -206,16 +211,15 @@ int get_ls_outfile(char* line1) {
 
 int get_ls_phstat(char* line1) {
 
-    int istat = sscanf(line1, "%lf %d %lf %lf %lf %lf",
-            &PhsStat.RMSMax, &PhsStat.NRdgsMin, &PhsStat.GapMax, &PhsStat.PResidualMax, &PhsStat.SResidualMax, &PhsStat.EllLen3Max);
+    int istat = sscanf(line1, "%lf %d %lf %lf %lf %lf %lf %lf",
+            &PhsStat.RMSMax, &PhsStat.NRdgsMin, &PhsStat.GapMax, &PhsStat.PResidualMax, &PhsStat.SResidualMax, &PhsStat.EllLen3Max, &PhsStat.DepthMin, &PhsStat.DepthMax);
 
     sprintf(MsgStr,
-            "LSPHSTAT:  RMSMax: %f  NRdgsMin: %d  GapMax: %.3g  PResidualMax: %.3g SResidualMax: %.3g EllLen3Max %.3g",
-            PhsStat.RMSMax, PhsStat.NRdgsMin, PhsStat.GapMax, PhsStat.PResidualMax, PhsStat.SResidualMax, PhsStat.EllLen3Max);
+            "LSPHSTAT:  RMSMax: %f  NRdgsMin: %d  GapMax: %.3g  PResidualMax: %.3g SResidualMax: %.3g EllLen3Max %.3g DepthMin %.3g DepthMax %.3g",
+            PhsStat.RMSMax, PhsStat.NRdgsMin, PhsStat.GapMax, PhsStat.PResidualMax, PhsStat.SResidualMax, PhsStat.EllLen3Max, PhsStat.DepthMin, PhsStat.DepthMax);
     nll_putmsg(1, MsgStr);
 
     if (istat < 6)
-
         return (-1);
 
     return (0);
@@ -606,8 +610,10 @@ int DoLoc2ssst() {
 
     double Len3Mean = 0.0, RMSMean = 0.0;
     double NRdgsMean = 0.0, GapMean = 0.0;
+    double DepthMean = 0.0;
     int Len3Reject = 0, RMSReject = 0;
     int NRdgsReject = 0, GapReject = 0;
+    int DepthMinReject = 0, DepthMaxReject = 0;
     int iReject;
 
     //char *pchr;
@@ -681,6 +687,7 @@ int DoLoc2ssst() {
             RMSMean += hypo.rms;
             NRdgsMean += (double) hypo.nreadings;
             GapMean += hypo.gap;
+            DepthMean += hypo.z;
             nLocRead++;
 
             iReject = 0;
@@ -702,6 +709,16 @@ int DoLoc2ssst() {
             if (hypo.ellipsoid.len3 > PhsStat.EllLen3Max) {
                 //nll_puterr("WARNING: ellipsoid.len3 is greater than EllLen3Max, ignoring event");
                 Len3Reject++;
+                iReject = 1;
+            }
+            if (hypo.z < PhsStat.DepthMin) {
+                nll_puterr("WARNING: hypo.z is less than DepthMin, ignoring event");
+                DepthMinReject++;
+                iReject = 1;
+            }
+            if (hypo.z > PhsStat.DepthMax) {
+                nll_puterr("WARNING: hypo.z is greater than DepthMax, ignoring event");
+                DepthMaxReject++;
                 iReject = 1;
             }
             if (iReject)
@@ -746,22 +763,30 @@ int DoLoc2ssst() {
     }
     fprintf(OUT_LEVEL_1, "\n");
 
-    // write message
-    fprintf(stdout,
-            "%d location files read, %d accepted.\n",
-            numFiles, nLocAccepted);
-    fprintf(stdout,
-            "RMS Mean: %lf, Reject %d\n",
-            RMSMean / (double) nLocRead, RMSReject);
-    fprintf(stdout,
-            "NRdgs Mean: %lf, Reject %d\n",
-            NRdgsMean / (double) nLocRead, NRdgsReject);
-    fprintf(stdout,
-            "Gap Mean: %lf, Reject %d\n",
-            GapMean / (double) nLocRead, GapReject);
-    fprintf(stdout,
-            "Len3 Mean: %lf, Reject %d\n",
-            Len3Mean / (double) nLocRead, Len3Reject);
+    if (nLocRead > 0) {
+        // write messages
+        fprintf(stdout,
+                "%d location files read, %d accepted.\n",
+                numFiles, nLocAccepted);
+        fprintf(stdout,
+                "RMS Mean: %lf, Reject %d\n",
+                RMSMean / (double) nLocRead, RMSReject);
+        fprintf(stdout,
+                "NRdgs Mean: %lf, Reject %d\n",
+                NRdgsMean / (double) nLocRead, NRdgsReject);
+        fprintf(stdout,
+                "Gap Mean: %lf, Reject %d\n",
+                GapMean / (double) nLocRead, GapReject);
+        fprintf(stdout,
+                "Len3 Mean: %lf, Reject %d\n",
+                Len3Mean / (double) nLocRead, Len3Reject);
+        fprintf(stdout,
+                "Depth Mean: %lf, DepthMinReject %d\n",
+                DepthMean / (double) nLocRead, DepthMinReject);
+        fprintf(stdout,
+                "Depth Mean: %lf, DepthMaxReject %d\n",
+                DepthMean / (double) nLocRead, DepthMaxReject);
+    }
 
     nHypos = nLocAccepted;
 
@@ -861,8 +886,8 @@ int DoLoc2ssst() {
         PhsNode *phsNode;
         NumPhsNodes = 0;
         while ((phsNode = getPhsNodeFromPhaseList(phs_list_head, NumPhsNodes)) != NULL) {
-            if (NumPhsNodes >= X_MAX_NUM_ARRIVALS) {
-                snprintf(MsgStr, sizeof (MsgStr), "ERROR: size PhsNodeArray exceeded, only first phases %d will be processed.", X_MAX_NUM_ARRIVALS);
+            if (NumPhsNodes >= MAX_NUM_ARRIVALS_LOC2SSST) {
+                snprintf(MsgStr, sizeof (MsgStr), "ERROR: size PhsNodeArray exceeded, only first %d phases will be processed.", MAX_NUM_ARRIVALS_LOC2SSST);
                 nll_puterr(MsgStr);
                 break;
             }
@@ -1282,7 +1307,7 @@ int add_ssst_to_traveltime_grid(char *phasecode, char *stacode, GridDesc *pssst_
         xval += pssst_time_grid->dx;
     }
     if (debug_count > 0) {
-                      printf("DEBUG ERROR: %d total errors\n", debug_count);
+        printf("DEBUG ERROR: %d total errors\n", debug_count);
     }
 
     return (0);

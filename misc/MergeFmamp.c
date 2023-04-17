@@ -286,7 +286,7 @@ int MergeFmamp(int argc, char** argv) {
                         return (-1);
                     }
                     if ((pchr = strstr(fn_hyp_in_list[nNLLFilesRead], test_str)) != NULL)
-                        sprintf(pchr, "");
+                        *pchr = '\0';
                     //
                     strcpy(fn_out, fdir_hyp_out);
                     strcat(fn_out, "/");
@@ -302,6 +302,7 @@ int MergeFmamp(int argc, char** argv) {
                         return (-1);
                     }
                 }
+                //printf("DEBUG: nNLLFilesRead %d fn_hyp_in_list[nNLLFilesRead] %s\n", nNLLFilesRead, fn_hyp_in_list[nNLLFilesRead]);
                 istat1 = GetHypLoc(fpHypo, fn_hyp_in_list[nNLLFilesRead], &HypoNLL, Arrival,
                         &NumArrivals, 1, &locgrid, 0);
                 //printf("DEBUG: fpHypo %ld, istat1 %d == EOF &&  && nNLLFilesRead %d < numNLLFiles - 1 %d, nNLLRead %d\n", fpHypo, istat2, nNLLFilesRead, numNLLFiles - 1, nNLLRead);
@@ -326,9 +327,9 @@ int MergeFmamp(int argc, char** argv) {
                 WriteLocation(stdout, &HypoNLL, Arrival, 0, fn_fmamp_in, 0, 0, 1, &locgrid, 0);
             }
 
+            matched = 0;
             if (istat1 >= 0 && istat1 != EOF) {
 
-                matched = 0;
                 while (1) {
 
                     idiff = compareTimes(HypoFmamp.year, HypoNLL.year, HypoFmamp.month, HypoNLL.month,

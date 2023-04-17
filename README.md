@@ -99,7 +99,17 @@ cd ..
 See ttime_func/run_func.sh for more detail.
 
 
-### IMPORTANT NOTE: Covariance errors (2014.10.30)
+## IMPORTANT NOTES
+
+
+### Grid2GMT (2023.02.19)
+Grid2GMT now supports GMT 5 and 6 (thanks to https://github.com/sean0921). See src/CMakeLists.txt for details on how to set GMT version when compiling.
+
+GMT 4 may work correctly when compile is set up for GMT 6.
+
+
+
+### Covariance errors (2014.10.30)
 Applies to: LOCSEARCH MET and LOCSEARCH OCT
 The algorithm for calculating the covariance of the PDF scatter sample used in NLLoc
 was subject to precision errors when the expectation of the scatter sample (e.g. the event location)

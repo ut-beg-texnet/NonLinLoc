@@ -527,6 +527,13 @@ New version 7.00 posted to web =================================
 
 20220131 NLLoc - LOCHYPOUT: Added: SAVE_NLLOC_JSON to support JSON output of location results (20220513: WARNING: under development).
 
+20220202 NLLoc - Replaced calls to system() to copy files with src/util.c -> copy_file() function (implemented by Jan Wiszniowski)
+
+20221116 Loc2SSST - Added support in LSPHSTAT for filtering of events (phases) by hypocenter depth
+
+20230219 Grid2GMT - Now supports GMT 5 and 6 (thanks to https://github.com/sean0921). See src/CMakeLists.txt for details on how to set GMT version.
+
+
 
 
 
