@@ -34,9 +34,9 @@ www.alomax.net
 
 
 #define PACKAGE  "NonLinLoc"
-#define PVER  "7.00.16"
-#define PDATE "17Apr2023"
-/*#define PCOPYRIGHT "\nCopyright (C) 1999-2019 Anthony Lomax\n"*/
+#define PVER  "7.1.00"
+#define PDATE "24Jan2024"
+/*#define PCOPYRIGHT "\nCopyright (C) 1999-2023 Anthony Lomax\n"*/
 #define PCOPYRIGHT "\0"
 
 
@@ -963,6 +963,11 @@ double IntegrateGrid(GridDesc* pgrid, int flag_normalize);
 int addToStationList(SourceDesc *stations, int numStations, ArrivalDesc *arrival, int nArrivals, int iuse_phaseid_in_label, int i_check_station_has_XYZ_coords);
 int WriteStationList(FILE*, SourceDesc*, int);
 int GetPhaseID(char*);
+
+// 20230428 AJL - following function moved here from NLLocLib.h
+int SetOutName(ArrivalDesc *arrival, char* out_file_root, char* out_file,
+        char* lastfile, int isec, int ipublic_id, char* public_id, int *pncount);
+
 
 /* */
 /*------------------------------------------------------------/ */

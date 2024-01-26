@@ -18,6 +18,7 @@ echo
 
 echo
 echo "Generate the model grid"
+mkdir model
 Vel2Grid run/nlloc_sample.in
 echo
 echo "Visualize the model grid"
@@ -25,6 +26,7 @@ Grid2GMT run/nlloc_sample.in model/layer.P.mod gmt/ V G 1 0 1 401
 ${PS_VIEWER} gmt/layer.P.mod.VG.ps &
 echo
 echo "Generate and view the travel-time and take-off angle grids "
+mkdir time
 Grid2Time run/nlloc_sample.in
 echo
 echo "Visualize P travel-time grid"
@@ -35,12 +37,15 @@ Grid2GMT run/nlloc_sample.in time/layer.P.AK_RC01_--.angle gmt/ V G 0 0 0 401
 ${PS_VIEWER} gmt/layer.P.AK_RC01_--.angle.VG.ps &
 echo
 echo "Generate some synthetic arrival times "
+mkdir obs_synth
 Time2EQ run/nlloc_sample.in
 more obs_synth/synth.obs
 echo
 echo "Do the event Location "
+mkdir loc
 NLLoc run/nlloc_sample.in
 echo "Plot the first event location with GMT"
+mkdir gmt
 Grid2GMT run/nlloc_sample.in loc/alaska.20181130.172935.grid0.loc gmt/ L S
 ${PS_VIEWER} gmt/alaska.20181130.172935.grid0.loc.LS.ps &
 echo "Plot the combined locations with GMT"

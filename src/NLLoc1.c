@@ -103,8 +103,8 @@ int NLLoc
     int maxArrExceeded = 0;
     int n_file_root_count = 1;
     char fn_root_out[FILENAME_MAX], fname[FILENAME_MAX], fn_root_out_last[FILENAME_MAX];
-    char sourcefname[FILENAME_MAX], targetfname[FILENAME_MAX];
-    char sys_command[2 * FILENAME_MAX];
+    char targetfname[FILENAME_MAX];
+    //char sys_command[2 * FILENAME_MAX];
     char *chr;
     FILE *fp_obs = NULL, *fpio;
 
@@ -303,7 +303,7 @@ int NLLoc
         /* Modified Jan Wiszniowski 2022-02-02
         sprintf(sys_command, "cp -p %s %s_%s", fn_control, fn_path_output, fname);
         system(sys_command);
-        */
+         */
         sprintf(targetfname, "%s_%s", fn_path_output, fname);
         copy_file(fn_control, targetfname);
         /**/
@@ -311,7 +311,7 @@ int NLLoc
         /* Modified Jan Wiszniowski 2022-02-02
         sprintf(sys_command, "cp -p %s %slast.in", fn_control, f_outpath);
         system(sys_command);
-        */
+         */
         sprintf(targetfname, "%slast.in", f_outpath);
         copy_file(fn_control, targetfname);
         /**/
@@ -593,13 +593,12 @@ cleanup:
             }
 
             if (iLocated) {
-                nll_putmsg(2, "");
-                sprintf(MsgStr,
-                        "Finished event location, output files: %s.* <%s.grid0.loc.hyp>",
-                        fn_root_out, fn_root_out);
+                nll_putmsg(1, "");
+                //20231114 AJL //sprintf(MsgStr, "Finished event location, output files: %s.* <%s.grid0.loc.hyp>", fn_root_out, fn_root_out);
+                sprintf(MsgStr, "Finished location: %s.grid0.loc.hyp", fn_root_out);
                 nll_putmsg(0, MsgStr);
             } else
-                nll_putmsg(2, "");
+                nll_putmsg(0, "");
 
             // 201101013 AJL - Bug fix - this cleanup was done in NLLocLib.c->clean_memory() which puts the cleanup incorrectly inside the Locate loop
             CleanWeightMatrix();
@@ -626,7 +625,7 @@ cleanup:
     sprintf(MsgStr,
             "No more observation files.  %d events read,  %d events located,  %d locations completed.",
             NumEvents, NumEventsLocated, NumLocationsCompleted);
-    nll_putmsg(0, MsgStr);
+    nll_putmsg(1, MsgStr);
     nll_putmsg(2, "");
 
 
@@ -660,7 +659,7 @@ cleanup:
                 /* Modified Jan Wiszniowski 2022-02-02
                 sprintf(sys_command, "cp %s %slast.stat", fname, f_outpath);
                 system(sys_command);
-                */
+                 */
                 sprintf(targetfname, "%slast.stat", f_outpath);
                 copy_file(fname, targetfname);
                 /**/
@@ -682,7 +681,7 @@ cleanup:
                 /* Modified Jan Wiszniowski 2022-02-02
                 sprintf(sys_command, "cp %s %slast.stat_totcorr", fname, f_outpath);
                 system(sys_command);
-                */
+                 */
                 sprintf(targetfname, "%slast.stat_totcorr", f_outpath);
                 copy_file(fname, targetfname);
                 /**/
@@ -709,7 +708,7 @@ cleanup:
                 /* Modified Jan Wiszniowski 2022-02-02
                 sprintf(sys_command, "cp %s %slast.stations", fname, f_outpath);
                 system(sys_command);
-                */
+                 */
                 sprintf(targetfname, "%slast.stations", f_outpath);
                 copy_file(fname, targetfname);
                 /**/

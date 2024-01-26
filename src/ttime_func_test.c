@@ -157,9 +157,11 @@ int main(int argc, char *argv[]) {
             psrceIn = &srceIn;
             ConvertASourceLocation(0, psrceIn, 1, 0);
             //printf("srceIn: lat=%f lon=%f depth=%f\n", srceIn.dlat, srceIn.dlong, srceIn.z);
+#ifdef LOC2SSST_CLUGE
             // assume Global, TauP type grid byte order
             // 20211212 TEST - comment out following line for use with swap_bytes_travel_time_grids.bash
             iSwapBytes = 1;
+#endif
         }
         // read source locations
         nvalues = 0;

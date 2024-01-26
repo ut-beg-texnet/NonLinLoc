@@ -64,6 +64,18 @@ Thanks to Gilles Celli (European Center for Geodynamics and Seismology) for crea
 ## Additional information
 
 
+### NEW! NLLoc-SSST-coherence
+NLL-SSST-coherence is an enhanced, absolute-timing earthquake location procedure, iteratively generates traveltime corrections to improve multi-scale precision and uses waveform similarity to improve fine-scale precision.
+
+For details, see:
+
+- Lomax, A. & Savvaidis, A. (2022) High-Precision Earthquake Location Using Source-Specific Station Terms and Inter-Event Waveform Similarity. Journal of Geophysical Research: Solid Earth, 127, e2021JB023190. [https://doi.org/10.1029/2021JB023190](https://doi.org/10.1029/2021JB023190)
+
+- Lomax, A., & Henry, P. (2023). Major California faults are smooth across multiple scales at seismogenic depth. Seismica, 2(1). [https://doi.org/10.26443/seismica.v2i1.324] (https://doi.org/10.26443/seismica.v2i1.324)
+
+Example/Tutorial: Files and instructions for running NLL-SSST-coherence for a subset of Parkfield events [https://zenodo.org/doi/10.5281/zenodo.4756709] (https://zenodo.org/doi/10.5281/zenodo.4756709)
+
+
 ### NLLoc_func_test program demonstrating running NLLoc through a function call
 Install as above.
 TODO: how to build GNU_SOURCE with cmake?????

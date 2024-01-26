@@ -530,7 +530,7 @@ int GenGMTCommands(char cplotmode, char cdatatype,
     /* write gmt script file */
 
     fprintf(fp_gmt, "#!/usr/bin/env bash\n#\n#\n\n");
-    fprintf(fp_gmt, "set -ex\n#\n#\n\n");
+    // 20230906 AJL //fprintf(fp_gmt, "set -ex\n#\n#\n\n");
 
     // gmtdefaults
 #ifdef GMT_VER_5
@@ -544,11 +544,12 @@ int GenGMTCommands(char cplotmode, char cdatatype,
     fprintf(fp_gmt, "gmtset ANNOT_FONT_SIZE_PRIMARY 14  ANNOT_FONT_SIZE_SECONDARY 14  HEADER_FONT_SIZE 14 LABEL_FONT_SIZE 14\n\n");
     fprintf(fp_gmt, "gmtset ANNOT_FONT_PRIMARY 4  ANNOT_FONT_SECONDARY 4  HEADER_FONT 4 LABEL_FONT 4\n\n");
     fprintf(fp_gmt, "gmtset LABEL_OFFSET 0.1c  ANNOT_OFFSET_PRIMARY 0.1c ANNOT_OFFSET_SECONDARY 0.1c\n\n");
-    fprintf(fp_gmt, "gmtset VERBOSE TRUE\n\n");
+    // 20230906 AJL //fprintf(fp_gmt, "gmtset VERBOSE TRUE\n\n");
+    fprintf(fp_gmt, "gmtset VERBOSE FALSE\n\n"); // 20230906 AJL
 #endif
 
     fprintf(fp_gmt, "POSTSCRIPT_NAME=%s\n\n", fn_root_output);
-    fprintf(fp_gmt, "\\rm -f $POSTSCRIPT_NAME.ps\n\n");
+    fprintf(fp_gmt, "rm -f $POSTSCRIPT_NAME.ps\n\n");
     sprintf(fn_ps_output, "$POSTSCRIPT_NAME");
 
 
@@ -1411,7 +1412,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
 
     /* RVAL rectangular x/y */
     fprintf(fp_gmt, "# Rect x/y in km\n");
-        fprintf(fp_gmt, "RVAL=\'-R%lf/%lf/%lf/%lf/-9999/9999\'\n",
+        fprintf(fp_gmt, "RVAL=\'-R%lf/%lf/%lf/%lf\'\n",
             horiz_min, horiz_max, vert_min, vert_max);
     if (message_flag > 0)
         fprintf(stdout, "RVAL: RECT/X: %lf/%lf RECTY:%lf/%lf\n",
@@ -1581,9 +1582,9 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
                 contour_int = GetContourInterval((double) grid_value_min,
                         (double) grid_value_max, NUM_COLORS, &nstep);
                 fprintf(fp_gmt,
-                        "if  [-f Grid2GMT.cpt ]; then\n");
+                        "if  [ -f Grid2GMT.cpt ]; then\n");
                 fprintf(fp_gmt,
-                        "   \\cp  Grid2GMT.cpt %s.cpt\n", fn_root_output);
+                        "   cp  Grid2GMT.cpt %s.cpt\n", fn_root_output);
                 fprintf(fp_gmt,
                         "   SCALE_FLAG=\n");
                 fprintf(fp_gmt,
@@ -1605,7 +1606,8 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
                     //strcpy(cpt_colortable, "rainbow");
                     if (value_min < -contour_int / 100.0 && value_max > contour_int / 100.0) {
                         // value range straddles zero, set min/max for color table equal.
-                        strcpy(cpt_colortable, "seis");
+                        //20231002//strcpy(cpt_colortable, "seis");
+                        strcpy(cpt_colortable, "polar");
                         if (value_max < contour_int)
                             value_max = contour_int;
                         else if (value_min > -contour_int)
@@ -1613,7 +1615,8 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
                     } else {
                         // value range positive
                         //strcpy(cpt_colortable, "rainbow");
-                        strcpy(cpt_colortable, "seis");
+                        //20231002//strcpy(cpt_colortable, "seis");
+                        strcpy(cpt_colortable, "polar");
                     }
                     char cpt_command[10 * MAXLINE];
                     sprintf(cpt_command, GMT_COMMAND_PREFIX"makecpt -Z -C%s -T%g/%g/%g > %s.cpt",

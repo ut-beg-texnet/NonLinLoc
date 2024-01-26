@@ -286,7 +286,7 @@ void writeLocNode(LocNode *addr, FILE *out)
 	int iWriteEndLoc = 1;
 	int iWriteMinimal = 1;
 
-	fprintf(out, "N=%d ", addr->id); /*DEBUG*/
+	fprintf(out, "N=%d ", addr->id); //DEBUG
 	WriteLocation(out, addr->plocation->phypo, addr->plocation->parrivals,
 		      addr->plocation->narrivals, NULL,
 		      iWriteArrivals, iWriteEndLoc, iWriteMinimal,
@@ -329,11 +329,12 @@ double getLocTimeValue(HypoDesc *phypo)
 	time_value = difftime(time_seconds, time_1970_seconds) + (*phypo).sec;
 
 
-	fprintf(stdout, "Hypo: time_1970_seconds=%f ", (double) time_1970_seconds); /*DEBUG*/
-	fprintf(stdout, "time_seconds=%f ", (double) time_seconds); /*DEBUG*/
-	fprintf(stdout, "(*phypo).sec=%f ", (*phypo).sec); /*DEBUG*/
-	fprintf(stdout, "time_value=%f ", time_value); /*DEBUG*/
-	fprintf(stdout, "\n"); /*DEBUG*/
+	/*fprintf(stdout, "Hypo: time_1970_seconds=%f ", (double) time_1970_seconds); //DEBUG
+	fprintf(stdout, "time_seconds=%f ", (double) time_seconds); //DEBUG
+	fprintf(stdout, "(*phypo).sec=%f ", (*phypo).sec); //DEBUG
+	fprintf(stdout, "time_value=%f ", time_value); //DEBUG
+	fprintf(stdout, "\n"); //DEBUG
+        */
 
 
 	return(time_value);

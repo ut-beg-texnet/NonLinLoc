@@ -41,6 +41,11 @@
 #include "GridLib.h"
 #include "phaseloclist.h"
 
+#ifdef GMT_VER_5
+    #define GMT_COMMAND_PREFIX "gmt "
+#else
+    #define GMT_COMMAND_PREFIX ""
+#endif
 
 /* defines */
 
@@ -92,7 +97,7 @@ typedef struct {
     double RMSMax;
     int NRdgsMin;
     double GapMax, PResidualMax, SResidualMax, EllLen3Max;
-    double DepthMin, DepthMax;  // 20221116 AJL - added to support filtering of events (phases) by hypocenter depth
+    double DepthMin, DepthMax; // 20221116 AJL - added to support filtering of events (phases) by hypocenter depth
 }
 LS_Phstat;
 LS_Phstat PhsStat;
@@ -811,6 +816,8 @@ int DoLoc2ssst() {
     char phasecode[SOURCE_LABEL_LEN];
     // 20210622 AJL - Bug fix: replaced possibly non-existent arrival pointer (PhsNodeArray[0]->parrival) with temp arrival pointer.
     ArrivalDesc arrival_tmp;
+    // 20230718 AJL - Bug fix, set iSwapBytes
+    arrival_tmp.gdesc.iSwapBytes = iSwapBytesOnInput;
     ArrivalDesc* parr_tmp = &arrival_tmp;
     for (int n = 0; n < NumStationPhases; n++) {
 
@@ -953,7 +960,6 @@ int DoLoc2ssst() {
         if (ihave_time_input_grids) {
             nll_putmsg2(1, "INFO: Opening existing time grid", fn_time_input);
             double tfact = 1.0;
-            ArrivalDesc* parr;
             // DEBUG!!
             //int message_flag_save = message_flag;
             //message_flag = 99;
@@ -1030,7 +1036,7 @@ int DoLoc2ssst() {
             cpt_increment = 2.0;
         }
         char system_str[MAXLINE_LONG];
-        sprintf(system_str, "makecpt -Z -Cred2green -T-%f/%f/%f > Grid2GMT_SSST.cpt", cpt_start_stop, cpt_start_stop, cpt_increment);
+        sprintf(system_str, GMT_COMMAND_PREFIX"makecpt -Z -Cred2green -T-%f/%f/%f > Grid2GMT_SSST.cpt", cpt_start_stop, cpt_start_stop, cpt_increment);
         system(system_str);
         sprintf(MsgStr, "Grid2GMT cpt file written to: %s", "Grid2GMT_SSST.cpt");
         nll_putmsg(1, MsgStr);
@@ -1192,9 +1198,11 @@ int open_traveltime_grid(ArrivalDesc* parr, char *fn_time_grid_input, char *stac
         if (pstation != NULL) {
             // open DEFAULT time grid for this phase
             int iSwapBytes = parr->gdesc.iSwapBytes;
+#ifdef LOC2SSST_CLUGE
             // 20201022 AJL - Cluge, assume need to byte swap if DEFAULT  // TODO: make this automatic or configurable
-            //iSwapBytes = 1;
+            iSwapBytes = 1;
             //
+#endif
             sprintf(filename, "%s.%s.%s.time", fn_time_grid_input, phasecode, "DEFAULT");
             if (DEBUG && istat < 0) {
                 nll_puterr2("INFO: Opening existing time grid: ", filename);
@@ -1260,7 +1268,7 @@ int add_ssst_to_traveltime_grid(char *phasecode, char *stacode, GridDesc *pssst_
 
     int debug_count = 0;
     int ix, iy, iz;
-    double xval, yval, zval, ttval, arrival_dist, ssst_corr;
+    double xval, yval, zval, ttval, arrival_dist = -1.0, ssst_corr;
     xval = pssst_time_grid->origx;
     for (ix = 0; ix < pssst_time_grid->numx; ix++) {
         yval = pssst_time_grid->origy;
@@ -1278,8 +1286,8 @@ int add_ssst_to_traveltime_grid(char *phasecode, char *stacode, GridDesc *pssst_
                 }
                 if (ttval < -LARGE_FLOAT) {
                     if (debug_count++ < 10) {
-                        printf("DEBUG ERROR: ttval < -LARGE_FLOAT: %s %s  is3D %d, xval %f, yval %f, zval %f\n",
-                                phasecode, stacode, is3D, xval, yval, zval);
+                        printf("DEBUG ERROR: ttval < -LARGE_FLOAT: %s %s  is3D %d, xval %f, yval %f, zval %f, ttval %f, arrival_dist %f\n",
+                                phasecode, stacode, is3D, xval, yval, zval, ttval, arrival_dist);
                     }
                     ttval = 0.0;
                     ssst_corr = 0.0;

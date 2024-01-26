@@ -602,8 +602,6 @@ int HomogDateTime(ArrivalDesc*, int, HypoDesc*);
 int CheckAbsoluteTiming(ArrivalDesc *arrival, int num_arrivals);
 int hypotime2hrminsec(long double phypo_time, int *phypo_hour, int *phypo_min, double *phypo_sec);
 int StdDateTime(ArrivalDesc*, int, HypoDesc*);
-int SetOutName(ArrivalDesc *arrival, char* out_file_root, char* out_file,
-        char* lastfile, int isec, int ipublic_id, char* public_id, int *pncount);
 int SaveLocation(HypoDesc* hypo, int ngrid, char* fnobs, char *fnout, int numArrivalsReject,
         char* loctypename, int isave_phases, GaussLocParams* gauss_par);
 void InitializeArrivalFields(ArrivalDesc *);

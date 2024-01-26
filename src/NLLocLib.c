@@ -931,7 +931,7 @@ int SaveLocation(HypoDesc* hypo, int ngrid, char* fnobs, char *fnout, int numArr
         char* loctypename, int isave_phases, GaussLocParams * gauss_par) {
     int istat;
     char *pchr;
-    char sys_command[2 * FILENAME_MAX];
+    //char sys_command[2 * FILENAME_MAX];
     char sourcefname[FILENAME_MAX], targetfname[FILENAME_MAX];
     char fname[2 * FILENAME_MAX], frootname[2 * FILENAME_MAX];
     FILE *fp_tmp;
@@ -984,7 +984,7 @@ int SaveLocation(HypoDesc* hypo, int ngrid, char* fnobs, char *fnout, int numArr
          */
         sprintf(targetfname, "%slast.hdr", f_outpath);
         copy_file(fname, targetfname);
-        /**/        sprintf(fname, "%s.scat", frootname);
+        /**/ sprintf(fname, "%s.scat", frootname);
         if ((fp_tmp = fopen(fname, "rb")) != NULL) {
             fclose(fp_tmp);
             /* Modified Jan Wiszniowski 2022-02-02
@@ -2850,6 +2850,7 @@ int GetNextObs(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, char* ftype_
 
     } else if (strcmp(ftype_obs, "HYPO71") == 0 ||
             strcmp(ftype_obs, "HYPO71_OV") == 0 ||
+            strcmp(ftype_obs, "HYPO71_S_QUAL_PLUS_1") == 0 ||
             strcmp(ftype_obs, "HYPOELLIPSE") == 0) {
 
         if (check_for_S_arrival) {
@@ -2873,7 +2874,8 @@ int GetNextObs(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, char* ftype_
                 TrimString(arrival->label);
                 istat += ReadFortranInt(line, 10, 2, &arrival->year);
                 // temporary fix for HYPO71 Y2K problem
-                if (arrival->year < 20)
+                // 20231017 //if (arrival->year < 20)
+                if (arrival->year < 40)
                     arrival->year += 100;
                 arrival->year += 1900;
                 istat += ReadFortranInt(line, 12, 2, &arrival->month);
@@ -2920,6 +2922,9 @@ int GetNextObs(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, char* ftype_
             //strcpy(arrival->phase, "S");
 
             /* set error fields */
+            if (strcmp(ftype_obs, "HYPO71_S_QUAL_PLUS_1") == 0) {
+                arrival->quality += 1;
+            }
             strcpy(arrival->error_type, "GAU");
             if (arrival->quality >= 0 &&
                     arrival->quality < NumQuality2ErrorLevels) {
@@ -2947,6 +2952,28 @@ int GetNextObs(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, char* ftype_
         if (cstat == NULL)
             return (OBS_FILE_END_OF_INPUT);
 
+
+        // 20231021 AJL - Added support for NLL header lines
+        // check for event public_id (assume listed before arrivals, e.g. in NLL Hypocenter-Phase file)
+        // 20190823 AJL - added
+        if (sscanf(line, "PUBLIC_ID %s", phypo->public_id) == 1) {
+            return (OBS_FILE_SKIP_INPUT_LINE);
+        }
+        // check for event QUALITY (assume listed before arrivals, e.g. in NLL Hypocenter-Phase file)
+        // 20191019 AJL - added
+        if (sscanf(line,
+                "QUALITY %*s %Lf %*s %lf %*s %lf %*s %lf %*s %d %*s %lf %*s %lf %*s %lf %d %*s %lf %d",
+                &phypo->probmax, &phypo->misfit,
+                &phypo->grid_misfit_max,
+                &phypo->rms, &phypo->nreadings, &phypo->gap,
+                &phypo->dist,
+                &phypo->amp_mag, &phypo->num_amp_mag,
+                &phypo->dur_mag, &phypo->num_dur_mag
+                ) == 11) {
+            return (OBS_FILE_SKIP_INPUT_LINE);
+        }
+
+
         /* read formatted P (or S) arrival input */
         istat = ReadFortranString(line, 1, 4, arrival->label);
         TrimString(arrival->label);
@@ -2959,7 +2986,8 @@ int GetNextObs(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, char* ftype_
         istat += ReadFortranInt(line, 8, 1, &arrival->quality);
         istat += ReadFortranInt(line, 10, 2, &arrival->year);
         // temporary fix for HYPO71 Y2K problem
-        if (arrival->year < 20)
+        // 20231017 //if (arrival->year < 20)
+        if (arrival->year < 40)
             arrival->year += 100;
         arrival->year += 1900;
         istat += ReadFortranInt(line, 12, 2, &arrival->month);
@@ -3012,10 +3040,17 @@ int GetNextObs(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, char* ftype_
         // END - 20090126 AJL bug fix
 
         /* convert quality to error */
+        // check if arrival is S
+        if (IsPhaseID(arrival->phase, "S") && strcmp(ftype_obs, "HYPO71_S_QUAL_PLUS_1") == 0) {
+            arrival->quality += 1;
+        }
         Qual2Err(arrival);
 
         return (istat);
-    } else if (strcmp(ftype_obs, "HYPOINVERSE_Y2000_ARC") == 0) {
+
+    } else if (strcmp(ftype_obs, "HYPOINVERSE_Y2000_ARC") == 0 ||
+            strcmp(ftype_obs, "HYPOINVERSE_Y2000_ARC_NET") == 0) // concatenate network with station: NN_SSS
+    {
 
         /*
                         Y2000 (station) archive format
@@ -3104,7 +3139,13 @@ int GetNextObs(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, char* ftype_
                 istat = ReadFortranString(line, 1, 5, arrival->label);
                 TrimString(arrival->label);
                 istat = ReadFortranString(line, 6, 2, arrival->network); // network code ignored in NLL
-                TrimString(arrival->network);
+                int clen_net = TrimString(arrival->network);
+                if (clen_net > 0 && strcmp(ftype_obs, "HYPOINVERSE_Y2000_ARC_NET") == 0) {
+                    strcpy(chrtmp, arrival->label);
+                    strcpy(arrival->label, arrival->network);
+                    strcat(arrival->label, "_");
+                    strcat(arrival->label, chrtmp);
+                }
                 istat += ReadFortranString(line, 9, 1, arrival->comp);
                 TrimString(arrival->comp);
                 istat += ReadFortranString(line, 10, 3, arrival->inst);
@@ -3235,7 +3276,13 @@ int GetNextObs(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, char* ftype_
             istat = ReadFortranString(line, 1, 5, arrival->label);
             TrimString(arrival->label);
             istat = ReadFortranString(line, 6, 2, arrival->network); // network code ignored in NLL
-            TrimString(arrival->network);
+            int clen_net = TrimString(arrival->network);
+            if (clen_net > 0 && strcmp(ftype_obs, "HYPOINVERSE_Y2000_ARC_NET") == 0) {
+                strcpy(chrtmp, arrival->label);
+                strcpy(arrival->label, arrival->network);
+                strcat(arrival->label, "_");
+                strcat(arrival->label, chrtmp);
+            }
             istat += ReadFortranString(line, 9, 1, arrival->comp);
             TrimString(arrival->comp);
             istat += ReadFortranString(line, 10, 3, arrival->inst);
@@ -3726,7 +3773,8 @@ int GetNextObs(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, char* ftype_
             istat += ReadFortranInt(line, 10, 2, &EventTime.min);
             if (istat == 5) {
                 // temporary fix for HYPO71 Y2K problem
-                if (EventTime.year < 20)
+                // 20231017 //if (arrival->year < 20)
+                if (arrival->year < 40)
                     EventTime.year += 100;
                 EventTime.year += 1900;
                 // read to end of line
@@ -3822,6 +3870,122 @@ int GetNextObs(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, char* ftype_
         Qual2Err(arrival);
 
         return (istat);
+
+    } else if (strcmp(ftype_obs, "PAL") == 0) {
+        // Zhou, Y., Yue, H., Fang, L., Zhou, S., Zhao, L. & Ghosh, A., 2021. An Earthquake Detection and Location Architecture for Continuous Seismograms: Phase Picking, Association, Location, and Matched Filter (PALM). Seismological Research Letters. doi:10.1785/0220210111
+
+        /*
+2023-02-01T07:02:02.724000Z,38.28,38.68,23,2.37,0.5
+KO.SVRC,2023-02-01T07:02:12.920000Z,2023-02-01T07:02:21.690000Z,4.4354171239049296e-07,42808.9
+TU.ATAB,2023-02-01T07:02:20.190000Z,2023-02-01T07:02:33.830000Z,2.2707865061916482e-07,36.4
+KO.DARE,2023-02-01T07:02:21.750000Z,2023-02-01T07:02:36.290000Z,6.171520362434723e-08,28.4
+TU.NARI,2023-02-01T07:02:11.210000Z,2023-02-01T07:02:17.650000Z,1.2742076995164313e-07,16.7
+TU.AKCD,2023-02-01T07:02:15.210000Z,2023-02-01T07:02:24.530000Z,7.080782126560284e-07,25167.6
+TU.HEKM,2023-02-01T07:02:19.710000Z,2023-02-01T07:02:32.270000Z,6.990056816112568e-07,37.8
+2023-02-01T03:38:52.499600Z,38.38,39.36,5,0.96,0.3
+TU.MKAM,2023-02-01T03:39:01.900000Z,2023-02-01T03:39:09.390000Z,8.320017592216995e-09,49.8
+KO.SVRC,2023-02-01T03:38:53.860000Z,2023-02-01T03:38:54.960000Z,1.1081106036964678e-06,107958.4
+         */
+
+        char *cptr;
+
+        //*DEBUG*/printf("TP 00");
+        if (check_for_S_arrival) {
+            check_for_S_arrival = 0;
+            // check for S phase input in last input line read
+            // KO.SVRC,2023-02-01T07:02:12.920000Z,2023-02-01T07:02:21.690000Z,4.4354171239049296e-07,42808.9
+            // replace ',' with ' '
+            while ((cptr = strchr(line, ',')) != NULL) {
+                *cptr = ' ';
+            }
+            istat = sscanf(line, "%s %*d-%*d-%*dT%*d:%*d:%*lfZ %d-%d-%dT%d:%d:%lfZ",
+                    arrival->label, &arrival->year, &arrival->month, &arrival->day, &arrival->hour, &arrival->min, &arrival->sec
+                    );
+            //*DEBUG*/printf("\n%d  %s\n", istat, line);
+            if (istat != 7) {
+                return (OBS_FILE_SKIP_INPUT_LINE);
+            }
+            // convert periods in NET.STA to _
+            while ((cptr = strchr(arrival->label, '.')) != NULL) {
+                *cptr = '_';
+            }
+            strncpy(arrival->phase, "S", 1);
+            arrival->quality = 1;
+            // convert quality to error
+            Qual2Err(arrival);
+
+            return (istat);
+        }
+
+        //*DEBUG*/printf(" 01");
+        // check for end of event or event hypocenter line (assumes no blanks after last phase)
+        chr = fgetc(fp_obs);
+        //*DEBUG*/printf("chr %c %d %d\n", chr, isdigit(chr), in_hypocenter_event);
+        ungetc(chr, fp_obs);
+        if (chr != EOF && isdigit(chr)) {
+            if (in_hypocenter_event) {
+                // end of event
+                in_hypocenter_event = 0;
+                return (OBS_FILE_END_OF_EVENT);
+            } else {
+                // read hypocenter line
+                cstat = fgets(line, MAXLINE_LONG, fp_obs);
+                if (cstat == NULL)
+                    return (OBS_FILE_END_OF_INPUT);
+
+                // 2023-02-01T07:02:02.724000Z,38.28,38.68,23,2.37,0.5
+                istat = sscanf(line, "%d-%d-%dT%d:%d:%lfZ,%lf,%lf,%lf,%lf",
+                        &EventTime.year, &EventTime.month, &EventTime.day,
+                        &EventTime.hour, &EventTime.min, &EventTime.sec,
+                        &phypo->dlat, &phypo->dlong, &phypo->depth, &phypo->amp_mag
+                        );
+                if (istat != 10) {
+                    return (OBS_FILE_END_OF_EVENT);
+                }
+                in_hypocenter_event = 1;
+                check_for_S_arrival = 0;
+            }
+        } else {
+            if (chr == EOF)
+                return (OBS_FILE_END_OF_INPUT);
+        }
+
+        //*DEBUG*/printf(" 03");
+        // P phase
+        // read next line
+        cstat = fgets(line, MAXLINE_LONG, fp_obs);
+        if (cstat == NULL)
+            return (OBS_FILE_END_OF_INPUT);
+        //*DEBUG*/printf(" 04");
+
+        // KO.SVRC,2023-02-01T07:02:12.920000Z,2023-02-01T07:02:21.690000Z,4.4354171239049296e-07,42808.9
+        // replace ',' with ' '
+        while ((cptr = strchr(line, ',')) != NULL) {
+            *cptr = ' ';
+        }
+        istat = sscanf(line, "%s %d-%d-%dT%d:%d:%lfZ",
+                arrival->label, &arrival->year, &arrival->month, &arrival->day, &arrival->hour, &arrival->min, &arrival->sec
+                );
+        //*DEBUG*/printf(" 05");
+        //*DEBUG*/printf("\n%d  %s\n", istat, line);
+        if (istat != 7) {
+            return (OBS_FILE_END_OF_EVENT);
+        }
+        //*DEBUG*/printf(" 06");
+        // convert periods in NET.STA to _
+        while ((cptr = strchr(arrival->label, '.')) != NULL) {
+            *cptr = '_';
+        }
+        strncpy(arrival->phase, "P", 1);
+        arrival->quality = 0;
+        // convert quality to error
+        Qual2Err(arrival);
+
+        check_for_S_arrival = 1;
+
+        //*DEBUG*/printf(" 99\n");
+        return (istat);
+
     } else if (strcmp(ftype_obs, "SED_LOC") == 0 || strcmp(ftype_obs, "SED_LOC_ERR") == 0) {
 
         /* example:
@@ -4487,13 +4651,13 @@ int GetNextObs(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, char* ftype_
 
         /* example:
 
-Channel	Distance	Azimuth	Phase	Arrival Time	Status	Residual	Weight
-IM PD31 BHZ --	0.378028	236.911	Pn	2013-09-21T13:16:45.66Z	manual	-0.10	0.0160
-IM PD31 BHN --	0.378028	236.911	Sn	2013-09-21T13:16:55.11Z	manual	0.00	0.0340
-IM PDAR SHZ FB	0.378181	236.836	Pn	2013-09-21T13:16:45.75Z	manual	0.00	0.0160
-IM PDAR SHZ FB	0.378181	236.836	Sn	2013-09-21T13:16:55.35Z	manual	0.20	0.0340
-US BW06 BHZ 00	0.378425	236.86	Pn	2013-09-21T13:16:45.58Z	manual	-0.20	0.0160
-US BW06 BHN 00	0.378425	236.86	Pn	2013-09-21T13:16:45.67Z	manual	0.00	0.0000
+        Channel	Distance	Azimuth	Phase	Arrival Time	Status	Residual	Weight
+        IM PD31 BHZ --	0.378028	236.911	Pn	2013-09-21T13:16:45.66Z	manual	-0.10	0.0160
+        IM PD31 BHN --	0.378028	236.911	Sn	2013-09-21T13:16:55.11Z	manual	0.00	0.0340
+        IM PDAR SHZ FB	0.378181	236.836	Pn	2013-09-21T13:16:45.75Z	manual	0.00	0.0160
+        IM PDAR SHZ FB	0.378181	236.836	Sn	2013-09-21T13:16:55.35Z	manual	0.20	0.0340
+        US BW06 BHZ 00	0.378425	236.86	Pn	2013-09-21T13:16:45.58Z	manual	-0.20	0.0160
+        US BW06 BHN 00	0.378425	236.86	Pn	2013-09-21T13:16:45.67Z	manual	0.00	0.0000
 
          *        */
         /* read line */
@@ -4523,8 +4687,8 @@ US BW06 BHN 00	0.378425	236.86	Pn	2013-09-21T13:16:45.67Z	manual	0.00	0.0000
 
         /* read phase arrival input */
         /*
-IM PD31 BHZ --	0.378028	236.911	Pn	2013-09-21T13:16:45.66Z	manual	-0.10	0.0160
-IM PD31 BHN --	0.378028	236.911	Sn	2013-09-21T13:16:55.11Z	manual	0.00	0.0340
+        IM PD31 BHZ --	0.378028	236.911	Pn	2013-09-21T13:16:45.66Z	manual	-0.10	0.0160
+        IM PD31 BHN --	0.378028	236.911	Sn	2013-09-21T13:16:55.11Z	manual	0.00	0.0340
          */
         istat = sscanf(line, "%s %s %s %*s %*f %*f %s %4d-%2d-%2dT%2d:%2d:%lfZ",
                 arrival->network, arrival->label, arrival->inst, arrival->phase, &arrival->year, &arrival->month, &arrival->day, &arrival->hour, &arrival->min, &arrival->sec);
@@ -4550,18 +4714,18 @@ IM PD31 BHN --	0.378028	236.911	Sn	2013-09-21T13:16:55.11Z	manual	0.00	0.0340
 
         /* example:
 
- 132750016  261603062   KSA       P       P  84.13 355.75 1929-07-03 01:05:49 ?
- 132750016  261603063   KSA       S       S  84.13 355.75 1929-07-03 01:15:55 ?
- 132750017  261603064   LPZ       P         100.36 105.55 1929-07-03 01:45:50 ?
+        132750016  261603062   KSA       P       P  84.13 355.75 1929-07-03 01:05:49 ?
+        132750016  261603063   KSA       S       S  84.13 355.75 1929-07-03 01:15:55 ?
+        132750017  261603064   LPZ       P         100.36 105.55 1929-07-03 01:45:50 ?
 
-#     evid      hypid author origin time               lat      lon    depth F  nsta  nass  ndef
+        #     evid      hypid author origin time               lat      lon    depth F  nsta  nass  ndef
     905632  607283695    GEM 1933/06/12 15:23:41.916  61.231 -151.354  15.00 H    21    68    26
 
-#     rdid       phid   sta  Pphase  Aphase  delta   esaz    arrival time    ch
- 132814560  261709084   VIC       P      Pn  20.30 116.11 1933-06-12 15:28:16 ?
- 132814560  261709085   VIC      SS      Sn  20.30 116.11 1933-06-12 15:32:19 ?
- 132814561  261709086   BZM      SS      SS  28.04 105.18 1933-06-12 15:36:24 ?
- 132814562  261709087   UKI       S       S  28.12 128.91 1933-06-12 15:34:30 ?
+        #     rdid       phid   sta  Pphase  Aphase  delta   esaz    arrival time    ch
+        132814560  261709084   VIC       P      Pn  20.30 116.11 1933-06-12 15:28:16 ?
+        132814560  261709085   VIC      SS      Sn  20.30 116.11 1933-06-12 15:32:19 ?
+        132814561  261709086   BZM      SS      SS  28.04 105.18 1933-06-12 15:36:24 ?
+        132814562  261709087   UKI       S       S  28.12 128.91 1933-06-12 15:34:30 ?
 
          *        */
         /* read line */
@@ -4591,7 +4755,7 @@ IM PD31 BHN --	0.378028	236.911	Sn	2013-09-21T13:16:55.11Z	manual	0.00	0.0340
 
         /* read phase arrival input */
         /*
- 132814560  261709084   VIC       P      Pn  20.30 116.11 1933-06-12 15:28:16 ?
+        132814560  261709084   VIC       P      Pn  20.30 116.11 1933-06-12 15:28:16 ?
          */
         istat = ReadFortranString(line, 25, 9, chrtmp);
         istat = sscanf(chrtmp, "%s", arrival->label);
@@ -5137,12 +5301,12 @@ IM PD31 BHN --	0.378028	236.911	Sn	2013-09-21T13:16:55.11Z	manual	0.00	0.0340
     } else if (strcmp(ftype_obs, "TEXNET_BULLETIN") == 0 || strcmp(ftype_obs, "TEXNET_BULLETIN__ZERO_WT_X") == 0) {
 
         /* example:
-Event:
+        Event:
     Public ID              texnet2017qjsf
     Type                   earthquake
     Description
       region name: Western Texas
-Origin:
+        Origin:
     Date                   2017-08-21
     Time                   23:59:32.064
     Latitude                31.11088 deg  +/-    0.943 km
@@ -5154,12 +5318,12 @@ Origin:
     Residual RMS               0.306 s
     Azimuthal gap               70.2 deg
 
-3 Network magnitudes:
+        3 Network magnitudes:
     ML        2.04 +/- 0.04   7 preferred
     MLv       2.38 +/- 0.14   9
     M         2.26            9
 
-20 Phase arrivals:
+        20 Phase arrivals:
     sta   net      dist   azi  phase   time             res     wt  sta
     PB08  TX     38.669 129.0  P       23:59:39.396  -0.044 M  1.3  PB08
     PB08  TX     38.669 129.0  S       23:59:46.382   1.408 MX 0.0  PB08
@@ -5182,7 +5346,7 @@ Origin:
     VHRN  TX    171.704 257.9  S       00:00:22.569  -0.389 M  0.8  VHRN
     TX31  IM    200.960 190.8  P       00:00:06.262   1.544 MX 0.0  TX31
 
-18 Station magnitudes:
+        18 Station magnitudes:
     sta   net      dist   azi  type   value   res        amp  per
     PB08  TX     38.669 129.0  ML      2.06  0.02    1.12763
     PB08  TX     38.669 129.0  MLv     2.02 -0.36   0.587801
@@ -5947,15 +6111,30 @@ Origin:
         TrimString(arrival->label);
         istat += ReadFortranString(line, 7, 1, arrival->inst);
         TrimString(arrival->inst);
+        if (strlen(arrival->inst) < 1) { // 20231108 AJL - make sure empty fields are set to "?"
+            strncpy(arrival->inst, "?", sizeof (arrival->inst));
+        }
         istat += ReadFortranString(line, 8, 1, arrival->comp);
         TrimString(arrival->comp);
+        if (strlen(arrival->comp) < 1) { // 20231108 AJL - make sure empty fields are set to "?"
+            strncpy(arrival->comp, "?", sizeof (arrival->comp));
+        }
         istat += ReadFortranString(line, 10, 1, arrival->onset);
         TrimString(arrival->onset);
+        if (strlen(arrival->onset) < 1) { // 20231108 AJL - make sure empty fields are set to "?"
+            strncpy(arrival->onset, "?", sizeof (arrival->onset));
+        }
         istat += ReadFortranString(line, 11, 4, arrival->phase);
         TrimString(arrival->phase);
+        if (strlen(arrival->phase) < 1) { // 20231108 AJL - make sure empty fields are set to "?"
+            strncpy(arrival->phase, "?", sizeof (arrival->phase));
+        }
         istat += ReadFortranInt(line, 15, 1, &arrival->quality);
         istat += ReadFortranString(line, 17, 1, arrival->first_mot);
         TrimString(arrival->first_mot);
+        if (strlen(arrival->first_mot) < 1) { // 20231108 AJL - make sure empty fields are set to "?"
+            strncpy(arrival->first_mot, "?", sizeof (arrival->first_mot));
+        }
         istat += ReadFortranInt(line, 19, 2, &arrival->hour);
         istat += ReadFortranInt(line, 21, 2, &arrival->min);
         istat += ReadFortranReal(line, 23, 6, &arrival->sec);
@@ -6053,9 +6232,9 @@ Origin:
         arrival->error = right_uncertainty;
         /*
         if (strcmp(arrival->phase, "P") == 0)
-arrival->error = 0.1;
+        arrival->error = 0.1;
         if (strcmp(arrival->phase, "S") == 0)
-arrival->error = 0.2;
+        arrival->error = 0.2;
          */
 
         return (istat);
@@ -6163,12 +6342,12 @@ arrival->error = 0.2;
 
         /* example:
 
- 10 70  9 3888 MLOA PTHNZ  1  20150124165003.00     107     103 68
- 10 70  9 3889 SPDD HVEHZ D1  20150124165021.21     141     154 88
- 10 70  9 3890 MLOA PTHNZ  2  20150124165039.47      55      71 11
- 10 70  9 3891 POLD HVEHZ U1  20150124165049.40     155     363 312
- 10 70  9 3892 KLUD HVEHZ U3  20150124165043.35      26      15 27
- 10 70  9 3893 HTCD HVEHZ U0  20150124165047.15     754     858 574
+        10 70  9 3888 MLOA PTHNZ  1  20150124165003.00     107     103 68
+        10 70  9 3889 SPDD HVEHZ D1  20150124165021.21     141     154 88
+        10 70  9 3890 MLOA PTHNZ  2  20150124165039.47      55      71 11
+        10 70  9 3891 POLD HVEHZ U1  20150124165049.40     155     363 312
+        10 70  9 3892 KLUD HVEHZ U3  20150124165043.35      26      15 27
+        10 70  9 3893 HTCD HVEHZ U0  20150124165047.15     754     858 574
 
          */
 
@@ -6272,24 +6451,24 @@ arrival->error = 0.2;
 
         /* example:
 
--
--   Ozet-Sum
--   Varislar-Arrivals
--   Kalite-Quality
--   Istasyonlar-Stations
+        -
+        -   Ozet-Sum
+        -   Varislar-Arrivals
+        -   Kalite-Quality
+        -   Istasyonlar-Stations
 
-Deprem ID-Earthquake ID : koeri2023ctri    
+        Deprem ID-Earthquake ID : koeri2023ctri    
 
-  Stat    Net   Time UTC                  Phase   Res     Distance   Azimuth   Status      Amp (MLv)      Mag (MLv)
-  ------- ----- ------------------------- ------- ------- ---------- --------- ----------- -------------- -----------
-  SARI    KO    2023-02-09 05:24:33.449   P       -0.2    0.4        2.1       automatic   69.56897307    4.17
-  KMRS    KO    2023-02-09 05:24:38.389   P       0.3     0.6        5.0       automatic   50.37548677    4.54
-  SARI    KO    2023-02-09 05:24:38.999   S       -0.2    0.4        2.1       automatic   -              -
-  DARE    KO    2023-02-09 05:24:41.420   P       -0.5    0.8        0.6       automatic   11.34292752    4.00
-  KHMN    KO    2023-02-09 05:24:42.129   P       0.5     0.8        5.2       automatic   42.34370569    4.57
-  KOZT    KO    2023-02-09 05:24:43.039   P       -0.4    0.9        3.9       automatic   11.99514082    4.08
-  KMRS    KO    2023-02-09 05:24:46.939   S       0.3     0.6        5.0       automatic   -              -
-  CEYT    KO    2023-02-09 05:24:50.900   P       -0.1    1.3        4.1       automatic   4.763989123    3.90
+        Stat    Net   Time UTC                  Phase   Res     Distance   Azimuth   Status      Amp (MLv)      Mag (MLv)
+        ------- ----- ------------------------- ------- ------- ---------- --------- ----------- -------------- -----------
+        SARI    KO    2023-02-09 05:24:33.449   P       -0.2    0.4        2.1       automatic   69.56897307    4.17
+        KMRS    KO    2023-02-09 05:24:38.389   P       0.3     0.6        5.0       automatic   50.37548677    4.54
+        SARI    KO    2023-02-09 05:24:38.999   S       -0.2    0.4        2.1       automatic   -              -
+        DARE    KO    2023-02-09 05:24:41.420   P       -0.5    0.8        0.6       automatic   11.34292752    4.00
+        KHMN    KO    2023-02-09 05:24:42.129   P       0.5     0.8        5.2       automatic   42.34370569    4.57
+        KOZT    KO    2023-02-09 05:24:43.039   P       -0.4    0.9        3.9       automatic   11.99514082    4.08
+        KMRS    KO    2023-02-09 05:24:46.939   S       0.3     0.6        5.0       automatic   -              -
+        CEYT    KO    2023-02-09 05:24:50.900   P       -0.1    1.3        4.1       automatic   4.763989123    3.90
 
          */
 
@@ -6319,8 +6498,8 @@ Deprem ID-Earthquake ID : koeri2023ctri    
 
         /* read phase arrival input */
         /*
-  SARI    KO    2023-02-09 05:24:33.449   P       -0.2    0.4        2.1       automatic   69.56897307    4.17
-  KMRS    KO    2023-02-09 05:24:38.389   P       0.3     0.6        5.0       automatic   50.37548677    4.54
+        SARI    KO    2023-02-09 05:24:33.449   P       -0.2    0.4        2.1       automatic   69.56897307    4.17
+        KMRS    KO    2023-02-09 05:24:38.389   P       0.3     0.6        5.0       automatic   50.37548677    4.54
          */
         char koeri_sta[16], koeri_net[16];
         double koeri_mag;
@@ -6534,61 +6713,12 @@ int StdDateTime(ArrivalDesc *arrival, int num_arrivals, HypoDesc * phypo) {
     //printf("DEBUG: StdDateTime: phypo->time %d:%d:%f\n", phypo->hour, phypo->min, phypo->sec);
 
     /*hyp_time_tmp = phypo->time;
-                                    phypo->hour = (int) (hyp_time_tmp / 3600.0L);
-                                    hyp_time_tmp -= (long double) phypo->hour * 3600.0L;
-                                    phypo->min = (int) (hyp_time_tmp / 60.0L);
-                                    hyp_time_tmp -= (long double) phypo->min * 60.0L;
-                                    phypo->sec = (double) hyp_time_tmp;*/
+                                                            phypo->hour = (int) (hyp_time_tmp / 3600.0L);
+                                                            hyp_time_tmp -= (long double) phypo->hour * 3600.0L;
+                                                            phypo->min = (int) (hyp_time_tmp / 60.0L);
+                                                            hyp_time_tmp -= (long double) phypo->min * 60.0L;
+                                                            phypo->sec = (double) hyp_time_tmp;*/
 
-    return (0);
-
-}
-
-/** function to set output file root name using arrival time or public_id */
-
-int SetOutName(ArrivalDesc *arrival, char* out_file_root, char* out_file,
-        char* lastfile, int isec, int ipublic_id, char* public_id, int *pncount) {
-
-    char filename_ctr[10];
-
-    /*	if (isec)
-            sprintf(out_file, "%s.%4.4d%2.2d%2.2d.%2.2d%2.2d%2.2d",
-            out_file_root, arrival->year, arrival->month, arrival->day,
-            arrival->hour, arrival->min, (int) arrival->sec);
-            else
-            sprintf(out_file, "%s.%4.4d%2.2d%2.2d.%2.2d%2.2d",
-            out_file_root, arrival->year, arrival->month, arrival->day,
-            arrival->hour, arrival->min);  */
-    /* SH 03/28/02 change to include digits of sec to construct filename */
-    if (isec) {
-        sprintf(out_file, "%s.%4.4d%2.2d%2.2d.%2.2d%2.2d%05.2f",
-                out_file_root, arrival->year, arrival->month, arrival->day,
-                arrival->hour, arrival->min, arrival->sec);
-    } else if (ipublic_id) {
-        sprintf(out_file, "%s.%4.4d%2.2d%2.2d.%2.2d%2.2d%2.2d_%s",
-                out_file_root, arrival->year, arrival->month, arrival->day,
-                arrival->hour, arrival->min, (int) arrival->sec, public_id);
-    } else {
-        sprintf(out_file, "%s.%4.4d%2.2d%2.2d.%2.2d%2.2d%2.2d",
-                out_file_root, arrival->year, arrival->month, arrival->day,
-                arrival->hour, arrival->min, (int) arrival->sec);
-    }
-    /* SH 04/08/02 check if same filename as previous event;
-            if so append 'b' to filename;
-            identical filenames can happen with swarm data */
-    //printf(">>>>>>%s<>%s<\n", out_file, lastfile);
-    //if (ncount++ > 0 || strcmp(out_file, lastfile) == 0) {
-    // AJL 20060615 bug fix!  Following line added
-    if (strcmp(out_file, lastfile) == 0) {
-        strcpy(lastfile, out_file); /* save filename */
-        sprintf(filename_ctr, "_%3.3d", *pncount);
-        strcat(out_file, filename_ctr);
-        (*pncount)++;
-    } else {
-
-        strcpy(lastfile, out_file); /* save filename */
-        *pncount = 1;
-    }
     return (0);
 
 }
@@ -9749,18 +9879,18 @@ long double CalcMaxLikeOriginTime(int num_arrivals, ArrivalDesc *arrival, GaussL
 
     /* NOTE: the following (MEN92, eq. 19) is unnecessary
 
-                                                    for (nrow = 0; nrow < num_arrivals; nrow++)
-                                                    for (ncol = 0; ncol <= nrow; ncol++) {
-                                                    if (ncol != nrow)
-                                                    time_est += 2.0L * (long double) wtmtx[nrow][ncol]
+                                                                            for (nrow = 0; nrow < num_arrivals; nrow++)
+                                                                            for (ncol = 0; ncol <= nrow; ncol++) {
+                                                                            if (ncol != nrow)
+                                                                            time_est += 2.0L * (long double) wtmtx[nrow][ncol]
      * (arrival[nrow].obs_time -
-                                                    (long double) arrival[nrow].pred_travel_time);
-                                                    else
-                                                    time_est += (long double) wtmtx[nrow][ncol] *
-                                                    (arrival[nrow].obs_time -
-                                                    (long double) arrival[nrow].pred_travel_time);
-                                            }
-                                                    return(time_est / (long double) gauss_par->WtMtrxSum);
+                                                                            (long double) arrival[nrow].pred_travel_time);
+                                                                            else
+                                                                            time_est += (long double) wtmtx[nrow][ncol] *
+                                                                            (arrival[nrow].obs_time -
+                                                                            (long double) arrival[nrow].pred_travel_time);
+                                                                    }
+                                                                            return(time_est / (long double) gauss_par->WtMtrxSum);
      */
 
     return (gauss_par->meanObs - (long double) gauss_par->meanPred);
@@ -9912,6 +10042,7 @@ int is_nll_control_json(FILE* fp_input) {
     }
 
     rewind(fp_input);
+
     return (0);
 
 }
@@ -10824,7 +10955,7 @@ int GetNLLoc_PdfGrid(char* line1, int prior_type) {
                                     sprintf(MsgStr,
                                             "WARNING: maximum number of coherence pdf grid files files reached, only first %d will be processed.",
                                             MAX_NUM_PDF_GRID_FILES);
-                                    nll_puterr(MsgStr);
+                                    nll_putmsg(1, MsgStr);
                                     break;
                                 }
                                 if (searchPdfGrid->max_count_other >= 0
@@ -10832,7 +10963,7 @@ int GetNLLoc_PdfGrid(char* line1, int prior_type) {
                                     sprintf(MsgStr,
                                             "WARNING: maximum number of other coherence pdf grid files files reached, only first %d will be processed.",
                                             searchPdfGrid->max_count_other);
-                                    nll_puterr(MsgStr);
+                                    nll_putmsg(1, MsgStr);
                                     break;
                                 }
                             }
@@ -10966,7 +11097,8 @@ int GetNLLoc_PdfGrid(char* line1, int prior_type) {
         if (searchPdfGrid->max_total_other_weight > 0.0 && tot_other_wt > searchPdfGrid->max_total_other_weight) {
             for (int nFile = 1; nFile < numPdfGridFiles; nFile++) {
                 //searchPdfGrid->weight[nFile] *= searchPdfGrid->max_total_other_weight / tot_other_wt;
-                searchPdfGrid->weight[nFile] /= tot_other_wt;
+                // 20231114 AJL - Bug fix: //searchPdfGrid->weight[nFile] /= tot_other_wt;
+                searchPdfGrid->weight[nFile] *= searchPdfGrid->max_total_other_weight / tot_other_wt; // 20231114 AJL - Bug fix
             }
         }
         free(arrival_tmp);
@@ -11028,6 +11160,7 @@ int GetNLLoc_PdfGrid(char* line1, int prior_type) {
     if (prior_type == PDF_GRID_PRIOR) {
         iUseSearchPrior = 1;
     } else if (prior_type == PDF_GRID_POSTERIOR) {
+
         iUseSearchPosterior = 1;
         /* 20220107 AJL - Revert Bug fix: faster to put grids in memory, maybe too much disk I/O otherwise
         // 20211026 AJL - Bug fix: do not put 3D grids in memory: LOCMETH maximum_number_3D_grids, not needed and can use much memory
@@ -11207,10 +11340,10 @@ int GetNLLoc_Method(char* line1) {
     // 20200203 AJL - not sure if this is correct, may be OK?  TODO:
 
     /*if (VpVsRatio > 0.0 && GeometryMode == MODE_GLOBAL) {
-                            nll_puterr("ERROR: cannot use VpVsRatio>0 with TRANSFORM GLOBAL.");
+                                        nll_puterr("ERROR: cannot use VpVsRatio>0 with TRANSFORM GLOBAL.");
 
-                            return (EXIT_ERROR_LOCATE);
-                        }*/
+                                        return (EXIT_ERROR_LOCATE);
+                                    }*/
 
     return (0);
 }
@@ -11699,7 +11832,7 @@ int GetTopoSurface(char* line1) {
         strcat(dump_file, ".bin");
         dump_grd(topo_surface_index, idump_decimation, 1.0, 1.0, -0.001, dump_file);
         sprintf(MsgStr, "LOCTOPO_SURFACE:  Grid dumped to: %s", dump_file);
-        nll_putmsg(0, MsgStr);
+        nll_putmsg(1, MsgStr);
     }
 
     return (0);
@@ -12962,20 +13095,29 @@ int WriteHypoInverseArchive(FILE *fpio, HypoDesc *phypo, ArrivalDesc *parrivals,
  *
  */
 
+double* azimuths = NULL;
+
 double CalcAzimuthGap(ArrivalDesc *arrival, int num_arrivals, double *pgap_secondary) {
 
-    int narr, naz;
-    //double az_last, az, gap, gap_max = -1.0;
-    double azimuths[MAX_NUM_ARRIVALS];
+    if (azimuths == NULL) {
+        if ((azimuths = (double *) malloc(MAX_NUM_ARRIVALS * sizeof (double))) == NULL) {
+            nll_puterr("ERROR: allocating memory for azimuths in CalcAzimuthGap().");
+            return (-1);
+        }
+    }
+
+    //printf("DEBUG: CalcAzimuthGap =========\n");
 
     /* load azimuths to working array */
-    naz = 0;
-    for (narr = 0; narr < num_arrivals; narr++) {
+    int naz = 0;
+    for (int narr = 0; narr < num_arrivals; narr++) {
         // AJL 20091208 Zero weight phase modification
         //if (!(arrival + narr)->flag_ignore)
-        if (!(arrival + narr)->flag_ignore && (arrival + narr)->weight > VERY_SMALL_DOUBLE) // 20100521 AJL
+        if (!(arrival + narr)->flag_ignore && (arrival + narr)->weight > VERY_SMALL_DOUBLE) { // 20100521 AJL
             //if ((arrival + narr)->weight > 0.001)
             azimuths[naz++] = (arrival + narr)->azim;
+            //printf("DEBUG: Azimuth added: %s %f\n", (arrival + narr)->label, (arrival + narr)->azim);
+        }
     }
 
     /* sort */
@@ -12988,7 +13130,17 @@ double CalcAzimuthGap(ArrivalDesc *arrival, int num_arrivals, double *pgap_secon
     // find largest gap and secondary gap
     az_last2 = azimuths[naz - 2] - 360.0;
     az_last = azimuths[naz - 1] - 360.0;
-    for (narr = 0; narr < naz; narr++) {
+    // 20230712 AJL - bug fix, skip identical azimuths (assume from same station)
+    int ndx = 3;
+    while (az_last2 == az_last && ndx <= naz) {
+        az_last2 = azimuths[naz - ndx] - 360.0;
+        ndx++;
+    }
+    for (int narr = 0; narr < naz; narr++) {
+        // 20230712 AJL - bug fix, skip identical azimuths (assume from same station)
+        if (azimuths[narr] == az_last) {
+            continue;
+        }
         az = azimuths[narr];
         gap_primary = az - az_last;
         if (gap_primary > gap_primary_max)
@@ -12996,11 +13148,13 @@ double CalcAzimuthGap(ArrivalDesc *arrival, int num_arrivals, double *pgap_secon
         gap_secondary = az - az_last2;
         if (gap_secondary > gap_secondary_max)
             gap_secondary_max = gap_secondary;
+        //printf("DEBUG: Azimuths tested: %f %f %f\n", az_last2, az_last, az);
         az_last2 = az_last;
         az_last = az;
     }
 
     *pgap_secondary = gap_secondary_max;
+    //printf("DEBUG: Azimuth gaps: gap %f gap2 %f\n", gap_primary_max, gap_secondary_max);
 
     return (gap_primary_max);
 
@@ -13992,9 +14146,9 @@ int isAboveTopo(double xval, double yval, double zval) {
         int iabove = elev > topo_elev;
 
         /*
-                                                                    if (iabove) {
-                                                                        printf("xyz %f %f %f  lon/lat/elev %f %f %f  topo_elev %f  above %d\n", xval, yval, zval, ylat, xlon, elev, topo_elev, iabove);
-                                                                    }//*/
+                                                                                if (iabove) {
+                                                                                    printf("xyz %f %f %f  lon/lat/elev %f %f %f  topo_elev %f  above %d\n", xval, yval, zval, ylat, xlon, elev, topo_elev, iabove);
+                                                                                }//*/
 
         return (iabove);
     }
@@ -14529,11 +14683,11 @@ long double LocOctree_core(int ngrid, double xval, double yval, double zval,
     resultTreeRoot = addResult(resultTreeRoot, log_value_volume, volume, poct_node);
 
     /*static int icount_value = 0;
-                                                                                                                                    if (icount_value < 10 && poct_node->value < -1.0e50) {
-                                                                                                                                        printf("poct_node->value < -1.0e50 !!! poct_node->value %lg  logStationDensityWeight %lg  logWtMtrxSum %lg  log(volume) %lg\n",
-                                                                                                                                                poct_node->value, logStationDensityWeight, logWtMtrxSum, log(volume));
-                                                                                                                                        icount_value++;
-                                                                                                                                    }*/
+                                                                                                                                                            if (icount_value < 10 && poct_node->value < -1.0e50) {
+                                                                                                                                                                printf("poct_node->value < -1.0e50 !!! poct_node->value %lg  logStationDensityWeight %lg  logWtMtrxSum %lg  log(volume) %lg\n",
+                                                                                                                                                                        poct_node->value, logStationDensityWeight, logWtMtrxSum, log(volume));
+                                                                                                                                                                icount_value++;
+                                                                                                                                                            }*/
 
     return (value);
 

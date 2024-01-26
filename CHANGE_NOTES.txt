@@ -479,7 +479,6 @@ New version 7.00 posted to web =================================
 
 20190522 NLLoc - Added code to support LOCMETH maxDistStaGrid and minDistStaGrid filters with 3D travel-time grids.  Previoiusly this filtering was only applied with 2D time grids (1D velocity models).
 
-
 20190823 NLLoc - Added PUBLIC_ID NLL Hypocenter line to contain an event id, e.g texnet2017wlpo, smi:ch.ethz.sed/event/historical/1165, ...
 
 20191208 NLLoc - Added phase wild-card matching to LOCEXCLUDE
@@ -534,10 +533,26 @@ New version 7.00 posted to web =================================
 20230219 Grid2GMT - Now supports GMT 5 and 6 (thanks to https://github.com/sean0921). See src/CMakeLists.txt for details on how to set GMT version.
 
 
+New version 7.1.00 24Jan2024  =================================
 
+20230428 NLLoc - Added PUBLIC_ID line to NLL hypocenter-phase file format.
 
+20230718 Loc2ssst - Bug fix to correct possible error in setting byte swapping for travel-time grids.
 
+20230712 NLLoc - Bug fix to correct calculation of secondary azimuth gap when multiple arrivals have same azimuth
 
+20230812 NLLoc - Added feature: If phase arrival GAU error is negative, set P or S GAU error through LOCQUAL2ERR.
+        assumes LOCQUAL2ERR is set with 2 values: qual 0 -> P error, qual 1 -> S or other phase types
 
+20231002 Grid2GMT - Changed default colortable from "seis" to "polar".
 
+20231017 NLLoc - Changed rule for classifying 2 digit HYPO71 (and other formats) year from year<20 to year<40, if true year assumed 2000+year, otherwise, 1900+year
+
+20231021 NLLoc - added support for NLL hypocenter-phase format header lines at beginning of NLL_OBS and HYPO71* phase files.
+        PUBLIC_ID to include an event ID, QUALITY to include an event Mamp and/or Mdur magnitude. Example:
+PUBLIC_ID 31499
+QUALITY  Pmax -1 MFmin -1 MFmax -1 RMS -1 Nphs -1 Gap -1 Dist -1 Mamp -9.90 0 Mdur 0.10 0
+<NLL or HYPO71* format phase readings>
+
+20231114 NLLoc - Bug fix: corrected normalization when NLLoc coherence MAX_TOTAL_OTHER_WEIGHT option is used.
 

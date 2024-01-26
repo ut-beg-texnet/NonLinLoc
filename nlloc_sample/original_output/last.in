@@ -53,6 +53,7 @@ CONTROL 1 54321
 # Syntax 4: TRANS SDC latOrig longOrig rotAngle
 # Syntax 5: TRANS LAMBERT refEllipsoid latOrig longOrig firstStdParal secondStdParal rotAngle
 # Syntax 6: TRANS TRANS_MERC refEllipsoid latOrig longOrig rotAngle
+# Syntax 7: TRANS AZIMUTHAL_EQUIDIST refEllipsoid latOrig longOrig rotAngle
 # Sets geographic to working coordinates transformation parameters. The GLOBAL option sets spherical regional/teleseismic mode, with no geographic transformation - most position values are input and used directly as latitude and longitude in degrees. The SIMPLE, SDC, LAMBERT and TRANS_MERC options make transformations of geographic coordinates into a Cartesian/rectangular system. The NONE transformation performs no geographic conversion.
 #
 #    latOrig (float, min:-90.0, max:90.0) latitude in decimal degrees of the rectangular coordinates origin
@@ -142,8 +143,8 @@ VGGRID  2 401 106  0.0 0.0 -5.0  1.0 1.0 1.0  SLOW_LEN # this grid is 400km in d
 #    VpTop VsTop rhoTop (float) P velocity, and S velocity in km/s and density in kg/m**3 at the top of the layer.
 #    VpGrad VsGrad rhoGrad (float) Linear P velocity and S velocity gradients in km/s/km and density gradient in kg/m**3/km increasing directly downwards from the top of the layer.
 #
-# scak model used by the Alaska Earthquake Center (Silwal and Tape, 2016)                            
-# https://agupubs.onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1002%2F2015JB012588&file=jgrb51546-sup-0001-supplementary.pdf                            
+# scak model used by the Alaska Earthquake Center (Silwal and Tape, 2016)
+# https://agupubs.onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1002%2F2015JB012588&file=jgrb51546-sup-0001-supplementary.pdf
 #LAYER depth Vp_top Vp_grad Vs_top Vs_grad p_top p_grad
 LAYER    0.0     5.30    0    3.01    0    2.52    0
 LAYER    4.0     5.60    0    3.18    0    2.61    0
@@ -526,7 +527,7 @@ LOCQUAL2ERR 0.1 0.5 1.0 2.0 99999.9
 # Specifies whether to determine take-off angles for the maximum likelihood hypocenter and sets minimum quality cutoff for saving angles and corresponding phases to the HypoInverse Archive file .
 #
 #    angleMode (choice: ANGLES_YES ANGLES_NO, default:ANGLES_YES) sets if take-off angles are read from angles grid files and output to locations files. ( ANGLES_YES for angles determination or ANGLES_NO for no angles determination)
-#    qualtiyMin (integer, default:5) sets the minimum quality (see Take-Off Angles Algorithm ) for writing take-off angles and corresponding phase to the HypoInverse Archive file . ( 0 to 10 ) 
+#    qualtiyMin (integer, default:5) sets the minimum quality (see Take-Off Angles Algorithm ) for writing take-off angles and corresponding phase to the HypoInverse Archive file . ( 0 to 10 )
 #
 LOCANGLES ANGLES_YES 5
 
@@ -616,14 +617,14 @@ LOCANGLES ANGLES_YES 5
 # Calculates a simple elevation correction using the travel-time of a vertical ray from elev 0 to the elevation of the station. This control statement is mean to be used in GLOBAL mode with TauP or other time grids which use elevation 0 for the station elevation.
 #    flag (integer, min:0, max:1, default:0) flag to set activation of simple elevation correction (0=NO, 1=Yes)
 #    velP (float) sets the P velocity to use for calculation of the elevation correction for P type phases (last leg of phase is P or p)
-#    velS (float) sets the S velocity to use for calculation of the elevation correction for S type phases (last leg of phase is S or s) 
+#    velS (float) sets the S velocity to use for calculation of the elevation correction for S type phases (last leg of phase is S or s)
 
 # LOCSTAWT - Station distribution weighting
 # optional, non-repeatable
 # Syntax 1: LOCSTAWT flag cutoffDist
 # Calculates a weight for each station that is a function of the average distance between all stations used for location. This helps to correct for irregular station distribution, i.e. a high density of stations in regions such as Europe and North America and few or no stations in regions such as oceans. The relative weight for station i is: wieghti = 1.0 / [ SUMj exp(-dist2/cutoffDist2 ] where j is a station used for location and dist is the epicentral/great-circle distance between stations i and j.
 #    flag (integer, min:0, max:1, default:0) flag to set activation of station distribution weighting (0=NO, 1=Yes)
-#    cutoffDist (float) sets the cutoff distance for weighting calculation. cutoffDist < 0.0 sets automatic cutoff distance: equal to the mean distance between all pairs of stations used for location. 
+#    cutoffDist (float) sets the cutoff distance for weighting calculation. cutoffDist < 0.0 sets automatic cutoff distance: equal to the mean distance between all pairs of stations used for location.
 
 # LOCPHSTAT - Phase Statistics parameters
 # optional, non-repeatable

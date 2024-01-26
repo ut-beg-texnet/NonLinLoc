@@ -191,15 +191,17 @@ int DiffHypocenters(int argc, char** argv) {
         return (-1);
     }
 
+    // diff output file
     sprintf(fn_out, "diff_%s_%s.all", pstmp1, pstmp2);
     if ((fp_gmt_all_out = fopen(fn_out, "w")) == NULL) {
-        nll_puterr2("ERROR: opening gmt horiz output file:", fn_out);
+        nll_puterr2("ERROR: opening diff output file:", fn_out);
         return (-1);
     }
     fprintf(fp_gmt_all_out,
             "year1 month1 day1  hour1 min1 sec1  lat1 long1 depth1 nphs1   "
             "year2 month2 day2  hour2 min2 sec2  lat2 long2 depth2 nphs2   "
-            "dt ds dh dz daz"
+            "dt ds dh dz daz assocPhCt1 usedPhCt1 usedStaCt1 stdErr1 azGap1 secAzGap1 "
+            "minDist1 maxDist1 medDist1"
             "\n");
 
 
@@ -311,6 +313,13 @@ int DiffHypocenters(int argc, char** argv) {
                 sqrt(dx * dx + dy * dy),
                 dz,
                 azim
+                );
+        // 20230712 AJL - add location quality measures of first hypo for statistics
+        fprintf(fp_gmt_all_out,
+                " %d %d %d %lg %lg %lg %lg %lg %lg ",
+                Hypo1.associatedPhaseCount, Hypo1.nreadings, Hypo1.usedStationCount,
+                Hypo1.rms, Hypo1.gap, Hypo1.gap_secondary,
+                Hypo1.minimumDistance, Hypo1.maximumDistance, Hypo1.medianDistance
                 );
         fprintf(fp_gmt_all_out, "\n");
 

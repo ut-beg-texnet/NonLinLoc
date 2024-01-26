@@ -3277,6 +3277,7 @@ int _WriteLocation(FILE *fpio, HypoDesc* phypo, ArrivalDesc* parrivals,
     if (iWriteMinimal) {
         fprintf(fpio, "NLLOC \"%s\" \"%s\" \" \"\n",
                 phypo->fileroot, phypo->locStat);
+        fprintf(fpio, "PUBLIC_ID %s\n", phypo->public_id); // 20230428 AJL - added
     } else {
         fprintf(fpio, "NLLOC \"%s\" \"%s\" \"%s\"\n",
                 phypo->fileroot, phypo->locStat, phypo->locStatComm);
@@ -3904,6 +3905,18 @@ int ReadArrival(char* line, ArrivalDesc* parr, int iReadType) {
     // 20160727 AJL - added
     if (strcmp(parr->error_type, "QUAL") == 0) {
         parr->quality = (int) lround(parr->error);
+        Qual2Err(parr);
+    }
+
+    // check for negative error and convert to P or S GAU error using LOCQUAL2ERR
+    // assumes LOCQUAL2ERR is set with 2 values: qual 0 -> P error, qual 1 -> other phase types
+    // 20230812 AJL - added
+    if (strcmp(parr->error_type, "GAU") == 0 && parr->error < 0.0) {
+        if (IsPhaseID(parr->phase, "P")) {
+            parr->quality = 0;
+        } else {
+            parr->quality = 1;
+        }
         Qual2Err(parr);
     }
 
@@ -5539,7 +5552,7 @@ int ReadHypoDesc(char* fnroot_in, HypoDesc *phypo) {
 
 
     // read next hypocenter
-    ArrivalDesc* parrivals;
+    ArrivalDesc* parrivals = NULL;
     int *pnarrivals = NULL;
     int istat = GetHypLoc(fp_io, fnroot_in, phypo, parrivals, pnarrivals, 0, NULL, 0);
 
@@ -6669,8 +6682,11 @@ int addToStationList(SourceDesc *stations, int numStations, ArrivalDesc *arrival
         // check arrival station has xyz coordinates
         if (i_check_station_has_XYZ_coords) {
             if (((arrival + i)->station).x < -LARGE_DOUBLE / 2.0 || ((arrival + i)->station).y < -LARGE_DOUBLE / 2.0 || ((arrival + i)->station).z < -LARGE_DOUBLE / 2.0) {
-                sprintf(MsgStr, "ERROR: addToStationList: No xyz station coordinates available: cannot add station %s ", arrival_label);
-                nll_puterr(MsgStr);
+                //sprintf(MsgStr, "ERROR: addToStationList: No xyz station coordinates available: cannot add station %s ", arrival_label);
+                //nll_puterr(MsgStr);
+                // 20230718 AJL - change to WARNING to avoid excessive console output
+                sprintf(MsgStr, "WARNING: addToStationList: No xyz station coordinates available: cannot add station %s ", arrival_label);
+                nll_putmsg(2, MsgStr);
                 continue;
             }
         }
@@ -6760,3 +6776,56 @@ int GetPhaseID(char* line1) {
     return (0);
 }
 
+
+
+// 20200122 AJL - following function moved here from NLLocLib.h
+
+
+/** function to set output file root name using arrival time or public_id */
+
+int SetOutName(ArrivalDesc *arrival, char* out_file_root, char* out_file,
+        char* lastfile, int isec, int ipublic_id, char* public_id, int *pncount) {
+
+    char filename_ctr[10];
+
+    /*	if (isec)
+            sprintf(out_file, "%s.%4.4d%2.2d%2.2d.%2.2d%2.2d%2.2d",
+            out_file_root, arrival->year, arrival->month, arrival->day,
+            arrival->hour, arrival->min, (int) arrival->sec);
+            else
+            sprintf(out_file, "%s.%4.4d%2.2d%2.2d.%2.2d%2.2d",
+            out_file_root, arrival->year, arrival->month, arrival->day,
+            arrival->hour, arrival->min);  */
+    /* SH 03/28/02 change to include digits of sec to construct filename */
+    if (isec) {
+        sprintf(out_file, "%s.%4.4d%2.2d%2.2d.%2.2d%2.2d%05.2f",
+                out_file_root, arrival->year, arrival->month, arrival->day,
+                arrival->hour, arrival->min, arrival->sec);
+    } else if (ipublic_id) {
+        sprintf(out_file, "%s.%4.4d%2.2d%2.2d.%2.2d%2.2d%2.2d_%s",
+                out_file_root, arrival->year, arrival->month, arrival->day,
+                arrival->hour, arrival->min, (int) arrival->sec, public_id);
+    } else {
+        sprintf(out_file, "%s.%4.4d%2.2d%2.2d.%2.2d%2.2d%2.2d",
+                out_file_root, arrival->year, arrival->month, arrival->day,
+                arrival->hour, arrival->min, (int) arrival->sec);
+    }
+    /* SH 04/08/02 check if same filename as previous event;
+            if so append 'b' to filename;
+            identical filenames can happen with swarm data */
+    //printf(">>>>>>%s<>%s<\n", out_file, lastfile);
+    //if (ncount++ > 0 || strcmp(out_file, lastfile) == 0) {
+    // AJL 20060615 bug fix!  Following line added
+    if (strcmp(out_file, lastfile) == 0) {
+        strcpy(lastfile, out_file); /* save filename */
+        sprintf(filename_ctr, "_%3.3d", *pncount);
+        strcat(out_file, filename_ctr);
+        (*pncount)++;
+    } else {
+
+        strcpy(lastfile, out_file); /* save filename */
+        *pncount = 1;
+    }
+    return (0);
+
+}

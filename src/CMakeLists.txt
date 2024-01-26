@@ -28,7 +28,11 @@ include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+# The -fcommon places uninitialized global variables in a common block. This allows the linker to resolve all tentative definitions of the same variable in different compilation units to the same object, or to a non-tentative definition. This behavior is inconsistent with C++, and on many targets implies a speed and code size penalty on global variable references. It is mainly useful to enable legacy code to link without errors.
 add_compile_options(-fcommon)
+
+# see all warnings
+add_compile_options(-Wall)
 
 # Uncomment the following if the compiler you are using supports GNU extensions such as:
 #   fmemopen, open_memstream -  open memory as stream (required to pass observations file lines as parameters
@@ -39,14 +43,16 @@ add_compile_options(-fcommon)
 # export CFLAGS='-D _GNU_SOURCE'
 # before running: rm CMakeCache.txt; cmake .
 
-# 20220921 Sean Ho - Uncomment one of the following if you want Grid2GMT to generate scripts compatible with gmt 5.x or 6.x
-#add_compile_options(-D GMT_VER_5)
-add_compile_options(-D GMT_VER_6)
+# 20230318 Anthony Lomax - Uncomment the following to force reading of *DEFAULT* named travel-time grids with byte swapping.
+#    Needed as a cluge when running Loc2ssst and NLLoc when doing NLL-SSST (e.g. with run_ssst_relocations.bash) where time grids with and
+#    without byte swapping are used together.
+#add_compile_definitions(LOC2SSST_CLUGE)
+
+# 20220921 Sean Ho - Uncomment the following if you want Grid2GMT to generate scripts compatible with gmt 5.x or 6.x
+add_compile_options(-D GMT_VER_5)
 #
 # Alternatively, in the make environment, set:
 # export CFLAGS='-D GMT_VER_5'
-# or
-# export CFLAGS='-D GMT_VER_6'
 # before running: rm CMakeCache.txt; cmake .
 
 # 20211110 AJL - New fix implemented, see https://github.com/alomax/NonLinLoc/issues/7
@@ -69,6 +75,10 @@ add_library(GRID_LIB_OBJS OBJECT GridLib.c util.c geo.c octtree/octtree.c io/jso
 
 ### Simplify by just creating the NLLOC_LIB_OBJS .o object file
 add_library(NLLOC_LIB_OBJS OBJECT calc_crust_corr.c velmod.c NLLocLib.c GridMemLib.c phaselist.c loclist.c otime_limit.c)
+
+#
+add_library(LOC_PHS_LIST OBJECT phaselist.c loclist.c)
+
 
 # Create NLLoc1.o
 add_library(NLLoc1 OBJECT NLLoc1.c)
@@ -216,10 +226,8 @@ target_link_libraries(grid2scat GRID_LIB_OBJS m)
 # --------------------------------------------------------------------------
 # Loc2ssst
 #
-add_library(phaselist OBJECT phaselist.c)
-add_library(loclist OBJECT loclist.c)
 add_executable(Loc2ssst Loc2ssst.c)
-target_link_libraries(Loc2ssst GRID_LIB_OBJS phaselist loclist m)
+target_link_libraries(Loc2ssst GRID_LIB_OBJS LOC_PHS_LIST m)
 
 # --------------------------------------------------------------------------
 # NLDiffLoc
@@ -232,3 +240,9 @@ target_link_libraries(NLDiffLoc GRID_LIB_OBJS NLLOC_LIB_OBJS m)
 #
 add_executable(Loc2ddct Loc2ddct.c)
 target_link_libraries(Loc2ddct GRID_LIB_OBJS m)
+
+# --------------------------------------------------------------------------
+# loc_combine
+#
+add_executable(loc_combine loc_combine.c)
+target_link_libraries(loc_combine GRID_LIB_OBJS LOC_PHS_LIST m)
