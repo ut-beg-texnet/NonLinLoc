@@ -880,7 +880,7 @@ int VelModToGrid3d(VelModel* vel_model, GridDesc* grid, char *waveType) {
 
     int ix, iy, iz;
     //int imodel;
-    char cWaveType;
+    //char cWaveType;
     double xval, yval, xloc, yloc, zdepth;
     double vel;
 
@@ -888,9 +888,11 @@ int VelModToGrid3d(VelModel* vel_model, GridDesc* grid, char *waveType) {
     /* check wavetype */
 
     if (strcmp(waveType, "P") == 0)
-        cWaveType = 'P';
+        //cWaveType = 'P';
+        ;
     else if (strcmp(waveType, "S") == 0)
-        cWaveType = 'S';
+        //cWaveType = 'S';
+        ;
     else {
         nll_puterr2("ERROR: unrecognized wave type", waveType);
         return (-1);
@@ -1069,14 +1071,16 @@ int VelModToFMM(VelModel* vel_model, GridDesc* grid, FILE* fp_fmmVgridFile, FILE
         nll_puterr("WARNING: no FMM output for ALBERTO 3D Velocity input.");
     }
     //int imodel;
-    char cWaveType;
+    //char cWaveType;
 
     // check wavetype
 
     if (strcmp(waveType, "P") == 0)
-        cWaveType = 'P';
+        //cWaveType = 'P';
+        ;
     else if (strcmp(waveType, "S") == 0)
-        cWaveType = 'S';
+        //cWaveType = 'S';
+        ;
     else {
         nll_puterr2("ERROR: unrecognized wave type", waveType);
         return (-1);

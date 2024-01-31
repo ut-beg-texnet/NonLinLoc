@@ -175,7 +175,7 @@ int main(int argc, char *argv[]) {
 
     int istat, n;
     int i_end_of_input, iLocated = 0;
-    int nhyp, narr, ngrid, nObsFile;
+    int nhyp, narr, nObsFile;
     int numArrivalsIgnore, numSArrivalsLocation;
     int numHypocentersAssigned;
     int numArrivalsReject;
@@ -185,8 +185,8 @@ int main(int argc, char *argv[]) {
     int numSArrivalsLocNew;
     int maxArrExceeded = 0;
     int nIgnored;
-    char fname[FILENAME_MAX];
-    char sys_command[MAXLINE_LONG];
+    char fname[2*FILENAME_MAX];
+    char sys_command[2*MAXLINE_LONG];
     char *chr;
     double mean_abs;
     FILE *fp_obs, *fp_out;
@@ -386,7 +386,7 @@ int main(int argc, char *argv[]) {
         i_end_of_input = 0;
 
         nll_putmsg(2, "");
-        sprintf(MsgStr, "... Reading observation file %s", fn_loc_obs[nObsFile]);
+        snprintf(MsgStr, sizeof(MsgStr), "... Reading observation file %s", fn_loc_obs[nObsFile]);
         nll_putmsg(1, MsgStr);
 
         /* open observation file */
@@ -611,7 +611,7 @@ int main(int argc, char *argv[]) {
             NumFilesOpen, NumGridBufFilesOpen, NumGridHdrFilesOpen, NumAllocations, Num3DGridReadToMemory, GridMemListSize, GridMemListTotalNumElementsAdded);
     nll_putmsg(1, MsgStr);
 
-    ngrid = 0;
+    //ngrid = 0;
     if ((NumLocationsCompleted = LocateDiff(fn_loc_obs[nObsFile], fn_path_output, numArrivalsReject)) < 0) {
         if (istat == GRID_NOT_INSIDE)
             //break;
@@ -768,7 +768,6 @@ int ReadNLDiffLoc_Input(FILE * fp_input) {
     char line[MAXLINE_LONG], *fgets_return;
 
     int flag_hypofile = 0, flag_search = 0;
-    int flag_include = 1;
 
 
     /* read each input line */
@@ -803,7 +802,6 @@ int ReadNLDiffLoc_Input(FILE * fp_input) {
         if (strcmp(param, "INCLUDE") == 0)
             if ((istat = GetIncludeFile(strchr(line, ' '), &fp_input)) < 0) {
                 nll_puterr("ERROR: processing include file.");
-                flag_include = 0;
             }
 
 
@@ -1030,7 +1028,7 @@ int LocateDiff(char* fn_obs, char* fn_path_output, int numArrivalsReject) {
     int nLocationsCompleted;
 
     FILE *fpio;
-    char fname[FILENAME_MAX];
+    char fname[2*FILENAME_MAX];
     char fn_root_out[FILENAME_MAX];
     int nSamplesTotal = -1;
     float *fdata, ftemp;
@@ -1540,12 +1538,12 @@ int DiffLocMetropolis(int num_arr_total, int num_arr_loc,
     long int nGenerated;
     int maxNumTries = MAX_NUM_MET_TRIES;
     int iFinishedSome = 0;
-    int writeMessage = 0;
+    //int writeMessage = 0;
     int iGridType;
     int nReject, numClipped = 0, numGridReject = 0;
     int iBoundary = 0;
     double xval, yval, zval, tval;
-    double currentMetStepFact;
+    //double currentMetStepFact;
 
     double value;
     double misfit;
@@ -1575,7 +1573,7 @@ int DiffLocMetropolis(int num_arr_total, int num_arr_loc,
 
     char status_msg[MAXLINE_LONG] = "";
     int nLowAcc, iHypo;
-    int nHypoActive, nHypoActiveInit;
+    int nHypoActive;
 
     // get solution quality at each sample on random walk
 
@@ -1638,7 +1636,6 @@ int DiffLocMetropolis(int num_arr_total, int num_arr_loc,
         if (!hyp_fixed[nHypo] && !phypo->flag_ignore)
             nHypoActive++;
     }
-    nHypoActiveInit = nHypoActive;
 
     // check for best
     for (nHypo = 0; nHypo < NumHypocenters; nHypo++) {
@@ -1662,7 +1659,7 @@ int DiffLocMetropolis(int num_arr_total, int num_arr_loc,
     zmax = zmin + (double) (ptgrid->numz - 1) * ptgrid->dz;
 
     // save initial values
-    currentMetStepFact = MetStepFact;
+    //currentMetStepFact = MetStepFact;
 
 
     // loop over walk samples
@@ -1760,7 +1757,7 @@ int DiffLocMetropolis(int num_arr_total, int num_arr_loc,
                         hyp_abort[nHypo] = 1;
                         nHypoActive--;
                         sprintf(phypo->locStat, "ABORTED");
-                        sprintf(phypo->locStatComm, "%s", MsgStr);
+                        snprintf(phypo->locStatComm, sizeof(phypo->locStatComm), "%s", MsgStr);
                     } else if (phypo->probmax < SMALLEST_LIKELIHOOD) {
                         if (message_flag > 0)
                             fprintf(stdout, "\n");
@@ -1769,7 +1766,7 @@ int DiffLocMetropolis(int num_arr_total, int num_arr_loc,
                         nll_puterr(MsgStr);
                         hyp_abort[nHypo] = 1;
                         sprintf(phypo->locStat, "ABORTED");
-                        sprintf(phypo->locStatComm, "%s", MsgStr);
+                        snprintf(phypo->locStatComm, sizeof(phypo->locStatComm), "%s", MsgStr);
                     }
                 }
                 break;
@@ -1946,8 +1943,8 @@ int DiffLocMetropolis(int num_arr_total, int num_arr_loc,
 
 
             if (iAccept > 0) { // accepted
-                if (nSamplesTotal % 1000 == 1)
-                    writeMessage = 1;
+                //if (nSamplesTotal % 1000 == 1)
+                //    writeMessage = 1;
                 // no more try's if accepted
                 break;
             } else if (iAccept < 0) { // rejected
@@ -1998,7 +1995,7 @@ int DiffLocMetropolis(int num_arr_total, int num_arr_loc,
             sprintf(MsgStr,
                     "WARNING: max prob location on grid boundary %d, rejecting location.", iBoundary);
             nll_putmsg(1, MsgStr);
-            sprintf(phypo->locStatComm, "%s", MsgStr);
+            snprintf(phypo->locStatComm, sizeof(phypo->locStatComm), "%s", MsgStr);
             sprintf(phypo->locStat, "REJECTED");
         }
 
@@ -2215,7 +2212,7 @@ double DiffLocCalcSolutionQuality_LN_NORM(double norm,
 
     // isave
     int n_compan;
-    static char filename[FILENAME_MAX];
+    static char filename[2*FILENAME_MAX];
     HypoDesc* phypo = NULL;
     HypoDesc* phypoOther = NULL;
 
@@ -2491,7 +2488,7 @@ double getTravelTimeDiff(ArrivalDesc* arrival, int narr, Vect3D hypo1, Vect3D hy
 int DiffLocSaveBestLocation(int num_arr_total, int num_arr_loc, ArrivalDesc *arrival,
         GridDesc* ptgrid, GaussLocParams* gauss_par, int nHypo, int iGridType) {
 
-    int istat, nReject;
+    int nReject;
     double value, misfit;
     HypoDesc* phypo;
 
@@ -2523,7 +2520,7 @@ int DiffLocSaveBestLocation(int num_arr_total, int num_arr_loc, ArrivalDesc *arr
         phypo->sec += phypo->dotime;
 
     /* set misc hypo fields */
-    istat = rect2latlon(0, phypo->x, phypo->y, &(phypo->dlat), &(phypo->dlong));
+    rect2latlon(0, phypo->x, phypo->y, &(phypo->dlat), &(phypo->dlong));
     phypo->depth = phypo->z;
 
     return (0);

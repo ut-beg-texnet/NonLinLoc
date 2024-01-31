@@ -196,7 +196,7 @@ int ConvertLocToCT(int argc, char *argv[]) {
         // open hypocenter file
         // 20160621 AJL - bug (compiler warning) fix  sprintf(strstr(fn_hyp_in_list[nHypo], test_str), "\0");
         sprintf(strstr(fn_hyp_in_list[nHypo], test_str), "%c", '\0');
-        sprintf(fn_hyp_in, "%s.hyp", fn_hyp_in_list[nHypo]);
+        snprintf(fn_hyp_in, sizeof(fn_hyp_in), "%s.hyp", fn_hyp_in_list[nHypo]);
         if (VERBOSE > 0) fprintf(stdout, "Opening: %s\n", fn_hyp_in);
         if ((fp_hyp_in = fopen(fn_hyp_in, "r")) == NULL) {
             nll_puterr2("ERROR: opening hypocenter file, ignoring event, file",

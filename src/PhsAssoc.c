@@ -312,7 +312,7 @@ int AssociatePhases(int argc, char** argv) {
                     *pchr0 = '\0';
                 if ((istat = OpenGrid3dFile(fn_loc_grids_list[nTimeGrid], &fp_grid, &fp_hdr,
                         &Grid, "time", &Srce, Grid.iSwapBytes)) < 0) {
-                    sprintf(MsgStr, "%s.*", fn_loc_grids_list[nTimeGrid]);
+                    snprintf(MsgStr, sizeof(MsgStr), "%s.*", fn_loc_grids_list[nTimeGrid]);
                     nll_puterr2("ERROR: opening grid file", MsgStr);
                     continue;
                 }

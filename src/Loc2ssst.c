@@ -165,7 +165,7 @@ int main(int argc, char** argv) {
 
     // read control file
     // 20210511 AJL - Bug fix: changed to strncpy from strlcpy which is not available in Linux.
-    strncpy(fn_control, argv[1], sizeof (fn_control));
+    strncpy(fn_control, argv[1], sizeof (fn_control) - 1);
     if ((fp_control = fopen(fn_control, "r")) == NULL) {
         nll_puterr("ERROR: opening control file.");
         exit(EXIT_ERROR_FILEIO);
@@ -329,12 +329,11 @@ int GetNLLoc_Files(char* line1) {
 
 int GetNLLoc_Method(char* line1) {
 
-    int istat;
 
     //     istat = sscanf(line1, "%s %lf %d %d %d %lf %d %lf %d", loc_method,
     //        &DistStaGridMax, &MinNumArrLoc, &MaxNumArrLoc, &MinNumSArrLoc,
     //        &VpVsRatio, &MaxNum3DGridMemory, &DistStaGridMin, &iRejectDuplicateArrivals);
-    istat = sscanf(line1, "%*s %*lf %*d %*d %*d %lf", &VpVsRatio);
+    sscanf(line1, "%*s %*f %*d %*d %*d %lf", &VpVsRatio);
 
     sprintf(MsgStr, "LOCMETHOD:  VpVsRatio: %lf", VpVsRatio);
     nll_putmsg(1, MsgStr);
@@ -577,6 +576,8 @@ int ReadLoc2ssstInput(FILE * fp_input) {
         nll_puterr("ERROR: no grid (LSGRID) params read.");
     if (!flag_params)
         nll_puterr("ERROR: no parameters (LSPARAMS) read.");
+    if (!flag_source)
+        nll_putmsg(2, "INFO: no source (LOCSRCE or GTSRCE) read.");
 
     if (!flag_trans) {
         snprintf(MsgStr, sizeof (MsgStr), "INFO: no transformation (TRANS) params read.");
@@ -798,7 +799,7 @@ int DoLoc2ssst() {
 
 
     // loop over station/phase, accumulate corrections in output grid
-    fprintf(stdout, "\nAccumulating SSST corrections in output grid for %d station/phases:\n", NumStationPhases);
+    fprintf(stdout, "\nAccumulating SSST corrections in output grid for %d station/phases from %d events:\n", NumStationPhases, nHypos);
 
     // allocate grids
     GridDesc ssst_grid = ssst_grid_template;
@@ -909,7 +910,7 @@ int DoLoc2ssst() {
 
         // get ssst corrections for this station/phase
         int ix, iy, iz;
-        GRID_FLOAT_TYPE xval, yval, zval, ssstval, ssstval_sum = 0.0;
+        GRID_FLOAT_TYPE xval, yval, zval, ssstval = 0.0, ssstval_sum = 0.0;
         xval = pssst_grid->origx;
         for (ix = 0; ix < pssst_grid->numx; ix++) {
             fprintf(stdout, "\r%d%%  ", (int) (0.5 + 100.0 * ((float) ix / (pssst_grid->numx - 1))));
@@ -934,7 +935,7 @@ int DoLoc2ssst() {
         fprintf(stdout, "ssstval: mean: %f last: %f\n", ssstval_sum / (double) (pssst_grid->numx * pssst_grid->numy * pssst_grid->numz), ssstval);
 
         // write ssst correction grid to disk
-        char filename[MAXLINE_LONG];
+        char filename[2*MAXLINE_LONG];
         sprintf(filename, "%s.%s.%s", fn_ls_output, phasecode, stacode);
         sprintf(MsgStr, "Finished calculation, SSST grid output files: %s.*", filename);
         nll_putmsg(1, MsgStr);
@@ -944,7 +945,7 @@ int DoLoc2ssst() {
             return (-1);
         }
         // save station coordinates to file
-        char fn_stations[FILENAME_MAX];
+        char fn_stations[3*FILENAME_MAX];
         FILE* fp_stations;
         sprintf(fn_stations, "%s.ssst.stations", filename);
         if ((fp_stations = fopen(fn_stations, "w")) != NULL) {
@@ -977,7 +978,7 @@ int DoLoc2ssst() {
             //sprintf(filename, "%s_ssst_corr.%s.%s", fn_ls_output, phasecode, stacode); // 20201010 AJL - bug fix: adding _ssst_corr to file root makes file management difficult
             sprintf(filename, "%s.%s.%s", fn_ls_output, phasecode, stacode);
             // remove existing files since may be links  // 20201010 AJL - added
-            char fname_remove[MAXLINE_LONG];
+            char fname_remove[3*MAXLINE_LONG];
             sprintf(fname_remove, "%s.%s.hdr", filename, "time");
             remove(fname_remove);
             sprintf(fname_remove, "%s.%s.buf", filename, "time");
@@ -1123,7 +1124,7 @@ int open_traveltime_grid(ArrivalDesc* parr, char *fn_time_grid_input, char *stac
     int istat;
     int DEBUG = 0;
 
-    char filename[MAXLINE_LONG];
+    char filename[2*MAXLINE_LONG];
     //sprintf(filename, "%s.%s.%s", fn_time_grid_input, stacode, phasecode);
 
     //char arrival_phase[PHASE_LABEL_LEN];
@@ -1192,7 +1193,7 @@ int open_traveltime_grid(ArrivalDesc* parr, char *fn_time_grid_input, char *stac
 
 
     // try opening DEFAULT time grid file
-    int i_need_elev_corr = 0; // TODO: implement elevation corr
+    //int i_need_elev_corr = 0; // TODO: implement elevation corr
     if (istat < 0) {
         SourceDesc* pstation = FindSource(stacode);
         if (pstation != NULL) {
@@ -1222,7 +1223,7 @@ int open_traveltime_grid(ArrivalDesc* parr, char *fn_time_grid_input, char *stac
                 nll_putmsg(3, MsgStr);
             }
             parr->station = *pstation;
-            i_need_elev_corr = 1;
+            //i_need_elev_corr = 1;
         }
     }
 
@@ -1328,16 +1329,9 @@ int GenAngleGrid(GridDesc* ptgrid, SourceDesc* psource, char *filename, GridDesc
 
     int istat;
 
-    double xsource, ysource, zsource;
-
     int grid_mode = GRID_TIME; // must be GRID_TIME for SSST time grid
 
     /* check grid mode, make appropriate adjustments */
-
-    xsource = psource->x;
-    ysource = psource->y;
-    zsource = psource->z;
-
 
     /* generate angle grid */
 

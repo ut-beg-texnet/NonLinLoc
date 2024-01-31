@@ -189,33 +189,33 @@ int main(int argc, char *argv[]) {
         exit(EXIT_ERROR_FILEIO);
     }
 
-    sprintf(fn_hypo_output, "%s.hypo", fn_eq_output);
+    snprintf(fn_hypo_output, sizeof(fn_hypo_output), "%s.hypo", fn_eq_output);
     if ((fp_hypo_output = fopen(fn_hypo_output, "w")) == NULL) {
         nll_puterr("ERROR: opening eq times HYPO output file.");
         exit(EXIT_ERROR_FILEIO);
     }
 
-    sprintf(fn_simulps_output, "%s.sim", fn_eq_output);
+    snprintf(fn_simulps_output, sizeof(fn_simulps_output), "%s.sim", fn_eq_output);
     if ((fp_simulps_output = fopen(fn_simulps_output, "w")) == NULL) {
         nll_puterr("ERROR: opening eq times SIMULPS (Alberto) output file.");
         exit(EXIT_ERROR_FILEIO);
     }
 
 
-    sprintf(fn_invc_output, "%s.invc", fn_eq_output);
+    snprintf(fn_invc_output, sizeof(fn_invc_output), "%s.invc", fn_eq_output);
     if ((fp_invc_output = fopen(fn_invc_output, "w")) == NULL) {
         nll_puterr("ERROR: opening eq times INVCOUCHE output file.");
         exit(EXIT_ERROR_FILEIO);
     }
 
 
-    sprintf(fn_gmt_output, "%s.gmtxy", fn_eq_output);
+    snprintf(fn_gmt_output, sizeof(fn_gmt_output), "%s.gmtxy", fn_eq_output);
     if ((fp_gmt_output = fopen(fn_gmt_output, "w")) == NULL) {
         nll_puterr("ERROR: opening eq times GMT output file.");
         exit(EXIT_ERROR_FILEIO);
     }
 
-    sprintf(fn_gmt_output, "%s_az.gmtxy", fn_eq_output);
+    snprintf(fn_gmt_output, sizeof(fn_gmt_output), "%s_az.gmtxy", fn_eq_output);
     if ((fp_gmt_output_az = fopen(fn_gmt_output, "w")) == NULL) {
         nll_puterr("ERROR: opening eq times GMT azimuth output file.");
         exit(EXIT_ERROR_FILEIO);
@@ -259,14 +259,14 @@ int main(int argc, char *argv[]) {
                     && VpVsRatio > 0.0 && last_arrival_time > 0.0) {
                 arrival_time = Event->otime + VpVsRatio * (last_arrival_time - Event->otime);
 
-                sprintf(MsgStr_sta,
+                snprintf(MsgStr_sta, sizeof(MsgStr_sta),
                         "Calculating travel time for station / S phase: %s  %s",
                         (Station + nsta)->label,
                         (Station + nsta)->phs[0].label);
             } else {
                 // not using VpVs
 
-                sprintf(filename, "%s.%s.%s.time", fn_eq_input,
+                snprintf(filename, sizeof(filename), "%s.%s.%s.time", fn_eq_input,
                         (Station + nsta)->phs[0].label,
                         (Station + nsta)->label);
                 if ((istat = OpenGrid3dFile(filename, &fp_time_grid,
@@ -276,7 +276,7 @@ int main(int argc, char *argv[]) {
                     nll_puterr2("ERROR: opening time grid files", filename);
                     continue;
                 }
-                sprintf(filename_angle, "%s.%s.%s.angle", fn_eq_input,
+                snprintf(filename_angle, sizeof(filename_angle), "%s.%s.%s.angle", fn_eq_input,
                         (Station + nsta)->phs[0].label,
                         (Station + nsta)->label);
                 (Station + nsta)->x = srce0.x;
@@ -285,7 +285,7 @@ int main(int argc, char *argv[]) {
 
                 arrival_time = CalcArrivalTime(fp_time_grid, &grid0, Event, Station + nsta);
                 CloseGrid3dFile(&grid0, &fp_time_grid, &fp_time_hdr);
-                sprintf(MsgStr_sta,
+                snprintf(MsgStr_sta, sizeof(MsgStr_sta),
                         "Calculating travel time for station / phase: %s  %s  X %.2lf  Y %.2lf  Z %.2lf",
                         (Station + nsta)->label,
                         (Station + nsta)->phs[0].label,

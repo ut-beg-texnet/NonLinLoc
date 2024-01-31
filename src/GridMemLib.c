@@ -216,8 +216,6 @@ void NLL_DestroyGridArray(GridDesc* pgrid) {
 
 int NLL_ReadGrid3dBuf(GridDesc* pgrid, FILE* fpio) {
 
-    int istat;
-
     int index;
     GridMemStruct* pGridMemStruct;
 
@@ -225,11 +223,11 @@ int NLL_ReadGrid3dBuf(GridDesc* pgrid, FILE* fpio) {
     if (USE_GRID_LIST && (index = GridMemList_IndexOfGridDesc(0, pgrid)) >= 0) {
         pGridMemStruct = GridMemList_ElementAt(index);
         if (!pGridMemStruct->grid_read) {
-            istat = ReadGrid3dBuf(pGridMemStruct->pgrid, fpio);
+            ReadGrid3dBuf(pGridMemStruct->pgrid, fpio);
             pGridMemStruct->grid_read = 1;
         }
     } else {
-        istat = ReadGrid3dBuf(pgrid, fpio);
+        ReadGrid3dBuf(pgrid, fpio);
     }
 
     return (0);

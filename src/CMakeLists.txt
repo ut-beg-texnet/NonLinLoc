@@ -28,11 +28,17 @@ include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+# Choose the compiler
+#set(CMAKE_C_COMPILER clang)
+set(CMAKE_C_COMPILER /usr/local/bin/gcc-13)
+
 # The -fcommon places uninitialized global variables in a common block. This allows the linker to resolve all tentative definitions of the same variable in different compilation units to the same object, or to a non-tentative definition. This behavior is inconsistent with C++, and on many targets implies a speed and code size penalty on global variable references. It is mainly useful to enable legacy code to link without errors.
 add_compile_options(-fcommon)
 
 # see all warnings
 add_compile_options(-Wall)
+# hide warnings that are difficult to suppress with code changes
+add_compile_options(-Wno-format-truncation)
 
 # Uncomment the following if the compiler you are using supports GNU extensions such as:
 #   fmemopen, open_memstream -  open memory as stream (required to pass observations file lines as parameters

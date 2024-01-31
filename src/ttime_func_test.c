@@ -135,7 +135,7 @@ int main(int argc, char *argv[]) {
         int istat;
         if ((istat = sscanf(in_line, "%s %s %s  %lf %lf %lf", fn_grid_root, station, phase, &lat, &lon, &elev)) < 3)
             break;
-        sprintf(filename_root, "%s.%s.%s.time", fn_grid_root, phase, station);
+        snprintf(filename_root, sizeof(filename_root), "%s.%s.%s.time", fn_grid_root, phase, station);
         //printf("filename_root: <%s>\n", filename_root);
 
         // station == "DEFAULT" 2D grids  // 20200724 AJL - added

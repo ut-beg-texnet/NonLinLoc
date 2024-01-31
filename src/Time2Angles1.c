@@ -179,7 +179,7 @@ int main(int argc, char *argv[]) {
 
         /* open time file and read header */
 
-        sprintf(fn_time, "%s.%s.time", fn_at_input, (Source + nsrce)->label);
+        snprintf(fn_time, sizeof(fn_time), "%s.%s.time", fn_at_input, (Source + nsrce)->label);
         if ((istat = OpenGrid3dFile(fn_time, &fp_time_grid, &fp_time_hdr,
                 &time_grid, " ", NULL, iSwapBytesOnInput)) < 0) {
             CloseGrid3dFile(&time_grid, &fp_time_grid, &fp_time_hdr);
@@ -477,24 +477,6 @@ int GenAngleGrid(GridDesc* ptgrid, SourceDesc* psource, GridDesc* pagrid, int an
     int istat, itemp = 0;
     char filename[MAXLINE];
 
-    double xsource, ysource, zsource;
-
-
-
-    /* check grid mode, make appropriate adjustments */
-
-    if (ptgrid->type == GRID_TIME_2D) {
-        /* set horiz source location to grid origin */
-        xsource = pagrid->origx;
-        ysource = pagrid->origy;
-        zsource = psource->z;
-    } else {
-        xsource = psource->x;
-        ysource = psource->y;
-        zsource = psource->z;
-    }
-
-
 
     /* generate angle grid */
 
@@ -526,7 +508,7 @@ int GenAngleGrid(GridDesc* ptgrid, SourceDesc* psource, GridDesc* pagrid, int an
 
     /* save angle grid to disk */
 
-    sprintf(filename, "%s.%s", fn_at_output, psource->label);
+    snprintf(filename, sizeof(filename), "%s.%s", fn_at_output, psource->label);
     sprintf(MsgStr,
             "Finished calculation, take-off angles grid output files: %s.*",
             filename);

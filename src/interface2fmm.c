@@ -193,7 +193,7 @@ int main(int argc, char *argv[]) {
 
 
     // open ANU-FMM interfaces.in in current working directory
-    sprintf(fn_fmmInterfacesFile, "%s_interfaces.in", fn_if_output);
+    snprintf(fn_fmmInterfacesFile, sizeof(fn_fmmInterfacesFile), "%s_interfaces.in", fn_if_output);
     if ((fp_fmmInterfacesFile = fopen(fn_fmmInterfacesFile, "w")) == NULL) {
         nll_puterr("ERROR: opening ANU-FMM interfaces.in file.");
         return (-1);

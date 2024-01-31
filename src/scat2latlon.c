@@ -122,7 +122,7 @@ int ConvertScat(int argc, char** argv) {
     float fdata[4], probmax = -VERY_LARGE_FLOAT;
     double dlat, dlon;
 
-    int nFile, numFiles, nLocWritten, nLocAccepted;
+    int nFile, numFiles, nLocAccepted;
     // make fn_hyp_in_list static to avoid stack overflow problem (F Tilmann) //
     static char fn_hyp_in_list[MAX_NUM_INPUT_FILES][FILENAME_MAX];
     char test_str[10];
@@ -169,7 +169,6 @@ int ConvertScat(int argc, char** argv) {
     }
 
 
-    nLocWritten = 0;
     nLocAccepted = 0;
     for (nFile = 0; nFile < numFiles; nFile++) {
 
@@ -189,7 +188,7 @@ int ConvertScat(int argc, char** argv) {
             strcpy(filename, cptr + 1);
         else
             strcpy(filename, fn_hyp_in_list[nFile]);
-        sprintf(fn_scat_out, "%s/%s.scat.xyz", fn_root_out, filename);
+        snprintf(fn_scat_out, sizeof(fn_scat_out), "%s/%s.scat.xyz", fn_root_out, filename);
         if ((fp_scat_out = fopen(fn_scat_out, "w")) == NULL) {
             nll_puterr2("ERROR: opening scatter output file:", fn_scat_out);
             return (-1);

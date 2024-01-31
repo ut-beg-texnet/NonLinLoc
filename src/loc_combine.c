@@ -150,7 +150,7 @@ int main(int argc, char** argv) {
     strcpy(secondary_phase_filter, "\0");
 
     // read control file
-    strncpy(fn_control, argv[1], sizeof (fn_control));
+    strncpy(fn_control, argv[1], sizeof (fn_control) - 1);
     if ((fp_control = fopen(fn_control, "r")) == NULL) {
         nll_puterr("ERROR: opening control file.");
         exit(EXIT_ERROR_FILEIO);
@@ -382,6 +382,8 @@ int Readloc_combineInput(FILE * fp_input) {
         nll_puterr("ERROR: no outputfile (LCOUT) params read.");
     if (!flag_params)
         nll_puterr("ERROR: no parameters (LCPARAMS) read.");
+    if (!flag_lcfilter)
+        nll_putmsg(2, "INFO: no parameters (LCPHFILTER) read.");
 
     return (flag_include * flag_control * flag_inpfile * flag_outfile * flag_params * flag_phstat - 1);
 }
@@ -415,7 +417,7 @@ int Doloc_combine() {
     //int n_hypos_secondary_read = read_input_locations(&loc_list_secondary_head, fn_hypos_secondary_in);
 
     // set some variables
-    char fn_root_out[FILENAME_MAX], fname[FILENAME_MAX], fn_root_out_last[FILENAME_MAX];
+    char fn_root_out[FILENAME_MAX], fname[2 * FILENAME_MAX], fn_root_out_last[FILENAME_MAX];
     strcpy(fn_root_out_last, "");
     int n_file_root_count = 1;
     LocNode *loc_list_secondary_curr = loc_list_secondary_head; // current node of secondary locations list

@@ -239,7 +239,7 @@ int GetSource(char* in_line, SourceDesc *srce_in, int num_sources) {
     char chr1, chr2, coord_type[MAXLINE];
     double val1, val1a, val1b, val2, val2a, val2b, val3, val4;
     double sign;
-    char label[10 * ARRIVAL_LABEL_LEN];
+    char label[ARRIVAL_LABEL_LEN];
 
 
     /* initialize some source fields */
@@ -258,7 +258,7 @@ int GetSource(char* in_line, SourceDesc *srce_in, int num_sources) {
         istat = sscanf(in_line, "%s %s %lf %lf %lf %lf",
                 label,
                 coord_type, &val1, &val2, &val3, &val4);
-        strncpy(srce_in->label, label, ARRIVAL_LABEL_LEN - 1);
+        strncpy(srce_in->label, label, ARRIVAL_LABEL_LEN);
         srce_in->x = val1;
         srce_in->y = val2;
         srce_in->z = val3 - val4;
@@ -275,7 +275,7 @@ int GetSource(char* in_line, SourceDesc *srce_in, int num_sources) {
     } else if (strcmp(coord_type, "LATLON") == 0) {
         istat = sscanf(in_line, "%s %s %lf %lf %lf %lf", label,
                 coord_type, &val1, &val2, &val3, &val4);
-        strncpy(srce_in->label, label, ARRIVAL_LABEL_LEN - 1);
+        strncpy(srce_in->label, label, ARRIVAL_LABEL_LEN);
         srce_in->dlat = val1;
         srce_in->dlong = val2;
         srce_in->depth = val3 - val4;
@@ -302,7 +302,7 @@ int GetSource(char* in_line, SourceDesc *srce_in, int num_sources) {
                 "%s %s %lf %lf %c %lf %lf %c %lf %lf",
                 label, coord_type, &val1, &val1a, &chr1,
                 &val2, &val2a, &chr2, &val3, &val4);
-        strncpy(srce_in->label, label, ARRIVAL_LABEL_LEN - 1);
+        strncpy(srce_in->label, label, ARRIVAL_LABEL_LEN);
         if ((toupper(chr1) != 'N' && toupper(chr1) != 'S')
                 || (toupper(chr2) != 'E' && toupper(chr2) != 'W'))
             return (-1);
@@ -335,7 +335,7 @@ int GetSource(char* in_line, SourceDesc *srce_in, int num_sources) {
                 label, coord_type,
                 &val1, &val1a, &val1b, &chr1,
                 &val2, &val2a, &val2b, &chr2, &val3, &val4);
-        strncpy(srce_in->label, label, ARRIVAL_LABEL_LEN - 1);
+        strncpy(srce_in->label, label, ARRIVAL_LABEL_LEN);
         if ((toupper(chr1) != 'N' && toupper(chr1) != 'S')
                 || (toupper(chr2) != 'E' && toupper(chr2) != 'W'))
             return (-1);
@@ -3104,7 +3104,7 @@ GRID_FLOAT_TYPE ReadAbsInterpGrid3d(FILE *fpgrid, GridDesc* pgrid, double xloc, 
 
 DOUBLE ReadAbsInterpGrid2d(FILE *fpgrid, GridDesc* pgrid, double yloc, double zloc) {
 
-    int ix0, ix1, iy0, iy1, iz0, iz1;
+    int ix0, iy0, iy1, iz0, iz1;
     DOUBLE value;
     DOUBLE vval00, vval01, vval10, vval11;
 
@@ -3119,7 +3119,6 @@ DOUBLE ReadAbsInterpGrid2d(FILE *fpgrid, GridDesc* pgrid, double yloc, double zl
     zoff = (zloc - pgrid->origz) / pgrid->dz;
     iz0 = (int) (zoff - VERY_SMALL_DOUBLE);
 
-    ix1 = 0;
     iy1 = (iy0 < pgrid->numy - 1) ? iy0 + 1 : iy0;
     iz1 = (iz0 < pgrid->numz - 1) ? iz0 + 1 : iz0;
 
@@ -3527,7 +3526,7 @@ int GetHypLoc(FILE *fpio, const char* filein, HypoDesc* phypo,
         ArrivalDesc* parrivals, int *pnarrivals, int iReadArrivals,
         GridDesc* pgrid, int n_proj) {
 
-    int istat, ifile = 0;
+    int ifile = 0;
     int lineLength;
     char fn_in[FILENAME_MAX];
     char line[MAXLINE_LONG], *pstr, *pstr2 = NULL;
@@ -3755,7 +3754,7 @@ int GetHypLoc(FILE *fpio, const char* filein, HypoDesc* phypo,
 
             if (sscanf(line,
                     "QML_OriginQuality  assocPhCt %d  usedPhCt %*d  assocStaCt %d  usedStaCt %d  depthPhCt %d"
-                    "  stdErr %*lg  azGap %*lg  secAzGap %lg  gtLevel %s  minDist %lg maxDist %lg medDist %lg",
+                    "  stdErr %*g  azGap %*g  secAzGap %lg  gtLevel %s  minDist %lg maxDist %lg medDist %lg",
                     &phypo->associatedPhaseCount, &phypo->associatedStationCount, &phypo->usedStationCount, &phypo->depthPhaseCount,
                     &phypo->gap_secondary, phypo->groundTruthLevel, &phypo->minimumDistance, &phypo->maximumDistance, &phypo->medianDistance) == EOF)
                 goto eof_exit;
@@ -3764,7 +3763,7 @@ int GetHypLoc(FILE *fpio, const char* filein, HypoDesc* phypo,
 
             double azMaxHorUnc;
             if (sscanf(line,
-                    "QML_OriginUncertainty  horUnc %*lg  minHorUnc %lg  maxHorUnc %lg  azMaxHorUnc %lg",
+                    "QML_OriginUncertainty  horUnc %*g  minHorUnc %lg  maxHorUnc %lg  azMaxHorUnc %lg",
                     // 20100617 AJL - horizontalUncertainty: not clear what this is, ignore
                     &phypo->ellipse.len1, &phypo->ellipse.len2, &azMaxHorUnc) == EOF)
                 goto eof_exit;
@@ -3795,7 +3794,7 @@ int GetHypLoc(FILE *fpio, const char* filein, HypoDesc* phypo,
                         break;
                     }
                     parr = parrivals + *pnarrivals;
-                    istat = ReadArrival(line, parr, IO_ARRIVAL_ALL);
+                    ReadArrival(line, parr, IO_ARRIVAL_ALL);
                     (*pnarrivals)++;
                 };
             }/* not requested to read arrivals */
@@ -3868,7 +3867,7 @@ int ReadArrival(char* line, ArrivalDesc* parr, int iReadType) {
     int istat, istat2;
     long int idate, ihrmin;
     char *line_calc;
-    static char label[10 * ARRIVAL_LABEL_LEN];
+    static char label[ARRIVAL_LABEL_LEN];
 
     // new values NLL PHASE_2 format
     // 20060629 AJL - Added
@@ -3964,7 +3963,7 @@ int ReadArrival(char* line, ArrivalDesc* parr, int iReadType) {
     // parr->error /= 2.0;
 
 
-    strncpy(parr->label, label, ARRIVAL_LABEL_LEN - 1);
+    strncpy(parr->label, label, ARRIVAL_LABEL_LEN);
 
 
     if (istat == EOF)
@@ -4368,7 +4367,7 @@ double getGMTJVAL(int n_proj, char* jval_string, double xlen, double vxmax, doub
 
 int convertCoordsRect(int proj_index_from, int proj_index_to, double x, double y, double *pxnew, double *pynew) {
 
-    double dlat, dlong;
+    double dlat = 0.0, dlong = 0.0;
 
     if (proj_index_from < 0 || proj_index_to < 0)
         return (-1);
@@ -6293,8 +6292,7 @@ int WriteDiffArrival(FILE* fpio, HypoDesc* hypos, ArrivalDesc* parr, int iWriteT
 int CalcAnglesGradient(GridDesc* ptgrid, GridDesc* pagrid, int angle_mode, int grid_mode) {
 
     int ix, iy, iz, edge_flagx = 0, edge_flagy = 0, iflag2D = 0;
-    double origx, origy, origz;
-    double dx, dy, dz, dvol;
+    double dx, dy, dz;
     double xlow = 0.0, xhigh = 0.0;
     double azim, dip;
     int iqual;
@@ -6314,13 +6312,9 @@ int CalcAnglesGradient(GridDesc* ptgrid, GridDesc* pagrid, int angle_mode, int g
 
     /* estimate take-off angles from numerical gradients */
 
-    origx = pagrid->origx;
-    origy = pagrid->origy;
-    origz = pagrid->origz;
     dx = pagrid->dx;
     dy = pagrid->dy;
     dz = pagrid->dz;
-    dvol = dx * dy * dz;
 
     for (ix = 0; ix < pagrid->numx; ix++) {
         /* 2D grids, store angles in ix = 0 sheet */

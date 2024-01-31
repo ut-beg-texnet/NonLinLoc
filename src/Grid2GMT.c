@@ -520,7 +520,7 @@ int GenGMTCommands(char cplotmode, char cdatatype,
 
     /* open gmt files */
 
-    sprintf(fn_gmt, "%s.gmt", fn_root_output);
+    snprintf(fn_gmt, sizeof(fn_gmt), "%s.gmt", fn_root_output);
     if ((fp_gmt = fopen(fn_gmt, "w")) == NULL) {
         nll_puterr("ERROR opening gmt output file.");
         return (-1);
@@ -599,16 +599,16 @@ int GenGMTCommands(char cplotmode, char cdatatype,
 
     if (cdatatype == 'G') {
         if (strlen(title) < 1)
-            sprintf(title_str, "%s__(%s)", fn_root_output, args_str);
+            snprintf(title_str, sizeof(title_str), "%s__(%s)", fn_root_output, args_str);
         else
-            sprintf(title_str, "%s", title);
+            snprintf(title_str, sizeof(title_str), "%s", title);
     }
 
     //} else {
 
     /* open hypocenter file */
 
-    sprintf(fn_hypo, "%s.hyp", fnroot_input);
+    snprintf(fn_hypo, sizeof(fn_hypo), "%s.hyp", fnroot_input);
     if ((fp_hypo = fopen(fn_hypo, "r")) == NULL) {
         if (message_flag >= 1)
             nll_putmsg2(1, "INFO: cannot open hypocenter file", fn_hypo);
@@ -667,9 +667,9 @@ int GenGMTCommands(char cplotmode, char cdatatype,
     }// no hypocenter file
     else {
         if (strlen(title) < 1)
-            sprintf(title_str, "%s__(%s)", fn_root_output, args_str);
+            snprintf(title_str, sizeof(title_str), "%s__(%s)", fn_root_output, args_str);
         else
-            sprintf(title_str, "%s", title);
+            snprintf(title_str, sizeof(title_str), "%s", title);
     }
 
 
@@ -951,7 +951,7 @@ int GenGMTCommands(char cplotmode, char cdatatype,
     /* run gmt script */
 
     fprintf(stdout, "\n\nRunning GMT script %s ...\n", fn_gmt);
-    sprintf(sys_string, "chmod a+x %s", fn_gmt);
+    snprintf(sys_string, sizeof(sys_string), "chmod a+x %s", fn_gmt);
     system(sys_string);
     system(fn_gmt);
 
@@ -1061,7 +1061,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
     /* open gmt grid file */
 
     if (cdatatype == 'G') {
-        sprintf(fn_gmtgrd, "%s.%c.grd", fn_root_output, file_id);
+        snprintf(fn_gmtgrd, sizeof(fn_gmtgrd), "%s.%c.grd", fn_root_output, file_id);
         if ((fp_gmtgrd = fopen(fn_gmtgrd, "w")) == NULL) {
             nll_puterr("ERROR opening gmt grid output file.");
             return (-1);
@@ -1393,7 +1393,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
 
     /* try to open and read station list file */
 
-    sprintf(fn_stations, "%s.stations", fnroot_input);
+    snprintf(fn_stations, sizeof(fn_stations), "%s.stations", fnroot_input);
     if ((fp_stations = fopen(fn_stations, "r")) != NULL) {
         NumStationPhases = ReadStationList(fp_stations, Stations, 0);
         fclose(fp_stations);
@@ -1486,7 +1486,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
         /* JVAL geographic version */
         gmt_scale = getGMTJVAL(proj_index_output, gmt_JVAL_latlong_string, *pxlen, vxmax, vxmin, *pylen, vymax, vymin);
         fprintf(fp_gmt, "# Latitude/Longitude in degrees\n");
-        sprintf(gmt_JVAL, "JVAL=\'%s -Jz%lf\'",
+        snprintf(gmt_JVAL, sizeof(gmt_JVAL), "JVAL=\'%s -Jz%lf\'",
                 gmt_JVAL_latlong_string, gmt_scale * zscalefact);
         fprintf(fp_gmt, "%s\n", gmt_JVAL);
 
@@ -1539,7 +1539,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
 
         if (pgrid->type == GRID_PROB_DENSITY) {
 
-            sprintf(fn_cont, "%s.conf", fnroot_input);
+            snprintf(fn_cont, sizeof(fn_cont), "%s.conf", fnroot_input);
             MakeConfCPT(fn_cont, fn_root_output);
             fprintf(fp_gmt,
                     GMT_COMMAND_PREFIX"grdimage -S-n %sgmt -C%s.conf.cpt $JVAL $RVAL $BVAL -K -O >> %s.ps\n\n",
@@ -1772,9 +1772,9 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
 
         if (cviewmode == 'H') {
             if (cdatatype == 'R') {
-                sprintf(fn_nlloc_stat, "%s.stat", fnroot_input);
+                snprintf(fn_nlloc_stat, sizeof(fn_nlloc_stat), "%s.stat", fnroot_input);
             } else {
-                sprintf(fn_nlloc_stat, "%s.stat_totcorr", fnroot_input);
+                snprintf(fn_nlloc_stat, sizeof(fn_nlloc_stat), "%s.stat_totcorr", fnroot_input);
             }
             nresiduals = ConvertResids2MapGMT(cdatatype,
                     fn_nlloc_stat, arg_elements[0], fp_gmt, Stations, NumStationPhases, res_scale, res_min_num_readings);
@@ -2185,6 +2185,8 @@ int ReadGrid2GMT_Input(FILE* fp_input) {
         nll_puterr("ERROR no control (CONTROL) params read.");
     if (!flag_trans)
         nll_puterr("ERROR no transformation (TRANS) params read.");
+    if (!flag_grid)
+        nll_putmsg(2, "INFO no map grid (MAPGRID) params read.");
 
 
     return (flag_control + flag_trans - 1);
@@ -2237,9 +2239,9 @@ int grd2GMT(int nmapfile, double xmin0, double ymin0, double xmax0, double ymax0
     sprintf(fname_cpt, "%s.cpt", mapfile[nmapfile].name);
     if ((fp_tmp = fopen(fname_cpt, "r")) == NULL) {
         // make default cpt file
-        sprintf(fname_temp_cpt, "%sgrd.temp.cpt", fnoutput);
+        snprintf(fname_temp_cpt, sizeof(fname_temp_cpt), "%sgrd.temp.cpt", fnoutput);
         MakeTopoCPT(fname_temp_cpt);
-        sprintf(fname_cpt, "%sgrd.cpt", fnoutput);
+        snprintf(fname_cpt, sizeof(fname_cpt), "%sgrd.cpt", fnoutput);
         fprintf(fp_gmt, GMT_COMMAND_PREFIX"grd2cpt %s -C%s -Z > %s\n", mapfile[nmapfile].name, fname_temp_cpt, fname_cpt);
     }
     if (fp_tmp != NULL)
@@ -2310,11 +2312,11 @@ int MapLines2GMT(int nmapfile, double xmin0, double ymin0, double xmax0, double 
     if ((fp_gmtxy = fopen(fn_gmtxy, "w")) == NULL)
         nll_puterr2("ERROR: cannot open map xy output file", fn_gmtxy);
     if ((fp_gmtlatlon = fopen(fn_gmtlatlon, "w")) == NULL)
-        nll_puterr2("ERROR: cannot open map lat/lon output file", fn_gmtxy);
+        nll_puterr2("ERROR: cannot open map lat/lon output file", fn_gmtlatlon);
     if ((fp_gmtxz = fopen(fn_gmtxz, "w")) == NULL)
-        nll_puterr2("ERROR: cannot open map xy output file", fn_gmtxy);
+        nll_puterr2("ERROR: cannot open map xz output file", fn_gmtxz);
     if ((fp_gmtzy = fopen(fn_gmtzy, "w")) == NULL)
-        nll_puterr2("ERROR: cannot open map xy output file", fn_gmtxy);
+        nll_puterr2("ERROR: cannot open map zy output file", fn_gmtzy);
 
 
     /* open input file */
@@ -2477,10 +2479,10 @@ int GenMapFileName(char *fname_xy, char *fname_xz, char *fname_zy,
         pstring++;
     else
         pstring = mapfile_name;
-    sprintf(fname_xy, "%smap.%s.xy", fnoutput, pstring);
-    sprintf(fname_xz, "%smap.%s.xz", fnoutput, pstring);
-    sprintf(fname_zy, "%smap.%s.zy", fnoutput, pstring);
-    sprintf(fname_latlon, "%smap.%s.latlon", fnoutput, pstring);
+    snprintf(fname_xy, FILENAME_MAX, "%smap.%s.xy", fnoutput, pstring);
+    snprintf(fname_xz, FILENAME_MAX, "%smap.%s.xz", fnoutput, pstring);
+    snprintf(fname_zy, FILENAME_MAX, "%smap.%s.zy", fnoutput, pstring);
+    snprintf(fname_latlon, FILENAME_MAX, "%smap.%s.latlon", fnoutput, pstring);
 
     return (0);
 }

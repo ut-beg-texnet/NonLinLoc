@@ -172,7 +172,7 @@ int main(int argc, char *argv[]) {
     int n_values_expected = fmm_times.numx * fmm_times.numy * fmm_times.numz;
     for (nPathGrid = 0; nPathGrid < NumPathPhaseCodes; nPathGrid++) {
 
-        sprintf(fileRoot, "%s.%s.%s", fn_fg_output, PathPhaseCodes[nPathGrid], (Source + 0)->label);
+        snprintf(fileRoot, sizeof(fileRoot), "%s.%s.%s", fn_fg_output, PathPhaseCodes[nPathGrid], (Source + 0)->label);
         sprintf(MsgStr, "Creating time grid files: %s.time.*", fileRoot);
         nll_putmsg(1, MsgStr);
 

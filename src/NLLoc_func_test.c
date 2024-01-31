@@ -215,14 +215,14 @@ int main(int argc, char *argv[]) {
 
         LocNode* locNode = NULL;
         char frootname[FILENAME_MAX];
-        char fname[FILENAME_MAX];
+        char fname[2*FILENAME_MAX];
 
         // loop over returned location results
         int id = 0;
         while ((locNode = getLocationFromLocList(loc_list_head, id)) != NULL) {
 
-            sprintf(frootname, "out/%3.3d", id_filename);
-            sprintf(fname, "%s.loc.hyp", frootname);
+            snprintf(frootname, sizeof(frootname), "out/%3.3d", id_filename);
+            snprintf(fname, sizeof(fname), "%s.loc.hyp", frootname);
 
             // NOTE: the angles in locNode->plocation->ellipsoid, ellipse and
             //    phase/arrival angles in locNode->plocation->parrivals are in NLL internal coordinates
@@ -248,19 +248,19 @@ int main(int argc, char *argv[]) {
 
             // write NLLoc location Oct tree structure of locaiton likelihood values to disk
             if (return_oct_tree_grid) {
-                sprintf(fname, "%s.loc.octree", frootname);
+                snprintf(fname, sizeof(fname), "%s.loc.octree", frootname);
                 FILE *fpio;
                 if ((fpio = fopen(fname, "w")) != NULL) {
                     istat = writeTree3D(fpio, locNode->plocation->poctTree);
                     fclose(fpio);
-                    sprintf(MsgStr, "Oct tree structure written to file : %d nodes", istat);
+                    snprintf(MsgStr, sizeof(MsgStr), "Oct tree structure written to file : %d nodes", istat);
                     nll_putmsg(1, MsgStr);
                 }
             }
 
             // write NLLoc binary Scatter file to disk
             if (return_scatter_sample) {
-                sprintf(fname, "%s.loc.scat", frootname);
+                snprintf(fname, sizeof(fname), "%s.loc.scat", frootname);
                 FILE *fpio;
                 if ((fpio = fopen(fname, "w")) != NULL) {
                     // write scatter file header informaion

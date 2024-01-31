@@ -165,8 +165,6 @@ int SumLocations(int argc, char** argv) {
     static char fn_hyp_in_list[MAX_NUM_INPUT_FILES][FILENAME_MAX];
     char test_str[10];
 
-    double xmin, xmax, ymin, ymax, zmin, zmax;
-
     double Len3Max, ProbMin, RMSMax;
     int NRdgsMin, GapMax;
     double Len3Mean = 0.0, ProbMean = 0.0, RMSMean = 0.0;
@@ -257,13 +255,13 @@ int SumLocations(int argc, char** argv) {
 
     /* duplicate size grid files to make dummy output grid files */
 
-    sprintf(sys_string, "cp %s.hdr %s.hdr", fn_grid_size, fn_root_out);
+    snprintf(sys_string, sizeof(sys_string), "cp %s.hdr %s.hdr", fn_grid_size, fn_root_out);
     if ((istat = system(sys_string)) != 0) {
         sprintf(MsgStr, "system return value = %d", istat);
         nll_puterr2("ERROR: copying header file", MsgStr);
         return (-1);
     }
-    sprintf(filename, "%s.buf", fn_root_out);
+    snprintf(filename, sizeof(filename), "%s.buf", fn_root_out);
     fp_dummy = fopen(filename, "w");
     fclose(fp_dummy);
 
@@ -275,18 +273,19 @@ int SumLocations(int argc, char** argv) {
         nll_puterr2("ERROR: open grid header file", MsgStr);
         return (-1);
     }
-    xmin = Grid.origx;
-    xmax = xmin + (double) (Grid.numx - 1) * Grid.dx;
-    ymin = Grid.origy;
-    ymax = ymin + (double) (Grid.numy - 1) * Grid.dy;
-    zmin = Grid.origz;
-    zmax = zmin + (double) (Grid.numz - 1) * Grid.dz;
+    
+    //double xmin = Grid.origx;
+    //double xmax = xmin + (double) (Grid.numx - 1) * Grid.dx;
+    //double ymin = Grid.origy;
+    //double ymax = ymin + (double) (Grid.numy - 1) * Grid.dy;
+    //double zmin = Grid.origz;
+    //double zmax = zmin + (double) (Grid.numz - 1) * Grid.dz;
 
 
 
     /* open ascii hypocenter sum file */
 
-    sprintf(fn_hyp_sum_out, "%s.sum.hyp", fn_root_out);
+    snprintf(fn_hyp_sum_out, sizeof(fn_hyp_sum_out), "%s.sum.hyp", fn_root_out);
     if ((fp_hyp_sum_out = fopen(fn_hyp_sum_out, "w")) == NULL) {
         nll_puterr("ERROR: opening hypocenter sum output file.");
         return (-1);
@@ -294,7 +293,7 @@ int SumLocations(int argc, char** argv) {
 
     /* open ascii hypocenter/scatter file */
 
-    sprintf(fn_hyp_scat_out, "%s.hyp", fn_root_out);
+    snprintf(fn_hyp_scat_out, sizeof(fn_hyp_scat_out), "%s.hyp", fn_root_out);
     if ((fp_hyp_scat_out = fopen(fn_hyp_scat_out, "w")) == NULL) {
         nll_puterr("ERROR: opening hypocenter/scatter ascii output file.");
         return (-1);
@@ -302,7 +301,7 @@ int SumLocations(int argc, char** argv) {
 
     /* open scatter file */
 
-    sprintf(fn_scat_out, "%s.scat", fn_root_out);
+    snprintf(fn_scat_out, sizeof(fn_scat_out), "%s.scat", fn_root_out);
     if ((fp_scat_out = fopen(fn_scat_out, "w")) == NULL) {
         nll_puterr("ERROR: opening scatter output file.");
         return (-1);
