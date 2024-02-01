@@ -546,7 +546,7 @@ New version 7.1.00 24Jan2024  =================================
 
 20231002 Grid2GMT - Changed default colortable from "seis" to "polar".
 
-20231017 NLLoc - Changed rule for classifying 2 digit HYPO71 (and other formats) year from year<20 to year<40, if true then year is assumed 2000+year, otherwise, 1900+year
+20231017 NLLoc - Changed rule for classifying 2 digit HYPO71 (and other formats) year from year<20 to year<40, if true year assumed 2000+year, otherwise, 1900+year
 
 20231021 NLLoc - added support for NLL hypocenter-phase format header lines at beginning of NLL_OBS and HYPO71* phase files.
         PUBLIC_ID to include an event ID, QUALITY to include an event Mamp and/or Mdur magnitude. Example:

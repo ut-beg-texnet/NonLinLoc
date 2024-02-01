@@ -2,9 +2,6 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-
-#define EXTERN_MODE 1
-
 #include "ran1.h"
 
 

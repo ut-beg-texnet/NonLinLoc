@@ -37,7 +37,11 @@
 
 
 
-#define EXTERN_MODE 1
+#ifdef EXTERN_MODE
+#define	EXTERN_TXT extern
+#else
+#define EXTERN_TXT
+#endif
 
 #include "util.h"
 
