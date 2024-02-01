@@ -1,3 +1,5 @@
+#define EXTERN_MODE 1
+
 //#include "iscloc.h"
 #include "GridLib.h"
 #include "calc_crust_corr.h"

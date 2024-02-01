@@ -33,6 +33,8 @@ tel: +33(0)493752502  e-mail: anthony@alomax.net  web: http://www.alomax.net
 
 
 
+#define EXTERN_MODE 1
+
 #include "GridLib.h"
 //#include "ran1.h"
 #include "GridMemLib.h"

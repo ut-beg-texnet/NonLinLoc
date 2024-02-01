@@ -40,6 +40,10 @@ add_compile_options(-Wall)
 # hide warnings that are difficult to suppress with code changes
 add_compile_options(-Wno-format-truncation)
 
+# Uncomment the following to set globally the floating point size (float or double) for NLL grids - modify with care!
+# take-off angle and byte-swapping support requires float type
+#add_compile_options(-D GRID_FLOAT_TYPE_DOUBLE)
+
 # Uncomment the following if the compiler you are using supports GNU extensions such as:
 #   fmemopen, open_memstream -  open memory as stream (required to pass observations file lines as parameters
 #   to a function call to NLLoc() and to run NLLoc_func_test)

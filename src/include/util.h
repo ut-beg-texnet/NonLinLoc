@@ -43,6 +43,12 @@
 #define VERY_SMALL_DOUBLE 1.0e-30
 #endif
 
+#ifdef EXTERN_MODE
+#define	EXTERN_TXT extern
+#else
+#define EXTERN_TXT
+#endif
+
 EXTERN_TXT char package_name[MAXLINE];
 EXTERN_TXT char prog_name[MAXLINE];
 EXTERN_TXT char prog_ver[MAXLINE];
