@@ -32,6 +32,13 @@ tel: +33(0)493752502  e-mail: anthony@alomax.net  web: http://www.alomax.net
  */
 
 
+#ifdef EXTERN_MODE
+#define	EXTERN_TXT extern
+#else
+#define EXTERN_TXT
+#endif
+
+
 /* the following should be included before NLLocLib.h in all sources that include NLLocLib.h
 #include "GridLib.h"
 #include "ran1.h"
