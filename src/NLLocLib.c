@@ -104,8 +104,6 @@ e-mail: anthony@alomax.net  web: http://www.alomax.net
 
 
 
-
-
 #include "GridLib.h"
 #include "ran1/ran1.h"
 #include "velmod.h"
@@ -119,6 +117,123 @@ e-mail: anthony@alomax.net  web: http://www.alomax.net
 #ifdef CUSTOM_ETH
 #include "custom_eth/eth_functions.h"
 #endif
+
+
+// define globals
+
+char f_outpath[FILENAME_MAX];
+GaussLocParams Gauss;
+Gauss2LocParams Gauss2;
+int iUseGauss2;
+ScatterParams Scatter;
+int NumEvents;
+int NumEventsLocated;
+int NumLocationsCompleted;
+int NumObsFiles;
+int NumArrivalsRead;
+int NumArrivalsLocation;
+char fn_loc_obs[MAX_NUM_OBS_FILES][FILENAME_MAX];
+char ftype_obs[MAXLINE];
+char fn_loc_grids[FILENAME_MAX], fn_path_output[FILENAME_MAX];
+int iSwapBytesOnInput;
+FILE *fp_model_grid_P;
+FILE *fp_model_hdr_P;
+GridDesc model_grid_P;
+FILE *fp_model_grid_S;
+FILE *fp_model_hdr_S;
+GridDesc model_grid_S;
+int SearchType;
+SearchPdfGridDesc SearchPrior;
+int iUseSearchPrior;
+SearchPdfGridDesc SearchPosterior;
+int iUseSearchPosterior;
+int LocMethod;
+int EDT_use_otime_weight;
+int EDT_otime_weight_active;
+double DistStaGridMin;
+double DistStaGridMax;
+int MinNumArrLoc;
+int MaxNumArrLoc;
+int MinNumSArrLoc;
+double VpVsRatio;
+char LocSignature[MAXLINE_LONG];
+GridDesc LocGrid[MAX_NUM_LOCATION_GRIDS];
+int NumLocGrids;
+int LocGridSave[MAX_NUM_LOCATION_GRIDS]; /* !should be in GridDesc */
+//int Num3DGridReadToMemory, MaxNum3DGridMemory;
+int iWriteHypHeader[MAX_NUM_LOCATION_GRIDS];
+char HypoInverseArchiveSumHdr[MAXLINE_LONG];
+int iSaveNLLocEvent, iSaveNLLocSum, iSaveNLLocOctree,
+    iSaveHypo71Event, iSaveHypo71Sum,
+    iSaveHypoEllEvent, iSaveHypoEllSum,
+    iSaveHypoInvSum, iSaveHypoInvY2KArc, iSaveAlberto4Sum, iSaveFmamp,
+    iSaveSnapSum, iCalcSedOrigin, iSaveDecSec, iSavePublicID, iSaveNone;
+int iSaveNLLocExpectation;
+int iSaveNLLocEvent_JSON;
+int iUseArrivalPriorWeights;
+int iSetStationDistributionWeights;
+double stationDistributionWeightCutoff;
+double AveInterStationDistance;
+int NumForceOctTreeStaDenWt;
+int iRejectDuplicateArrivals;
+EventTimeExtract EventTime;
+long int EventID;
+int NumMagnitudeMethods;
+MagDesc Magnitude[MAX_NUM_MAG_METHODS];
+CompDesc Component[MAX_NUM_COMP_DESC];
+int NumCompDesc;
+AliasDesc LocAlias[MAX_NUM_LOC_ALIAS];
+int NumLocAlias;
+ExcludeDesc LocExclude[MAX_NUM_LOC_EXCLUDE];
+int NumLocExclude;
+ExcludeDesc LocInclude[MAX_NUM_LOC_INCLUDE];
+int NumLocInclude;
+TimeDelayDesc TimeDelay[MAX_NUM_STA_DELAYS];
+int NumTimeDelays;
+char TimeDelaySurfacePhase[MAX_SURFACES][PHASE_LABEL_LEN];
+double TimeDelaySurfaceMultiplier[MAX_SURFACES];
+int NumTimeDelaySurface;
+int ApplyElevCorrFlag;
+double ElevCorrVelP;
+double ElevCorrVelS;
+int ApplyCrustElevCorrFlag;
+double MinDistCrustElevCorr;
+struct surface *topo_surface;
+int topo_surface_index; // topo surface index is velmod.h.MAX_SURFACES-1 so as not to interferce with any TimeDelaySurfaces read in
+int FixOriginTimeFlag;
+WalkParams Metrop; /* walk parameters */
+int MetNumSamples; /* number of samples to evaluate */
+int MetLearn; /* learning length in number of samples for calculation of sample statistics */
+int MetEquil; /* number of samples to equil before using */
+int MetStartSave; /* number of sample to begin saving */
+int MetSkip; /* number of samples to wait between saves */
+double MetStepInit; /* initial step size (km) (< 0.0 for auto) */
+double MetStepMin; /* minimum step size (km) */
+double MetStepMax; /* maximum step size (km) (NLDiffLoc) */
+double MetStepFact; /* step size factor */
+double MetProbMin; /* minimum likelihood necessary after learn */
+double MetVelocity; /* velocity for conversion of distance to time */
+double MetInititalTemperature; /* initial temperature */
+int MetUse; /* number of samples to use = MetNumSamples - MetEquil */
+OcttreeParams octtreeParams; /* Octtree parameters */
+Tree3D* octTree; /* Octtree */
+ResultTreeNode* resultTreeRoot; /* Octtree likelihood*volume results tree root node */
+//ResultTreeNode* resultTreeLikelihoodRoot;	/* Octtree likelihood results tree root node */
+int angleMode; /* angle mode - ANGLE_MODE_NO, ANGLE_MODE_YES */
+int iAngleQualityMin; /* minimum quality for angles to be used */
+OtimeLimit** OtimeLimitList;
+int NumOtimeLimit;
+StaStatNode *hashtab[MAX_NUM_LOCATION_GRIDS][HASHSIZE];
+int NRdgs_Min;
+double RMS_Max, Gap_Max;
+double P_ResidualMax;
+double S_ResidualMax;
+double Ell_Len3_Max;
+double Hypo_Depth_Min;
+double Hypo_Depth_Max;
+double Hypo_Dist_Max;
+//char snap_pid[255];
+
 
 
 // AJL - 20080710 (valgrind)
@@ -145,7 +260,7 @@ int Locate(int ngrid, char* fn_loc_obs, char* fn_root_out, int numArrivalsReject
     char fnout[4 * MAXLINE];
 
     FILE *fpio;
-    char fname[5 * MAXLINE];  // should be bigger than fnout, to avoid compiler warnings
+    char fname[5 * MAXLINE]; // should be bigger than fnout, to avoid compiler warnings
     float *fdata = NULL;
     float ftemp;
     int iSizeOfFdata;
@@ -7195,7 +7310,7 @@ int LocMetropolis(int ngrid, int num_arr_total, int num_arr_loc,
             sprintf(MsgStr,
                     "ERROR: failed to accept new Metropolis sample after %d tries, aborting location.", ntry);
             nll_puterr(MsgStr);
-            snprintf(phypo->locStatComm, sizeof(phypo->locStatComm), "%s", MsgStr);
+            snprintf(phypo->locStatComm, sizeof (phypo->locStatComm), "%s", MsgStr);
             iAbort = 1;
             break;
         }
@@ -7206,7 +7321,7 @@ int LocMetropolis(int ngrid, int num_arr_total, int num_arr_loc,
                     "ERROR: after learning stage (%d samples), best probability = %.2le is less than ProbMin = %.2le, aborting location.",
                     MetLearn, dlike_max, MetProbMin);
             nll_puterr(MsgStr);
-            snprintf(phypo->locStatComm, sizeof(phypo->locStatComm), "%s", MsgStr);
+            snprintf(phypo->locStatComm, sizeof (phypo->locStatComm), "%s", MsgStr);
             iAbort = 1;
             break;
         }
@@ -7239,7 +7354,7 @@ int LocMetropolis(int ngrid, int num_arr_total, int num_arr_loc,
             ptgrid, pMetrop->dx, pMetrop->dx, 0))) {
         sprintf(MsgStr, "WARNING: max prob location on grid boundary %d, rejecting location.", iBoundary);
         nll_putmsg(1, MsgStr);
-        snprintf(phypo->locStatComm, sizeof(phypo->locStatComm), "%s", MsgStr);
+        snprintf(phypo->locStatComm, sizeof (phypo->locStatComm), "%s", MsgStr);
         iReject = 1;
     }
 
@@ -7371,7 +7486,7 @@ int SaveBestLocation(OctNode* poct_node, int num_arr_total, int num_arr_loc, Arr
         double cell_diagonal_time_var_best, double cell_diagonal_best, double cell_volume_best) {
 
     int istat, narr, n_compan;
-    char filename[2*FILENAME_MAX];
+    char filename[2 * FILENAME_MAX];
 
     SourceDesc station;
 
@@ -7500,9 +7615,9 @@ int SaveBestLocation(OctNode* poct_node, int num_arr_total, int num_arr_loc, Arr
         /* read angles */
         /* angle grid file name */
         if (n_compan >= 0)
-            snprintf(filename, sizeof(filename), "%s.angle", arrival[n_compan].fileroot);
+            snprintf(filename, sizeof (filename), "%s.angle", arrival[n_compan].fileroot);
         else
-            snprintf(filename, sizeof(filename), "%s.angle", arrival[narr].fileroot);
+            snprintf(filename, sizeof (filename), "%s.angle", arrival[narr].fileroot);
         if (angleMode == ANGLE_MODE_YES) {
             if (arrival[narr].gdesc.type == GRID_TIME) {
                 /* 3D grid */
@@ -10653,7 +10768,7 @@ int GetNLLoc_Files(char* line1) {
                 ftype_obs, fn_loc_grids, fn_path_output, iSwapBytesOnInput);
         nll_putmsg(3, MsgStr);
         for (nObsFile = 0; nObsFile < NumObsFiles; nObsFile++) {
-            snprintf(MsgStr, sizeof(MsgStr), "   Obs File: %3d  %s", nObsFile, fn_loc_obs[nObsFile]);
+            snprintf(MsgStr, sizeof (MsgStr), "   Obs File: %3d  %s", nObsFile, fn_loc_obs[nObsFile]);
             nll_putmsg(3, MsgStr);
         }
     }
@@ -14531,7 +14646,7 @@ int LocOctree(int ngrid, int num_arr_total, int num_arr_loc,
         sprintf(MsgStr,
                 "WARNING: max prob location on grid boundary %d, rejecting location.", iBoundary);
         nll_putmsg(1, MsgStr);
-        snprintf(phypo->locStatComm, sizeof(phypo->locStatComm), "%s", MsgStr);
+        snprintf(phypo->locStatComm, sizeof (phypo->locStatComm), "%s", MsgStr);
         iReject = 1;
     }
 

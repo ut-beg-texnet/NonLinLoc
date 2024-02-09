@@ -43,13 +43,13 @@
 #define VERY_SMALL_DOUBLE 1.0e-30
 #endif
 
-EXTERN_TXT char package_name[MAXLINE];
-EXTERN_TXT char prog_name[MAXLINE];
-EXTERN_TXT char prog_ver[MAXLINE];
-EXTERN_TXT char prog_date[MAXLINE];
-EXTERN_TXT char prog_copyright[MAXLINE];
-EXTERN_TXT int message_flag;
-EXTERN_TXT char MsgStr[100 * MAXLINE];
+extern char package_name[MAXLINE];
+extern char prog_name[MAXLINE];
+extern char prog_ver[MAXLINE];
+extern char prog_date[MAXLINE];
+extern char prog_copyright[MAXLINE];
+extern int message_flag;
+extern char MsgStr[100 * MAXLINE];
 
 /*** function to copy file by Jan Wiszniowski 2022-01-31*/
 void copy_file(char* in_name, char* out_name);

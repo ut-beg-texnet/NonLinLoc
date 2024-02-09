@@ -84,23 +84,23 @@ static void term_handler(int sig);
 
 /*------------------------------------------------------------*/
 /* globals  */
-EXTERN_TXT char fn_hypocenters[FILENAME_MAX];
-EXTERN_TXT char ftype_hypocenters[MAXLINE];
-EXTERN_TXT int NumHypocenterFix;
-EXTERN_TXT int NumHypocenterFree;
+char fn_hypocenters[FILENAME_MAX];
+char ftype_hypocenters[MAXLINE];
+int NumHypocenterFix;
+int NumHypocenterFree;
 #define  MAX_NUM_DIFF_HYPOCENTERS 1000
-EXTERN_TXT HypoDesc DiffHypocenters[MAX_NUM_DIFF_HYPOCENTERS];
-EXTERN_TXT int NumHypocenters;
-EXTERN_TXT double xcorr_uncertainty_P;
-EXTERN_TXT double cat_uncertainty_P;
-EXTERN_TXT double xcorr_uncertainty_S;
-EXTERN_TXT double cat_uncertainty_S;
+HypoDesc DiffHypocenters[MAX_NUM_DIFF_HYPOCENTERS];
+int NumHypocenters;
+double xcorr_uncertainty_P;
+double cat_uncertainty_P;
+double xcorr_uncertainty_S;
+double cat_uncertainty_S;
 
 
 //#define TEST_WIEGHT_LIKE_BY_MISFIT
-EXTERN_TXT double hypo_likelyhood_best = -1.0;
-EXTERN_TXT double hypo_misfit_best = -1.0;
-EXTERN_TXT int iHypo_hypo_likelyhood_best = -1;
+double hypo_likelyhood_best = -1.0;
+double hypo_misfit_best = -1.0;
+int iHypo_hypo_likelyhood_best = -1;
 
 
 // 20190314 AJL - Added: only use misfit values less than the mean of the previous misfit
@@ -110,7 +110,7 @@ EXTERN_TXT int iHypo_hypo_likelyhood_best = -1;
 typedef struct {
     double last_mean_misfit_all;
 } DiffHypoDataDesc;
-EXTERN_TXT DiffHypoDataDesc DiffHypoData[MAX_NUM_DIFF_HYPOCENTERS];
+DiffHypoDataDesc DiffHypoData[MAX_NUM_DIFF_HYPOCENTERS];
 
 #endif
 

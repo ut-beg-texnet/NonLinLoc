@@ -34,8 +34,8 @@ www.alomax.net
 
 
 #define PACKAGE  "NonLinLoc"
-#define PVER  "7.1.01"
-#define PDATE "07Feb2024"
+#define PVER  "7.1.02"
+#define PDATE "09Feb2024"
 /*#define PCOPYRIGHT "\nCopyright (C) 1999-2023 Anthony Lomax\n"*/
 #define PCOPYRIGHT "\0"
 
@@ -56,12 +56,6 @@ www.alomax.net
 #include <sys/types.h>
 #endif
  */
-
-#ifdef EXTERN_MODE
-#define EXTERN_TXT extern
-#else
-#define EXTERN_TXT
-#endif
 
 #include "geometry/geometry.h"
 #include "alomax_matrix/alomax_matrix.h"
@@ -158,7 +152,7 @@ www.alomax.net
 /* program mode */
 #define MODE_ABSOLUTE     0
 #define MODE_DIFFERENTIAL    1
-EXTERN_TXT int nll_mode;
+extern int nll_mode;
 
 
 #define EXIT_NORMAL 0
@@ -639,8 +633,8 @@ PhaseIdent;
 /* phase identification */
 // 20161004 AJL - moved here from NLLocLib.c
 #define MAX_NUM_PHASE_ID 50
-EXTERN_TXT PhaseIdent PhaseID[MAX_NUM_PHASE_ID];
-EXTERN_TXT int NumPhaseID;
+extern PhaseIdent PhaseID[MAX_NUM_PHASE_ID];
+extern int NumPhaseID;
 
 
 
@@ -654,46 +648,46 @@ EXTERN_TXT int NumPhaseID;
 /* globals  */
 /*------------------------------------------------------------/ */
 
-EXTERN_TXT char fn_control[MAXLINE]; /* control file name */
-EXTERN_TXT FILE *fp_control; /* control file pointer */
-EXTERN_TXT char fn_output[MAXLINE]; /* output file name */
+extern char fn_control[MAXLINE]; /* control file name */
+extern FILE *fp_control; /* control file pointer */
+extern char fn_output[MAXLINE]; /* output file name */
 
 /* miscellaneous */
-EXTERN_TXT int RandomNumSeed;
-EXTERN_TXT int NumFilesOpen;
-EXTERN_TXT int NumGridBufFilesOpen, NumGridHdrFilesOpen;
-EXTERN_TXT int NumAllocations;
+extern int RandomNumSeed;
+extern int NumFilesOpen;
+extern int NumGridBufFilesOpen, NumGridHdrFilesOpen;
+extern int NumAllocations;
 
 /* algorithm constants */
-EXTERN_TXT int prog_mode_3d;
-EXTERN_TXT int prog_mode_2dto3d;
+extern int prog_mode_3d;
+extern int prog_mode_2dto3d;
 
 // mode
 #define MODE_RECT   0 // rectangular cartesian x(km),y(km),z:depth(km)
 #define MODE_GLOBAL   1 // spherical x:longitdue(deg),y:latittude(deg),z:depth(km)
-EXTERN_TXT int GeometryMode;
+extern int GeometryMode;
 
 /* 3D grid description */
-EXTERN_TXT int grid_type; /* grid type (VELOCITY, SLOWNESS, SLOW2, etc) */
-EXTERN_TXT GridDesc grid_in;
+extern int grid_type; /* grid type (VELOCITY, SLOWNESS, SLOW2, etc) */
+extern GridDesc grid_in;
 
 /* source */
-EXTERN_TXT int NumSources;
-EXTERN_TXT SourceDesc Source[MAX_NUM_SOURCES];
+extern int NumSources;
+extern SourceDesc Source[MAX_NUM_SOURCES];
 
 /* stations */
-//EXTERN_TXT int NumStations;
-EXTERN_TXT StationDesc Station[MAX_NUM_SOURCES];
+//extern int NumStations;
+extern StationDesc Station[MAX_NUM_SOURCES];
 
 /* arrivals */
-EXTERN_TXT int PhaseFormat;
-EXTERN_TXT int MAX_NUM_STATIONS;
-EXTERN_TXT int MAX_NUM_ARRIVALS;
-EXTERN_TXT int NumArrivals;
-EXTERN_TXT ArrivalDesc* Arrival;
+extern int PhaseFormat;
+extern int MAX_NUM_STATIONS;
+extern int MAX_NUM_ARRIVALS;
+extern int NumArrivals;
+extern ArrivalDesc* Arrival;
 
 /* hypocenter */
-EXTERN_TXT HypoDesc Hypocenter;
+extern HypoDesc Hypocenter;
 
 /* geographic transformations (lat/long <=> x/y) */
 #define NUM_PROJ_MAX   10
@@ -705,43 +699,43 @@ EXTERN_TXT HypoDesc Hypocenter;
 #define MAP_TRANS_TM     4
 #define MAP_TRANS_AZ_EQUID     5
 #define MAP_TRANS_SDC   6
-EXTERN_TXT char map_trans_type[NUM_PROJ_MAX][MAXLINE]; /* name of projection */
-EXTERN_TXT int map_itype[NUM_PROJ_MAX]; /* int id of projection */
-EXTERN_TXT char MapProjStr[NUM_PROJ_MAX][2 * MAXLINE]; /* string description of proj params */
-EXTERN_TXT char map_ref_ellipsoid[NUM_PROJ_MAX][MAXLINE]; /* name of reference ellipsoid */
+extern char map_trans_type[NUM_PROJ_MAX][MAXLINE]; /* name of projection */
+extern int map_itype[NUM_PROJ_MAX]; /* int id of projection */
+extern char MapProjStr[NUM_PROJ_MAX][2 * MAXLINE]; /* string description of proj params */
+extern char map_ref_ellipsoid[NUM_PROJ_MAX][MAXLINE]; /* name of reference ellipsoid */
 /* general map parameters */
-EXTERN_TXT double map_orig_lat[NUM_PROJ_MAX], map_orig_long[NUM_PROJ_MAX], map_rot[NUM_PROJ_MAX], map_scale_factor[NUM_PROJ_MAX];
-EXTERN_TXT long map_false_easting[NUM_PROJ_MAX];
-EXTERN_TXT double map_cosang[NUM_PROJ_MAX], map_sinang[NUM_PROJ_MAX]; /* rotation */
+extern double map_orig_lat[NUM_PROJ_MAX], map_orig_long[NUM_PROJ_MAX], map_rot[NUM_PROJ_MAX], map_scale_factor[NUM_PROJ_MAX];
+extern long map_false_easting[NUM_PROJ_MAX];
+extern double map_cosang[NUM_PROJ_MAX], map_sinang[NUM_PROJ_MAX]; /* rotation */
 /* LAMBERT projection parameters */
-EXTERN_TXT double map_lambert_1st_std_paral[NUM_PROJ_MAX], map_lambert_2nd_std_paral[NUM_PROJ_MAX];
+extern double map_lambert_1st_std_paral[NUM_PROJ_MAX], map_lambert_2nd_std_paral[NUM_PROJ_MAX];
 /* SDC Short Distance Coversion projection parameters */
-EXTERN_TXT double map_sdc_xltkm[NUM_PROJ_MAX], map_sdc_xlnkm[NUM_PROJ_MAX];
+extern double map_sdc_xltkm[NUM_PROJ_MAX], map_sdc_xlnkm[NUM_PROJ_MAX];
 #define MAP_TRANS_SDC_DRLT 0.99330647
 
 /* constants */
-EXTERN_TXT double cPI;
-EXTERN_TXT double cRPD;
-EXTERN_TXT double c111;
+extern double cPI;
+extern double cRPD;
+extern double c111;
 
 /* include file */
-EXTERN_TXT char fn_include[FILENAME_MAX];
-EXTERN_TXT FILE* fp_include;
-EXTERN_TXT FILE* fp_input_save;
+extern char fn_include[FILENAME_MAX];
+extern FILE* fp_include;
+extern FILE* fp_input_save;
 
 /* take-off angle */
-EXTERN_TXT TakeOffAngles AnglesNULL;
+extern TakeOffAngles AnglesNULL;
 
 /* quality to error mapping (hypo71, etc) */
 #define MAX_NUM_QUALITY_LEVELS 50
-EXTERN_TXT double Quality2Error[MAX_NUM_QUALITY_LEVELS];
-EXTERN_TXT int NumQuality2ErrorLevels;
+extern double Quality2Error[MAX_NUM_QUALITY_LEVELS];
+extern int NumQuality2ErrorLevels;
 
 /* model coordinates */
 #define COORDS_RECT 0
 #define COORDS_LATLON 1
 // int ModelCoordsMode;  // 20200608 AJL - bug fix (e-mail 07/06/2020 03:11 陈俊磊)
-EXTERN_TXT int ModelCoordsMode;
+extern int ModelCoordsMode;
 
 /* */
 /*------------------------------------------------------------/ */
@@ -892,7 +886,7 @@ char* CurrTimeStr(void);
 /* file list functions */
 int ExpandWildCards(char*, char[][FILENAME_MAX], int);
 int fnmatch_wrapper(const struct dirent* entry);
-EXTERN_TXT char ExpandWildCards_pattern[FILENAME_MAX];
+extern char ExpandWildCards_pattern[FILENAME_MAX];
 
 /* string / char functions */
 int TrimString(char*);

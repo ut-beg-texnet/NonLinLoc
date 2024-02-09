@@ -37,6 +37,13 @@ tel: +33(0)493752502  e-mail: anthony@alomax.net  web: http://www.alomax.net
 //#include "ran1.h"
 #include "GridMemLib.h"
 
+// define globals
+
+GridMemStruct** GridMemList;
+int GridMemListSize;
+int GridMemListNumElements;
+int Num3DGridReadToMemory, MaxNum3DGridMemory;
+int GridMemListTotalNumElementsAdded;
 
 
 /*------------------------------------------------------------/ */

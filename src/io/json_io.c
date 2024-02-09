@@ -42,12 +42,6 @@ e-mail: anthony@alomax.net  web: http://www.alomax.net
 
 
 
-#ifdef EXTERN_MODE
-#define EXTERN_TXT extern
-#else
-#define EXTERN_TXT
-#endif
-
 #define JW_GLOBAL_CONTROL_STRUCT
 #include "jRead.h"
 #include "jWrite.h"

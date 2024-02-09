@@ -40,12 +40,6 @@ tel: +33(0)493752502  e-mail: anthony@alomax.net  web: http://www.alomax.net
 #include <limits.h>
 #include <time.h>
 
-#ifdef EXTERN_MODE
-#define	EXTERN_TXT extern
-#else
-#define EXTERN_TXT
-#endif
-
 	/* misc defines */
 
 #ifndef SMALL_DOUBLE
@@ -127,7 +121,7 @@ typedef struct resultTreeNode {
 /* globals  */
 /*------------------------------------------------------------/ */
 
-//EXTERN_TXT char fn_control[MAXLINE];	/* control file name */
+//extern char fn_control[MAXLINE];	/* control file name */
 
 /* */
 /*------------------------------------------------------------/ */

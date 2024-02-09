@@ -13,11 +13,11 @@ typedef struct gridMem {	/* 3D grid data in memory */
 } GridMemStruct;
 
 /* array of gridMem structure pointers for storing list of grids in memory */
-EXTERN_TXT GridMemStruct** GridMemList;
-EXTERN_TXT int GridMemListSize;
-EXTERN_TXT int GridMemListNumElements;
-EXTERN_TXT int Num3DGridReadToMemory, MaxNum3DGridMemory;
-EXTERN_TXT int GridMemListTotalNumElementsAdded;
+extern GridMemStruct** GridMemList;
+extern int GridMemListSize;
+extern int GridMemListNumElements;
+extern int Num3DGridReadToMemory, MaxNum3DGridMemory;
+extern int GridMemListTotalNumElementsAdded;
 
 /* GridLib wrapper functions */
 void* NLL_AllocateGrid(GridDesc* pgrid);

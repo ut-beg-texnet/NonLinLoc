@@ -71,12 +71,12 @@
 extern int prog_mode_3d; /* 0 = 2D, 1 = 3D calculation */
 //extern void puterr(char* );
 
-EXTERN_TXT double min_x_cut; /* minimum x distance cutoff */
-EXTERN_TXT double max_x_cut; /* maximum x distance cutoff */
-EXTERN_TXT double min_y_cut; /* minimum y distance cutoff */
-EXTERN_TXT double max_y_cut; /* maximum y distance cutoff */
-EXTERN_TXT double min_z_cut; /* minimum y distance cutoff */
-EXTERN_TXT double max_z_cut; /* maximum y distance cutoff */
+extern double min_x_cut; /* minimum x distance cutoff */
+extern double max_x_cut; /* maximum x distance cutoff */
+extern double min_y_cut; /* minimum y distance cutoff */
+extern double max_y_cut; /* maximum y distance cutoff */
+extern double min_z_cut; /* minimum y distance cutoff */
+extern double max_z_cut; /* maximum y distance cutoff */
 
 
 /**************************************************************************/
@@ -86,9 +86,9 @@ EXTERN_TXT double max_z_cut; /* maximum y distance cutoff */
 
 /* 2D to 3D transformation */
 
-EXTERN_TXT int prog_mode_Mod2D3D; /* 1 = 3D calculation with 2D model */
-EXTERN_TXT double Mod2D3D_origx, Mod2D3D_origy, Mod2D3D_rot;
-EXTERN_TXT double Mod2D3D_cosang, Mod2D3D_sinang;
+extern int prog_mode_Mod2D3D; /* 1 = 3D calculation with 2D model */
+extern double Mod2D3D_origx, Mod2D3D_origy, Mod2D3D_rot;
+extern double Mod2D3D_cosang, Mod2D3D_sinang;
 
 /* layered model */
 
@@ -106,8 +106,8 @@ struct layer {
 // 20220530 AJL #define MAX_LAYERS 100
 // 20230105 AJL #define MAX_LAYERS 20000   // 20220530 AJL
 #define MAX_LAYERS 200000   // 20230105 AJL
-EXTERN_TXT struct layer model_layer[MAX_LAYERS];
-EXTERN_TXT int num_layers; /* number of layers read in */
+extern struct layer model_layer[MAX_LAYERS];
+extern int num_layers; /* number of layers read in */
 #define LAYEROFFSET 99000000	/* base offset for layer model element id */
 
 
@@ -147,8 +147,8 @@ struct surface {
 };
 
 #define MAX_SURFACES 100
-EXTERN_TXT struct surface model_surface[MAX_SURFACES];
-EXTERN_TXT int num_surfaces; /* number of surfaces read in */
+extern struct surface model_surface[MAX_SURFACES];
+extern int num_surfaces; /* number of surfaces read in */
 #define SURFACEOFFSET 3000	/* base offset for surface model element id */
 
 /* GMT 2-D gridfile header structure */
@@ -233,8 +233,8 @@ struct rough_bndry {
     int plot; /* line plot style */
 };
 
-EXTERN_TXT struct rough_bndry model_rough[MAX_ROUGH];
-EXTERN_TXT int num_rough; /* number of layers read in */
+extern struct rough_bndry model_rough[MAX_ROUGH];
+extern int num_rough; /* number of layers read in */
 
 /* disk inclusions */
 
@@ -249,9 +249,9 @@ struct disk {
 };
 
 #define MAX_DISKS 100
-EXTERN_TXT struct disk model_disk[MAX_DISKS]; /* array of disk structures */
+extern struct disk model_disk[MAX_DISKS]; /* array of disk structures */
 
-EXTERN_TXT int num_disks; /* number of disks read in */
+extern int num_disks; /* number of disks read in */
 
 /* sphere inclusions (3-D only) */
 
@@ -268,9 +268,9 @@ struct sphere {
 /* array of sphere structures */
 
 #define MAX_SPHERES 100
-EXTERN_TXT struct sphere model_sphere[MAX_SPHERES];
+extern struct sphere model_sphere[MAX_SPHERES];
 
-EXTERN_TXT int num_spheres; /* number of spheres read in */
+extern int num_spheres; /* number of spheres read in */
 
 /** polygon model */
 
@@ -285,8 +285,8 @@ struct vertex {
     double z; /* z loc of vertex */
 };
 
-EXTERN_TXT struct vertex *vtx_head;
-EXTERN_TXT int num_vtx; /* number of vertices read in */
+extern struct vertex *vtx_head;
+extern int num_vtx; /* number of vertices read in */
 
 /* edge structure */
 
@@ -300,8 +300,8 @@ struct edge {
     int refl_mode; /* reflection mode  0 = no, 1 = yes (2D SH only) */
 };
 
-EXTERN_TXT struct edge *edge_head;
-EXTERN_TXT int num_edge; /* number of edges read in */
+extern struct edge *edge_head;
+extern int num_edge; /* number of edges read in */
 
 /* 2-D or 3-D polygon structure */
 
@@ -327,8 +327,8 @@ struct polygon {
     double dengrad; /* density gradient */
 };
 
-EXTERN_TXT struct polygon *poly_head;
-EXTERN_TXT int num_poly; /* number of polygons read in */
+extern struct polygon *poly_head;
+extern int num_poly; /* number of polygons read in */
 #define POLYOFFSET 2000		/* base offset for polygon model element id */
 
 /* 3-D solid structure */
@@ -355,8 +355,8 @@ struct solid {
     double dengrad; /* density gradient */
 };
 
-EXTERN_TXT struct solid *solid_head;
-EXTERN_TXT int num_solid; /* number of solids read in */
+extern struct solid *solid_head;
+extern int num_solid; /* number of solids read in */
 
 /* edge or polygon normal coeffs (ax + by + cz + d = 0) */
 struct normals {
@@ -369,17 +369,17 @@ struct normals {
 
 /* vel fd grid model */
 
-EXTERN_TXT int fdgrid_flag;
-EXTERN_TXT int fdgrid_numx, fdgrid_numz;
-EXTERN_TXT double fdgrid_xmin, fdgrid_xmax;
-EXTERN_TXT double fdgrid_zmin, fdgrid_zmax;
-EXTERN_TXT double fdgrid_xstep, fdgrid_zstep;
-EXTERN_TXT float *fdgrid_array;
-EXTERN_TXT char vfile_name[MAXFILE]; /* vgrid file name */
+extern int fdgrid_flag;
+extern int fdgrid_numx, fdgrid_numz;
+extern double fdgrid_xmin, fdgrid_xmax;
+extern double fdgrid_zmin, fdgrid_zmax;
+extern double fdgrid_xstep, fdgrid_zstep;
+extern float *fdgrid_array;
+extern char vfile_name[MAXFILE]; /* vgrid file name */
 
-EXTERN_TXT double vmodel_vmean;
+extern double vmodel_vmean;
 
-EXTERN_TXT double cPI; /* PI = 3.14...*/
+extern double cPI; /* PI = 3.14...*/
 
 /**************************************************************************/
 /* function prototypes */
@@ -443,18 +443,3 @@ int draw_time_axis();
 double get_fdiff_vel(double xpos, double zpos, char wavetype, double *density, int iden);
 
 
-
-/*
-
-EXTERN_TXT int init_graph();
-EXTERN_TXT int init_disp();
-EXTERN_TXT int close_graph();
-EXTERN_TXT drawline();
-EXTERN_TXT int draw_front();
-EXTERN_TXT setline();
-EXTERN_TXT setcolor();
-EXTERN_TXT int set_colortable();
-EXTERN_TXT gtextw();
-EXTERN_TXT char keypress();
-EXTERN_TXT message();
- */
