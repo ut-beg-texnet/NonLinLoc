@@ -200,6 +200,8 @@ int ApplyCrustElevCorrFlag;
 double MinDistCrustElevCorr;
 struct surface *topo_surface;
 int topo_surface_index; // topo surface index is velmod.h.MAX_SURFACES-1 so as not to interferce with any TimeDelaySurfaces read in
+int NumStationPhases;
+SourceDesc StationPhaseList[X_MAX_NUM_ARRIVALS];
 int FixOriginTimeFlag;
 WalkParams Metrop; /* walk parameters */
 int MetNumSamples; /* number of samples to evaluate */
@@ -234,6 +236,13 @@ double Hypo_Depth_Max;
 double Hypo_Dist_Max;
 //char snap_pid[255];
 
+FILE *pSumFileHypNLLoc[MAX_NUM_LOCATION_GRIDS];
+FILE *pSumFileHypo71[MAX_NUM_LOCATION_GRIDS];
+FILE *pSumFileHypoEll[MAX_NUM_LOCATION_GRIDS];
+FILE *pSumFileHypoInv[MAX_NUM_LOCATION_GRIDS];
+FILE *pSumFileHypoInvY2K[MAX_NUM_LOCATION_GRIDS];
+FILE *pSumFileAlberto4[MAX_NUM_LOCATION_GRIDS];
+FILE *pSumFileFmamp[MAX_NUM_LOCATION_GRIDS];
 
 
 // AJL - 20080710 (valgrind)

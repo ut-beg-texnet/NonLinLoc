@@ -309,13 +309,13 @@ extern int LocGridSave[MAX_NUM_LOCATION_GRIDS]; /* !should be in GridDesc */
 //extern int Num3DGridReadToMemory, MaxNum3DGridMemory;
 
 /* related hypocenter file pointers */
-FILE *pSumFileHypNLLoc[MAX_NUM_LOCATION_GRIDS];
-FILE *pSumFileHypo71[MAX_NUM_LOCATION_GRIDS];
-FILE *pSumFileHypoEll[MAX_NUM_LOCATION_GRIDS];
-FILE *pSumFileHypoInv[MAX_NUM_LOCATION_GRIDS];
-FILE *pSumFileHypoInvY2K[MAX_NUM_LOCATION_GRIDS];
-FILE *pSumFileAlberto4[MAX_NUM_LOCATION_GRIDS];
-FILE *pSumFileFmamp[MAX_NUM_LOCATION_GRIDS];
+extern FILE *pSumFileHypNLLoc[MAX_NUM_LOCATION_GRIDS];
+extern FILE *pSumFileHypo71[MAX_NUM_LOCATION_GRIDS];
+extern FILE *pSumFileHypoEll[MAX_NUM_LOCATION_GRIDS];
+extern FILE *pSumFileHypoInv[MAX_NUM_LOCATION_GRIDS];
+extern FILE *pSumFileHypoInvY2K[MAX_NUM_LOCATION_GRIDS];
+extern FILE *pSumFileAlberto4[MAX_NUM_LOCATION_GRIDS];
+extern FILE *pSumFileFmamp[MAX_NUM_LOCATION_GRIDS];
 
 
 /* related flags */
@@ -411,8 +411,8 @@ extern int topo_surface_index; // topo surface index is velmod.h.MAX_SURFACES-1 
 
 
 /* station list */
-int NumStationPhases;
-SourceDesc StationPhaseList[X_MAX_NUM_ARRIVALS];
+extern int NumStationPhases;
+extern SourceDesc StationPhaseList[X_MAX_NUM_ARRIVALS];
 
 /* fixed origin time parameters */
 extern int FixOriginTimeFlag;
