@@ -89,9 +89,6 @@ char vfile_name[MAXFILE]; /* vgrid file name */
 
 double vmodel_vmean;
 
-double cPI; /* PI = 3.14...*/
-
-
 int Get2Dto3DTrans(char* input_line);
 
 /*** function to read velocity model input */
