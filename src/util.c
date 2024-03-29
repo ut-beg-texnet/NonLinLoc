@@ -37,13 +37,16 @@
 
 
 
-#ifdef EXTERN_MODE
-#define	EXTERN_TXT extern
-#else
-#define EXTERN_TXT
-#endif
-
 #include "util.h"
+
+char package_name[MAXLINE];
+char prog_name[MAXLINE];
+char prog_ver[MAXLINE];
+char prog_date[MAXLINE];
+char prog_copyright[MAXLINE];
+int message_flag;
+char MsgStr[100 * MAXLINE];
+
 
 
 /*** function to copy file by Jan Wiszniowski 2022-01-31*/

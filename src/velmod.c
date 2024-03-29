@@ -28,19 +28,66 @@
  */
 
 
-#define EXTERN_MODE 1
-
-#undef EXTERN_TXT
-#ifdef EXTERN_MODE
-#define EXTERN_TXT extern
-#else
-#define EXTERN_TXT
-#endif
-
 
 #include "util.h"
 #include "velmod.h"
 
+// define globals
+double min_x_cut; /* minimum x distance cutoff */
+double max_x_cut; /* maximum x distance cutoff */
+double min_y_cut; /* minimum y distance cutoff */
+double max_y_cut; /* maximum y distance cutoff */
+double min_z_cut; /* minimum y distance cutoff */
+double max_z_cut; /* maximum y distance cutoff */
+
+
+/**************************************************************************/
+/* model definitions */
+/**************************************************************************/
+
+
+/* 2D to 3D transformation */
+
+int prog_mode_Mod2D3D; /* 1 = 3D calculation with 2D model */
+double Mod2D3D_origx, Mod2D3D_origy, Mod2D3D_rot;
+double Mod2D3D_cosang, Mod2D3D_sinang;
+
+struct layer model_layer[MAX_LAYERS];
+int num_layers; /* number of layers read in */
+
+struct surface model_surface[MAX_SURFACES];
+int num_surfaces; /* number of surfaces read in */
+
+struct rough_bndry model_rough[MAX_ROUGH];
+int num_rough; /* number of layers read in */
+
+struct disk model_disk[MAX_DISKS]; /* array of disk structures */
+int num_disks; /* number of disks read in */
+
+struct sphere model_sphere[MAX_SPHERES];
+int num_spheres; /* number of spheres read in */
+
+struct vertex *vtx_head;
+int num_vtx; /* number of vertices read in */
+
+struct edge *edge_head;
+int num_edge; /* number of edges read in */
+
+struct polygon *poly_head;
+int num_poly; /* number of polygons read in */
+
+struct solid *solid_head;
+int num_solid; /* number of solids read in */
+
+int fdgrid_flag;
+int fdgrid_numx, fdgrid_numz;
+double fdgrid_xmin, fdgrid_xmax;
+double fdgrid_zmin, fdgrid_zmax;
+double fdgrid_xstep, fdgrid_zstep;
+float *fdgrid_array;
+char vfile_name[MAXFILE]; /* vgrid file name */
+
+double vmodel_vmean;
 
 int Get2Dto3DTrans(char* input_line);
 

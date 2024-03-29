@@ -2,17 +2,6 @@
 #ifndef _RAN1_H
 #define _RAN1_H
 
-/* 20220118 AJL
-#ifdef EXTERN_MODE
-#define EXTERN_TXT extern
-#else
-#define EXTERN_TXT
-#endif
-
-EXTERN_TXT int RanSeed;
-// 20220118 AJL */
-
-
 
 int get_rand_int(const int, const int);
 double get_rand_double(const double, const double);

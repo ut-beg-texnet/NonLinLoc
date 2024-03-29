@@ -44,9 +44,88 @@ e-mail: anthony@alomax.net  web: http://www.alomax.net
 
 
 
-#define EXTERN_MODE 1
 
 #include "GridLib.h"
+
+// define globals
+
+int nll_mode;
+PhaseIdent PhaseID[MAX_NUM_PHASE_ID];
+int NumPhaseID;
+char fn_control[MAXLINE]; /* control file name */
+FILE *fp_control; /* control file pointer */
+char fn_output[MAXLINE]; /* output file name */
+
+/* miscellaneous */
+int RandomNumSeed;
+int NumFilesOpen;
+int NumGridBufFilesOpen, NumGridHdrFilesOpen;
+int NumAllocations;
+
+/* algorithm constants */
+int prog_mode_3d;
+int prog_mode_2dto3d;
+
+int GeometryMode;
+
+/* 3D grid description */
+int grid_type; /* grid type (VELOCITY, SLOWNESS, SLOW2, etc) */
+GridDesc grid_in;
+
+/* source */
+int NumSources;
+SourceDesc Source[MAX_NUM_SOURCES];
+
+/* stations */
+//int NumStations;
+StationDesc Station[MAX_NUM_SOURCES];
+
+/* arrivals */
+int PhaseFormat;
+int MAX_NUM_STATIONS;
+int MAX_NUM_ARRIVALS;
+int NumArrivals;
+ArrivalDesc* Arrival;
+
+/* hypocenter */
+HypoDesc Hypocenter;
+
+char map_trans_type[NUM_PROJ_MAX][MAXLINE]; /* name of projection */
+int map_itype[NUM_PROJ_MAX]; /* int id of projection */
+char MapProjStr[NUM_PROJ_MAX][2 * MAXLINE]; /* string description of proj params */
+char map_ref_ellipsoid[NUM_PROJ_MAX][MAXLINE]; /* name of reference ellipsoid */
+/* general map parameters */
+double map_orig_lat[NUM_PROJ_MAX], map_orig_long[NUM_PROJ_MAX], map_rot[NUM_PROJ_MAX], map_scale_factor[NUM_PROJ_MAX];
+long map_false_easting[NUM_PROJ_MAX];
+double map_cosang[NUM_PROJ_MAX], map_sinang[NUM_PROJ_MAX]; /* rotation */
+/* LAMBERT projection parameters */
+double map_lambert_1st_std_paral[NUM_PROJ_MAX], map_lambert_2nd_std_paral[NUM_PROJ_MAX];
+/* SDC Short Distance Coversion projection parameters */
+double map_sdc_xltkm[NUM_PROJ_MAX], map_sdc_xlnkm[NUM_PROJ_MAX];
+
+/* constants */
+double cPI;
+double cRPD;
+double c111;
+
+/* include file */
+char fn_include[FILENAME_MAX];
+FILE* fp_include;
+FILE* fp_input_save;
+
+/* take-off angle */
+TakeOffAngles AnglesNULL;
+
+/* quality to error mapping (hypo71, etc) */
+double Quality2Error[MAX_NUM_QUALITY_LEVELS];
+int NumQuality2ErrorLevels;
+
+// int ModelCoordsMode;  // 20200608 AJL - bug fix (e-mail 07/06/2020 03:11 陈俊磊)
+int ModelCoordsMode;
+
+char ExpandWildCards_pattern[FILENAME_MAX];
+
+
 
 // private functions
 int _WriteLocation(FILE *fpio, HypoDesc* phypo, ArrivalDesc* parrivals,

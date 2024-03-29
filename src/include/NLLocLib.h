@@ -217,55 +217,55 @@ SearchPdfGridDesc;
 /* globals  */
 
 /* output file path  */
-EXTERN_TXT char f_outpath[FILENAME_MAX];
+extern char f_outpath[FILENAME_MAX];
 
 /* Gaussian error parameters */
-EXTERN_TXT GaussLocParams Gauss;
-EXTERN_TXT Gauss2LocParams Gauss2;
-EXTERN_TXT int iUseGauss2;
+extern GaussLocParams Gauss;
+extern Gauss2LocParams Gauss2;
+extern int iUseGauss2;
 
 /* Scatter parameters */
-EXTERN_TXT ScatterParams Scatter;
+extern ScatterParams Scatter;
 
 
 /* events */
-EXTERN_TXT int NumEvents;
-EXTERN_TXT int NumEventsLocated;
-EXTERN_TXT int NumLocationsCompleted;
+extern int NumEvents;
+extern int NumEventsLocated;
+extern int NumLocationsCompleted;
 
 // 20200107 AJL  #define MAX_NUM_OBS_FILES 10000
 //#define MAX_NUM_OBS_FILES 20000  // 20200107 AJL
 #define MAX_NUM_OBS_FILES 30000  // 20221218 AJL
-EXTERN_TXT int NumObsFiles;
+extern int NumObsFiles;
 
 /* number of arrivals read from obs file */
-EXTERN_TXT int NumArrivalsRead;
+extern int NumArrivalsRead;
 
 /* number of arrivals used for location */
-EXTERN_TXT int NumArrivalsLocation;
+extern int NumArrivalsLocation;
 
 /* observations filenames */
-EXTERN_TXT char fn_loc_obs[MAX_NUM_OBS_FILES][FILENAME_MAX];
+extern char fn_loc_obs[MAX_NUM_OBS_FILES][FILENAME_MAX];
 /* filetype */
-EXTERN_TXT char ftype_obs[MAXLINE];
+extern char ftype_obs[MAXLINE];
 
 /* filenames */
-EXTERN_TXT char fn_loc_grids[FILENAME_MAX], fn_path_output[FILENAME_MAX];
-EXTERN_TXT int iSwapBytesOnInput;
+extern char fn_loc_grids[FILENAME_MAX], fn_path_output[FILENAME_MAX];
+extern int iSwapBytesOnInput;
 
 // model files
-EXTERN_TXT FILE *fp_model_grid_P;
-EXTERN_TXT FILE *fp_model_hdr_P;
-EXTERN_TXT GridDesc model_grid_P;
-EXTERN_TXT FILE *fp_model_grid_S;
-EXTERN_TXT FILE *fp_model_hdr_S;
-EXTERN_TXT GridDesc model_grid_S;
+extern FILE *fp_model_grid_P;
+extern FILE *fp_model_hdr_P;
+extern GridDesc model_grid_P;
+extern FILE *fp_model_grid_S;
+extern FILE *fp_model_hdr_S;
+extern GridDesc model_grid_S;
 
 /* location search type (grid, simulated annealing, Metropolis, etc) */
 #define SEARCH_GRID   0
 #define SEARCH_MET   1
 #define SEARCH_OCTTREE  2
-EXTERN_TXT int SearchType;
+extern int SearchType;
 
 #define PDF_GRID_UNDEF   0
 #define PDF_GRID_GRID   1
@@ -274,10 +274,10 @@ EXTERN_TXT int SearchType;
 #define PDF_GRID_POSTERIOR   1
 #define MAX_NUM_PDF_GRID_FILES 5000
 // location search prior  // 20190510 AJL - added
-EXTERN_TXT SearchPdfGridDesc SearchPrior;
-EXTERN_TXT int iUseSearchPrior;
-EXTERN_TXT SearchPdfGridDesc SearchPosterior;
-EXTERN_TXT int iUseSearchPosterior;
+extern SearchPdfGridDesc SearchPrior;
+extern int iUseSearchPrior;
+extern SearchPdfGridDesc SearchPosterior;
+extern int iUseSearchPosterior;
 
 /* location method (misfit, etc) */
 #define METH_UNDEF    0
@@ -288,101 +288,101 @@ EXTERN_TXT int iUseSearchPosterior;
 #define METH_ML_OT    5
 #define METH_OT_STACK    6
 #define METH_L1_NORM    7         // 20140515 AJL - added for NLDiffLoc
-EXTERN_TXT int LocMethod;
-EXTERN_TXT int EDT_use_otime_weight;
-EXTERN_TXT int EDT_otime_weight_active;
-EXTERN_TXT double DistStaGridMin;
-EXTERN_TXT double DistStaGridMax;
-EXTERN_TXT int MinNumArrLoc;
-EXTERN_TXT int MaxNumArrLoc;
-EXTERN_TXT int MinNumSArrLoc;
-EXTERN_TXT double VpVsRatio;
+extern int LocMethod;
+extern int EDT_use_otime_weight;
+extern int EDT_otime_weight_active;
+extern double DistStaGridMin;
+extern double DistStaGridMax;
+extern int MinNumArrLoc;
+extern int MaxNumArrLoc;
+extern int MinNumSArrLoc;
+extern double VpVsRatio;
 
 /* location signature */
-EXTERN_TXT char LocSignature[MAXLINE_LONG];
+extern char LocSignature[MAXLINE_LONG];
 
 /* location grids */
 #define MAX_NUM_LOCATION_GRIDS 10
-EXTERN_TXT GridDesc LocGrid[MAX_NUM_LOCATION_GRIDS];
-EXTERN_TXT int NumLocGrids;
-EXTERN_TXT int LocGridSave[MAX_NUM_LOCATION_GRIDS]; /* !should be in GridDesc */
-//EXTERN_TXT int Num3DGridReadToMemory, MaxNum3DGridMemory;
+extern GridDesc LocGrid[MAX_NUM_LOCATION_GRIDS];
+extern int NumLocGrids;
+extern int LocGridSave[MAX_NUM_LOCATION_GRIDS]; /* !should be in GridDesc */
+//extern int Num3DGridReadToMemory, MaxNum3DGridMemory;
 
 /* related hypocenter file pointers */
-FILE *pSumFileHypNLLoc[MAX_NUM_LOCATION_GRIDS];
-FILE *pSumFileHypo71[MAX_NUM_LOCATION_GRIDS];
-FILE *pSumFileHypoEll[MAX_NUM_LOCATION_GRIDS];
-FILE *pSumFileHypoInv[MAX_NUM_LOCATION_GRIDS];
-FILE *pSumFileHypoInvY2K[MAX_NUM_LOCATION_GRIDS];
-FILE *pSumFileAlberto4[MAX_NUM_LOCATION_GRIDS];
-FILE *pSumFileFmamp[MAX_NUM_LOCATION_GRIDS];
+extern FILE *pSumFileHypNLLoc[MAX_NUM_LOCATION_GRIDS];
+extern FILE *pSumFileHypo71[MAX_NUM_LOCATION_GRIDS];
+extern FILE *pSumFileHypoEll[MAX_NUM_LOCATION_GRIDS];
+extern FILE *pSumFileHypoInv[MAX_NUM_LOCATION_GRIDS];
+extern FILE *pSumFileHypoInvY2K[MAX_NUM_LOCATION_GRIDS];
+extern FILE *pSumFileAlberto4[MAX_NUM_LOCATION_GRIDS];
+extern FILE *pSumFileFmamp[MAX_NUM_LOCATION_GRIDS];
 
 
 /* related flags */
-EXTERN_TXT int iWriteHypHeader[MAX_NUM_LOCATION_GRIDS];
+extern int iWriteHypHeader[MAX_NUM_LOCATION_GRIDS];
 
 /* format specific event data */
-EXTERN_TXT char HypoInverseArchiveSumHdr[MAXLINE_LONG];
+extern char HypoInverseArchiveSumHdr[MAXLINE_LONG];
 
 /* hypocenter filetype saving flags */
 /* SH 02/26/2004  added iSaveSnapSum for output to be read
     by SNAP */
-EXTERN_TXT int iSaveNLLocEvent, iSaveNLLocSum, iSaveNLLocOctree,
-iSaveHypo71Event, iSaveHypo71Sum,
-iSaveHypoEllEvent, iSaveHypoEllSum,
-iSaveHypoInvSum, iSaveHypoInvY2KArc, iSaveAlberto4Sum, iSaveFmamp,
-iSaveSnapSum, iCalcSedOrigin, iSaveDecSec, iSavePublicID, iSaveNone;
+extern int iSaveNLLocEvent, iSaveNLLocSum, iSaveNLLocOctree,
+    iSaveHypo71Event, iSaveHypo71Sum,
+    iSaveHypoEllEvent, iSaveHypoEllSum,
+    iSaveHypoInvSum, iSaveHypoInvY2KArc, iSaveAlberto4Sum, iSaveFmamp,
+    iSaveSnapSum, iCalcSedOrigin, iSaveDecSec, iSavePublicID, iSaveNone;
 // 20170811 AJL - added to allow saving of expectation hypocenter results instead of maximum likelihood
-EXTERN_TXT int iSaveNLLocExpectation;
+extern int iSaveNLLocExpectation;
 // 20220131 AJL - added to support JSON output of location results
-EXTERN_TXT int iSaveNLLocEvent_JSON;
+extern int iSaveNLLocEvent_JSON;
 
 
 // Arrival prior weighting flag (NLL_FORMAT_VER_2)
-EXTERN_TXT int iUseArrivalPriorWeights;
+extern int iUseArrivalPriorWeights;
 
 /* station distance weighting flag. */
-EXTERN_TXT int iSetStationDistributionWeights;
-EXTERN_TXT double stationDistributionWeightCutoff;
+extern int iSetStationDistributionWeights;
+extern double stationDistributionWeightCutoff;
 
 /* station density weghting */
-EXTERN_TXT double AveInterStationDistance;
-EXTERN_TXT int NumForceOctTreeStaDenWt;
+extern double AveInterStationDistance;
+extern int NumForceOctTreeStaDenWt;
 
-EXTERN_TXT int iRejectDuplicateArrivals;
+extern int iRejectDuplicateArrivals;
 
 /* Event Information extracted from phase file */
-EXTERN_TXT EventTimeExtract EventTime;
-EXTERN_TXT long int EventID;
+extern EventTimeExtract EventTime;
+extern long int EventID;
 
 /* magnitude calculation */
 #define MAG_UNDEF   0
 #define MAG_ML_HB   1
 #define MAG_MD_FMAG   2
-EXTERN_TXT int NumMagnitudeMethods;
+extern int NumMagnitudeMethods;
 #define MAX_NUM_MAG_METHODS   2
-EXTERN_TXT MagDesc Magnitude[MAX_NUM_MAG_METHODS];
+extern MagDesc Magnitude[MAX_NUM_MAG_METHODS];
 
 /* station/inst/component parameters */
 #define MAX_NUM_COMP_DESC 1000
-EXTERN_TXT CompDesc Component[MAX_NUM_COMP_DESC];
-EXTERN_TXT int NumCompDesc;
+extern CompDesc Component[MAX_NUM_COMP_DESC];
+extern int NumCompDesc;
 
 /* arrival label alias */
 #define MAX_NUM_LOC_ALIAS 1000
 #define MAX_NUM_LOC_ALIAS_CHECKS 2*MAX_NUM_LOC_ALIAS
-EXTERN_TXT AliasDesc LocAlias[MAX_NUM_LOC_ALIAS];
-EXTERN_TXT int NumLocAlias;
+extern AliasDesc LocAlias[MAX_NUM_LOC_ALIAS];
+extern int NumLocAlias;
 
 /* exclude arrivals */
 #define MAX_NUM_LOC_EXCLUDE 1000
-EXTERN_TXT ExcludeDesc LocExclude[MAX_NUM_LOC_EXCLUDE];
-EXTERN_TXT int NumLocExclude;
+extern ExcludeDesc LocExclude[MAX_NUM_LOC_EXCLUDE];
+extern int NumLocExclude;
 
 /* include arrivals */
 #define MAX_NUM_LOC_INCLUDE 1000
-EXTERN_TXT ExcludeDesc LocInclude[MAX_NUM_LOC_INCLUDE];
-EXTERN_TXT int NumLocInclude;
+extern ExcludeDesc LocInclude[MAX_NUM_LOC_INCLUDE];
+extern int NumLocInclude;
 
 /* station delays */
 #define WRITE_RESIDUALS 0
@@ -390,70 +390,68 @@ EXTERN_TXT int NumLocInclude;
 #define WRITE_PDF_RESIDUALS 2
 #define WRITE_PDF_DELAYS 3
 #define MAX_NUM_STA_DELAYS 10000
-EXTERN_TXT TimeDelayDesc TimeDelay[MAX_NUM_STA_DELAYS];
-EXTERN_TXT int NumTimeDelays;
+extern TimeDelayDesc TimeDelay[MAX_NUM_STA_DELAYS];
+extern int NumTimeDelays;
 
-EXTERN_TXT char TimeDelaySurfacePhase[MAX_SURFACES][PHASE_LABEL_LEN];
-EXTERN_TXT double TimeDelaySurfaceMultiplier[MAX_SURFACES];
-EXTERN_TXT int NumTimeDelaySurface;
+extern char TimeDelaySurfacePhase[MAX_SURFACES][PHASE_LABEL_LEN];
+extern double TimeDelaySurfaceMultiplier[MAX_SURFACES];
+extern int NumTimeDelaySurface;
 
 /* crustal and elev corrections */
-EXTERN_TXT int ApplyElevCorrFlag;
-EXTERN_TXT double ElevCorrVelP;
-EXTERN_TXT double ElevCorrVelS;
-EXTERN_TXT int ApplyCrustElevCorrFlag;
-EXTERN_TXT double MinDistCrustElevCorr;
+extern int ApplyElevCorrFlag;
+extern double ElevCorrVelP;
+extern double ElevCorrVelS;
+extern int ApplyCrustElevCorrFlag;
+extern double MinDistCrustElevCorr;
 
 /* topo surface */
-EXTERN_TXT struct surface *topo_surface;
-EXTERN_TXT int topo_surface_index; // topo surface index is velmod.h.MAX_SURFACES-1 so as not to interferce with any TimeDelaySurfaces read in
+extern struct surface *topo_surface;
+extern int topo_surface_index; // topo surface index is velmod.h.MAX_SURFACES-1 so as not to interferce with any TimeDelaySurfaces read in
 
 
 
 /* station list */
-int NumStationPhases;
-SourceDesc StationPhaseList[X_MAX_NUM_ARRIVALS];
+extern int NumStationPhases;
+extern SourceDesc StationPhaseList[X_MAX_NUM_ARRIVALS];
 
 /* fixed origin time parameters */
-EXTERN_TXT int FixOriginTimeFlag;
+extern int FixOriginTimeFlag;
 
 /* Metropolis */
-EXTERN_TXT WalkParams Metrop; /* walk parameters */
-EXTERN_TXT int MetNumSamples; /* number of samples to evaluate */
-EXTERN_TXT int MetLearn; /* learning length in number of samples for
-					calculation of sample statistics */
-EXTERN_TXT int MetEquil; /* number of samples to equil before using */
-EXTERN_TXT int MetStartSave; /* number of sample to begin saving */
-EXTERN_TXT int MetSkip; /* number of samples to wait between saves */
-EXTERN_TXT double MetStepInit; /* initial step size (km) (< 0.0 for auto) */
-EXTERN_TXT double MetStepMin; /* minimum step size (km) */
-EXTERN_TXT double MetStepMax; /* maximum step size (km) (NLDiffLoc) */
-EXTERN_TXT double MetStepFact; /* step size factor */
-EXTERN_TXT double MetProbMin; /* minimum likelihood necessary after learn */
-EXTERN_TXT double MetVelocity; /* velocity for conversion of distance to time */
-EXTERN_TXT double MetInititalTemperature; /* initial temperature */
-EXTERN_TXT int MetUse; /* number of samples to use
-					= MetNumSamples - MetEquil */
+extern WalkParams Metrop; /* walk parameters */
+extern int MetNumSamples; /* number of samples to evaluate */
+extern int MetLearn; /* learning length in number of samples for calculation of sample statistics */
+extern int MetEquil; /* number of samples to equil before using */
+extern int MetStartSave; /* number of sample to begin saving */
+extern int MetSkip; /* number of samples to wait between saves */
+extern double MetStepInit; /* initial step size (km) (< 0.0 for auto) */
+extern double MetStepMin; /* minimum step size (km) */
+extern double MetStepMax; /* maximum step size (km) (NLDiffLoc) */
+extern double MetStepFact; /* step size factor */
+extern double MetProbMin; /* minimum likelihood necessary after learn */
+extern double MetVelocity; /* velocity for conversion of distance to time */
+extern double MetInititalTemperature; /* initial temperature */
+extern int MetUse; /* number of samples to use = MetNumSamples - MetEquil */
 
 
 /* Octtree */
-EXTERN_TXT OcttreeParams octtreeParams; /* Octtree parameters */
-EXTERN_TXT Tree3D* octTree; /* Octtree */
-EXTERN_TXT ResultTreeNode* resultTreeRoot; /* Octtree likelihood*volume results tree root node */
-//EXTERN_TXT ResultTreeNode* resultTreeLikelihoodRoot;	/* Octtree likelihood results tree root node */
+extern OcttreeParams octtreeParams; /* Octtree parameters */
+extern Tree3D* octTree; /* Octtree */
+extern ResultTreeNode* resultTreeRoot; /* Octtree likelihood*volume results tree root node */
+//extern ResultTreeNode* resultTreeLikelihoodRoot;	/* Octtree likelihood results tree root node */
 
 
 /* take-off angles */
-EXTERN_TXT int angleMode; /* angle mode - ANGLE_MODE_NO, ANGLE_MODE_YES */
-EXTERN_TXT int iAngleQualityMin; /* minimum quality for angles to be used */
+extern int angleMode; /* angle mode - ANGLE_MODE_NO, ANGLE_MODE_YES */
+extern int iAngleQualityMin; /* minimum quality for angles to be used */
 #define ANGLE_MODE_NO 0
 #define ANGLE_MODE_YES 1
 #define ANGLE_MODE_UNDEF -1
 
 
 /* otime list */
-EXTERN_TXT OtimeLimit** OtimeLimitList;
-EXTERN_TXT int NumOtimeLimit;
+extern OtimeLimit** OtimeLimitList;
+extern int NumOtimeLimit;
 
 
 
@@ -486,16 +484,16 @@ typedef struct staStatNode StaStatNode;
 
 #define HASHSIZE 46
 /* table of pointers to list of StaStatNode */
-EXTERN_TXT StaStatNode *hashtab[MAX_NUM_LOCATION_GRIDS][HASHSIZE];
+extern StaStatNode *hashtab[MAX_NUM_LOCATION_GRIDS][HASHSIZE];
 /* maxumum residual values to include in statistics */
-EXTERN_TXT int NRdgs_Min;
-EXTERN_TXT double RMS_Max, Gap_Max;
-EXTERN_TXT double P_ResidualMax;
-EXTERN_TXT double S_ResidualMax;
-EXTERN_TXT double Ell_Len3_Max;
-EXTERN_TXT double Hypo_Depth_Min;
-EXTERN_TXT double Hypo_Depth_Max;
-EXTERN_TXT double Hypo_Dist_Max;
+extern int NRdgs_Min;
+extern double RMS_Max, Gap_Max;
+extern double P_ResidualMax;
+extern double S_ResidualMax;
+extern double Ell_Len3_Max;
+extern double Hypo_Depth_Min;
+extern double Hypo_Depth_Max;
+extern double Hypo_Dist_Max;
 
 /* hashtable function declarations */
 StaStatNode *InstallStaStatInTable(int, char*, char*, int, double,
@@ -666,7 +664,7 @@ int GetElevCorr(char* line1);
    this needs to be given as second argument
    and is needed to construct output file name for SNAP
    SH  02/27/2004 */
-//EXTERN_TXT char snap_pid[255];
+//extern char snap_pid[255];
 /** function declarations */
 /* added this function for output in SED SNAP format SH 02/27/2004 */
 //int WriteSnapSum (FILE *fpio, HypoDesc* phypo, ArrivalDesc* parrivals);

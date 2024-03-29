@@ -30,10 +30,10 @@ include_directories(
 
 # Choose the compiler
 #set(CMAKE_C_COMPILER clang)
-set(CMAKE_C_COMPILER /usr/local/bin/gcc-13)
+#set(CMAKE_C_COMPILER /usr/local/bin/gcc-13)
 
 # The -fcommon places uninitialized global variables in a common block. This allows the linker to resolve all tentative definitions of the same variable in different compilation units to the same object, or to a non-tentative definition. This behavior is inconsistent with C++, and on many targets implies a speed and code size penalty on global variable references. It is mainly useful to enable legacy code to link without errors.
-add_compile_options(-fcommon)
+#add_compile_options(-fcommon)
 
 # see all warnings
 add_compile_options(-Wall)
@@ -196,13 +196,13 @@ target_link_libraries(Vel2Grid3D velmod GRID_LIB_OBJS m)
 # interface2fmm
 #
 add_executable(interface2fmm interface2fmm.c)
-target_link_libraries(interface2fmm GRID_LIB_OBJS m)
+target_link_libraries(interface2fmm velmod GRID_LIB_OBJS m)
 
 # --------------------------------------------------------------------------
 # fmm2grid
 #
 add_executable(fmm2grid fmm2grid.c)
-target_link_libraries(fmm2grid GRID_LIB_OBJS m)
+target_link_libraries(fmm2grid velmod GRID_LIB_OBJS m)
 
 # --------------------------------------------------------------------------
 # scat2latlon
