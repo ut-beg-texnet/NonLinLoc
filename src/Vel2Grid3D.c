@@ -69,7 +69,7 @@
 // Uncomment following for ETH format (*f variable width, space delimited) for reading velocity values
 //#define ETH_3D_FORMAT 1
 // Uncomment following for left-handed, East-positive coordinate system
-#define COORDS_POS_EAST 1
+//#define COORDS_POS_EAST 1
 // ----------------------------------------------------------------------------
 
 #ifdef ZHANG_FORMAT_COORDS_POSX

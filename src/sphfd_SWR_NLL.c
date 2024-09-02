@@ -12,6 +12,9 @@
         contributions of Roecker, Hole and Vidale to this code are gratefully acknowledged.
         See below for more details.
 
+
+       20240902 - Applied patch from C. Satriano 20240425 to prevent compile errors https://github.com/alomax/NonLinLoc/issues/37#issuecomment-2077092100
+
  */
 /*
         sphfd.c
@@ -150,6 +153,7 @@
 #include    <string.h>
 #include    <math.h>
 #include    <fcntl.h>
+#include    <unistd.h>
 /* file header structure */
 // 20190405 AJL  #include  "vhead.h"
 #include  "sphfd_SWR_NLL.h" // 20190405 AJL
@@ -193,7 +197,15 @@ double
 fdsph3d(), fdsphne(), fdsph2d(), fdsphnf(); /*STENCILS */
 double
 glat(), glath(), rcent, z0r;
+void gp_add_entry();
 void gp_close_dump(); // 20190405 ALomax
+void gp_do_par_file();
+void gp_getpar_err();
+int gp_getvector();
+int gp_compute_hash();
+int getpar();
+int writeNLLtimeGrid();
+int writeNLLmodelGrid();
 
 int endian();
 int litend;
@@ -286,7 +298,7 @@ double hlat, h, *r;
     return (x);
 }
 
-compar(a, b)
+int compar(a, b)
 struct sorted *a, *b;
 {
     if (a->time > b->time) return (1);
@@ -644,7 +656,7 @@ struct ext_par /* global variables for getpar */ {
 setpar_()
 #else
 
-setpar(ac, av) /* set up arglist & process INPUT command */
+void setpar(ac, av) /* set up arglist & process INPUT command */
 int ac;
 char **av;
 #endif
@@ -733,7 +745,7 @@ char **av;
     FLAGS |= addflags;
 }
 
-gp_add_entry(name, value) /* add an entry to arglist, expanding memory */
+void gp_add_entry(name, value) /* add an entry to arglist, expanding memory */
 register char *name, *value; /* if necessary */
 {
     struct arglist *alptr;
@@ -813,7 +825,7 @@ char **av;
 }
 #endif
 
-ENDPAR() /* free arglist & argbuf memory, & process STOP command */ {
+void ENDPAR() /* free arglist & argbuf memory, & process STOP command */ {
     if (ARGLIST != NULL) free(ARGLIST);
     if (ARGBUF != NULL) free(ARGBUF);
     ARGBUF = NULL;
@@ -831,7 +843,7 @@ mstpar_(name, type, val, dum1, dum2)
 int dum1, dum2; /* dum1 & dum2 are extra args that fortran puts in */
 #else
 
-mstpar(name, type, val)
+int mstpar(name, type, val)
 #endif
 char *name, *type;
 int *val;
@@ -877,11 +889,11 @@ int *val;
 }
 
 #ifdef FORTRAN
-getpar_(name, type, val, dum1, dum2)
+int getpar_(name, type, val, dum1, dum2)
 int dum1, dum2; /* dum1 & dum2 are extra args that fortran puts in */
 #else
 
-getpar(name, type, val)
+int getpar(name, type, val)
 #endif
 char *name, *type;
 int *val;
@@ -1030,7 +1042,7 @@ FILE *file;
     fclose(file);
 }
 
-gp_compute_hash(s)
+int gp_compute_hash(s)
 register char *s;
 {
     register int h;
@@ -1043,7 +1055,7 @@ register char *s;
     return (h);
 }
 
-gp_do_par_file(fname, level)
+void gp_do_par_file(fname, level)
 char *fname;
 int level;
 {
@@ -1093,7 +1105,7 @@ loop:
     fclose(file);
 }
 
-gp_getpar_err(subname, mess, a1, a2, a3, a4)
+void gp_getpar_err(subname, mess, a1, a2, a3, a4)
 char *subname, *mess;
 int a1, a2, a3, a4;
 {
@@ -1104,7 +1116,7 @@ int a1, a2, a3, a4;
     exit(GETPAR_ERROR);
 }
 
-gp_getvector(list, type, val)
+int gp_getvector(list, type, val)
 char *list, *type;
 int *val;
 {
@@ -1204,7 +1216,7 @@ int FixDouble(double *n) {
     return (1);
 }
 
-main(ac, av)
+int main(ac, av)
 int ac;
 char **av;
 {

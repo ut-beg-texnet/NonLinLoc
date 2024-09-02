@@ -34,8 +34,8 @@ www.alomax.net
 
 
 #define PACKAGE  "NonLinLoc"
-#define PVER  "7.1.02"
-#define PDATE "09Feb2024"
+#define PVER  "7.1.03"
+#define PDATE "02Sep2024"
 /*#define PCOPYRIGHT "\nCopyright (C) 1999-2023 Anthony Lomax\n"*/
 #define PCOPYRIGHT "\0"
 
@@ -568,6 +568,8 @@ typedef struct {
     char comment[4 * MAXLINE]; /* char comment */
     char signature[6 * MAXLINE]; /* char signature/program/date/etc */
     char searchInfo[2 * MAXLINE]; /* char search type dependent info */
+    double oct_tree_integral; /* integral of all oct-tree leaf node pdf values */
+    double oct_tree_scatter_volume; /* weighted volume of cells in results tree; = SUM(cell_volume * cell_prob / oct_node_value_ref) */
 
     // 20170811 AJL - added to allow saving of expectation hypocenter results instead of maximum likelihood
     char type[64]; // char hypocenter type MAXIMUM_LIKELIHOOD, EXPECTATION
@@ -839,6 +841,8 @@ Mtrx3D CalcCovarianceSamples(float*, int, Vect3D*);
 /* hypocenter functions */
 int WriteLocation(FILE*, HypoDesc*, ArrivalDesc*, int, char*,
         int, int, int, GridDesc*, int);
+int WriteLocationCSV(FILE*, HypoDesc*, char*);
+void WriteLocationCSVheader(FILE*);
 int WritePhases(FILE *fpio, HypoDesc* phypo, ArrivalDesc* parrivals,
         int narrivals, char* filename,
         int iWriteArrivals, int iWriteEndLoc, int iWriteMinimal,

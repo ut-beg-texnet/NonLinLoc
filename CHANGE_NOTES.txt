@@ -556,3 +556,10 @@ QUALITY  Pmax -1 MFmin -1 MFmax -1 RMS -1 Nphs -1 Gap -1 Dist -1 Mamp -9.90 0 Md
 
 20231114 NLLoc - Bug fix: corrected normalization when NLLoc coherence MAX_TOTAL_OTHER_WEIGHT option is used.
 
+20240826 NLLoc - Added CSV hypocenter sum output. When LOCHYPOUT options SAVE_NLLOC_ALL or SAVE_NLLOC_SUM are active, then a CSV hypocenter sum file with extension .csv is also written to the LOCFILES output file path/root. Columns are:
+    date-time, latitude, longitude, depth, RMS, Nphs, Gap, Dist, errH, errZ, Mamp, Mdur, expect_lat, expect_lon, expect_z,
+    EllipsoidAz1, EllipsoidDip1, EllipsoidLen1, EllipsoidAz2, EllipsoidDip2, EllipsoidLen2, EllipsoidLen3,
+    minHorUnc, maxHorUnc, azMaxHorUnc, pdfVolume, publicId
+
+20240902 sphfd_SWR_NLL.c - Applied patch from C. Satriano 20240425 to prevent compile errors https://github.com/alomax/NonLinLoc/issues/37#issuecomment-2077092100
+
