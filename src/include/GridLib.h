@@ -34,8 +34,8 @@ www.alomax.net
 
 
 #define PACKAGE  "NonLinLoc"
-#define PVER  "7.1.03"
-#define PDATE "02Sep2024"
+#define PVER  "7.1.04"
+#define PDATE "05Sep2024"
 /*#define PCOPYRIGHT "\nCopyright (C) 1999-2023 Anthony Lomax\n"*/
 #define PCOPYRIGHT "\0"
 

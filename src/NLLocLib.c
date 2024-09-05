@@ -10287,7 +10287,7 @@ patch below fixes this problem.
 
         if (strcmp(param, "CONTROL") == 0) {
             if ((istat = get_control(strchr(line, ' '))) < 0)
-                nll_puterr("ERROR: readingng control params.");
+                nll_puterr("ERROR: reading control params.");
             else
                 flag_control = 1;
         }
