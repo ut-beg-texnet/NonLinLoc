@@ -271,6 +271,7 @@ int MergeFmamp(int argc, char** argv) {
             break;
         } else if (istat2 < 0) {
             nll_puterr2("ERROR: reading fmamp summary file", fn_fmamp_in);
+            fprintf(stderr, "%d fmamp and %d NLL hypocenters read, %d merged\n", nFmampRead, nNLLRead, nHypMerged);
             continue;
         }
         nFmampRead++;
@@ -283,6 +284,7 @@ int MergeFmamp(int argc, char** argv) {
                 if (fpHypo == NULL) {
                     if ((fpHypo = fopen(fn_hyp_in_list[nNLLFilesRead], "r")) == NULL) {
                         nll_puterr2("ERROR: opening hypocenter file", fn_hyp_in_list[nNLLFilesRead]);
+                        fprintf(stderr, "%d fmamp and %d NLL hypocenters read, %d merged\n", nFmampRead, nNLLRead, nHypMerged);
                         return (-1);
                     }
                     if ((pchr = strstr(fn_hyp_in_list[nNLLFilesRead], test_str)) != NULL)
@@ -299,6 +301,7 @@ int MergeFmamp(int argc, char** argv) {
                     strcat(fn_out_fopen, ".hyp");
                     if ((fp_out = fopen(fn_out_fopen, "w")) == NULL) {
                         nll_puterr2("ERROR: opening output file", fn_out);
+                        fprintf(stderr, "%d fmamp and %d NLL hypocenters read, %d merged\n", nFmampRead, nNLLRead, nHypMerged);
                         return (-1);
                     }
                 }
@@ -346,6 +349,7 @@ int MergeFmamp(int argc, char** argv) {
                             break;
                         else if (istat2 < 0) {
                             nll_puterr2("ERROR: reading fmamp summary file", fn_fmamp_in);
+                            fprintf(stderr, "%d fmamp and %d NLL hypocenters read, %d merged\n", nFmampRead, nNLLRead, nHypMerged);
                             continue;
                         }
                         nFmampRead++;

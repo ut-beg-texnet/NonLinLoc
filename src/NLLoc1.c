@@ -105,8 +105,8 @@ int NLLoc
     int maxArrExceeded = 0;
     int n_file_root_count = 1;
     char fn_root_out[FILENAME_MAX], fn_root_out_last[FILENAME_MAX];
-    char fname[2*FILENAME_MAX];
-    char targetfname[3*FILENAME_MAX];
+    char fname[2 * FILENAME_MAX];
+    char targetfname[3 * FILENAME_MAX];
     //char sys_command[2 * FILENAME_MAX];
     char *chr;
     FILE *fp_obs = NULL, *fpio;
@@ -195,6 +195,17 @@ int NLLoc
     char *bp_memory_stream = NULL;
 
     int is_nll_control_json_file = 0;
+
+
+
+    // check if only version is requested
+    if (fn_control_main != NULL && (strncmp(fn_control_main, "-v", 2) == 0 || strncmp(fn_control_main, "--version", 9) == 0)) {
+        message_flag = 99;
+        DispProgInfo();
+        return_value = EXIT_NORMAL;
+        goto cleanup_return;
+    }
+
 
     /* open control file */
 
@@ -349,7 +360,7 @@ int NLLoc
     fp_model_grid_P = fp_model_hdr_P = NULL;
     fp_model_grid_S = fp_model_hdr_S = NULL;
     if (LocMethod == METH_OT_STACK) {
-        snprintf(fname, sizeof(fname), "%s.%s", fn_loc_grids, "P.mod");
+        snprintf(fname, sizeof (fname), "%s.%s", fn_loc_grids, "P.mod");
         if ((istat = OpenGrid3dFile(fname, &fp_model_grid_P, &fp_model_hdr_P,
                 &model_grid_P, " ", NULL, iSwapBytesOnInput)) < 0) {
             sprintf(MsgStr, "WARNING: LocMethod == OT_STACK, but cannot open velocity model file %s.*", fname);
@@ -359,7 +370,7 @@ int NLLoc
             nll_putmsg(1, MsgStr);
 
         }
-        snprintf(fname, sizeof(fname), "%s.%s", fn_loc_grids, "S.mod");
+        snprintf(fname, sizeof (fname), "%s.%s", fn_loc_grids, "S.mod");
         if ((istat = OpenGrid3dFile(fname, &fp_model_grid_S, &fp_model_hdr_S,
                 &model_grid_S, " ", NULL, iSwapBytesOnInput)) < 0) {
             sprintf(MsgStr, "WARNING: LocMethod == OT_STACK, but cannot open velocity model file %s.*", fname);
@@ -379,7 +390,7 @@ int NLLoc
         i_end_of_input = 0;
 
         nll_putmsg(2, "");
-        snprintf(MsgStr, sizeof(MsgStr), "... Reading observation file %s", fn_loc_obs[nObsFile]);
+        snprintf(MsgStr, sizeof (MsgStr), "... Reading observation file %s", fn_loc_obs[nObsFile]);
         nll_putmsg(1, MsgStr);
 
         // check if observations are read from file(s)

@@ -19,9 +19,9 @@
 
 /*   NLLoc.c
 
-	Program to do global search earthquake location in 3-D models
+        Program to do global search earthquake location in 3-D models
 
-*/
+ */
 
 /*-----------------------------------------------------------------------
 Anthony Lomax
@@ -32,16 +32,16 @@ tel: +33(0)493752502  e-mail: anthony@alomax.net  web: http://www.alomax.net
 
 
 /*
-	history:	(see also http://alomax.net/nlloc -> Updates)
+        history:	(see also http://alomax.net/nlloc -> Updates)
 
-	ver 01    17DEC2007  AJL  Created NLLoc_main and function call NLLoc()
+        ver 01    17DEC2007  AJL  Created NLLoc_main and function call NLLoc()
 
-	see NLLoc1.c and NLLocLib.c
+        see NLLoc1.c and NLLocLib.c
 
 
 .........1.........2.........3.........4.........5.........6.........7.........8
 
-*/
+ */
 
 
 
@@ -80,46 +80,45 @@ tel: +33(0)493752502  e-mail: anthony@alomax.net  web: http://www.alomax.net
 #define ARG_DESC "<control file>"
 #endif
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
 
-	int istat;
+    int istat;
 
-	char fn_control_main[MAXLINE];	// control file name
-	char pid_main[255];	// string process id
+    char fn_control_main[MAXLINE]; // control file name
+    char pid_main[255]; // string process id
 
 
-	// set program name
-	strcpy(prog_name, PNAME);
+    // set program name
+    strcpy(prog_name, PNAME);
 
-	// check command line for correct usage
-	if (argc < NARGS_MIN) {
-		disp_usage(prog_name, ARG_DESC);
-		return(EXIT_ERROR_USAGE);
-	}
+    // check command line for correct usage
+    if (argc < NARGS_MIN) {
+        disp_usage(prog_name, ARG_DESC);
+        return (EXIT_ERROR_USAGE);
+    }
 
-	// set control file
-	strcpy(fn_control_main, argv[1]);
+    // set control file
+    strcpy(fn_control_main, argv[1]);
 
 #ifdef CUSTOM_ETH
-	// SH 02/27/2004 added snap_pid
-	if (argc > 2)
-		strcpy(pid_main, argv[2]);
-	else
-		strcpy(pid_main, "000");
-	/* SH 02AUG2004 not needed any more
-	// AJL 20040527 added snap param file
-	if (argc > 3)
-		strcpy(snap_param_file, argv[3]);
-	else
-		strcpy(snap_param_file, "snap_param.txt");
-	*/
+    // SH 02/27/2004 added snap_pid
+    if (argc > 2)
+        strcpy(pid_main, argv[2]);
+    else
+        strcpy(pid_main, "000");
+    /* SH 02AUG2004 not needed any more
+    // AJL 20040527 added snap param file
+    if (argc > 3)
+            strcpy(snap_param_file, argv[3]);
+    else
+            strcpy(snap_param_file, "snap_param.txt");
+     */
 #endif
 
-	// run NLLoc
-	istat = NLLoc(pid_main, fn_control_main, NULL, -1, NULL, -1, 0, 0, 0, NULL);
+    // run NLLoc
+    istat = NLLoc(pid_main, fn_control_main, NULL, -1, NULL, -1, 0, 0, 0, NULL);
 
-	return(istat);
+    return (istat);
 
 }
 

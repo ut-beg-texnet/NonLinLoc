@@ -750,7 +750,7 @@ int get_transform(int n_proj, char* in_line) {
 
         // initialize projection
         vtm(n_proj, map_orig_long[n_proj], map_orig_lat[n_proj], use_false_easting,
-            map_false_easting[n_proj], map_scale_factor[n_proj]);
+                map_false_easting[n_proj], map_scale_factor[n_proj]);
 
         sprintf(MapProjStr[n_proj],
                 "TRANSFORM  %s RefEllipsoid %s  LatOrig %lf  LongOrig %lf  RotCW %lf  UseFalseEasting %d  FalseEasting %ld  ScaleFactor %lf",
@@ -3302,6 +3302,89 @@ DOUBLE InterpSquareLagrange(DOUBLE xdiff, DOUBLE zdiff,
 
 }
 
+/** function to write hypocenter to output in CSV format */
+ // 20240826 AJL - added
+
+void WriteLocationCSVheader(FILE *fpio) {
+
+    fprintf(fpio, "date-time, latitude, longitude, depth, RMS, Nphs, Gap, Dist, errH, errZ, Mamp, Mdur, expect_lat, expect_lon, expect_z, EllipsoidAz1, EllipsoidDip1, EllipsoidLen1, EllipsoidAz2, EllipsoidDip2, EllipsoidLen2, EllipsoidLen3, minHorUnc, maxHorUnc, azMaxHorUnc, pdfVolume, publicId\n");
+
+}
+
+/** function to write hypocenter to output in CSV format */
+ // 20240826 AJL - added
+
+int WriteLocationCSV(FILE *fpio, HypoDesc* phypo, char* filename) {
+
+    int ifile = 0;
+
+    // write hypocenter to CSV file
+    // date-time, latitude, longitude, depth, RMS, Nphs, Gap, Dist, errH, errZ, Mamp, Mdur, expect_lat, expect_lon, expect_z, EllipsoidAz1, EllipsoidDip1, EllipsoidLen1, EllipsoidAz2, EllipsoidDip2, EllipsoidLen2, EllipsoidLen3, EllipseAz1, EllipseDip1, EllipseLen1, EllipseAz2, EllipseDip2, EllipseLen2, pdfVolume, publicId
+
+
+    if (fpio == NULL) {
+        if ((fpio = fopen(filename, "w")) == NULL) {
+            nll_puterr2("ERROR: opening hypocenter CSV output file", filename);
+            return (-1);
+        }
+        NumFilesOpen++;
+        ifile = 1;
+        WriteLocationCSVheader(fpio);
+    }
+
+    // origin time, lat, lon, depth
+    fprintf(fpio,
+            "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%09.6f, %.4f, %.4f, %.4f",
+            phypo->year, phypo->month, phypo->day,
+            phypo->hour, phypo->min, (float) phypo->sec,
+            (float) phypo->dlat, (float) phypo->dlong, (float) phypo->depth);
+
+    // statistics
+    fprintf(fpio, ", %.6f", (float) phypo->rms);
+    fprintf(fpio, ", %d", phypo->nreadings);
+    fprintf(fpio, ", %.4f", (float) phypo->gap);
+    fprintf(fpio, ", %.4f", (float) phypo->dist);
+    fprintf(fpio, ", %.4f", (float) phypo->ellipse.len2);
+    double quality_errZ = sqrt(DELTA_CHI_SQR_68_2 * phypo->cov.zz);
+    fprintf(fpio, ", %.4f", (float) quality_errZ);
+    fprintf(fpio, ", %.4f", (float) phypo->amp_mag);
+    fprintf(fpio, ", %.4f", (float) phypo->dur_mag);
+    fprintf(fpio, ", %.4f, %.4f, %.4f", (float) phypo->expect_dlat, (float) phypo->expect_dlong, (float) phypo->expect.z);
+
+    // ellipsoid
+    fprintf(fpio, ", %.4f, %.4f, %.4f",
+            phypo->ellipsoid.az1, phypo->ellipsoid.dip1,
+            phypo->ellipsoid.len1);
+    fprintf(fpio, ", %.4f, %.4f, %.4f",
+            phypo->ellipsoid.az2, phypo->ellipsoid.dip2,
+            phypo->ellipsoid.len2);
+    fprintf(fpio, ", %.4f", phypo->ellipsoid.len3);
+
+    // ellipse
+    double azMaxHorUnc = phypo->ellipse.az1 + 90.0;
+    if (azMaxHorUnc >= 360.0)
+        azMaxHorUnc -= 360.0;
+    if (azMaxHorUnc >= 180.0)
+        azMaxHorUnc -= 180.0;
+    fprintf(fpio, ", %.4f, %.4f, %.4f", phypo->ellipse.len1, phypo->ellipse.len2, azMaxHorUnc);
+
+    fprintf(fpio, ", %.4f", (float) phypo->oct_tree_scatter_volume);
+
+    fprintf(fpio, ", %s", phypo->public_id);
+
+    fprintf(fpio, "\n");
+
+    if (ifile) {
+
+        fclose(fpio);
+        NumFilesOpen--;
+    }
+
+    return (0);
+
+
+}
+
 /** function to write hypocenter/arrivals to output */
 
 int WriteLocation(FILE *fpio, HypoDesc* phypo, ArrivalDesc* parrivals,
@@ -5637,7 +5720,7 @@ int ReadHypoDesc(char* fnroot_in, HypoDesc *phypo) {
     fclose(fp_io);
     NumFilesOpen--;
 
-    return (istat);     // -1 if error opening hypo file, EOF if EOF error reading hypo file, 0 otherwise
+    return (istat); // -1 if error opening hypo file, EOF if EOF error reading hypo file, 0 otherwise
 
 }
 
@@ -5912,6 +5995,7 @@ void Qual2Err(ArrivalDesc * arrival) {
             arrival->quality < NumQuality2ErrorLevels) {
         arrival->error = Quality2Error[arrival->quality];
     } else {
+
         arrival->error = Quality2Error[NumQuality2ErrorLevels - 1];
         nll_puterr("WARNING: invalid arrival quality.");
     }
@@ -6558,6 +6642,7 @@ int CalcAnglesQuality(double grad_low, double grad_high) {
     /* calculate quality */
     ratio = 2.0 * grad_low * grad_high /
             (grad_low * grad_low + grad_high * grad_high);
+
     return (ratio > 0.0 ? (int) (10.01 * ratio) : 0);
 
 }
@@ -6673,6 +6758,7 @@ int GenEventScatterGrid(GridDesc* ptgrid, HypoDesc* phypo, ScatterParams* pscat,
 
     /* write message */
     if (message_flag >= 3) {
+
         sprintf(MsgStr, "  %d points generated.", tot_npoints);
         nll_putmsg(3, MsgStr);
         sprintf(MsgStr, "  (%d points requested, dvol= %lf, probmax=%lf)",
@@ -6708,7 +6794,9 @@ double IntegrateGrid(GridDesc* pgrid, int flag_normalize) {
         for (ix = 0; ix < pgrid->numx; ix++) {
             for (iy = 0; iy < pgrid->numy; iy++) {
                 for (iz = 0; iz < pgrid->numz; iz++) {
-                    ((GRID_FLOAT_TYPE ***) pgrid->array)[ix][iy][iz] /= integral;
+                    ((
+
+                            GRID_FLOAT_TYPE ***) pgrid->array)[ix][iy][iz] /= integral;
                 }
             }
         }
@@ -6803,6 +6891,7 @@ int WriteStationList(FILE* fpio, SourceDesc *stations, int numStations) {
     ConvertSourceLoc(0, stations, numStations, 1, 1);
 
     for (int n = 0; n < numStations; n++) {
+
         fprintf(fpio, "%s %lf %lf %lf %lf %lf %lf\n",
                 (stations + n)->label, (stations + n)->x, (stations + n)->y, (stations + n)->z, (stations + n)->dlat, (stations + n)->dlong, (stations + n)->depth);
     }
@@ -6852,7 +6941,6 @@ int GetPhaseID(char* line1) {
 
 
 // 20200122 AJL - following function moved here from NLLocLib.h
-
 
 /** function to set output file root name using arrival time or public_id */
 

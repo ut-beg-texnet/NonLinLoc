@@ -78,7 +78,7 @@ int main(int argc, char** argv) {
     if (argc < 5) {
         nll_puterr("ERROR wrong number of command line arguments.");
         disp_usage(PNAME,
-                "hypfile1 hypfile2 time_tolerance nobs_tolerance");
+                "hypfile1 hypfile2 time_tolerance nobs_tolerance [skip_rejected]");
         exit(-1);
     }
 
@@ -98,6 +98,25 @@ int main(int argc, char** argv) {
 
 }
 
+/** function to read hypocenter/arrival parameters with special filtering
+ * 20240605 AJL - added to support filtering of REJECTED events
+ */
+
+int GetHypLoc_wrapper(FILE *fpio, const char* filein, HypoDesc* phypo,
+        ArrivalDesc* parrivals, int *pnarrivals, int iReadArrivals,
+        GridDesc* pgrid, int n_proj,
+        int skip_rejected) {
+
+    int istat;
+
+    do {
+        istat = GetHypLoc(fpio, filein, phypo, parrivals, pnarrivals, iReadArrivals, pgrid, n_proj);
+    } while (istat >= 0 && istat != EOF && skip_rejected && strcmp(phypo->locStat, "REJECTED") == 0);
+
+    return(istat);
+
+}
+
 int DiffHypocenters(int argc, char** argv) {
 
     int istat1, istat2;
@@ -113,6 +132,8 @@ int DiffHypocenters(int argc, char** argv) {
     char *pchr, *pstmp1, *pstmp2;
     double time_tolerance;
     int nobs_tolerance;
+    int skip_rejected = 0;
+
     int nLocMatched, nHypo1 = 0, nHypo2 = 0;
     int idiff, ok;
 
@@ -128,6 +149,9 @@ int DiffHypocenters(int argc, char** argv) {
     strcpy(fn_hyp2, argv[2]);
     sscanf(argv[3], "%lf", &time_tolerance);
     sscanf(argv[4], "%d", &nobs_tolerance);
+    if (argc > 5) {
+        sscanf(argv[5], "%d", &skip_rejected);
+    }
 
     pstmp1 = strrchr(fn_hyp1, '/');
     if (pstmp1 == NULL)
@@ -208,12 +232,12 @@ int DiffHypocenters(int argc, char** argv) {
     /* difference corresponding hypocenters */
 
     nLocMatched = 0;
-    if ((istat2 = GetHypLoc(fp_hyp2, fn_hyp2, &Hypo2, NULL, &NumArrivals, 0, &locgrid, 0))
+    if ((istat2 = GetHypLoc_wrapper(fp_hyp2, fn_hyp2, &Hypo2, NULL, &NumArrivals, 0, &locgrid, 0, skip_rejected))
             >= 0 && istat2 != EOF)
         nHypo2++;
 
     while (istat2 >= 0 && istat2 != EOF &&
-            (istat1 = GetHypLoc(fp_hyp1, fn_hyp1, &Hypo1, NULL, &NumArrivals, 0, &locgrid, 0))
+            (istat1 = GetHypLoc_wrapper(fp_hyp1, fn_hyp1, &Hypo1, NULL, &NumArrivals, 0, &locgrid, 0, skip_rejected))
             >= 0 && istat1 != EOF) {
 
         nHypo1++;
@@ -232,8 +256,7 @@ int DiffHypocenters(int argc, char** argv) {
                 ok = 1;
                 break;
             } else if (idiff > 0) { // hypo2 earlier, read next hypo2
-                if ((istat2 = GetHypLoc(fp_hyp2, fn_hyp2, &Hypo2, NULL,
-                        &NumArrivals, 0, &locgrid, 0))
+                if ((istat2 = GetHypLoc_wrapper(fp_hyp2, fn_hyp2, &Hypo2, NULL, &NumArrivals, 0, &locgrid, 0, skip_rejected))
                         >= 0 && istat2 != EOF) {
                     nHypo2++;
                     continue;
@@ -326,7 +349,7 @@ int DiffHypocenters(int argc, char** argv) {
 
         nLocMatched++;
 
-        if ((istat2 = GetHypLoc(fp_hyp2, fn_hyp2, &Hypo2, NULL, &NumArrivals, 0, &locgrid, 0))
+        if ((istat2 = GetHypLoc_wrapper(fp_hyp2, fn_hyp2, &Hypo2, NULL, &NumArrivals, 0, &locgrid, 0, skip_rejected))
                 >= 0 && istat2 != EOF)
             nHypo2++;
 

@@ -163,11 +163,11 @@ int LocGridSave[MAX_NUM_LOCATION_GRIDS]; /* !should be in GridDesc */
 //int Num3DGridReadToMemory, MaxNum3DGridMemory;
 int iWriteHypHeader[MAX_NUM_LOCATION_GRIDS];
 char HypoInverseArchiveSumHdr[MAXLINE_LONG];
-int iSaveNLLocEvent, iSaveNLLocSum, iSaveNLLocOctree,
-    iSaveHypo71Event, iSaveHypo71Sum,
-    iSaveHypoEllEvent, iSaveHypoEllSum,
-    iSaveHypoInvSum, iSaveHypoInvY2KArc, iSaveAlberto4Sum, iSaveFmamp,
-    iSaveSnapSum, iCalcSedOrigin, iSaveDecSec, iSavePublicID, iSaveNone;
+int iSaveNLLocEvent, iSaveNLLocSum, iSaveNLLocSumCSV, iSaveNLLocOctree,
+iSaveHypo71Event, iSaveHypo71Sum,
+iSaveHypoEllEvent, iSaveHypoEllSum,
+iSaveHypoInvSum, iSaveHypoInvY2KArc, iSaveAlberto4Sum, iSaveFmamp,
+iSaveSnapSum, iCalcSedOrigin, iSaveDecSec, iSavePublicID, iSaveNone;
 int iSaveNLLocExpectation;
 int iSaveNLLocEvent_JSON;
 int iUseArrivalPriorWeights;
@@ -237,6 +237,7 @@ double Hypo_Dist_Max;
 //char snap_pid[255];
 
 FILE *pSumFileHypNLLoc[MAX_NUM_LOCATION_GRIDS];
+FILE *pSumFileHypNLLocCSV[MAX_NUM_LOCATION_GRIDS]; // 20240826 AJL - added
 FILE *pSumFileHypo71[MAX_NUM_LOCATION_GRIDS];
 FILE *pSumFileHypoEll[MAX_NUM_LOCATION_GRIDS];
 FILE *pSumFileHypoInv[MAX_NUM_LOCATION_GRIDS];
@@ -1197,6 +1198,14 @@ int SaveLocation(HypoDesc* hypo, int ngrid, char* fnobs, char *fnout, int numArr
         /**/
     }
 
+    if (iSaveNLLocSumCSV) {
+        /* write NLLoc hypocenter to CSV summary file */
+        if ((istat = WriteLocationCSV(pSumFileHypNLLocCSV[ngrid], hypo, fnout)) < 0) {
+            nll_puterr("ERROR: writing location CSV to summary file.");
+            return (EXIT_ERROR_IO);
+        }
+        fflush(pSumFileHypNLLocCSV[ngrid]);
+    }
 
     if (iSaveHypo71Event) {
         /* write HYPO71 hypocenter to event file */
@@ -10278,7 +10287,7 @@ patch below fixes this problem.
 
         if (strcmp(param, "CONTROL") == 0) {
             if ((istat = get_control(strchr(line, ' '))) < 0)
-                nll_puterr("ERROR: readingng control params.");
+                nll_puterr("ERROR: reading control params.");
             else
                 flag_control = 1;
         }
@@ -10645,6 +10654,7 @@ patch below fixes this problem.
                 "INFO: DEFAULT: \"LOCHYPOUT SAVE_NLLOC_ALL SAVE_HYPOINVERSE_Y2000_ARC SAVE_FMAMP\"");
         nll_putmsg(2, MsgStr);
         iSaveNLLocEvent = iSaveNLLocSum = 1;
+        iSaveNLLocSumCSV = 1; // 20240826 AJL - added
         iSaveNLLocExpectation = 0;
         iSaveHypo71Sum = iSaveHypoEllSum = 0;
         iSaveHypo71Event = iSaveHypoEllEvent = 0;
@@ -11142,28 +11152,27 @@ int GetNLLoc_PdfGrid(char* line1, int prior_type) {
             searchPdfGrid->tree3D[nFile] = readTree3D(fp_oct_in);
             searchPdfGrid->coherence[nFile] = coherence[nFile];
             // weight is zero at coherence_min and 1.0 at coherence=1.0
-            searchPdfGrid->weight[nFile]
-                    = (searchPdfGrid->coherence[nFile] - searchPdfGrid->coherence_min) / (1.0 - searchPdfGrid->coherence_min);
+            //searchPdfGrid->weight[nFile] = (searchPdfGrid->coherence[nFile] - searchPdfGrid->coherence_min) / (1.0 - searchPdfGrid->coherence_min);
             // TEST 20210126 AJL - 0 -> 1 cosine taper weighting
-            if (1) {
-                // weight is zero at coherence_min and 1.0 at coherence=0.9
-                double wt_tmp = (searchPdfGrid->coherence[nFile] - searchPdfGrid->coherence_min) / (0.9 - searchPdfGrid->coherence_min);
-                if (wt_tmp >= 1.0) {
-                    wt_tmp = 1.0;
-                } else if (wt_tmp <= 0.0) {
-                    wt_tmp = 0.0;
-                } else {
-                    //printf("DEBUG: read input oct tree file: coherence: %f  weight %f  %s", coherence[nFile], searchPdfGrid->weight[nFile], fn_pdf_grid[nFile]);
-                    // use cos instead of sin   wt_tmp = cPI * (wt_tmp - 0.5); // -PI/2 -> PI/2
-                    wt_tmp = cPI * (1.0 - wt_tmp); // PI -> 0
-                    //printf(" -> %f", wt_tmp);
-                    // use cos instead of sin   wt_tmp = 0.5 * (sin(wt_tmp) + 1.0); // 0 -> 1 sine
-                    wt_tmp = 0.5 * cos(wt_tmp) + 0.5; // 0 -> 1 cos
-                    //printf(" -> %f", wt_tmp);
-                    //printf("\n");
-                }
-                searchPdfGrid->weight[nFile] = wt_tmp;
+            //if (1) {
+            // weight is zero at coherence_min and 1.0 at coherence=0.9
+            double wt_tmp = (searchPdfGrid->coherence[nFile] - searchPdfGrid->coherence_min) / (0.9 - searchPdfGrid->coherence_min);
+            if (wt_tmp >= 1.0) {
+                wt_tmp = 1.0;
+            } else if (wt_tmp <= 0.0) {
+                wt_tmp = 0.0;
+            } else {
+                //printf("DEBUG: read input oct tree file: coherence: %f  weight %f  %s", coherence[nFile], searchPdfGrid->weight[nFile], fn_pdf_grid[nFile]);
+                // use cos instead of sin   wt_tmp = cPI * (wt_tmp - 0.5); // -PI/2 -> PI/2
+                wt_tmp = cPI * (1.0 - wt_tmp); // PI -> 0
+                //printf(" -> %f", wt_tmp);
+                // use cos instead of sin   wt_tmp = 0.5 * (sin(wt_tmp) + 1.0); // 0 -> 1 sine
+                wt_tmp = 0.5 * cos(wt_tmp) + 0.5; // 0 -> 1 cos
+                //printf(" -> %f", wt_tmp);
+                //printf("\n");
             }
+            searchPdfGrid->weight[nFile] = wt_tmp;
+            //}
             // END TEST
             // TEST 20210110 AJL - 0 -> 1 sine weighting
             if (0) {
@@ -11312,11 +11321,13 @@ int GetNLLoc_HypOutTypes(char* line1) {
         if ((istat = sscanf(pchr, "%s", hyp_type)) != 1)
             return (-1);
 
-        if (strcmp(hyp_type, "SAVE_NLLOC_ALL") == 0)
+        if (strcmp(hyp_type, "SAVE_NLLOC_ALL") == 0) {
             iSaveNLLocEvent = iSaveNLLocSum = 1;
-        else if (strcmp(hyp_type, "SAVE_NLLOC_SUM") == 0)
+            iSaveNLLocSumCSV = 1; // 20240826 AJL - added
+        } else if (strcmp(hyp_type, "SAVE_NLLOC_SUM") == 0) {
             iSaveNLLocSum = 1;
-        else if (strcmp(hyp_type, "SAVE_NLLOC_EXPECTATION") == 0) // 20170811 AJL - added
+            iSaveNLLocSumCSV = 1; // 20240826 AJL - added
+        } else if (strcmp(hyp_type, "SAVE_NLLOC_EXPECTATION") == 0) // 20170811 AJL - added
             iSaveNLLocExpectation = 1;
         else if (strcmp(hyp_type, "SAVE_NLLOC_OCTREE") == 0)
             iSaveNLLocOctree = 1;
@@ -11360,6 +11371,7 @@ int GetNLLoc_HypOutTypes(char* line1) {
                     iSaveHypo71Event = iSaveHypoEllEvent = iSaveHypoInvSum = iSaveHypoInvY2KArc =
                     iSaveAlberto4Sum = iSaveFmamp = iSaveSnapSum = iCalcSedOrigin = iSaveDecSec = iSavePublicID = 0;
             iSaveNLLocExpectation = 0; // 20170811 AJL - added
+            iSaveNLLocSumCSV = 0; // 20240826 AJL - added
         } else
             return (-1);
 
@@ -12029,6 +12041,18 @@ int OpenSummaryFiles(char *path_output, char* loctypename) {
         }
 
 
+        /* CSV Hyp format */
+
+        pSumFileHypNLLocCSV[ngrid] = NULL;
+        sprintf(fname, "%s.sum.%s%d.loc.csv", path_output, loctypename, ngrid);
+        if ((pSumFileHypNLLocCSV[ngrid] = fopen(fname, "w")) == NULL) {
+            nll_puterr2("ERROR: opening CSV summary output file", fname);
+            return (-1);
+        } else {
+            NumFilesOpen++;
+        }
+        WriteLocationCSVheader(pSumFileHypNLLocCSV[ngrid]);
+
         iWriteHypHeader[ngrid] = 1;
 
         /* Hypo71 format */
@@ -12152,6 +12176,14 @@ int CloseSummaryFiles() {
         if (pSumFileHypNLLoc[ngrid] != NULL) {
             fclose(pSumFileHypNLLoc[ngrid]);
             pSumFileHypNLLoc[ngrid] = NULL;
+            NumFilesOpen--;
+        }
+
+        /* CSV Hyp format */
+
+        if (pSumFileHypNLLocCSV[ngrid] != NULL) {
+            fclose(pSumFileHypNLLocCSV[ngrid]);
+            pSumFileHypNLLocCSV[ngrid] = NULL;
             NumFilesOpen--;
         }
 
@@ -14673,6 +14705,8 @@ int LocOctree(int ngrid, int num_arr_total, int num_arr_loc,
     }
     sprintf(phypo->searchInfo, "OCTREE nInitial %d nEvaluated %d smallestNodeSide %lf/%lf/%lf oct_tree_integral %le",
             nInitial, nSamples, smallest_node_size_x, smallest_node_size_y, smallest_node_size_z, *poct_tree_integral);
+    // set values in hypo
+    phypo->oct_tree_integral = *poct_tree_integral;
     /* write message */
     nll_putmsg(2, phypo->searchInfo);
 
@@ -15102,6 +15136,8 @@ int GenEventScatterOcttree(OcttreeParams* pParams, double oct_node_value_max, fl
     // update hypocenter searchInfo
     sprintf(scatter_volume_text, " scatter_volume %le", oct_tree_scatter_volume);
     strcat(phypo->searchInfo, scatter_volume_text);
+    // set values in hypo
+    phypo->oct_tree_scatter_volume = oct_tree_scatter_volume;
 
     return (tot_npoints);
 

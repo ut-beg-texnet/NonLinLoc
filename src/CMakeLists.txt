@@ -52,14 +52,17 @@ add_compile_options(-Wno-format-truncation)
 # 20230318 Anthony Lomax - Uncomment the following to force reading of *DEFAULT* named travel-time grids with byte swapping.
 #    Needed as a cluge when running Loc2ssst and NLLoc when doing NLL-SSST (e.g. with run_ssst_relocations.bash) where time grids with and
 #    without byte swapping are used together.
-#add_compile_definitions(LOC2SSST_CLUGE)
+add_compile_definitions(LOC2SSST_CLUGE)
 
 # 20220921 Sean Ho - Uncomment the following if you want Grid2GMT to generate scripts compatible with gmt 5.x or 6.x
-add_compile_options(-D GMT_VER_5)
+add_compile_options("-D GMT_VER_5")
 #
 # Alternatively, in the make environment, set:
 # export CFLAGS='-D GMT_VER_5'
 # before running: rm CMakeCache.txt; cmake .
+
+# double precision grid files (not yet supported fully for NonLinLoc)
+#add_compile_options("-D GRID_FLOAT_TYPE_DOUBLE")
 
 # 20211110 AJL - New fix implemented, see https://github.com/alomax/NonLinLoc/issues/7
 #   This fix probably supersedes the following:
