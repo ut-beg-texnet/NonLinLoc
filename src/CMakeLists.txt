@@ -11,8 +11,12 @@ set(CMAKE_BUILD_TYPE Release)
 # If you want to build the library in ${CMAKE_CURRENT_SOURCE_DIR}/lib
 #set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
-# If you want to move the binaries in ${CMAKE_CURRENT_SOURCE_DIR}/bin
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+# Path to created binaries
+if(DEFINED "ENV{MYBIN}")
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "$ENV{MYBIN}")
+else()
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+endif()
 ###DEBUG#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin_debug)
 
 # Bring the include directory with its headers into the project

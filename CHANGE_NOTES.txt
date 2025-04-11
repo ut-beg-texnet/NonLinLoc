@@ -563,3 +563,6 @@ QUALITY  Pmax -1 MFmin -1 MFmax -1 RMS -1 Nphs -1 Gap -1 Dist -1 Mamp -9.90 0 Md
 
 20240902 sphfd_SWR_NLL.c - Applied patch from C. Satriano 20240425 to prevent compile errors https://github.com/alomax/NonLinLoc/issues/37#issuecomment-2077092100
 
+20250221 NLLoc - HYPODD_PHA format observation input: Added: reading of Event identification into NLL public_id.
+
+20250314 NLLoc - HYPODD_PHA format observation input: Added: reading of MAG field into NLL amp_mag.

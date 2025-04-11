@@ -4968,12 +4968,12 @@ KO.SVRC,2023-02-01T03:38:53.860000Z,2023-02-01T03:38:54.960000Z,1.10811060369646
         do {
             file_pos = ftell(fp_obs);
             cstat = fgets(line, MAXLINE_LONG, fp_obs);
-            //printf("1 %s", line);
+            //printf("IMS-1 %s", line);
             if (cstat == NULL)
                 return (OBS_FILE_END_OF_INPUT);
         } while (LineIsBlank(line));
         // check for end of event (assumes Event or STOP at end of event or following DATA_TYPE)
-        if ((in_hypocenter_event && strncmp(line, "Event", 5) == 0)) {
+        if (in_hypocenter_event && (strncmp(line, "Event", 5) == 0 || strncmp(line, "EVENT", 5) == 0)) {
             /* end of event */
             fseek(fp_obs, file_pos, SEEK_SET);
             return (OBS_FILE_END_OF_EVENT);
@@ -4996,14 +4996,14 @@ KO.SVRC,2023-02-01T03:38:53.860000Z,2023-02-01T03:38:54.960000Z,1.10811060369646
             // find date
             while (strncmp(line, "   Date", 7) != 0) {
                 // check for Event line to get event id  // 20191209 AJL - added
-                if (strncmp(line, "Event", 5) == 0) {
+                if (strncmp(line, "Event", 5) == 0 || strncmp(line, "EVENT", 5) == 0) {
                     sscanf(line, "%*s %s ", phypo->public_id);
                 }
                 // read next line
                 do {
                     file_pos = ftell(fp_obs);
                     cstat = fgets(line, MAXLINE_LONG, fp_obs);
-                    //printf("1 %s", line);
+                    //printf("IMS-2 %s", line);
                     if (cstat == NULL)
                         return (OBS_FILE_END_OF_INPUT);
                 } while (LineIsBlank(line));
@@ -5012,7 +5012,7 @@ KO.SVRC,2023-02-01T03:38:53.860000Z,2023-02-01T03:38:54.960000Z,1.10811060369646
             do {
                 file_pos = ftell(fp_obs);
                 cstat = fgets(line, MAXLINE_LONG, fp_obs);
-                //printf("1 %s", line);
+                //printf("IMS-3 %s", line);
                 if (cstat == NULL)
                     return (OBS_FILE_END_OF_INPUT);
             } while (LineIsBlank(line));
@@ -5033,12 +5033,12 @@ KO.SVRC,2023-02-01T03:38:53.860000Z,2023-02-01T03:38:54.960000Z,1.10811060369646
                     do {
                         file_pos = ftell(fp_obs);
                         cstat = fgets(line, MAXLINE_LONG, fp_obs);
-                        //printf("1 %s", line);
+                        //printf("IMS-4 %s", line);
                         if (cstat == NULL)
                             return (OBS_FILE_END_OF_INPUT);
                     } while (LineIsBlank(line));
                     // check for end of event (assumes Event or STOP at end of event
-                    if (strncmp(line, "Event", 5) == 0) {
+                    if (strncmp(line, "Event", 5) == 0 || strncmp(line, "EVENT", 5) == 0) {
                         /* end of event */
                         fseek(fp_obs, file_pos, SEEK_SET);
                         return (OBS_FILE_END_OF_EVENT);
@@ -5073,12 +5073,12 @@ KO.SVRC,2023-02-01T03:38:53.860000Z,2023-02-01T03:38:54.960000Z,1.10811060369646
                 do {
                     file_pos = ftell(fp_obs);
                     cstat = fgets(line, MAXLINE_LONG, fp_obs);
-                    //printf("1 %s", line);
+                    //printf("IMS-5 %s", line);
                     if (cstat == NULL)
                         return (OBS_FILE_END_OF_INPUT);
                 } while (LineIsBlank(line));
                 // check for end of event (assumes Event or STOP at end of event
-                if (strncmp(line, "Event", 5) == 0) {
+                if (strncmp(line, "Event", 5) == 0 || strncmp(line, "EVENT", 5) == 0) {
                     /* end of event */
                     fseek(fp_obs, file_pos, SEEK_SET);
                     return (OBS_FILE_END_OF_EVENT);
@@ -5107,7 +5107,7 @@ KO.SVRC,2023-02-01T03:38:53.860000Z,2023-02-01T03:38:54.960000Z,1.10811060369646
             if (cstat == NULL)
                 return (OBS_FILE_END_OF_INPUT);
             // check for end of event (assumes Event or STOP at end of event
-            if (strncmp(line, "Event", 5) == 0) {
+            if (strncmp(line, "Event", 5) == 0 || strncmp(line, "EVENT", 5) == 0) {
                 /* end of event */
                 fseek(fp_obs, file_pos, SEEK_SET);
                 return (OBS_FILE_END_OF_EVENT);
@@ -5120,12 +5120,12 @@ KO.SVRC,2023-02-01T03:38:53.860000Z,2023-02-01T03:38:54.960000Z,1.10811060369646
             do {
                 file_pos = ftell(fp_obs);
                 cstat = fgets(line, MAXLINE_LONG, fp_obs);
-                //printf("1 %s", line);
+                //printf("IMS-6 %s", line);
                 if (cstat == NULL)
                     return (OBS_FILE_END_OF_INPUT);
             } while (LineIsBlank(line));
             // check for end of event (assumes Event or STOP at end of event
-            if (strncmp(line, "Event", 5) == 0) {
+            if (strncmp(line, "Event", 5) == 0 || strncmp(line, "EVENT", 5) == 0) {
                 /* end of event */
                 fseek(fp_obs, file_pos, SEEK_SET);
                 return (OBS_FILE_END_OF_EVENT);
@@ -5154,16 +5154,24 @@ KO.SVRC,2023-02-01T03:38:53.860000Z,2023-02-01T03:38:54.960000Z,1.10811060369646
             strcpy(arrival->phase, eval_phase_tmp);
         }
 
-        istat += ReadFortranInt(line, 29, 2, &arrival->hour);
+        int ioffset = 0;
+        if (strstr(ftype_obs, "_GEIN_NOA") != NULL) { // DATA_TYPE BULLETIN IMS1.0:LONG ???
+            ioffset = 1;
+        }
+
+        istat += ReadFortranInt(line, 29 + ioffset, 2, &arrival->hour);
         // BUG FIX - 20091019 signaled by Edith Korger (Edith.Korger@awi.de)
         // ISC_IMS1.0 uses 00h for phases arriving after 24h of day of event !!!
         if (arrival->hour < EventTime.hour)
             arrival->hour += 24;
         //
-        istat += ReadFortranInt(line, 32, 2, &arrival->min);
-        istat += ReadFortranReal(line, 35, 6, &arrival->sec);
+        istat += ReadFortranInt(line, 32 + ioffset, 2, &arrival->min);
+        istat += ReadFortranReal(line, 35 + ioffset, 6, &arrival->sec);
+        //printf("IMS-date %s\n", line);
+        //printf("IMS-date %s\n", line + 29 + ioffset);
+        //printf("IMS-date %d %d %f\n", arrival->hour, arrival->min, arrival->sec);
         double tres = 0.0;
-        istat += ReadFortranReal(line, 40, 7, &tres); // TRes
+        istat += ReadFortranReal(line, 40 + ioffset, 7, &tres); // TRes
         istat += ReadFortranString(line, 101, 1, arrival->first_mot);
         istat += ReadFortranString(line, 102, 1, arrival->onset);
         // set weight, check for P - reset weight
@@ -5183,7 +5191,24 @@ KO.SVRC,2023-02-01T03:38:53.860000Z,2023-02-01T03:38:54.960000Z,1.10811060369646
             arrival->quality += 1;
         }*/
 
+        // special processing for quality in phase code (e.g. "P_3")
+        if (strstr(ftype_obs, "_GEIN_NOA") != NULL) {
+            char *csep = 0;
+            if ((csep = strstr(arrival->phase, "_")) != NULL) {
+                int iqual;
+                int istat2 = sscanf(csep + 1, "%d", &iqual);
+                if (istat2 > 0) {
+                    arrival->quality = iqual;
+                    arrival->phase[csep - arrival->phase] = '\0';
+                }
+            }
+
+        }
+
+
+
         if (istat != 8) {
+            printf("DEBUG_IMS OBS_FILE_INVALID_PHASE %d\n", istat);
             return (OBS_FILE_INVALID_PHASE);
         }
 
@@ -5194,10 +5219,12 @@ KO.SVRC,2023-02-01T03:38:53.860000Z,2023-02-01T03:38:54.960000Z,1.10811060369646
 
         // convert quality to error
         Qual2Err(arrival);
-        // 20160929 AJL - multiplication of error if not first arrival P
-        // 20190815  if (0 && strstr("P$Pg$Pn$Pb$P0$P1$PKP$PKPdf", arrival->phase) == NULL) {
-        if (strstr("P$Pg$Pn$Pb$P0$P1$PKP$PKPdf", arrival->phase) == NULL) {
-            arrival->error *= 4.0;
+        if (strstr(ftype_obs, "_GEIN_NOA") == NULL) {
+            // 20160929 AJL - multiplication of error if not first arrival P
+            // 20190815  if (0 && strstr("P$Pg$Pn$Pb$P0$P1$PKP$PKPdf", arrival->phase) == NULL) {
+            if (strstr("P$Pg$Pn$Pb$P0$P1$PKP$PKPdf", arrival->phase) == NULL) {
+                arrival->error *= 4.0;
+            }
         }
 
         // set error to 9999.0 if ISC Tres > 4*nominal_error from LOCQUAL2ERR
@@ -5249,7 +5276,7 @@ KO.SVRC,2023-02-01T03:38:53.860000Z,2023-02-01T03:38:54.960000Z,1.10811060369646
          */
         /* read line */
         cstat = fgets(line, MAXLINE_LONG, fp_obs);
-        //printf("1 %s", line);
+        printf("IMS %s", line);
         if (cstat == NULL)
             return (OBS_FILE_END_OF_INPUT);
         /* check for end of event (assumes Event or STOP at end of event) */
@@ -5293,7 +5320,7 @@ KO.SVRC,2023-02-01T03:38:53.860000Z,2023-02-01T03:38:54.960000Z,1.10811060369646
                         while (ReadFortranString(line, 35, 3, isc_time_str) != 1
                         || strncmp(isc_time_str, "   ", 3) == 0) {
         // not a time, check if end
-                        if (cstat == NULL || strncmp(line, "Event", 5) == 0
+                        if (cstat == NULL || strncmp(line, "Event", 5 || strncmp(line, "EVENT", 5) == 0) == 0
                         || strncmp(line, "STOP", 4) == 0)
                         return(OBS_FILE_END_OF_EVENT);
         // not a time, not end, read next line
@@ -5919,7 +5946,8 @@ KO.SVRC,2023-02-01T03:38:53.860000Z,2023-02-01T03:38:54.960000Z,1.10811060369646
         Qual2Err(arrival);
 
         return (istat);
-    } else if (strcmp(ftype_obs, "HYPODD_PHA") == 0) {
+    } else if (strcmp(ftype_obs, "HYPODD_PHA") == 0 ||
+            strcmp(ftype_obs, "HYPODD_PHA_S_QUAL_PLUS_1") == 0) {
 
         /* example:
         # 1985  1 24  2 19 58.71  37.8832 -122.2415    9.80 1.40  0.15  0.51  0.02      38542
@@ -5959,10 +5987,13 @@ KO.SVRC,2023-02-01T03:38:53.860000Z,2023-02-01T03:38:54.960000Z,1.10811060369646
         /* read event hypocenter line */
         if (!in_hypocenter_event) {
             /* read hypocenter time */
-            istat = sscanf(line, "# %d %d %d %d %d %lf %*f %*f %*f %*f %*f %*f %*f %ld",
+// DATE, TIME, LAT, LON, DEP, MAG, EH, EV, RMS, ID
+// 2025  02  28   23    59    33.212    36.6105    25.6038    0.00     0.768     0.0     0.0    0.0    34423
+            // 20250314 AJL - added reading of MAG to hypo
+            istat = sscanf(line, "# %d %d %d %d %d %lf %*f %*f %*f %lf %*f %*f %*f %ld",
                     &EventTime.year, &EventTime.month, &EventTime.day,
-                    &EventTime.hour, &EventTime.min, &EventTime.sec, &EventID);
-            if (istat == 7) {
+                    &EventTime.hour, &EventTime.min, &EventTime.sec, &phypo->amp_mag, &EventID);
+            if (istat == 8) {
                 in_hypocenter_event = 1;
                 /* read next line */
                 cstat = fgets(line, MAXLINE_LONG, fp_obs);
@@ -5996,6 +6027,7 @@ KO.SVRC,2023-02-01T03:38:53.860000Z,2023-02-01T03:38:54.960000Z,1.10811060369646
 
         // 20110620 AJL - preserve event id if available
         arrival->dd_event_id_1 = EventID;
+        snprintf(phypo->public_id, sizeof (phypo->public_id), "%ld", EventID); // 20250221 AJL - added
 
         // convert weight to quality (following Appendix C in hypoDD.pdf)
         weight = fabs(weight);
@@ -6009,6 +6041,10 @@ KO.SVRC,2023-02-01T03:38:53.860000Z,2023-02-01T03:38:54.960000Z,1.10811060369646
             arrival->quality = 3;
         else
             arrival->quality = 4;
+        // increase S uncertainty
+        if (IsPhaseID(arrival->phase, "S") && strcmp(ftype_obs, "HYPODD_PHA_S_QUAL_PLUS_1") == 0) {
+            arrival->quality += 1;
+        }
         // convert quality to error
         Qual2Err(arrival);
 
@@ -6796,6 +6832,53 @@ int hypotime2hrminsec(long double phypo_time, int *phypo_hour, int *phypo_min, d
 
 }
 
+/** function to regenerate hypo date and time fields, robust to negative sec in hypo time */
+
+int reset_hypodatetime(long double phypo_time, HypoDesc *phypo) {
+
+    long double hyp_time_tmp = phypo_time;
+    phypo->hour = (int) (hyp_time_tmp / 3600.0L);
+    hyp_time_tmp -= (long double) phypo->hour * 3600.0L;
+    phypo->min = (int) (hyp_time_tmp / 60.0L);
+    hyp_time_tmp -= (long double) phypo->min * 60.0L;
+    phypo->sec = (double) hyp_time_tmp;
+
+    if (phypo->sec < 0.0) {
+
+        printf("DEBUG: reset_hypodatetime: phypo time in: %4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%lf\n", phypo->year, phypo->month, phypo->day, phypo->hour, phypo->min, phypo->sec);
+
+        double hypo_sec = -phypo->sec;
+        int int_sec_offset = (int) hypo_sec + 1;
+        double dec_sec_corr = (double) int_sec_offset - hypo_sec;
+
+        struct tm hypo_time;
+        hypo_time.tm_year = phypo->year - 1900;
+        hypo_time.tm_mon = phypo->month - 1;
+        hypo_time.tm_mday = phypo->day;
+        hypo_time.tm_hour = phypo->hour;
+        hypo_time.tm_min = phypo->min;
+        hypo_time.tm_sec = 0;
+
+        time_t time_seconds = mktime(&hypo_time);
+        time_seconds += 3600 - int_sec_offset;
+
+        struct tm *new_hypo_time = gmtime(&time_seconds);
+
+        phypo->year = new_hypo_time->tm_year + 1900;
+        phypo->month = new_hypo_time->tm_mon + 1;
+        phypo->day = new_hypo_time->tm_mday;
+        phypo->hour = new_hypo_time->tm_hour;
+        phypo->min = new_hypo_time->tm_min;
+        phypo->sec = (double) new_hypo_time->tm_sec + dec_sec_corr;
+
+        printf("DEBUG: reset_hypodatetime: phypo time out: %4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%lf\n", phypo->year, phypo->month, phypo->day, phypo->hour, phypo->min, phypo->sec);
+
+    }
+
+    return (0);
+
+}
+
 /** function to standardize date / time of arrivals, calculate rms */
 
 int StdDateTime(ArrivalDesc *arrival, int num_arrivals, HypoDesc * phypo) {
@@ -6843,7 +6926,12 @@ int StdDateTime(ArrivalDesc *arrival, int num_arrivals, HypoDesc * phypo) {
     }
 
     hypotime2hrminsec(phypo->time, &(phypo->hour), &(phypo->min), &(phypo->sec));
-    //printf("DEBUG: StdDateTime: phypo->time %d:%d:%f\n", phypo->hour, phypo->min, phypo->sec);
+    //printf("DEBUG: StdDateTime: phypo->time %4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%lf\n", phypo->year, phypo->month, phypo->day, phypo->hour, phypo->min, phypo->sec);
+    // 20250207 AJL - Bug fix: if negative time correct data/time
+    if (phypo->sec < 0.0) {
+
+        reset_hypodatetime(phypo->time, phypo);
+    }
 
     /*hyp_time_tmp = phypo->time;
                                                             phypo->hour = (int) (hyp_time_tmp / 3600.0L);
@@ -7585,6 +7673,12 @@ int SaveBestLocation(OctNode* poct_node, int num_arr_total, int num_arr_loc, Arr
             // save station information (will be overwritten in OpenGrid3dFile()
             station = arrival[narr].station;
             sprintf(filename, "%s.time", arrival[narr].fileroot);
+            // 20250215 AJL - Bug fix, check if need to open companion time grid file
+            if (n_compan >= 0)
+                snprintf(filename, sizeof (filename), "%s.time", arrival[n_compan].fileroot);
+            else
+                snprintf(filename, sizeof (filename), "%s.time", arrival[narr].fileroot);
+
             if ((istat = OpenGrid3dFile(filename,
                     &(arrival[narr].fpgrid),
                     &(arrival[narr].fphdr),
@@ -8354,6 +8448,7 @@ double getLogPdfValue(SearchPdfGridDesc *searchPdfGrid, double hypo_x, double hy
                         value = searchPdfGrid->default_value;
                     }
                     if (value > FLT_MIN) {
+
                         pdf_value += log(value) * searchPdfGrid->weight[ngrid];
                         // NO_WT  pdf_value += log(value);
                     }
@@ -11467,10 +11562,10 @@ int GetNLLoc_Method(char* line1) {
     // 20200203 AJL - not sure if this is correct, may be OK?  TODO:
 
     /*if (VpVsRatio > 0.0 && GeometryMode == MODE_GLOBAL) {
-                                        nll_puterr("ERROR: cannot use VpVsRatio>0 with TRANSFORM GLOBAL.");
+                                            nll_puterr("ERROR: cannot use VpVsRatio>0 with TRANSFORM GLOBAL.");
 
-                                        return (EXIT_ERROR_LOCATE);
-                                    }*/
+                                            return (EXIT_ERROR_LOCATE);
+                                        }*/
 
     return (0);
 }
@@ -14082,14 +14177,19 @@ int setStationDistributionWeights(SourceDesc *stations, int numStations, Arrival
         for (m = 0; m < numStations; m++) {
             if ((stations + m)->ignored)
                 continue;
+            // 20240207 AJL - Bug fix: skip stations without coordinates
+            if ((stations + m)->x < -1.0e6)
+                continue;
             dist = GetEpiDist((stations + m), x, y);
             weight = exp(-(dist * dist) / cutoff2); // 0.0 for farthest -> 1.0 for same position
+            //printf("other dist/weigh: %s d=%lf w=%lf (%lf,%lf,%lf)\n",
+            //        (stations + m)->label, dist, weight, (stations + m)->x, (stations + m)->y, (stations + m)->z);
             station_weight += weight; // count of number close stations
         }
         nsta++;
         station_weight = 1.0 / station_weight; // weight inversely prop to number of close stations
         arr->station_weight = station_weight;
-        //printf("Station Weight: %s %lf (%lf,%lf,%lf)\n", arr->label, arr->station_weight, arr->station.x, arr->station.y, arr->station.z);
+        //printf("Station Weight: %s %lf (%lf,%lf,%lf) cutoff2 %lf\n", arr->label, arr->station_weight, arr->station.x, arr->station.y, arr->station.z, sqrt(cutoff2));
         station_weight_sum += station_weight;
     }
     if (nsta > 0) {
@@ -14292,9 +14392,9 @@ int isAboveTopo(double xval, double yval, double zval) {
         int iabove = elev > topo_elev;
 
         /*
-                                                                                if (iabove) {
-                                                                                    printf("xyz %f %f %f  lon/lat/elev %f %f %f  topo_elev %f  above %d\n", xval, yval, zval, ylat, xlon, elev, topo_elev, iabove);
-                                                                                }//*/
+            if (iabove) {
+                printf("xyz %f %f %f  lon/lat/elev %f %f %f  topo_elev %f  above %d\n", xval, yval, zval, ylat, xlon, elev, topo_elev, iabove);
+            }//*/
 
         return (iabove);
     }
@@ -14832,11 +14932,11 @@ long double LocOctree_core(int ngrid, double xval, double yval, double zval,
     resultTreeRoot = addResult(resultTreeRoot, log_value_volume, volume, poct_node);
 
     /*static int icount_value = 0;
-                                                                                                                                                            if (icount_value < 10 && poct_node->value < -1.0e50) {
-                                                                                                                                                                printf("poct_node->value < -1.0e50 !!! poct_node->value %lg  logStationDensityWeight %lg  logWtMtrxSum %lg  log(volume) %lg\n",
-                                                                                                                                                                        poct_node->value, logStationDensityWeight, logWtMtrxSum, log(volume));
-                                                                                                                                                                icount_value++;
-                                                                                                                                                            }*/
+                                                                                                                                                                    if (icount_value < 10 && poct_node->value < -1.0e50) {
+                                                                                                                                                                        printf("poct_node->value < -1.0e50 !!! poct_node->value %lg  logStationDensityWeight %lg  logWtMtrxSum %lg  log(volume) %lg\n",
+                                                                                                                                                                                poct_node->value, logStationDensityWeight, logWtMtrxSum, log(volume));
+                                                                                                                                                                        icount_value++;
+                                                                                                                                                                    }*/
 
     return (value);
 

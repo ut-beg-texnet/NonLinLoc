@@ -627,7 +627,8 @@ int read_grd_surface(struct surface *ps, int imessage, int force_km) {
 
     if ((phline = fgets(hline, MAXLINE_LONG, fp_grd)) == NULL)
         return (-1);
-    istat = sscanf(hline, "%s y_min: %lf y_max: %lf y_inc: %lf %*s %s ny: %d",
+    // 20250110 AJL - Bug fix //istat = sscanf(hline, "%s y_min: %lf y_max: %lf y_inc: %lf %*s %s ny: %d",
+    istat = sscanf(hline, "%s y_min: %lf y_max: %lf y_inc: %lf %*s %s %*s %d",
             filename, &(ps->hdr)->y_min, &(ps->hdr)->y_max, &(ps->hdr)->y_inc,
             (ps->hdr)->y_units, &(ps->hdr)->ny);
     if (imessage) {
@@ -841,7 +842,7 @@ int read_grd(struct surface *ps, int imessage) {
     }
     if (imessage)
         printf("phline: \"%s\"\n", phline);
-    istat = sscanf(hline, "%s x_min: %lf x_max: %lf x_inc: %lf %*s %s nx: %d",
+    istat = sscanf(hline, "%s x_min: %lf x_max: %lf x_inc: %lf %*s %s %*s %d",
             filename, &(ps->hdr)->x_min, &(ps->hdr)->x_max, &(ps->hdr)->x_inc,
             (ps->hdr)->x_units, &(ps->hdr)->nx);
     if (imessage) {
@@ -859,7 +860,8 @@ int read_grd(struct surface *ps, int imessage) {
     }
     if (imessage)
         printf("phline: \"%s\"\n", phline);
-    istat = sscanf(hline, "%s y_min: %lf y_max: %lf y_inc: %lf %*s %s ny: %d",
+    // 20250110 AJL - Bug fix //istat = sscanf(hline, "%s y_min: %lf y_max: %lf y_inc: %lf %*s %s ny: %d",
+    istat = sscanf(hline, "%s y_min: %lf y_max: %lf y_inc: %lf %*s %s %*s %d",
             filename, &(ps->hdr)->y_min, &(ps->hdr)->y_max, &(ps->hdr)->y_inc,
             (ps->hdr)->y_units, &(ps->hdr)->ny);
     if (imessage) {
@@ -989,7 +991,7 @@ int free_surface(struct surface *ps) {
     return (0);
 }
 
-/*** function to write surace data to xyz file */
+/*** function to write surface data to xyz file */
 
 int dump_grd(int nsurface, int idump_decimation, double x_factor, double y_factor, double z_factor, char *dump_file) {
 

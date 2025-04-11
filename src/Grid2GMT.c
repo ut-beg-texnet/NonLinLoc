@@ -1619,7 +1619,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
                         strcpy(cpt_colortable, "polar");
                     }
                     char cpt_command[10 * MAXLINE];
-                    sprintf(cpt_command, GMT_COMMAND_PREFIX"makecpt -Z -C%s -T%g/%g/%g > %s.cpt",
+                    sprintf(cpt_command, GMT_COMMAND_PREFIX"makecpt -Z -I -C%s -T%g/%g/%g > %s.cpt",
                             cpt_colortable, value_min, value_max, contour_int_cpt, fn_root_output);
                     fprintf(fp_gmt, "   %s\n", cpt_command);
                     //if (message_flag > 0)
