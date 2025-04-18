@@ -44,6 +44,12 @@ add_compile_options(-Wall)
 # hide warnings that are difficult to suppress with code changes
 add_compile_options(-Wno-format-truncation)
 
+# 20250416 JUNZHU-SEIS (ut-beg-texnet/NonLinLoc#69)
+# As a side note, I have tried to change the 'MAX_NUM_SOURCES' to 250000 on both MAC and Ubuntu systems, it works on MAC but fails on Ubuntu. I got error message below on Ubuntu. After I ask DeepSeek for the solution, it suggests me edit the CMakeLists.txt as follows and it finally works on Ubuntu as well.
+# 20250416 ALomax; the --no-relax option is unknown on my MAC system
+#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--no-relax")
+#set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-relax")
+
 # Uncomment the following if the compiler you are using supports GNU extensions such as:
 #   fmemopen, open_memstream -  open memory as stream (required to pass observations file lines as parameters
 #   to a function call to NLLoc() and to run NLLoc_func_test)
