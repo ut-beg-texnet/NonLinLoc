@@ -470,6 +470,10 @@ printf("xloc %lf yloc %lf zdepth %lf cWaveType %c imodel %d vel %lg\n", xloc, yl
 				    ((GRID_FLOAT_TYPE***) grid->array)[ix][iy][iz] = 1000.0 * vel;
 				    break;
 
+				case GRID_SLOWNESS:
+				    ((GRID_FLOAT_TYPE***) grid->array)[ix][iy][iz] = 1.0 / vel;
+				    break;
+
 				case GRID_SLOW_LEN:
 				    ((GRID_FLOAT_TYPE***) grid->array)[ix][iy][iz] = grid->dx / vel;
 				    break;

@@ -61,7 +61,9 @@ also: (gcc (GCC) 4.4.4 20100630 (Red Hat 4.4.4-10)   Kernel: 2.6.32.26-175.fc12.
  Frederik Tilmann */
 //#define MAX_NUM_INPUT_FILES 32000
 // 20170210 AJL - reset to 50k
-#define MAX_NUM_INPUT_FILES 50000
+//#define MAX_NUM_INPUT_FILES 50000
+// 20250912 AJL - set to 100k
+#define MAX_NUM_INPUT_FILES 100000
 
 // 20221020 AJL - replaced X_MAX_NUM_ARRIVALS with this defined constant so larger numbers of phases can be processed
 #define MAX_NUM_ARRIVALS_LOC2SSST 20000
