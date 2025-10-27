@@ -87,6 +87,11 @@ int main(int argc, char *argv[]) {
         exit(-1);
     }
 
+    // set constants
+    SetConstants();
+    prog_mode_3d = 1;
+    NumSources = 0;
+
     DoGridCutProcess(argc, argv);
 
     exit(0);
