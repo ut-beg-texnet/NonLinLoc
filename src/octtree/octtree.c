@@ -1044,6 +1044,84 @@ int writeNode(FILE *fpio, OctNode *node) {
 
 }
 
+/** Called by getScatterSampleResultTreeAtLevels. The purpose of this function
+ * is to keep the stack frame of getScatterSampleResultTreeAtLevels free of
+ * local variables, so that excessive recursion caused by a deep tree does not
+ * lead to a SIGSEGV due to stack memory exhaustion.
+ */
+int _getScatterSampleResultTreeAtLevels_(ResultTreeNode* prtree, int value_type, int num_scatter,
+        double integral, float* fdata, int npoints, int* pfdata_index,
+        double oct_node_value_ref, double *poct_tree_scatter_volume) {
+
+    OctNode* pnode;
+    double xnpoints = 0.0;
+    double xval, yval, zval;
+    double dx, dy, dz;
+    //int isample_taken;
+
+    pnode = prtree->pnode;
+
+    // AJL 20061023 bug fix - prtree value may not be same as pnode value * volume
+    //xnpoints = (double) num_scatter * exp(prtree->value - oct_node_value_ref) / integral;
+    if (value_type == VALUE_IS_LOG_PROB_DENSITY_IN_NODE) {
+        xnpoints = (double) num_scatter * (exp(pnode->value - oct_node_value_ref) * prtree->volume) / integral;
+    } else if (value_type == VALUE_IS_PROB_DENSITY_IN_NODE) {
+        xnpoints = prtree->volume * (double) num_scatter * (pnode->value / oct_node_value_ref) / integral;
+    } else if (value_type == VALUE_IS_PROBABILITY_IN_NODE) {
+        // 20140220 AJL - bug fix
+        xnpoints = (double) num_scatter * (pnode->value / oct_node_value_ref) / integral;
+        //xnpoints = (double) num_scatter * (pnode->value - oct_node_value_ref) / integral;
+    }
+    //printf("xnpoints %g  num_scatter %d  value %lf  integral %g\n", xnpoints, num_scatter, pnode->value, integral);
+
+    xval = pnode->center.x;
+    yval = pnode->center.y;
+    zval = pnode->center.z;
+    dx = pnode->ds.x / 2.0;
+    dy = pnode->ds.y / 2.0;
+    dz = pnode->ds.z / 2.0;
+
+        //isample_taken = 0;
+
+        //while (xnpoints > 0.0 /*&& npoints < num_scatter*/) {
+    while (xnpoints > 0.0 && npoints < num_scatter) { // 20110118 AJL
+
+        if (xnpoints > 1.0 || xnpoints - (double) ((int) xnpoints) > get_rand_double(0.0, 1.0)) {
+            fdata[*pfdata_index + 0] = xval + get_rand_double(-dx, dx);
+            //printf("npoints %d  *pfdata_index %d  %lf  dx %lf  exp(prtree->value) %le  integral %le\n", npoints, *pfdata_index, fdata[*pfdata_index + 0], dx, exp(prtree->value), integral);
+            fdata[*pfdata_index + 1] = yval + get_rand_double(-dy, dy);
+            fdata[*pfdata_index + 2] = zval + get_rand_double(-dz, dz);
+            fdata[*pfdata_index + 3] = pnode->value;
+            //printf("npoints %d  *pfdata_index %d  value %lf  dx %g dy %g dz %g   x %g y %g z %g\n", npoints, *pfdata_index, pnode->value, dx, dy, dz, xval, yval, zval);
+            npoints++;
+            //isample_taken = 1;
+            *pfdata_index += 4;
+        }
+
+        xnpoints -= 1.0;
+
+    }
+
+    // update weighted scatter volume
+    // pnode->value is probability density
+    // oct_node_value_ref is maximum probability density
+    if (value_type == VALUE_IS_LOG_PROB_DENSITY_IN_NODE) {
+        *poct_tree_scatter_volume += prtree->volume * exp(pnode->value - oct_node_value_ref);
+    } else if (value_type == VALUE_IS_PROB_DENSITY_IN_NODE) {
+        *poct_tree_scatter_volume += prtree->volume * ((pnode->value / oct_node_value_ref) > 0.0 ? (pnode->value / oct_node_value_ref) : 0.0);
+    } else if (value_type == VALUE_IS_PROBABILITY_IN_NODE) {
+        // 20150910 AJL - TEST
+        *poct_tree_scatter_volume += (pnode->value / oct_node_value_ref) > 0.0 ? (pnode->value / oct_node_value_ref) : 0.0;
+        // 20150215 AJL - bug fix? - need to weight volume by something, TODO: though this (wt by P) is not equivalent to weighting above (wt by PDF)
+        //*poct_tree_scatter_volume += prtree->volume * ((pnode->value / oct_node_value_ref) > 0.0 ? (pnode->value / oct_node_value_ref) : 0.0);
+        // 20140220 AJL - bug fix
+        //printf("poct_tree_scatter_volume %f  volume %f  value%f  oct_node_value_ref%f\n", *poct_tree_scatter_volume, prtree->volume, pnode->value, oct_node_value_ref);
+        //*poct_tree_scatter_volume += (pnode->value - oct_node_value_ref) > 0.0 ? (pnode->value - oct_node_value_ref) : 0.0;
+    }
+
+    return (npoints);
+}
+
 /** function to get scatter sample for all leafs in results tree
  *  *poct_tree_scatter_volume is weighted volume of cells in results tree
  *  *poct_tree_scatter_volume = SUM(cell_volume * cell_prob / oct_node_value_ref)
@@ -1054,10 +1132,11 @@ int getScatterSampleResultTreeAtLevels(ResultTreeNode* prtree, int value_type, i
         double oct_node_value_ref, double *poct_tree_scatter_volume, int level_min, int level_max) {
 
     OctNode* pnode;
-    double xnpoints = 0.0;
-    double xval, yval, zval;
-    double dx, dy, dz;
-    //int isample_taken;
+
+    // 20260115 - stop recursion when enough samples have been gathered
+    if ( npoints >= num_scatter) {
+      return (npoints);
+    }
 
     if (prtree->right != NULL)
         npoints = getScatterSampleResultTreeAtLevels(prtree->right, value_type, num_scatter, integral,
@@ -1067,64 +1146,9 @@ int getScatterSampleResultTreeAtLevels(ResultTreeNode* prtree, int value_type, i
     //printf("npoints < num_scatter %d && pnode->isLeaf %d && pnode->level >= level_min %d && pnode->level <= level_max %d (level %d min %d max %d\n",
     //        npoints < num_scatter, pnode->isLeaf, pnode->level >= level_min, pnode->level <= level_max, pnode->level, level_min, level_max);
     if (npoints < num_scatter && pnode->isLeaf && pnode->level >= level_min && pnode->level <= level_max) {
-
-        // AJL 20061023 bug fix - prtree value may not be same as pnode value * volume
-        //xnpoints = (double) num_scatter * exp(prtree->value - oct_node_value_ref) / integral;
-        if (value_type == VALUE_IS_LOG_PROB_DENSITY_IN_NODE) {
-            xnpoints = (double) num_scatter * (exp(pnode->value - oct_node_value_ref) * prtree->volume) / integral;
-        } else if (value_type == VALUE_IS_PROB_DENSITY_IN_NODE) {
-            xnpoints = prtree->volume * (double) num_scatter * (pnode->value / oct_node_value_ref) / integral;
-        } else if (value_type == VALUE_IS_PROBABILITY_IN_NODE) {
-            // 20140220 AJL - bug fix
-            xnpoints = (double) num_scatter * (pnode->value / oct_node_value_ref) / integral;
-            //xnpoints = (double) num_scatter * (pnode->value - oct_node_value_ref) / integral;
-        }
-        //printf("xnpoints %g  num_scatter %d  value %lf  integral %g\n", xnpoints, num_scatter, pnode->value, integral);
-
-        xval = pnode->center.x;
-        yval = pnode->center.y;
-        zval = pnode->center.z;
-        dx = pnode->ds.x / 2.0;
-        dy = pnode->ds.y / 2.0;
-        dz = pnode->ds.z / 2.0;
-
-        //isample_taken = 0;
-
-        //while (xnpoints > 0.0 /*&& npoints < num_scatter*/) {
-        while (xnpoints > 0.0 && npoints < num_scatter) { // 20110118 AJL
-
-            if (xnpoints > 1.0 || xnpoints - (double) ((int) xnpoints) > get_rand_double(0.0, 1.0)) {
-                fdata[*pfdata_index + 0] = xval + get_rand_double(-dx, dx);
-                //printf("npoints %d  *pfdata_index %d  %lf  dx %lf  exp(prtree->value) %le  integral %le\n", npoints, *pfdata_index, fdata[*pfdata_index + 0], dx, exp(prtree->value), integral);
-                fdata[*pfdata_index + 1] = yval + get_rand_double(-dy, dy);
-                fdata[*pfdata_index + 2] = zval + get_rand_double(-dz, dz);
-                fdata[*pfdata_index + 3] = pnode->value;
-                //printf("npoints %d  *pfdata_index %d  value %lf  dx %g dy %g dz %g   x %g y %g z %g\n", npoints, *pfdata_index, pnode->value, dx, dy, dz, xval, yval, zval);
-                npoints++;
-                //isample_taken = 1;
-                *pfdata_index += 4;
-            }
-
-            xnpoints -= 1.0;
-
-        }
-
-        // update weighted scatter volume
-        // pnode->value is probability density
-        // oct_node_value_ref is maximum probability density
-        if (value_type == VALUE_IS_LOG_PROB_DENSITY_IN_NODE) {
-            *poct_tree_scatter_volume += prtree->volume * exp(pnode->value - oct_node_value_ref);
-        } else if (value_type == VALUE_IS_PROB_DENSITY_IN_NODE) {
-            *poct_tree_scatter_volume += prtree->volume * ((pnode->value / oct_node_value_ref) > 0.0 ? (pnode->value / oct_node_value_ref) : 0.0);
-        } else if (value_type == VALUE_IS_PROBABILITY_IN_NODE) {
-            // 20150910 AJL - TEST
-            *poct_tree_scatter_volume += (pnode->value / oct_node_value_ref) > 0.0 ? (pnode->value / oct_node_value_ref) : 0.0;
-            // 20150215 AJL - bug fix? - need to weight volume by something, TODO: though this (wt by P) is not equivalent to weighting above (wt by PDF)
-            //*poct_tree_scatter_volume += prtree->volume * ((pnode->value / oct_node_value_ref) > 0.0 ? (pnode->value / oct_node_value_ref) : 0.0);
-            // 20140220 AJL - bug fix
-            //printf("poct_tree_scatter_volume %f  volume %f  value%f  oct_node_value_ref%f\n", *poct_tree_scatter_volume, prtree->volume, pnode->value, oct_node_value_ref);
-            //*poct_tree_scatter_volume += (pnode->value - oct_node_value_ref) > 0.0 ? (pnode->value - oct_node_value_ref) : 0.0;
-        }
+      // 20260115 - move code block to _getScatterSampleResultTreeAtLevels_ to decrease the stack memory
+      npoints = _getScatterSampleResultTreeAtLevels_(prtree, value_type, num_scatter,
+        integral, fdata, npoints, pfdata_index, oct_node_value_ref,  poct_tree_scatter_volume);
     }
 
     if (prtree->left != NULL)
