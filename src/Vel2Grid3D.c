@@ -51,7 +51,7 @@
         ver 06    09MAR2007  AJL  Added ALBERTO ascii table format
         ver 07    01MAY2012  AJL  Misc bug fixes, and changes to prevent gcc warnings.
                                   Added output of ANU-FMM vgrids.in velocity model file
-                                  and propgrid.in propagation grid file in current working direcgtory.
+                                  and propgrid.in propagation grid file in current working directory.
 
 
 
@@ -82,7 +82,7 @@
 #endif
 #endif
 
-
+#define DEBUG 0
 
 #define PNAME  "Vel2Grid3D"
 
@@ -299,7 +299,6 @@ int main(int argc, char *argv[]) {
 
 }
 
-
 /*** function to read Velocity Model input file */
 
 int ReadVelModel(VelModel* vel_model, GridDesc* mod_grid) {
@@ -466,6 +465,7 @@ int ReadVelModel(VelModel* vel_model, GridDesc* mod_grid) {
             fscanf(inpfile, "%*f %*f %*f");
 #endif
 
+            int nread_total = 0;
             for (k = 0; k < vel_model->numz; k++) {
                 /*  	for(j=vel_model->numy;j>0;j--) */
                 for (j = 0; j < vel_model->numy; j++) {
@@ -474,13 +474,22 @@ int ReadVelModel(VelModel* vel_model, GridDesc* mod_grid) {
                     for (i = 0; i < vel_model->numx; i++) {
                         fscanf(inpfile, VEL_FORMAT, &vel_model->array[i][j][k]);
                         nread++;
+                        nread_total++;
+                        if (DEBUG) {
+                            fprintf(stderr, "%f ", vel_model->array[i][j][k]);
+                        }
                     }
                     if (nread < vel_model->numx) {
                         fclose(inpfile);
                         return (-6);
                     }
+                    if (DEBUG) {
+                        fprintf(stderr, "\n");
+                    }
                 }
             }
+            fprintf(stderr, "ReadVelModel: total number vel values read: %d, Nx*Ny*Nz: %d\n\t",
+                    nread_total, vel_model->numx * vel_model->numy * vel_model->numz);
         } else {
             fclose(inpfile);
             return (-1);
@@ -488,6 +497,7 @@ int ReadVelModel(VelModel* vel_model, GridDesc* mod_grid) {
     }
 
     fclose(inpfile);
+
     return (0);
 }
 
@@ -522,7 +532,8 @@ float get3Dvel(VelModel* vel_model, float posx, float posy, float posz) {
 #ifdef COORDS_POS_EAST
     for (i = 0; (i < vel_model->numx) && (vel_model->deltax[i] < posx); i++);
 #else
-    for (i = 0; (i < vel_model->numx) && (vel_model->deltax[i] > posx); i++);
+    // 20241023 ALomax = Bug fix? #for (i = 0; (i < vel_model->numx) && (vel_model->deltax[i] > posx); i++);
+    for (i = 0; (i < vel_model->numx) && (vel_model->deltax[i] < posx); i++); // 20241023 ALomax = Bug fix?
 #endif
 #endif
     for (j = 0; (j < vel_model->numy) && (vel_model->deltay[j] < posy); j++);
@@ -595,7 +606,9 @@ float get3Dvel(VelModel* vel_model, float posx, float posy, float posz) {
     if (clip_method == CLIP_METHOD_LOW_HIGH) {
         if (vel < vel_clip_low)
             vel = vel_clip_low;
-        else if (vel > vel_clip_high)
+        else
+
+            if (vel > vel_clip_high)
             vel = vel_clip_high;
     }
 
@@ -631,7 +644,6 @@ int get_vg_type(char* line1) {
     nll_putmsg(3, MsgStr);
 
     NumWaveTypes++;
-
 
     return (0);
 }
@@ -894,8 +906,8 @@ int VelModToGrid3d(VelModel* vel_model, GridDesc* grid, char *waveType) {
         //cWaveType = 'S';
         ;
     else {
-        nll_puterr2("ERROR: unrecognized wave type", waveType);
-        return (-1);
+        nll_puterr2("WARNING: unrecognized wave type", waveType);
+        //return (-1);
     }
 
 
@@ -926,6 +938,7 @@ int VelModToGrid3d(VelModel* vel_model, GridDesc* grid, char *waveType) {
                                 num_surfaces, &den, 0);
                         vel = vel1 > 0.0 ? vel1 : vel;
                     }*/
+                    //printf("get3Dvel(vel_model, xval %f, yval %f, zdepth %f, vel %f\n", xval, yval, zdepth, vel);
                 }
 
                 if (vel < 0.0) {
@@ -954,6 +967,7 @@ int VelModToGrid3d(VelModel* vel_model, GridDesc* grid, char *waveType) {
 
                     default:
                         nll_puterr("ERROR: unrecognized grid type.");
+
                         return (-1);
 
                 }
@@ -1021,6 +1035,7 @@ int AllocateVelModel(VelModel * vel_model) {
             garray[ix][iy] = vel_model->buffer + ix * numyz + iy * vel_model->numz;
     }
     vel_model->array = garray;
+
     return (0);
 }
 
@@ -1057,6 +1072,7 @@ void FreeVelModel(VelModel * vel_model) {
     if (vel_model->deltay)
         free(vel_model->deltay);
     vel_model->deltay = NULL;
+
     if (vel_model->deltaz)
         free(vel_model->deltaz);
     vel_model->deltaz = NULL;
@@ -1082,8 +1098,8 @@ int VelModToFMM(VelModel* vel_model, GridDesc* grid, FILE* fp_fmmVgridFile, FILE
         //cWaveType = 'S';
         ;
     else {
-        nll_puterr2("ERROR: unrecognized wave type", waveType);
-        return (-1);
+        nll_puterr2("WARNING: unrecognized wave type", waveType);
+        //return (-1);
     }
 
     int pad_for_propagation_grid = 2; // propagation grid is extended at each boudary:

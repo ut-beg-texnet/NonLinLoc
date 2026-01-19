@@ -56,13 +56,13 @@ tel: +33(0)493752502  e-mail: anthony@alomax.net  web: http://www.alomax.net
 //#define GMT_VER_5        // define this macro to generate GMT 5.x compatible script
 
 #ifdef GMT_VER_5
-    #define GMT_COMMAND_PREFIX "gmt "
-    #define GMT_PEN_WIDTH_SUFFIX "p,"
-    #define GMT_SCAT_WIDTH_SUFFIX "p -G"
+#define GMT_COMMAND_PREFIX "gmt "
+#define GMT_PEN_WIDTH_SUFFIX "p,"
+#define GMT_SCAT_WIDTH_SUFFIX "p -G"
 #else
-    #define GMT_COMMAND_PREFIX ""
-    #define GMT_PEN_WIDTH_SUFFIX "/"
-    #define GMT_SCAT_WIDTH_SUFFIX "/"
+#define GMT_COMMAND_PREFIX ""
+#define GMT_PEN_WIDTH_SUFFIX "/"
+#define GMT_SCAT_WIDTH_SUFFIX "/"
 #endif
 
 #define NUM_COLORS 8
@@ -210,10 +210,10 @@ int main(int argc, char *argv[]) {
     /* check command line for correct usage */
 
     //if (message_flag > 0) {
-        fprintf(stdout, "\n%s Arguments: ", prog_name);
-        for (narg = 0; narg < argc; narg++)
-            fprintf(stdout, "<%s> ", argv[narg]);
-        fprintf(stdout, "\n");
+    fprintf(stdout, "\n%s Arguments: ", prog_name);
+    for (narg = 0; narg < argc; narg++)
+        fprintf(stdout, "<%s> ", argv[narg]);
+    fprintf(stdout, "\n");
     //}
 
     // count non option arguments
@@ -271,8 +271,8 @@ int main(int argc, char *argv[]) {
         sscanf(argv[++narg], "%d", &izlevel);
         sprintf(args_str, "%s", argv[6]);
     } else if (cplotmode == 'L') {
+        ix1 = iy1 = izlevel = -1;
         if (argc_non_opt == 9) {
-            ix1 = iy1 = izlevel = 0;
             sscanf(argv[++narg], "%d", &ix1);
             sscanf(argv[++narg], "%d", &iy1);
             sscanf(argv[++narg], "%d", &izlevel);
@@ -364,6 +364,20 @@ int main(int argc, char *argv[]) {
                 exit(EXIT_ERROR_MISC);
             }
         }
+
+        // For Loc mode, set ix, iy, iz to midpoing of grid, if not specified on command line
+        if (cplotmode == 'L') {
+            if (ix1 < 0) {
+                ix1 = grid0.numx / 2;
+            }
+            if (iy1 < 0) {
+                iy1 = grid0.numy / 2;
+            }
+            if (izlevel < 0) {
+                izlevel = grid0.numz / 2;
+            }
+        }
+
 
         // set grid for plotting
         if (mapGridRead) {
@@ -493,7 +507,7 @@ int parameter_proc(int argcount, char **argvec) {
 
 int GenGMTCommands(char cplotmode, char cdatatype,
         char arg_elements[][20], int num_arg_elements, char *args_str,
-        int ix1, int iy1, int ix2, int iy2, int izlevel, GridDesc *pgrid0) {
+        int ix1, int iy1, int ix2, int iy2, int izlevel, GridDesc * pgrid0) {
 
     int istat, ihypo;
     char shift_str[MAXLINE], title_str[MAXLINE] = "\0";
@@ -520,7 +534,7 @@ int GenGMTCommands(char cplotmode, char cdatatype,
 
     /* open gmt files */
 
-    snprintf(fn_gmt, sizeof(fn_gmt), "%s.gmt", fn_root_output);
+    snprintf(fn_gmt, sizeof (fn_gmt), "%s.gmt", fn_root_output);
     if ((fp_gmt = fopen(fn_gmt, "w")) == NULL) {
         nll_puterr("ERROR opening gmt output file.");
         return (-1);
@@ -599,16 +613,16 @@ int GenGMTCommands(char cplotmode, char cdatatype,
 
     if (cdatatype == 'G') {
         if (strlen(title) < 1)
-            snprintf(title_str, sizeof(title_str), "%s__(%s)", fn_root_output, args_str);
+            snprintf(title_str, sizeof (title_str), "%s__(%s)", fn_root_output, args_str);
         else
-            snprintf(title_str, sizeof(title_str), "%s", title);
+            snprintf(title_str, sizeof (title_str), "%s", title);
     }
 
     //} else {
 
     /* open hypocenter file */
 
-    snprintf(fn_hypo, sizeof(fn_hypo), "%s.hyp", fnroot_input);
+    snprintf(fn_hypo, sizeof (fn_hypo), "%s.hyp", fnroot_input);
     if ((fp_hypo = fopen(fn_hypo, "r")) == NULL) {
         if (message_flag >= 1)
             nll_putmsg2(1, "INFO: cannot open hypocenter file", fn_hypo);
@@ -667,9 +681,9 @@ int GenGMTCommands(char cplotmode, char cdatatype,
     }// no hypocenter file
     else {
         if (strlen(title) < 1)
-            snprintf(title_str, sizeof(title_str), "%s__(%s)", fn_root_output, args_str);
+            snprintf(title_str, sizeof (title_str), "%s__(%s)", fn_root_output, args_str);
         else
-            snprintf(title_str, sizeof(title_str), "%s", title);
+            snprintf(title_str, sizeof (title_str), "%s", title);
     }
 
 
@@ -951,7 +965,7 @@ int GenGMTCommands(char cplotmode, char cdatatype,
     /* run gmt script */
 
     fprintf(stdout, "\n\nRunning GMT script %s ...\n", fn_gmt);
-    snprintf(sys_string, sizeof(sys_string), "chmod a+x %s", fn_gmt);
+    snprintf(sys_string, sizeof (sys_string), "chmod a+x %s", fn_gmt);
     system(sys_string);
     system(fn_gmt);
 
@@ -1061,7 +1075,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
     /* open gmt grid file */
 
     if (cdatatype == 'G') {
-        snprintf(fn_gmtgrd, sizeof(fn_gmtgrd), "%s.%c.grd", fn_root_output, file_id);
+        snprintf(fn_gmtgrd, sizeof (fn_gmtgrd), "%s.%c.grd", fn_root_output, file_id);
         if ((fp_gmtgrd = fopen(fn_gmtgrd, "w")) == NULL) {
             nll_puterr("ERROR opening gmt grid output file.");
             return (-1);
@@ -1393,7 +1407,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
 
     /* try to open and read station list file */
 
-    snprintf(fn_stations, sizeof(fn_stations), "%s.stations", fnroot_input);
+    snprintf(fn_stations, sizeof (fn_stations), "%s.stations", fnroot_input);
     if ((fp_stations = fopen(fn_stations, "r")) != NULL) {
         NumStationPhases = ReadStationList(fp_stations, Stations, 0);
         fclose(fp_stations);
@@ -1412,7 +1426,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
 
     /* RVAL rectangular x/y */
     fprintf(fp_gmt, "# Rect x/y in km\n");
-        fprintf(fp_gmt, "RVAL=\'-R%lf/%lf/%lf/%lf\'\n",
+    fprintf(fp_gmt, "RVAL=\'-R%lf/%lf/%lf/%lf\'\n",
             horiz_min, horiz_max, vert_min, vert_max);
     if (message_flag > 0)
         fprintf(stdout, "RVAL: RECT/X: %lf/%lf RECTY:%lf/%lf\n",
@@ -1486,7 +1500,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
         /* JVAL geographic version */
         gmt_scale = getGMTJVAL(proj_index_output, gmt_JVAL_latlong_string, *pxlen, vxmax, vxmin, *pylen, vymax, vymin);
         fprintf(fp_gmt, "# Latitude/Longitude in degrees\n");
-        snprintf(gmt_JVAL, sizeof(gmt_JVAL), "JVAL=\'%s -Jz%lf\'",
+        snprintf(gmt_JVAL, sizeof (gmt_JVAL), "JVAL=\'%s -Jz%lf\'",
                 gmt_JVAL_latlong_string, gmt_scale * zscalefact);
         fprintf(fp_gmt, "%s\n", gmt_JVAL);
 
@@ -1532,14 +1546,14 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
                     GMT_COMMAND_PREFIX"xyz2grd %s -G%sgmt -I%lf/%lf ${RVAL} -Ddeg/deg/=/0.0/0.0/%s/remark -V -ZTLf\n",
                     fn_gmtgrd, fn_gmtgrd, vdgridx, vdgridy, fn_root_output);
             // 20230308 AJL - Bug fix //fprintf(fp_gmt, "endif\n\n");
-            fprintf(fp_gmt, "fi\n\n");  // 20230308 AJL - Bug fix
+            fprintf(fp_gmt, "fi\n\n"); // 20230308 AJL - Bug fix
         }
 
         fprintf(fp_gmt, "SCALE_FLAG=\n\n");
 
         if (pgrid->type == GRID_PROB_DENSITY) {
 
-            snprintf(fn_cont, sizeof(fn_cont), "%s.conf", fnroot_input);
+            snprintf(fn_cont, sizeof (fn_cont), "%s.conf", fnroot_input);
             MakeConfCPT(fn_cont, fn_root_output);
             fprintf(fp_gmt,
                     GMT_COMMAND_PREFIX"grdimage -S-n %sgmt -C%s.conf.cpt $JVAL $RVAL $BVAL -K -O >> %s.ps\n\n",
@@ -1619,7 +1633,7 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
                         strcpy(cpt_colortable, "polar");
                     }
                     char cpt_command[10 * MAXLINE];
-                    sprintf(cpt_command, GMT_COMMAND_PREFIX"makecpt -Z -C%s -T%g/%g/%g > %s.cpt",
+                    sprintf(cpt_command, GMT_COMMAND_PREFIX"makecpt -Z -I -C%s -T%g/%g/%g > %s.cpt",
                             cpt_colortable, value_min, value_max, contour_int_cpt, fn_root_output);
                     fprintf(fp_gmt, "   %s\n", cpt_command);
                     //if (message_flag > 0)
@@ -1772,9 +1786,9 @@ int GenGridViewGMT(GridDesc* pgrid, char cviewmode, char cdatatype,
 
         if (cviewmode == 'H') {
             if (cdatatype == 'R') {
-                snprintf(fn_nlloc_stat, sizeof(fn_nlloc_stat), "%s.stat", fnroot_input);
+                snprintf(fn_nlloc_stat, sizeof (fn_nlloc_stat), "%s.stat", fnroot_input);
             } else {
-                snprintf(fn_nlloc_stat, sizeof(fn_nlloc_stat), "%s.stat_totcorr", fnroot_input);
+                snprintf(fn_nlloc_stat, sizeof (fn_nlloc_stat), "%s.stat_totcorr", fnroot_input);
             }
             nresiduals = ConvertResids2MapGMT(cdatatype,
                     fn_nlloc_stat, arg_elements[0], fp_gmt, Stations, NumStationPhases, res_scale, res_min_num_readings);
@@ -2093,7 +2107,7 @@ int MakeTopoCPT(char* fileout) {
 
 /*** function to read input file */
 
-int ReadGrid2GMT_Input(FILE* fp_input) {
+int ReadGrid2GMT_Input(FILE * fp_input) {
     int istat, iscan;
     char param[MAXLINE];
     char line[MAXLINE];
@@ -2239,9 +2253,9 @@ int grd2GMT(int nmapfile, double xmin0, double ymin0, double xmax0, double ymax0
     sprintf(fname_cpt, "%s.cpt", mapfile[nmapfile].name);
     if ((fp_tmp = fopen(fname_cpt, "r")) == NULL) {
         // make default cpt file
-        snprintf(fname_temp_cpt, sizeof(fname_temp_cpt), "%sgrd.temp.cpt", fnoutput);
+        snprintf(fname_temp_cpt, sizeof (fname_temp_cpt), "%sgrd.temp.cpt", fnoutput);
         MakeTopoCPT(fname_temp_cpt);
-        snprintf(fname_cpt, sizeof(fname_cpt), "%sgrd.cpt", fnoutput);
+        snprintf(fname_cpt, sizeof (fname_cpt), "%sgrd.cpt", fnoutput);
         fprintf(fp_gmt, GMT_COMMAND_PREFIX"grd2cpt %s -C%s -Z > %s\n", mapfile[nmapfile].name, fname_temp_cpt, fname_cpt);
     }
     if (fp_tmp != NULL)
@@ -2949,7 +2963,7 @@ void genResidualGMT(FILE* fp_out, char* xtra_args, double resid, double x, doubl
 
 /** function to find a station name in a StaList */
 
-SourceDesc *findStaLoc(char *staName, SourceDesc* stalist, int nstations) {
+SourceDesc * findStaLoc(char *staName, SourceDesc* stalist, int nstations) {
 
     int n;
 

@@ -456,7 +456,7 @@ printf("xloc %lf yloc %lf zdepth %lf cWaveType %c imodel %d vel %lg\n", xloc, yl
 				}
 
 				if (vel < 0.0) {
-					nll_puterr("ERROR: cannot get velocity.");
+					nll_puterr("ERROR: vel < 0.0, cannot get velocity.");
 					return(-1);
 				}
 
@@ -468,6 +468,10 @@ printf("xloc %lf yloc %lf zdepth %lf cWaveType %c imodel %d vel %lg\n", xloc, yl
 
 				case GRID_VELOCITY_METERS:
 				    ((GRID_FLOAT_TYPE***) grid->array)[ix][iy][iz] = 1000.0 * vel;
+				    break;
+
+				case GRID_SLOWNESS:
+				    ((GRID_FLOAT_TYPE***) grid->array)[ix][iy][iz] = 1.0 / vel;
 				    break;
 
 				case GRID_SLOW_LEN:

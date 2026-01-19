@@ -51,7 +51,8 @@ tel: +33(0)493752502  e-mail: anthony@alomax.net  web: http://www.alomax.net
 
 #include "GridLib.h"
 
-#define DEBUG_GRID2TIME 0
+//#define DEBUG_GRID2TIME 0
+#define DEBUG_GRID2TIME 1
 
 
 
@@ -73,10 +74,14 @@ int tt_calc_meth; /*	travel time calc method */
 
 
 /*------------------------------------------------------------/ */
-/* METHOD_PODLECFD = Podvin & Lecomte Finite Diff  (TIme_3d_fs.c) */
+/* METHOD_PODLECFD = Podvin & Lecomte Finite Diff  (Time_3d_fs.c) */
 /*			Podvin & Lecomte, Geophys.J.Intnl. 105, 271-284, 1991. */
 #define METHOD_PODLECFD 1
-int time_3d(GRID_FLOAT_TYPE *HS, GRID_FLOAT_TYPE *T, int NX, int NY, int NZ, GRID_FLOAT_TYPE XS, GRID_FLOAT_TYPE YS, GRID_FLOAT_TYPE ZS, GRID_FLOAT_TYPE HS_EPS_INIT, int MSG);
+// 20250422 ALomax - modified to support multiple sources:
+// int time_3d(GRID_FLOAT_TYPE *HS, GRID_FLOAT_TYPE *T, int NX, int NY, int NZ, GRID_FLOAT_TYPE XS, GRID_FLOAT_TYPE YS, GRID_FLOAT_TYPE ZS, GRID_FLOAT_TYPE HS_EPS_INIT, int MSG);
+int time_3d_ms(GRID_FLOAT_TYPE *HS, GRID_FLOAT_TYPE *T, int NX, int NY, int NZ,
+        GRID_FLOAT_TYPE *XS, GRID_FLOAT_TYPE *YS, GRID_FLOAT_TYPE *ZS, int NUM_SOURCE,
+        GRID_FLOAT_TYPE HS_EPS_INIT, int MSG);
 /*
 int time_3d(HS,T,NX,NY,NZ,XS,YS,ZS,HS_EPS_INIT,MSG)
 GRID_FLOAT_TYPE *HS,*T,HS_EPS_INIT,XS,YS,ZS;
@@ -146,6 +151,31 @@ float wvfrnt_dtemps;
 
 /*------------------------------------------------------------/ */
 
+/*------------------------------------------------------------/ */
+/* METHOD_FTEIK3D = FTeik-Eikonal-Solver
+ *		FTeik 2D and 3D Eikonal solver to compute first arrival traveltimes in a heterogeneous isotropic velocity model,
+ *		with the possibility to use different grid spacing in all directions.
+ *
+ *		Programed by Mark NOBLE, MINES ParisTech, France
+ *		M. Noble, A. Gesret and N. Belayouni, 2014, Accurate 3-D finite difference computation of traveltimes
+ *                 in strongly heterogeneous media, Geophys.J.Int.,199,(3),1572-158.
+ */
+#define METHOD_FTEIK3D 3
+int get_gt_fteik3d(char* line1);
+
+/* FTeik-Eikonal-Solver parameters */
+
+/*
+!      integer*4 - eps : radius in number of grid points arround source where then
+!                   spherical approximation will be used (for most applications
+!                   5 to 10 is enough.
+!
+! integer*4 - n_sweep : Number of sweeps over model. 1 is in general enough
+ */
+int fteik_eps; // radius in number of grid points around source where then spherical approximation will be used
+// (for most applications 5 to 10 is enough.
+int fteik_nsweep; // Number of sweeps over model. 1 is in general enough
+int fteik_message;
 
 /*------------------------------------------------------------/ */
 /* END declarations for various travel time calculation methods */
@@ -159,6 +189,18 @@ float wvfrnt_dtemps;
 char fn_gt_input[MAXLINE_LONG], fn_gt_output[MAXLINE_LONG];
 int iSwapBytesOnInput;
 
+// line sensor
+#define MAX_NUM_LINESENSOR_SOURCES 100
+int NumLineSensorSources;
+char LineSensorFiles[MAX_NUM_LINESENSOR_SOURCES][MAXLINE_LONG];
+// line sensor flags
+int IsLineSensor[MAX_NUM_SOURCES];
+// line sensor points
+#define MAX_NUM_LINESENSOR_POINTS  10000
+int NumLineSensorPoints;
+SourceDesc LineSensorPoints[MAX_NUM_LINESENSOR_POINTS];
+
+
 
 /* function declarations */
 
@@ -166,10 +208,11 @@ int ReadGrid2TimeInput(FILE*);
 int get_gt_files(char*);
 int get_grid_mode(char*);
 int get_gt_plfd(char*);
-int GenTimeGrid(GridDesc*, SourceDesc*, GridDesc*, char*);
+int GenTimeGrid(GridDesc*, SourceDesc*, int, GridDesc*, char*);
 int GenAngleGrid(GridDesc*, SourceDesc*, GridDesc*, int);
 void InitTimeGrid(GridDesc*, GridDesc*);
 int RunGreen3d(GridDesc*, SourceDesc*, GridDesc*, char*);
+int ReadLineSensorPoints(char* fn_gt_linesrce);
 
 
 
@@ -233,7 +276,7 @@ int main(int argc, char *argv[]) {
 
     /* open model file and read header */
 
-    snprintf(fn_model, sizeof(fn_model), "%s.mod", fn_gt_input);
+    snprintf(fn_model, sizeof (fn_model), "%s.mod", fn_gt_input);
     if ((istat = OpenGrid3dFile(fn_model, &fp_model_grid, &fp_model_hdr,
             &mod_grid, " ", NULL, iSwapBytesOnInput)) < 0) {
         CloseGrid3dFile(&mod_grid, &fp_model_grid, &fp_model_hdr);
@@ -354,7 +397,7 @@ int main(int argc, char *argv[]) {
                 (Source + nsrce)->dlat, (Source + nsrce)->dlong, (Source + nsrce)->depth
                 );
         nll_putmsg(1, MsgStr);
-        if ((istat = GenTimeGrid(&mod_grid, Source + nsrce, &time_grid, fn_model)) < 0)
+        if ((istat = GenTimeGrid(&mod_grid, Source + nsrce, nsrce, &time_grid, fn_model)) < 0)
             nll_puterr("ERROR: calculating travel times.");
         else if (angle_mode == ANGLE_MODE_YES) {
             if ((istat = GenAngleGrid(&time_grid, Source + nsrce,
@@ -377,8 +420,8 @@ int main(int argc, char *argv[]) {
 /*** function to initialize travel time grid description */
 
 void InitTimeGrid(GridDesc* ptime_grid, GridDesc* pmod_grid) {
-    char chr_type[MAXLINE];
 
+    char chr_type[MAXLINE];
 
     /* set grid type */
     if (grid_mode == GRID_TIME_2D)
@@ -393,6 +436,8 @@ void InitTimeGrid(GridDesc* ptime_grid, GridDesc* pmod_grid) {
         DuplicateGrid(ptime_grid, pmod_grid, chr_type);
     } else if (tt_calc_meth == METHOD_WAVEFRONT_RAY) {
         DuplicateGrid(ptime_grid, &grid_in, chr_type);
+    } else if (tt_calc_meth == METHOD_FTEIK3D) {
+        DuplicateGrid(ptime_grid, pmod_grid, chr_type);
     }
 
 
@@ -413,7 +458,7 @@ void InitTimeGrid(GridDesc* ptime_grid, GridDesc* pmod_grid) {
 
 /*** function to generate travel time grid */
 
-int GenTimeGrid(GridDesc* pmgrid, SourceDesc* psource, GridDesc* ptt_grid, char* fn_model) {
+int GenTimeGrid(GridDesc* pmgrid, SourceDesc* psource, int nsrce, GridDesc* ptt_grid, char* fn_model) {
 
     int istat, itemp = 0;
     char filename[MAXLINE_LONG];
@@ -437,8 +482,6 @@ int GenTimeGrid(GridDesc* pmgrid, SourceDesc* psource, GridDesc* ptt_grid, char*
         xsource = psource->x;
         ysource = psource->y;
         zsource = psource->z;
-        /*vel_source = ReadAbsInterpGrid3d(NULL, pmgrid,
-                xsource, ysource, zsource);*/
         vel_source = ReadAbsGrid3dValue(NULL, pmgrid, xsource, ysource, zsource, 1);
     }
 
@@ -450,7 +493,7 @@ int GenTimeGrid(GridDesc* pmgrid, SourceDesc* psource, GridDesc* ptt_grid, char*
     zsource_igrid = (zsource - ptt_grid->origz) / ptt_grid->dz;
 
 
-    /* check that source in inside model grid */
+    /* check that source is inside model grid */
 
     if (!IsPointInsideGrid(pmgrid, xsource, ysource, zsource)) {
         nll_puterr(
@@ -488,7 +531,9 @@ int GenTimeGrid(GridDesc* pmgrid, SourceDesc* psource, GridDesc* ptt_grid, char*
 
     /* generate travel time grid */
 
+    // Podvin-Lecomte ----------------------------------------------
     if (tt_calc_meth == METHOD_PODLECFD) {
+
         /* check things */
         if (pmgrid->type != GRID_SLOW_LEN) {
             nll_puterr(
@@ -506,13 +551,55 @@ int GenTimeGrid(GridDesc* pmgrid, SourceDesc* psource, GridDesc* ptt_grid, char*
                     ptt_grid->numx, ptt_grid->numy, ptt_grid->numz, xsource_igrid, ysource_igrid, zsource_igrid, plfd_hs_eps_init);
         }
 
+        // special processing for line sensor
+        if (IsLineSensor[nsrce]) {
+
+            // read source points defining line
+            ReadLineSensorPoints(LineSensorFiles[nsrce]);
+
+        }
+
+        // 20250422 ALomax - modified to support multiple sources:
+        // construct source arrays
+        GRID_FLOAT_TYPE xsource_igrid_array[MAX_NUM_LINESENSOR_POINTS];
+        GRID_FLOAT_TYPE ysource_igrid_array[MAX_NUM_LINESENSOR_POINTS];
+        GRID_FLOAT_TYPE zsource_igrid_array[MAX_NUM_LINESENSOR_POINTS];
+        int num_igrid_array = -1;
+        if (IsLineSensor[nsrce]) {
+            for (int n = 0; n < NumLineSensorPoints; n++) {
+                SourceDesc *srce = LineSensorPoints + n;
+                xsource_igrid = (srce->x - ptt_grid->origx) / ptt_grid->dx;
+                ysource_igrid = (srce->y - ptt_grid->origy) / ptt_grid->dy;
+                zsource_igrid = (srce->z - ptt_grid->origz) / ptt_grid->dz;
+                xsource_igrid_array[n] = xsource_igrid;
+                ysource_igrid_array[n] = ysource_igrid;
+                zsource_igrid_array[n] = zsource_igrid;
+                printf("LINESRCE: %3d  Name: %s  Loc: X(east) %lg  Y(north) %lg  Z(pos DOWN) %lg\n",
+                        n, srce->label, srce->x, srce->y, srce->z);
+            }
+            num_igrid_array = NumLineSensorPoints;
+        } else {
+            xsource_igrid_array[0] = xsource_igrid;
+            ysource_igrid_array[0] = ysource_igrid;
+            zsource_igrid_array[0] = zsource_igrid;
+            num_igrid_array = 1;
+        }
+
         /* run Podvin-Lecomte algorithm */
-        istat = time_3d(pmgrid->buffer, ptt_grid->buffer,
+        // 20250422 ALomax - modified to support multiple sources:
+        /*istat = time_3d(pmgrid->buffer, ptt_grid->buffer,
                 ptt_grid->numx, ptt_grid->numy, ptt_grid->numz,
                 // AJL 2010 - following seems to avoid all zero travel time grids in some cases ! (GTSRCE  TARGET_0   XYZ  0.0 0.0 2.200000 0.0 ??  Mac OS X ??)
                 //xsource_igrid + ptt_grid->dx / 2.0, ysource_igrid, zsource_igrid,
                 (GRID_FLOAT_TYPE) xsource_igrid, (GRID_FLOAT_TYPE) ysource_igrid, (GRID_FLOAT_TYPE) zsource_igrid,
                 (GRID_FLOAT_TYPE) plfd_hs_eps_init, plfd_message);
+         */
+        istat = time_3d_ms(pmgrid->buffer, ptt_grid->buffer,
+                ptt_grid->numx, ptt_grid->numy, ptt_grid->numz,
+                xsource_igrid_array, ysource_igrid_array, zsource_igrid_array,
+                num_igrid_array,
+                (GRID_FLOAT_TYPE) plfd_hs_eps_init, plfd_message);
+
         if (DEBUG_GRID2TIME) {
             fprintf(stdout, "time_3d returned: %d\n", istat);
         }
@@ -520,6 +607,136 @@ int GenTimeGrid(GridDesc* pmgrid, SourceDesc* psource, GridDesc* ptt_grid, char*
             return (-1);
 
 
+        // FTeik-Eikonal-Solver ----------------------------------------------
+    } else if (tt_calc_meth == METHOD_FTEIK3D) {
+
+        /* check things */
+        if (pmgrid->type != GRID_SLOWNESS) {
+            nll_puterr(
+                    "ERROR: FTeik-Eikonal-Solver algorithm requires GRID_SLOWNESS grid.");
+            return (-1);
+        }
+        /*if (pmgrid->dx != pmgrid->dy || pmgrid->dx != pmgrid->dz) {
+            nll_puterr(
+                    "ERROR: FTeik-Eikonal-Solver algorithm requires cubic grid, i.e. dx=dy=dz.");
+            return (-1);
+        }*/
+
+        if (DEBUG_GRID2TIME) {
+            fprintf(stdout, "ptt_grid->numx %d  ptt_grid->numy %d  ptt_grid->numz %d  xsource_igrid %.3f  ysource_igrid %.3f  zsource_igrid %.3f  fteik_eps %d, fteik_nsweep %d\n",
+                    ptt_grid->numx, ptt_grid->numy, ptt_grid->numz, xsource_igrid, ysource_igrid, zsource_igrid, fteik_eps, fteik_nsweep);
+        }
+
+        // special processing for line sensor
+        if (IsLineSensor[nsrce]) {
+
+            nll_puterr(
+                    "ERROR: FTeik-Eikonal-Solver algorithm support for line sensors not yet implemented.");
+            return (-1);
+
+            // read source points defining line
+            ReadLineSensorPoints(LineSensorFiles[nsrce]);
+
+        }
+
+        // 20250422 ALomax - modified to support multiple sources:
+        // construct source arrays
+        GRID_FLOAT_TYPE xsource_igrid_array[MAX_NUM_LINESENSOR_POINTS];
+        GRID_FLOAT_TYPE ysource_igrid_array[MAX_NUM_LINESENSOR_POINTS];
+        GRID_FLOAT_TYPE zsource_igrid_array[MAX_NUM_LINESENSOR_POINTS];
+        int num_igrid_array = -1;
+        if (IsLineSensor[nsrce]) {
+            for (int n = 0; n < NumLineSensorPoints; n++) {
+                SourceDesc *srce = LineSensorPoints + n;
+                xsource_igrid = (srce->x - ptt_grid->origx) / ptt_grid->dx;
+                ysource_igrid = (srce->y - ptt_grid->origy) / ptt_grid->dy;
+                zsource_igrid = (srce->z - ptt_grid->origz) / ptt_grid->dz;
+                xsource_igrid_array[n] = xsource_igrid;
+                ysource_igrid_array[n] = ysource_igrid;
+                zsource_igrid_array[n] = zsource_igrid;
+                printf("LINESRCE: %3d  Name: %s  Loc: X(east) %lg  Y(north) %lg  Z(pos DOWN) %lg\n",
+                        n, srce->label, srce->x, srce->y, srce->z);
+            }
+            num_igrid_array = NumLineSensorPoints;
+        } else {
+            xsource_igrid_array[0] = xsource_igrid;
+            ysource_igrid_array[0] = ysource_igrid;
+            zsource_igrid_array[0] = zsource_igrid;
+            num_igrid_array = 1;
+        }
+
+        /* run FTeik-Eikonal-Solver algorithm */
+        istat = 0;
+        // 20250422 ALomax - modified to support multiple sources:
+        /*istat = time_3d(pmgrid->buffer, ptt_grid->buffer,
+                ptt_grid->numx, ptt_grid->numy, ptt_grid->numz,
+                // AJL 2010 - following seems to avoid all zero travel time grids in some cases ! (GTSRCE  TARGET_0   XYZ  0.0 0.0 2.200000 0.0 ??  Mac OS X ??)
+                //xsource_igrid + ptt_grid->dx / 2.0, ysource_igrid, zsource_igrid,
+                (GRID_FLOAT_TYPE) xsource_igrid, (GRID_FLOAT_TYPE) ysource_igrid, (GRID_FLOAT_TYPE) zsource_igrid,
+                (GRID_FLOAT_TYPE) plfd_hs_eps_init, fteik_message);
+         */
+        /*istat = fteik3d_ms(pmgrid->buffer, ptt_grid->buffer,
+                ptt_grid->numx, ptt_grid->numy, ptt_grid->numz,
+                xsource_igrid_array, ysource_igrid_array, zsource_igrid_array,
+                num_igrid_array,
+                (GRID_FLOAT_TYPE) fteik_eps, fteik_nsweep, fteik_message);
+         */
+        /* write config file */
+
+        char fn_fteik3d_config[] = "fteik3d.config";
+        FILE *fp_fteik3d_config;
+        if ((fp_fteik3d_config = fopen(fn_fteik3d_config, "w")) == NULL) {
+            nll_puterr("ERROR: opening FTeik-Eikonal-Solver configuration file.");
+            return (-1);
+        }
+        // model file root
+        fprintf(fp_fteik3d_config, "%s\n", fn_model);
+        // Point source coordinates referred expressed in meters; Licit ranges : [0.0, (nz - 1.) * dzin][0.0, (nx - 1.) * dxin]
+        fprintf(fp_fteik3d_config, "%f %f %f\n", xsource_igrid * ptt_grid->dx, ysource_igrid * ptt_grid->dy, zsource_igrid * ptt_grid->dz);
+        // eps : radius in number of grid points around source where then
+        //      spherical approximation will be used(for most applications 5 to 10 is enough.
+        //  n_sweep : Number of sweeps over model. 1 is in general enough
+        fprintf(fp_fteik3d_config, "%d %d\n", fteik_eps, fteik_nsweep);
+        // travel-time grid root name
+        char fn_tt[MAXLINE_LONG];
+        snprintf(fn_tt, sizeof (fn_tt), "%s.%s.time.buf", fn_gt_output, psource->label);
+        fprintf(fp_fteik3d_config, "%s", fn_tt);
+
+        fclose(fp_fteik3d_config);
+
+
+        // run mainFTeik3d_NLL.exe
+        char system_str[MAXLINE_LONG];
+        sprintf(system_str, "mainFTeik3d_NLL.exe %s", fn_fteik3d_config);
+        sprintf(MsgStr, "Calling mainFTeik3d_NLL.exe [%s] ...", system_str);
+        nll_putmsg(2, MsgStr);
+        istat = system(system_str);
+        sprintf(MsgStr, "Return from mainFTeik3d_NLL.exe - return val is %d", istat);
+        nll_putmsg(2, MsgStr);
+
+        // read FTeik travel time grid
+        FILE *fp_fteik_io;
+        if ((fp_fteik_io = fopen(fn_tt, "r")) == NULL) {
+            nll_puterr2("ERROR: opening FTeik travel time grid file.", fn_tt);
+            return (-1);
+        }
+        if ((istat =
+                ReadGrid3dBuf(ptt_grid, fp_fteik_io)) < 0) {
+            nll_puterr2(
+                    "ERROR: reading FTeik travel time grid from disk.", fn_tt);
+            return (-1);
+        }
+        fclose(fp_fteik_io);
+
+
+        if (DEBUG_GRID2TIME) {
+            fprintf(stdout, "FTeik-Eikonal-Solver returned: %d\n", istat);
+        }
+        if (istat)
+            return (-1);
+
+
+        // Wavefront ray tracing (green3d) ----------------------------------------------
     } else if (tt_calc_meth == METHOD_WAVEFRONT_RAY) {
         /* check things */
         if (pmgrid->type != GRID_VELOCITY_METERS) {
@@ -618,7 +835,7 @@ int GenTimeGrid(GridDesc* pmgrid, SourceDesc* psource, GridDesc* ptt_grid, char*
 
     /* save time grid to disk */
 
-    snprintf(filename, sizeof(filename), "%s.%s", fn_gt_output, psource->label);
+    snprintf(filename, sizeof (filename), "%s.%s", fn_gt_output, psource->label);
     sprintf(MsgStr,
             "Finished calculation, time grid output files: %s.*", filename);
     nll_putmsg(1, MsgStr);
@@ -794,6 +1011,111 @@ int RunGreen3d(GridDesc* pmgrid, SourceDesc* psource, GridDesc* ptt_grid,
 
 }
 
+/*** function to read input file
+ *
+ * 20250418 AJL - added to support line sensor initialization of time field. For application with, e.g., telecom fiber monitoring.
+ */
+
+int ReadLineSensorPoints(char* fn_gt_linesrce) {
+
+    int istat, iscan;
+    FILE* fp_input;
+    char param[MAXLINE];
+    char line[4 * MAXLINE], *fgets_return;
+
+    if ((fp_input = fopen(fn_gt_linesrce, "r")) == NULL) {
+        nll_puterr("ERROR: opening line sensor file.");
+        exit(EXIT_ERROR_FILEIO);
+    }
+
+    // read each input line
+
+    NumLineSensorPoints = 0;
+
+    while ((fgets_return = fgets(line, 4 * MAXLINE, fp_input)) != NULL) {
+
+        istat = -1;
+
+        // read parameter line
+        if ((iscan = sscanf(line, "%s", param)) < 0)
+            continue;
+
+        // skip comment line or white space
+        if (strncmp(param, "#", 1) == 0 || isspace(param[0]))
+            continue;
+
+        // check number of sources
+        if (NumLineSensorPoints >= MAX_NUM_LINESENSOR_POINTS) {
+            nll_puterr2("ERROR: to many line sensor points, ignoring point", param);
+            return (0);
+        }
+
+        SourceDesc *srce_in = LineSensorPoints + NumLineSensorPoints;
+        istat = GetSource(line, srce_in, NumLineSensorPoints);
+        if (istat < 0)
+            return (istat);
+
+        NumLineSensorPoints++;
+
+    }
+
+    istat = ConvertSourceLoc(0, LineSensorPoints, NumLineSensorPoints, 1, 1);
+
+
+    return (NumLineSensorPoints);
+
+}
+
+/** function to read line sensor params from input line
+ *
+ * 20250418 AJL - added to support line sensor initialization of time field. For application with, e.g., telecom fiber monitoring.
+ */
+
+int GetNextLineSource(char* in_line) {
+
+    int istat;
+    char fn_gt_linesrce[MAXLINE], gtsrce_text[MAXLINE];
+
+    istat = sscanf(in_line, "%s %[^\n]s", fn_gt_linesrce, gtsrce_text);
+
+    sprintf(MsgStr,
+            "Grid2Time GTLINESRCE:  LineFile: %s  Ref_GTSRCE: %s", fn_gt_linesrce, gtsrce_text);
+    nll_putmsg(3, MsgStr);
+
+    // check number of sources
+    if (NumSources >= MAX_NUM_SOURCES) {
+        nll_puterr2("ERROR: to many sources, ignoring source", gtsrce_text);
+        return (0);
+    }
+    if (NumLineSensorSources >= MAX_NUM_LINESENSOR_SOURCES) {
+        nll_puterr2("ERROR: to many line sensor sources, ignoring source", gtsrce_text);
+        return (0);
+    }
+
+    SourceDesc *srce_in = Source + NumSources;
+    istat = GetSource(gtsrce_text, srce_in, NumSources);
+    if (istat < 0)
+        return (istat);
+
+    // check if duplicate
+    if (FindSource(srce_in->label) != NULL) {
+        if (message_flag >= 2) {
+            sprintf(MsgStr, "WARNING: duplicated source, ignoring source: %s", srce_in->label);
+            nll_putmsg(2, MsgStr);
+            return (istat);
+        }
+    }
+
+    // flag as line sensor
+    IsLineSensor[NumSources] = 1;
+    strncpy(LineSensorFiles[NumSources], fn_gt_linesrce, sizeof (LineSensorFiles[NumSources]));
+    NumSources++;
+    NumLineSensorSources++;
+
+    return (istat);
+
+}
+
 /*** function to read input file */
 
 int ReadGrid2TimeInput(FILE* fp_input) {
@@ -802,7 +1124,7 @@ int ReadGrid2TimeInput(FILE* fp_input) {
     char line[4 * MAXLINE], *fgets_return;
 
     int flag_control = 0, flag_outfile = 0, flag_source = 0,
-            flag_grid = 0, flag_plfd = 0, flag_wavefront = 0,
+            flag_grid = 0, flag_plfd = 0, flag_wavefront = 0, flag_fteik3d = 0,
             flag_trans = 0, flag_grid_mode = 0;
     int flag_include = 1;
 
@@ -880,6 +1202,19 @@ int ReadGrid2TimeInput(FILE* fp_input) {
                 nll_puterr(line);
             } else
                 flag_source = 1;
+            // flag as non-line sensor
+            IsLineSensor[NumSources - 1] = 0;
+        }
+
+
+        /* read source params */
+
+        if (strcmp(param, "GTLINESRCE") == 0) {
+            if ((istat = GetNextLineSource(strchr(line, ' '))) < 0) {
+                nll_puterr("ERROR: reading line sensor params:");
+                nll_puterr(line);
+            } else
+                flag_source = 1;
         }
 
 
@@ -909,6 +1244,16 @@ int ReadGrid2TimeInput(FILE* fp_input) {
                 nll_puterr("ERROR: reading wavefront-ray params.");
             else
                 flag_wavefront = 1;
+        }
+
+
+        /* read FTeik-Eikonal-Solver params */
+
+        if (strcmp(param, "GT_FTEIK") == 0) {
+            if ((istat = get_gt_fteik3d(strchr(line, ' '))) < 0)
+                nll_puterr("ERROR: reading FTeik-Eikonal-Solver params.");
+            else
+                flag_fteik3d = 1;
         }
 
 
@@ -945,25 +1290,24 @@ int ReadGrid2TimeInput(FILE* fp_input) {
     if (!flag_grid_mode)
         nll_puterr("ERROR: no grid mode (GTMODE) params read.");
     if (!flag_source)
-        nll_puterr("ERROR: no source (GTSRCE) params read.");
-    if (!flag_plfd && !flag_wavefront)
+        nll_puterr("ERROR: no source (GTSRCE or GTLINESRCE) params read.");
+    if (!flag_plfd && !flag_wavefront && !flag_fteik3d)
         nll_puterr(
-            "ERROR: no Travel Time method (GT_PLFD, GT_WAVEFRONT_RAY) params read.");
-    if (flag_plfd + flag_wavefront > 1)
+            "ERROR: no Travel Time method (GT_PLFD, GT_WAVEFRONT_RAY, GT_FTEIK) params read.");
+    if (flag_plfd + flag_wavefront + flag_fteik3d > 1)
         nll_puterr(
-            "ERROR: too many Travel Time methods (GT_PLFD, GT_WAVEFRONT_RAY) read.");
-    if (flag_wavefront && !flag_grid)
-        nll_puterr("ERROR: no grid (GTGRID) params read.");
-    if (flag_plfd && flag_grid)
+            "ERROR: too many Travel Time methods (GT_PLFD, GT_WAVEFRONT_RAY, GT_FTEIK) read.");
+    if ((flag_plfd || flag_fteik3d) && flag_grid)
         nll_putmsg(2,
-            "WARNING: grid (GTGRID) params ignored with Podvin-Lecompte FD method.  Podvin-Lecompte FD method reproduces model grid dimensions");
+            "WARNING: grid (GTGRID) params ignored with Podvin-Lecompte FD or FTeik-Eikonal-Solver methods;"
+            " these methods reproduce model grid dimensions");
     if (!flag_trans)
         nll_puterr("ERROR: no transformation (TRANS) params read.");
 
 
     return (flag_include * flag_control * flag_outfile * flag_grid_mode
             * flag_source * flag_trans
-            * (flag_plfd || (flag_wavefront && flag_grid))
+            * (flag_plfd || (flag_wavefront && flag_grid) || flag_fteik3d)
             - 1);
 }
 
@@ -982,7 +1326,7 @@ int get_gt_files(char* line1) {
     strcat(strcat(fn_gt_output, "."), waveType);
 
     sprintf(MsgStr,
-            "Grid2Time GTFILES:  Input: %s.*  Output: %s.*  wavetype: %s.*  iSwapBytesOnInput: %d",
+            "Grid2Time GTFILES:  Input: %s.*  Output: %s.*  wavetype: %s  iSwapBytesOnInput: %d",
             fn_gt_input, fn_gt_output, waveType, iSwapBytesOnInput);
     nll_putmsg(3, MsgStr);
 
@@ -1042,7 +1386,7 @@ int get_gt_plfd(char* line1) {
     ierr = 0;
     if (checkRangeInt("GT_PLFD", "message_flag", plfd_message, 1, 0, 1, 2) != 0)
         ierr = -1;
-    if (checkRangeInt("GT_PLFD", "hs_eps_init", plfd_hs_eps_init, 1, 0.0, 0, 0.0) != 0)
+    if (checkRangeDouble("GT_PLFD", "hs_eps_init", plfd_hs_eps_init, 1, 0.0, 0, 0.0) != 0)
         ierr = -1;
 
     tt_calc_meth = METHOD_PODLECFD;
@@ -1107,6 +1451,52 @@ int get_gt_wavefront(char* line1) {
 
 }
 
+/*** function to read FTeik-Eikonal-Solver params
+ *
+ * 20250728 ALomax - added.
+
+ ***/
+
+int get_gt_fteik3d(char* line1) {
+
+    /*
+    !      integer*4 - eps : radius in number of grid points arround source where then
+    !                   spherical approximation will be used (for most applications
+    !                   5 to 10 is enough.
+    !
+    ! integer*4 - n_sweep : Number of sweeps over model. 1 is in general enough
+     */
+
+    int istat, ierr;
+
+    istat = sscanf(line1, "%d %d %d", &fteik_eps, &fteik_nsweep, &fteik_message);
+
+    sprintf(MsgStr, "Grid2Time GT_FTEIK: fteik_eps %d  fteik_nsweep %d  message_flag %d",
+            fteik_eps, fteik_nsweep, fteik_message);
+    nll_putmsg(3, MsgStr);
+
+    ierr = 0;
+    if (checkRangeInt("GT_FTEIK", "message_flag", fteik_message, 1, 0, 1, 2) != 0)
+        ierr = -1;
+    if (checkRangeInt("GT_FTEIK", "fteik_eps", fteik_eps, 1, 0, 0, 0) != 0)
+        ierr = -1;
+    if (checkRangeInt("GT_FTEIK", "fteik_nsweep", fteik_nsweep, 1, 1, 0, 0) != 0)
+        ierr = -1;
+
+
+
+    tt_calc_meth = METHOD_FTEIK3D;
+    sprintf(MsgStr,
+            "  (Method is FTeik-Eikonal-Solver)");
+    nll_putmsg(3, MsgStr);
+
+    if (istat != 3)
+        return (-1);
+
+    return (0);
+
+}
+
 /*** function to generate take-off angle grid */
 
 int GenAngleGrid(GridDesc* ptgrid, SourceDesc* psource, GridDesc* pagrid, int angle_mode) {
@@ -1141,7 +1531,7 @@ int GenAngleGrid(GridDesc* ptgrid, SourceDesc* psource, GridDesc* pagrid, int an
 
     /* save angle grid to disk */
 
-    snprintf(filename, sizeof(filename), "%s.%s", fn_gt_output, psource->label);
+    snprintf(filename, sizeof (filename), "%s.%s", fn_gt_output, psource->label);
     sprintf(MsgStr,
             "Finished calculation, take-off angles grid output files: %s.*",
             filename);

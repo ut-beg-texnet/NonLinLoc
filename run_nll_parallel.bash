@@ -45,6 +45,9 @@ else
 	INCLUDE="INCLUDE out/${RUN_NAME}/loc/${PROJECT_NAME}.sum.grid0.loc.stat_totcorr"
 fi
 
+# specify the number NLLoc to be run in parallel (e.g. up to the number of physical or virtual CPU cores available)
+NUM_CORES=7
+
 
 # less important NLLoc control file settings ------------------------------------------------------------
 
@@ -80,8 +83,6 @@ END
 CONTROL_FILE_TMP=tmp/${PROJECT_NAME}_nll.in
 cp ${SKELETON_CONF} ${CONTROL_FILE_TMP}
 
-# specify the number NLLoc to be run in parallel (e.g. up to the number of physical or virtual CPU cores available)
-NUM_CORES=7
 # get a list of all obs files
 OBS_LIST=$(echo ${LOC_OBS})
 for ENTRY in ${OBS_LIST}; do

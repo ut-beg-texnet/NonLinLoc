@@ -11,8 +11,12 @@ set(CMAKE_BUILD_TYPE Release)
 # If you want to build the library in ${CMAKE_CURRENT_SOURCE_DIR}/lib
 #set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
-# If you want to move the binaries in ${CMAKE_CURRENT_SOURCE_DIR}/bin
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+# Path to created binaries
+if(DEFINED "ENV{MYBIN}")
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "$ENV{MYBIN}")
+else()
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+endif()
 ###DEBUG#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin_debug)
 
 # Bring the include directory with its headers into the project
@@ -39,6 +43,12 @@ include_directories(
 add_compile_options(-Wall)
 # hide warnings that are difficult to suppress with code changes
 add_compile_options(-Wno-format-truncation)
+
+# 20250416 JUNZHU-SEIS (ut-beg-texnet/NonLinLoc#69)
+# As a side note, I have tried to change the 'MAX_NUM_SOURCES' to 250000 on both MAC and Ubuntu systems, it works on MAC but fails on Ubuntu. I got error message below on Ubuntu. After I ask DeepSeek for the solution, it suggests me edit the CMakeLists.txt as follows and it finally works on Ubuntu as well.
+# 20250416 ALomax; the --no-relax option is unknown on my MAC system
+#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--no-relax")
+#set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-relax")
 
 # Uncomment the following if the compiler you are using supports GNU extensions such as:
 #   fmemopen, open_memstream -  open memory as stream (required to pass observations file lines as parameters
@@ -112,10 +122,10 @@ target_link_libraries(Vel2Grid velmod GRID_LIB_OBJS m)
 # --------------------------------------------------------------------------
 # Grid2Time
 #
-add_library(Time_3d_NLL OBJECT Time_3d_NLL.c)
-target_compile_options(Time_3d_NLL PRIVATE "-DNO_IEEE_PROTOCOL")
+add_library(Time_3d_NLL_multisource OBJECT Time_3d_NLL_multisource.c)
+target_compile_options(Time_3d_NLL_multisource PRIVATE "-DNO_IEEE_PROTOCOL")
 add_executable(Grid2Time Grid2Time1.c)
-target_link_libraries(Grid2Time Time_3d_NLL GRID_LIB_OBJS m)
+target_link_libraries(Grid2Time Time_3d_NLL_multisource GRID_LIB_OBJS m)
 
 # --------------------------------------------------------------------------
 # Time2Angles
@@ -255,3 +265,9 @@ target_link_libraries(Loc2ddct GRID_LIB_OBJS m)
 #
 add_executable(loc_combine loc_combine.c)
 target_link_libraries(loc_combine GRID_LIB_OBJS LOC_PHS_LIST m)
+
+# --------------------------------------------------------------------------
+# GridCut
+#
+add_executable(GridCut GridCut.c)
+target_link_libraries(GridCut GRID_LIB_OBJS m)
