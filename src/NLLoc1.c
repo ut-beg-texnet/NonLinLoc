@@ -127,6 +127,7 @@ int NLLoc
 
     SetConstants();
     NumLocGrids = 0;
+    NumTimeGridPaths = 0;    // 20251027 add support for alternative travel-time grid path/root
     NumEvents = NumEventsLocated = NumLocationsCompleted = 0;
     NumCompDesc = 0;
     NumLocAlias = 0;
@@ -360,7 +361,7 @@ int NLLoc
     fp_model_grid_P = fp_model_hdr_P = NULL;
     fp_model_grid_S = fp_model_hdr_S = NULL;
     if (LocMethod == METH_OT_STACK) {
-        snprintf(fname, sizeof (fname), "%s.%s", fn_loc_grids, "P.mod");
+        snprintf(fname, sizeof (fname), "%s.%s", fn_time_grids[0], "P.mod");
         if ((istat = OpenGrid3dFile(fname, &fp_model_grid_P, &fp_model_hdr_P,
                 &model_grid_P, " ", NULL, iSwapBytesOnInput)) < 0) {
             sprintf(MsgStr, "WARNING: LocMethod == OT_STACK, but cannot open velocity model file %s.*", fname);
@@ -370,7 +371,7 @@ int NLLoc
             nll_putmsg(1, MsgStr);
 
         }
-        snprintf(fname, sizeof (fname), "%s.%s", fn_loc_grids, "S.mod");
+        snprintf(fname, sizeof (fname), "%s.%s", fn_time_grids[0], "S.mod");
         if ((istat = OpenGrid3dFile(fname, &fp_model_grid_S, &fp_model_hdr_S,
                 &model_grid_S, " ", NULL, iSwapBytesOnInput)) < 0) {
             sprintf(MsgStr, "WARNING: LocMethod == OT_STACK, but cannot open velocity model file %s.*", fname);
@@ -444,7 +445,7 @@ int NLLoc
 
             NumArrivalsLocation = 0;
             if ((NumArrivals = GetObservations(fp_obs,
-                    ftype_obs, fn_loc_grids, Arrival,
+                    ftype_obs, fn_time_grids, Arrival,
                     &i_end_of_input, &numArrivalsIgnore,
                     &numArrivalsReject,
                     MaxNumArrLoc, &Hypocenter,
@@ -602,7 +603,9 @@ cleanup:
 
             // 20130413 AJL - bug? fix, release memory for all arrivals read
             //for (narr = 0; narr < NumArrivalsLocation; narr++) {
+            //printf("DEBUG: NLLoc1.c: CloseGrid3dFiles:\n");
             for (narr = 0; narr < NumArrivals; narr++) {
+                //printf("DEBUG: narr %d %s fpgrid %p\n", narr, Arrival[narr].label, Arrival[narr].fpgrid);
                 CloseGrid3dFile(&(Arrival[narr].gdesc), &(Arrival[narr].fpgrid), &(Arrival[narr].fphdr));
             }
 

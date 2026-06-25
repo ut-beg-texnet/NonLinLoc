@@ -1,0 +1,34 @@
+FIELD         : DESCRIPTION                                                                                           
+date-time     : maximum likelihood* hypocenter origin time                                                            
+latitude      : maximum likelihood* hypocenter latitude (deg)                                                         
+longitude     : maximum likelihood* hypocenter longitude (deg)                                                        
+depth         : maximum likelihood* hypocenter depth (km below reference level (e.g. sea-level))                      
+RMS           : root-mean-square of phase residuals at hypocenter (sec)                                               
+Nphs          : number of readings used for location                                                                  
+Gap           : maximum azimuth gap between stations used for location (deg)                                          
+Dist          : distance of closest station to maximum likelihood* hypocenter (Non-GLOBAL: km, GLOBAL: deg)           
+errH          : horizontal error (semi-major axis of 68% confidence error ellipse) (km)                               
+errZ          : depth error (68% confidence: sqrt(2.30 * covariance(zz))) (km)                                        
+Mamp          : amplitude (i.e. ML) magnitude                                                                         
+Mdur          : duration magnitude                                                                                    
+expect_lat    : expectation hypocenter latitude (deg)                                                                 
+expect_lon    : expectation hypocenter longitude (deg)                                                                
+expect_z      : expectation hypocenter depth (km below reference level (e.g. sea-level))                              
+EllipsoidAz1  : azimuth of semi-minor-axis of 68% confidence ellipsoid (deg)                                          
+EllipsoidDip1 : dip of semi-minor-axis of 68% confidence ellipsoid (deg)                                              
+EllipsoidLen1 : length of semi-minor-axis of 68% confidence ellipsoid (km)                                            
+EllipsoidAz2  : azimuth of semi-intermediate-axis of 68% confidence ellipsoid                                         
+EllipsoidDip2 : dip of semi-intermediate-axis of 68% confidence ellipsoid (deg)                                       
+EllipsoidLen2 : length of semi-intermediate-axis of 68% confidence ellipsoid (km)                                     
+EllipsoidLen3 : length of semi-major-axis of 68% confidence ellipsoid (km)                                            
+minHorUnc     : semi-minor axis of 68% confidence ellipse (km)                                                        
+maxHorUnc     : semi-major axis of 68% confidence ellipse (km)                                                        
+azMaxHorUnc   : azimuth of major axis of 68% confidence ellipse (deg)                                                 
+pdfVolume     : integral over octree cells of volume * cell probability (if octree search used)                       
+mech_strike   : strike of double couple mechanism (deg)                                                               
+mech_dip      : dip of double couple mechanism (deg)                                                                  
+mech_rake     : rake of double couple mechanism (deg)                                                                 
+mech_misfit   : misfit of mechanism determination                                                                     
+mech_Nobs     : number of first motion observations used in mechanism determination                                   
+publicId      : event id string                                                                                       
+                * expectation hypocenter if LOCHYPOUT SAVE_NLLOC_EXPECTATION used                                     

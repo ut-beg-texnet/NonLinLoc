@@ -34,8 +34,8 @@ www.alomax.net
 
 
 #define PACKAGE  "NonLinLoc"
-#define PVER  "7.1.05"
-#define PDATE "18Apr2025"
+#define PVER  "7.1.07"
+#define PDATE "25Jun2026"
 /*#define PCOPYRIGHT "\nCopyright (C) 1999-2023 Anthony Lomax\n"*/
 #define PCOPYRIGHT "\0"
 
@@ -169,6 +169,12 @@ extern int nll_mode;
 
 #define GRID_UNDEF  0  /* undefined */
 
+// IMPORTANT: use ≤ 999 for pixel center (e.g. vel/slow) grid data and ≥ 1000 for gridline (pixel corner w/ floor xyz values; e.g. travel-time) grid data in NLL
+//    in both cases, xyz coordinates are gridline-registration
+//    see: https://docs.generic-mapping-tools.org/latest/reference/options.html#grid-registration-the-r-option//
+
+// pixel center data (e.g. vel/slow)
+
 #define GRID_VELOCITY  1  /* velocity (km/sec) */
 #define GRID_VELOCITY_METERS 11  /* velocity (m/sec) */
 #define GRID_SLOWNESS  2  /* slowness (sec/km) */
@@ -176,6 +182,8 @@ extern int nll_mode;
 #define GRID_SLOW2  4  /* slowness**2 (sec/km)**2 */
 #define GRID_SLOW2_METERS 44  /* slowness**2 (sec/m)**2 */
 #define GRID_SLOW_LEN  5  /* slowness*length (sec) */
+
+// gridline / pixel corner data
 
 #define GRID_TIME  1000  /* time (sec) 3D grid */
 #define GRID_TIME_2D  1001  /* time (sec)
@@ -827,6 +835,7 @@ int IsGrid2DBigEnough(GridDesc*, GridDesc*, SourceDesc*,
 // 20161019 AJL - added
 int isCascadingGrid(GridDesc* pgrid);
 void setCascadingGrid(GridDesc* pgrid);
+int isPixelCenterDataGrid(GridDesc* pgrid);
 void* AllocateGrid_Cascading(GridDesc* pgrid, int allocate_buffer);
 void FreeGrid_Cascading(GridDesc * pgrid);
 

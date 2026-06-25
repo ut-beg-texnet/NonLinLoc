@@ -1,19 +1,17 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>1.1.8. Loc2ssst - generate SSST corrections on a to 3D grid for NLLoc locations &#8212; NonLinLoc Doc 7.00 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b76e3c8a" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=def86cc0" />
     
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
+    <script src="../_static/documentation_options.js?v=b489f74c"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -47,11 +45,11 @@
 <div class="line"><br /></div>
 </div>
 <section id="loc2ssst-generate-ssst-corrections-on-a-to-3d-grid-for-nlloc-locations">
-<h1><span class="section-number">1.1.8. </span>Loc2ssst - generate SSST corrections on a  to 3D grid for NLLoc locations<a class="headerlink" href="#loc2ssst-generate-ssst-corrections-on-a-to-3d-grid-for-nlloc-locations" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">1.1.8. </span>Loc2ssst - generate SSST corrections on a  to 3D grid for NLLoc locations<a class="headerlink" href="#loc2ssst-generate-ssst-corrections-on-a-to-3d-grid-for-nlloc-locations" title="Link to this heading">¶</a></h1>
 <p>Given a set of NLLoc locations, <strong>Loc2ssst</strong> generates station and phase specific, SSST corrections over a specified 3D grid
 and adds these corrections to the input travel-times used for NLLoc location to generate new, SSST travel-time grids.</p>
 <section id="overview">
-<h2><span class="section-number">1.1.8.1. </span>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.1.8.1. </span>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
 <p>For each station and phase in the input NLLoc locations (see LSLOCFILES),
 the Loc2ssst program accumulates over a specified SSST 3D grid (see LSGRID)
 a weighted sum of the residuals for the station and phase for each input NLLoc location.  Each residual is weighted based on the
@@ -62,7 +60,7 @@ distance <cite>D</cite> between the grid cell and the coresponding hypocenter us
 <p>where <cite>CharDist</cite> and <cite>WeightFloor</cite> are specified in LSPARAMS.</p>
 </section>
 <section id="running-the-program-input">
-<h2><span class="section-number">1.1.8.2. </span>Running the program - Input<a class="headerlink" href="#running-the-program-input" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.1.8.2. </span>Running the program - Input<a class="headerlink" href="#running-the-program-input" title="Link to this heading">¶</a></h2>
 <p>Synopsis: <code class="docutils literal notranslate"><span class="pre">Loc2ssst</span> <span class="pre">InputControlFile</span></code></p>
 <p>The Loc2ssst program takes a single argument <code class="docutils literal notranslate"><span class="pre">InputControlFile</span></code> which
 specifies the complete path and filename for an <cite>Input Control
@@ -76,7 +74,7 @@ section of the Input Control File must contain the ``CONTROL`</cite> and <code c
 Statements in the Input Control File</p>
 </section>
 <section id="output">
-<h2><span class="section-number">1.1.8.3. </span>Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.1.8.3. </span>Output<a class="headerlink" href="#output" title="Link to this heading">¶</a></h2>
 <p>The calculated SSST values throughout the requested <code class="docutils literal notranslate"><span class="pre">LSGRID</span></code> grid are
 written to a new <cite>3D Grid</cite>.
 The updated travel-time values throughout the requested <code class="docutils literal notranslate"><span class="pre">LSOUTGRID</span></code> grid are
@@ -85,7 +83,7 @@ For a descrition of the naming convention for these grid files, see the
 <code class="docutils literal notranslate"><span class="pre">`LSOUT</span></code> statement in the Loc2ssst Statements section of the Input Control File.</p>
 </section>
 <section id="processing-and-display-of-results">
-<h2><span class="section-number">1.1.8.4. </span>Processing and Display of results<a class="headerlink" href="#processing-and-display-of-results" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.1.8.4. </span>Processing and Display of results<a class="headerlink" href="#processing-and-display-of-results" title="Link to this heading">¶</a></h2>
 <p>The 3D SSST and updated travel-time grids can be post-processed with the program
 <cite>Grid2GMT</cite> to
 produce a GMT command script for plotting with the <a class="reference external" href="http://gmt.soest.hawaii.edu/">GMT plotting
@@ -100,8 +98,9 @@ package</a>.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">1.1.8. Loc2ssst - generate SSST corrections on a  to 3D grid for NLLoc locations</a><ul>
 <li><a class="reference internal" href="#overview">1.1.8.1. Overview</a></li>
 <li><a class="reference internal" href="#running-the-program-input">1.1.8.2. Running the program - Input</a></li>
@@ -111,12 +110,17 @@ package</a>.</p>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="core.Grid2GMT.html"
-                        title="previous chapter"><span class="section-number">1.1.7. </span>Grid2GMT - location results or 3D grid data to GMT command script</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="control.ControlFile.html"
-                        title="next chapter"><span class="section-number">1.3.1. </span>NonLinLoc Software Package Control File</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="core.Grid2GMT.html"
+                          title="previous chapter"><span class="section-number">1.1.7. </span>Grid2GMT - location results or 3D grid data to GMT command script</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="control.ControlFile.html"
+                          title="next chapter"><span class="section-number">1.3.1. </span>NonLinLoc Software Package Control File</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -124,7 +128,7 @@ package</a>.</p>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -132,8 +136,8 @@ package</a>.</p>
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
-<script>$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -156,8 +160,8 @@ package</a>.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Anthony Lomax.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+    &#169; Copyright 2020, Anthony Lomax.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

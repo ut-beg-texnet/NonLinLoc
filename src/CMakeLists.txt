@@ -122,10 +122,10 @@ target_link_libraries(Vel2Grid velmod GRID_LIB_OBJS m)
 # --------------------------------------------------------------------------
 # Grid2Time
 #
-add_library(Time_3d_NLL_multisource OBJECT Time_3d_NLL_multisource.c)
-target_compile_options(Time_3d_NLL_multisource PRIVATE "-DNO_IEEE_PROTOCOL")
+add_library(Time_3d_NLL_multiSource OBJECT Time_3d_NLL_multiSource.c)
+target_compile_options(Time_3d_NLL_multiSource PRIVATE "-DNO_IEEE_PROTOCOL")
 add_executable(Grid2Time Grid2Time1.c)
-target_link_libraries(Grid2Time Time_3d_NLL_multisource GRID_LIB_OBJS m)
+target_link_libraries(Grid2Time Time_3d_NLL_multiSource GRID_LIB_OBJS m)
 
 # --------------------------------------------------------------------------
 # Time2Angles

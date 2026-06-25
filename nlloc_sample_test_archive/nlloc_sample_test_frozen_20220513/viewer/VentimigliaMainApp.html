@@ -1,0 +1,51 @@
+<HTML>
+<HEAD>
+<TITLE>Seismicity Viewer</TITLE>
+</HEAD>
+
+<BODY>
+
+<h2>
+M=4.7 1995 Ventimiglia Sequence (France-Italy Border) Mainshock
+</h2>
+
+<applet code=SeismicityApp.class alt="Seismicity Viewer requires a browser that can run Java applets" width=640 height=480>
+
+<param name=grid value=./vinti.hdr>
+
+<!param name=event value=./main.hyp.jbin>
+<!param name=binaryout value=false>
+<param name=event value=../loc/main.hyp>
+<!param name=binaryout value=true>
+
+<param name=probability value=true>
+<param name=mechanisms value=false>
+
+<param name=linesBlack value= >
+<param name=linesBlue value= >
+<param name=linesCyan value= >
+<param name=linesDarkGray value= ./vinti.cont.xyz#Topography>
+<param name=linesGray value= >
+<param name=linesLightGray value= ./map.prov.line.xy#Boundaries>
+<param name=linesGreen value= ./map.accmsb.d.xy#Faults>
+<param name=linesMagenta value= ./map.chne.d.xy#Thrusts>
+<param name=linesOrange value= >
+<param name=linesPink value= >
+<param name=linesRed value= >
+<param name=linesWhite value= >
+<param name=linesYellow value= >
+
+<param name=text value=./vinti.text>
+
+</applet>
+
+<BR>
+<A HREF=../seismicity/SeisViewInfo.html><B>Seismicity Viewer Information and Help</B></A>
+
+<BR>
+Press the left mouse button and drag the mouse slowly over the image to change the orientation of the view volume.
+<BR>
+Click the mouse over the image to re-center the view at the mouse location.
+
+</BODY>
+</HTML>

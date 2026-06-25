@@ -210,11 +210,11 @@ int DoGridCutProcess(int argc, char *argv[]) {
     display_grid_param(&grid_out);
 
     // if source specified, shift grid
+    double x_source_rect, y_source_rect;
     if (flag_source) {
-        double xrect, yrect;
         if (Source[0].is_coord_xyz) {
-            xrect = Source[0].x;
-            yrect = Source[0].y;
+            x_source_rect = Source[0].x;
+            y_source_rect = Source[0].y;
         } else {
             if (!have_projection) {
                 nll_puterr("ERROR: Cannot process lat/lon source, no coordinate transform available.");
@@ -225,11 +225,11 @@ int DoGridCutProcess(int argc, char *argv[]) {
             projection_str2transform_str(trans_str, MapProjStr[0]);
             get_transform(0, trans_str);
             // transform lat/lon to x/y
-            latlon2rect(0, Source[0].dlat, Source[0].dlong, &xrect, &yrect);
-            printf("DEBUG: lat/lon -> x/y:  %f %f -> %f %f\n", Source[0].dlat, Source[0].dlong, xrect, yrect);
+            latlon2rect(0, Source[0].dlat, Source[0].dlong, &x_source_rect, &y_source_rect);
+            printf("DEBUG: lat/lon -> x/y:  %f %f -> %f %f\n", Source[0].dlat, Source[0].dlong, x_source_rect, y_source_rect);
         }
-        grid_out.origx = xrect - ((double) grid_out.numx * grid_out.dx / 2.0);
-        grid_out.origy = yrect - ((double) grid_out.numy * grid_out.dy / 2.0);
+        grid_out.origx = x_source_rect - ((double) grid_out.numx * grid_out.dx / 2.0);
+        grid_out.origy = y_source_rect - ((double) grid_out.numy * grid_out.dy / 2.0);
         printf("DEBUG: origx/origy:  %f %f\n", grid_out.origx, grid_out.origy);
         printf("Shifted output grid center to lat/lon: %f %f\n", Source[0].dlat, Source[0].dlong);
         printf("Output grid:\n");
@@ -327,13 +327,28 @@ int DoGridCutProcess(int argc, char *argv[]) {
     // map input grid file into output cut grid
     float val;
     int ix, iy, iz;
-    double x_coord = grid_out.origx;
     printf("Processing:\n");
+    double x_coord = grid_out.origx;
+    // 20260226 AJL - Bug fix: shift to account for gridline (e.g travel-time) vs pixel center (e.g. vel/slow) grid data in NLL
+    if (isPixelCenterDataGrid(&grid_input)) {
+        x_coord += grid_out.dx / 2.0; // shift output coordinate from grid point at corner to center of output grid cell (true xyz coord)
+        x_coord -= grid_input.dx / 2.0; // shift input coordinate from grid center to grid point at corner (true xyz coord)
+    }
     for (ix = 0; ix < grid_out.numx; ix++) {
         printf("  x=%d/%d\r", ix, grid_out.numx);
         double y_coord = grid_out.origy;
+        // 20260226 AJL - Bug fix: shift to account for gridline (e.g travel-time) vs pixel center (e.g. vel/slow) grid data in NLL
+        if (isPixelCenterDataGrid(&grid_input)) {
+            y_coord += grid_out.dy / 2.0; // shift output coordinate from grid point at corner to center of output grid cell (true xyz coord)
+            y_coord -= grid_input.dy / 2.0; // shift input coordinate from grid center to grid point at corner (true xyz coord)
+        }
         for (iy = 0; iy < grid_out.numy; iy++) {
             double z_coord = grid_out.origz;
+            // 20260226 AJL - Bug fix: shift to account for gridline (e.g travel-time) vs pixel center (e.g. vel/slow) grid data in NLL
+            if (isPixelCenterDataGrid(&grid_input)) {
+                z_coord += grid_out.dz / 2.0; // shift output coordinate from grid point at corner to center of output grid cell (true xyz coord)
+                z_coord -= grid_input.dz / 2.0; // shift input coordinate from grid center to grid point at corner (true xyz coord)
+            }
             for (iz = 0; iz < grid_out.numz; iz++) {
                 val = ReadAbsInterpGrid3d(fp_grid_in, &grid_input, x_coord, y_coord, z_coord, 0);
                 ((GRID_FLOAT_TYPE***) grid_out.array)[ix][iy][iz] = val;
@@ -352,6 +367,61 @@ int DoGridCutProcess(int argc, char *argv[]) {
         nll_puterr("ERROR: writing output cut grid to disk.\n");
         return (-1);
     }
+
+    // if source specified, output profile of grid values below source
+    if (flag_source) {
+        char fn_source_grid_out[FILENAME_MAX];
+        sprintf(fn_source_grid_out, "%s.%s.profile.in", fn_grid_out, file_type);
+        printf("Writing grid profile below source to disk: %s\n", fn_source_grid_out);
+        FILE *fpio;
+        if ((fpio = fopen(fn_source_grid_out, "w")) == NULL) {
+            nll_puterr("ERROR: opening profile output file.");
+        } else {
+            // determine if may be P or S velocity model
+            int isP = 0, isS = 0;
+            if (strstr(fn_source_grid_out, ".P.") != NULL) {
+                isP = 1;
+            } else if (strstr(fn_source_grid_out, ".S.") != NULL) {
+                isS = 1;
+            }
+            // write output
+            fprintf(fpio, "# %s\n", fn_source_grid_out);
+            if (isP || isS) {
+                fprintf(fpio, "# model layers (LAYER depth, Vp_top, Vp_grad, Vs_top, Vs_grad, p_top, p_grad)\n");
+            } else {
+                fprintf(fpio, "# depth %s\n", grid_out.chr_type);
+            }
+            float val;
+            double x_source_rect_shift = x_source_rect;
+            double y_source_rect_shift = y_source_rect;
+            double z_coord = grid_out.origz;
+            // 20260226 AJL - Bug fix: shift to account for gridline (e.g travel-time) vs pixel center (e.g. vel/slow) grid data in NLL
+            if (isPixelCenterDataGrid(&grid_input)) {
+                // shift xy output coordinates dist from center of output grid cell (true xyz coord) to grid point at corner (grid coord)
+                x_source_rect_shift -= grid_out.dx / 2.0;
+                y_source_rect_shift -= grid_out.dy / 2.0;
+            }
+            for (int iz = 0; iz < grid_out.numz; iz++) {
+                val = ReadAbsInterpGrid3d(NULL, &grid_out, x_source_rect_shift, y_source_rect_shift, z_coord, 0);
+                if (grid_out.type == GRID_SLOW_LEN) {
+                    val = grid_out.dz / val;
+                }
+                if (isP) {
+                    fprintf(fpio, "LAYER %f %f 0.0 -99 -99 -99 -99\n", z_coord, val);
+                } else if (isS) {
+                    fprintf(fpio, "LAYER %f -99 -99 %f 0.0 -99 -99\n", z_coord, val);
+                } else {
+                    fprintf(fpio, "%f %f\n", z_coord, val);
+                }
+                z_coord += grid_out.dz;
+            }
+        }
+        fclose(fpio);
+    }
+
+    // free grid memory
+    DestroyGridArray(&grid_out);
+    FreeGrid(&grid_out);
 
     return (0);
 

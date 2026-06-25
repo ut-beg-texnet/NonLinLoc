@@ -1,0 +1,45 @@
+#
+# property defaults file for Seismicity Viewer
+#
+
+#
+seismicity.title =  M=4.7 1995 Ventimiglia Sequence (France-Italy Border) Mainshock
+
+#seismicity.grid = vinti.hdr
+#seismicity.event = vinti.hyp
+seismicity.eventfiletype=NLLOC
+
+seismicity.binaryout = false
+
+seismicity.init.plotfirst=NO
+#seismicity.init.rotation=0,0,0
+
+seismicity.show.axis.p=NO
+seismicity.show.axis.t=NO
+seismicity.show.ellipsoid=YES
+seismicity.show.expectation=YES
+seismicity.show.faultplane=NO
+seismicity.show.firstmotion=YES
+seismicity.show.magnitude=YES
+seismicity.show.maxlikelihood=YES
+seismicity.show.probability=YES
+seismicity.show.residual.all=YES
+seismicity.show.residual.p=YES
+seismicity.show.residual.s=YES
+seismicity.show.station=YES
+
+seismicity.lines.black =
+seismicity.lines.blue =
+seismicity.lines.cyan
+seismicity.lines.darkGray =
+seismicity.lines.gray =  vinti.cont.xyz#Topography
+seismicity.lines.lightGray = map.prov.line.xy#Boundaries
+seismicity.lines.green = map.accmsb.d.xy#Faults
+seismicity.lines.magenta = map.chne.d.xy#Thrusts
+seismicity.lines.orange =
+seismicity.lines.pink =
+seismicity.lines.red =
+seismicity.lines.white =
+seismicity.lines.yellow =
+
+seismicity.text = vinti.text

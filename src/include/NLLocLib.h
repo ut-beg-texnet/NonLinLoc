@@ -238,6 +238,10 @@ extern int NumLocationsCompleted;
 #define MAX_NUM_OBS_FILES 30000  // 20221218 AJL
 extern int NumObsFiles;
 
+#define MAX_NUM_TIME_GRID_PATHS 10   // 20251027 add support for alternative travel-time grid path/root
+extern int NumTimeGridPaths;
+extern char fn_time_grids[MAX_NUM_TIME_GRID_PATHS][FILENAME_MAX];   // 20251027 add support for alternative travel-time grid path/root
+
 /* number of arrivals read from obs file */
 extern int NumArrivalsRead;
 
@@ -250,7 +254,7 @@ extern char fn_loc_obs[MAX_NUM_OBS_FILES][FILENAME_MAX];
 extern char ftype_obs[MAXLINE];
 
 /* filenames */
-extern char fn_loc_grids[FILENAME_MAX], fn_path_output[FILENAME_MAX];
+extern char fn_path_output[FILENAME_MAX];
 extern int iSwapBytesOnInput;
 
 // model files
@@ -534,7 +538,7 @@ int GetNLLoc_Method(char*);
 int GetNLLoc_SearchType(char*);
 int GetNLLoc_PdfGrid(char*, int);
 int GetNLLoc_FixOriginTime(char*);
-int GetObservations(FILE*, char*, char*, ArrivalDesc*, int*, int*, int*, int, HypoDesc*, int*, int*, int);
+int GetObservations(FILE*, char*, char[MAX_NUM_TIME_GRID_PATHS][FILENAME_MAX], ArrivalDesc*, int*, int*, int*, int, HypoDesc*, int*, int*, int);
 int GetNextObs(HypoDesc* phypo, FILE*, ArrivalDesc *, char*, int);
 int IsGoodDate(int, int, int);
 int ReadArrivalSheets(int, ArrivalDesc*, double);

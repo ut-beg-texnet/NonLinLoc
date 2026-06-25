@@ -418,7 +418,7 @@ int main(int argc, char *argv[]) {
         /* read next set of observations */
 
         numArrivalsNew = GetObservations(fp_obs,
-                ftype_obs, fn_loc_grids, Arrival,
+                ftype_obs, fn_time_grids, Arrival,
                 &i_end_of_input, &numArrivalsIgnoreNew,
                 &numArrivalsRejectNew,
                 MaxNumArrLoc - NumArrivals, &Hypocenter,

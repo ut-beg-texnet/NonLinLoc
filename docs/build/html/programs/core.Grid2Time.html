@@ -1,19 +1,17 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>1.1.3. Grid2Time - 3D model grid to travel-time and angles grids &#8212; NonLinLoc Doc 7.00 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b76e3c8a" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=def86cc0" />
     
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
+    <script src="../_static/documentation_options.js?v=b489f74c"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -47,7 +45,7 @@
 <div class="line"><br /></div>
 </div>
 <section id="grid2time-3d-model-grid-to-travel-time-and-angles-grids">
-<h1><span class="section-number">1.1.3. </span>Grid2Time - 3D model grid to travel-time and angles grids<a class="headerlink" href="#grid2time-3d-model-grid-to-travel-time-and-angles-grids" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">1.1.3. </span>Grid2Time - 3D model grid to travel-time and angles grids<a class="headerlink" href="#grid2time-3d-model-grid-to-travel-time-and-angles-grids" title="Link to this heading">¶</a></h1>
 <p>Given a velocity model grid, <strong>Grid2Time</strong> calculates the travel-time
 from a source point in a 3D grid to all other points in the grid.
 Optionally, the program also estimates the take-off angles for rays from
@@ -59,7 +57,7 @@ program-Input &lt;#_running_&gt;`__</span></a> - <a href="#id13"><span class="pr
 Display of results &lt;#_processing_&gt;`__</span></a> - <a class="reference external" href="./index.html">[NonLinLoc
 Home]</a></p>
 <div class="color"></div><section id="overview">
-<h2><span class="section-number">1.1.3.1. </span>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.1.3.1. </span>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
 <p>The Grid2Time program calculates the travel-times between a station and
 all nodes of an <em>x,y,z</em> spatial grid using the Eikonal finite-difference
 scheme of <a class="reference external" href="./references.html">Podvin and Lecomte (1991)</a>. The results
@@ -84,7 +82,7 @@ distance quantities can be expressed in rectangular or geographic
 (latitude and logitude) coordinates.</p>
 <div class="color"></div></section>
 <section id="podvin-and-lecomte-eikonal-finite-difference-algorithm">
-<h2><span class="section-number">1.1.3.2. </span>Podvin and Lecomte, Eikonal, Finite-difference Algorithm<a class="headerlink" href="#podvin-and-lecomte-eikonal-finite-difference-algorithm" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.1.3.2. </span>Podvin and Lecomte, Eikonal, Finite-difference Algorithm<a class="headerlink" href="#podvin-and-lecomte-eikonal-finite-difference-algorithm" title="Link to this heading">¶</a></h2>
 <p>The travel times between a station and all nodes of a 3D grid are
 calculated using the Eikonal finite-difference scheme of <a class="reference external" href="./references.html">Podvin and
 Lecomte (1991)</a>. The algorithm is implemented in
@@ -107,7 +105,7 @@ large spectrum of seismic and seismological problems.</em></p>
 </div></blockquote>
 <div class="color"></div></section>
 <section id="take-off-angles-algorithm">
-<h2><span class="section-number">1.1.3.3. </span>Take-Off Angles Algorithm<a class="headerlink" href="#take-off-angles-algorithm" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.1.3.3. </span>Take-Off Angles Algorithm<a class="headerlink" href="#take-off-angles-algorithm" title="Link to this heading">¶</a></h2>
 <p>The take-off angles at a node for the first-arrival ray to the source
 are estimated from the gradients of travel-time at the node. Two
 gradients are estimated for each axis direction <em>x, y, z</em> - one
@@ -139,7 +137,7 @@ mean gradient along each axis,</p>
 </div></blockquote>
 <div class="color"></div></section>
 <section id="running-the-program-input">
-<h2><span class="section-number">1.1.3.4. </span>Running the program - Input<a class="headerlink" href="#running-the-program-input" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.1.3.4. </span>Running the program - Input<a class="headerlink" href="#running-the-program-input" title="Link to this heading">¶</a></h2>
 <p>Synopsis: <code class="docutils literal notranslate"><span class="pre">Grid2Time</span> <span class="pre">InputControlFile</span></code></p>
 <p>The Grid2Time program takes a single argument <code class="docutils literal notranslate"><span class="pre">InputControlFile</span></code> which
 specifies the complete path and filename for an <a class="reference external" href="./control.html">Input Control
@@ -162,7 +160,7 @@ in the <a href="#id25"><span class="problematic" id="id26">`Grid2Time Statements
 the Input Control File.</p>
 <div class="color"></div></section>
 <section id="output">
-<h2><span class="section-number">1.1.3.5. </span>Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.1.3.5. </span>Output<a class="headerlink" href="#output" title="Link to this heading">¶</a></h2>
 <p>The travel-times and take-off angles throughout a grid are written to a
 separate <a href="#id27"><span class="problematic" id="id28">`3D Grid File &lt;formats.html#_grid_&gt;`__</span></a> for each phase at each
 station. For a descrition of the naming convention for these grid files,
@@ -170,7 +168,7 @@ see the <code class="docutils literal notranslate"><span class="pre">`GTFILES</s
 in the Grid2Time Statements section of the Input Control File.</p>
 <div class="color"></div></section>
 <section id="processing-and-display-of-results">
-<h2><span class="section-number">1.1.3.6. </span>Processing and Display of results<a class="headerlink" href="#processing-and-display-of-results" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.1.3.6. </span>Processing and Display of results<a class="headerlink" href="#processing-and-display-of-results" title="Link to this heading">¶</a></h2>
 <p>The travel-time and angles grid results for a single source can be
 post-processed with the program <a class="reference external" href="./Grid2GMT.html">Grid2GMT</a> to
 produce a GMT command script for plotting with the <a class="reference external" href="http://gmt.soest.hawaii.edu/">GMT plotting
@@ -187,8 +185,9 @@ package</a>.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">1.1.3. Grid2Time - 3D model grid to travel-time and angles grids</a><ul>
 <li><a class="reference internal" href="#overview">1.1.3.1. Overview</a></li>
 <li><a class="reference internal" href="#podvin-and-lecomte-eikonal-finite-difference-algorithm">1.1.3.2. Podvin and Lecomte, Eikonal, Finite-difference Algorithm</a></li>
@@ -200,12 +199,17 @@ package</a>.</p>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="core.Vel2Grid3D.html"
-                        title="previous chapter"><span class="section-number">1.1.2. </span>Vel2Grid3D - velocity model description to 3D model grid</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="core.Time2EQ.html"
-                        title="next chapter"><span class="section-number">1.1.4. </span>Time2EQ - travel-time grid to synthetic observations</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="core.Vel2Grid3D.html"
+                          title="previous chapter"><span class="section-number">1.1.2. </span>Vel2Grid3D - velocity model description to 3D model grid</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="core.Time2EQ.html"
+                          title="next chapter"><span class="section-number">1.1.4. </span>Time2EQ - travel-time grid to synthetic observations</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -213,7 +217,7 @@ package</a>.</p>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -221,8 +225,8 @@ package</a>.</p>
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
-<script>$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -245,8 +249,8 @@ package</a>.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Anthony Lomax.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+    &#169; Copyright 2020, Anthony Lomax.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

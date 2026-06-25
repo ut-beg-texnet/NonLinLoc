@@ -1,23 +1,21 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>1.3.1. NonLinLoc Software Package Control File &#8212; NonLinLoc Doc 7.00 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b76e3c8a" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=def86cc0" />
     
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
+    <script src="../_static/documentation_options.js?v=b489f74c"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="1.1.8. Loc2ssst - generate SSST corrections on a to 3D grid for NLLoc locations" href="core.Loc2ssst.html" /> 
+    <link rel="prev" title="1.1.9. GridCut - extracts a sub-volume from a NLL 3D grid" href="core.GridCut.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -26,7 +24,7 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="core.Loc2ssst.html" title="1.1.8. Loc2ssst - generate SSST corrections on a to 3D grid for NLLoc locations"
+          <a href="core.GridCut.html" title="1.1.9. GridCut - extracts a sub-volume from a NLL 3D grid"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">NonLinLoc Doc 7.00 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../programs.html" accesskey="U"><span class="section-number">1. </span>NonLinLoc Programs</a> &#187;</li>
@@ -40,7 +38,7 @@
           <div class="body" role="main">
             
   <section id="nonlinloc-software-package-control-file">
-<h1><span class="section-number">1.3.1. </span>NonLinLoc Software Package Control File<a class="headerlink" href="#nonlinloc-software-package-control-file" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">1.3.1. </span>NonLinLoc Software Package Control File<a class="headerlink" href="#nonlinloc-software-package-control-file" title="Link to this heading">¶</a></h1>
 <p><a class="reference internal" href="core.NLLoc.html#overview"><span class="std std-ref">Overview</span></a> -
 <a class="reference internal" href="#definitions"><span class="std std-ref">Definitions</span></a> -
 <a class="reference internal" href="#generic-control-statements"><span class="std std-ref">Generic Control Statements</span></a> -
@@ -51,7 +49,7 @@
 <a class="reference internal" href="#nlloc-program"><span class="std std-ref">NLLoc Program</span></a> -
 <a class="reference internal" href="#loc2ssst-program"><span class="std std-ref">Loc2ssst Program</span></a></p>
 <section id="overview">
-<h2><span class="section-number">1.3.1.1. </span>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.3.1.1. </span>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
 <div class="line-block">
 <div class="line">The various NonLinLoc programs all use the same control file syntax
  and share some “generic” control statements. The control statements
@@ -69,7 +67,7 @@
 </div>
 </section>
 <section id="definitions">
-<h2><span class="section-number">1.3.1.2. </span>Definitions<a class="headerlink" href="#definitions" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.3.1.2. </span>Definitions<a class="headerlink" href="#definitions" title="Link to this heading">¶</a></h2>
 <div class="line-block">
 <div class="line"><strong>Statement Priority</strong></div>
 <div class="line"><em>required</em> - must be present in control file to run the coressponding
@@ -102,7 +100,7 @@ parameters</div>
 </div>
 </section>
 <section id="generic-control-statements">
-<h2><span class="section-number">1.3.1.3. </span>Generic Control Statements<a class="headerlink" href="#generic-control-statements" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.3.1.3. </span>Generic Control Statements<a class="headerlink" href="#generic-control-statements" title="Link to this heading">¶</a></h2>
 <div class="line-block">
 <div class="line">The generic control file statements may be used by one or more of the
  programs in the NonLinLoc package. The statements <code class="docutils literal notranslate"><span class="pre">TRANS</span></code> and
@@ -144,7 +142,7 @@ samples and by program Time2EQ to generate noisy time picks)</div>
 <div class="line">Syntax 3: <code class="docutils literal notranslate"><span class="pre">TRANS</span></code> <code class="docutils literal notranslate"><span class="pre">NONE</span></code></div>
 <div class="line">Syntax 4: <code class="docutils literal notranslate"><span class="pre">TRANS</span></code> <code class="docutils literal notranslate"><span class="pre">SDC</span> <span class="pre">latOrig</span> <span class="pre">longOrig</span> <span class="pre">rotAngle</span></code></div>
 <div class="line">Syntax 5: <code class="docutils literal notranslate"><span class="pre">TRANS</span></code> <code class="docutils literal notranslate"><span class="pre">LAMBERT</span> <span class="pre">refEllipsoid</span> <span class="pre">latOrig</span> <span class="pre">longOrig</span> <span class="pre">firstStdParal</span> <span class="pre">secondStdParal</span> <span class="pre">rotAngle</span></code></div>
-<div class="line">Syntax 6: <code class="docutils literal notranslate"><span class="pre">TRANS</span></code> <code class="docutils literal notranslate"><span class="pre">TRANS_MERC</span> <span class="pre">refEllipsoid</span> <span class="pre">latOrig</span> <span class="pre">longOrig</span> <span class="pre">rotAngle</span></code></div>
+<div class="line">Syntax 6: <code class="docutils literal notranslate"><span class="pre">TRANS</span></code> <code class="docutils literal notranslate"><span class="pre">TRANS_MERC</span> <span class="pre">refEllipsoid</span> <span class="pre">latOrig</span> <span class="pre">longOrig</span> <span class="pre">rotAngle</span> <span class="pre">[useFalseEasting]</span> <span class="pre">[falseEasting]</span> <span class="pre">[mapScaleFactor]</span></code></div>
 <div class="line">Syntax 7: <code class="docutils literal notranslate"><span class="pre">TRANS</span></code> <code class="docutils literal notranslate"><span class="pre">AZIMUTHAL_EQUIDIST</span> <span class="pre">refEllipsoid</span> <span class="pre">latOrig</span> <span class="pre">longOrig</span> <span class="pre">rotAngle</span></code></div>
 <div class="line">Sets geographic to working coordinates transformation parameters. The
 <cite>GLOBAL`</cite> option sets spherical regional/teleseismic mode, with no
@@ -173,6 +171,13 @@ decimal degrees</div>
 <div class="line">   <code class="docutils literal notranslate"><span class="pre">rotAngle</span></code> (<em>float</em>, min:<code class="docutils literal notranslate"><span class="pre">-360.0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">360.0</span></code>) rotation
 angle of geographic north in degrees clockwise relative to the
 rectangular coordinates system Y-axis</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">useFalseEasting</span></code> (<em>choice</em>: <cite>0 1`</cite>) whether to use
+false easting in UTM coordinates or not</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">falseEasting</span></code> (<em>int</em>) false easting in meters to use in UTM coordinates,
+defaults to <code class="docutils literal notranslate"><span class="pre">500000</span></code> (500km) if not specified and <code class="docutils literal notranslate"><span class="pre">useFalseEasting</span></code> is
+switched on</div>
+<div class="line">   <code class="docutils literal notranslate"><span class="pre">mapScaleFactor</span></code> (<em>float</em>) map scale factor to use in UTM coordinate
+conversion, defaults to <code class="docutils literal notranslate"><span class="pre">1.0</span></code> if not specified</div>
 <div class="line">Notes:</div>
 <div class="line">   1. `` rotAngle                ` = <code class="docutils literal notranslate"><span class="pre">0</span></code> gives
  North along the positive Y-axis,
@@ -260,7 +265,7 @@ the control file.</div>
 </div>
 </section>
 <section id="vel2grid-program">
-<h2><span class="section-number">1.3.1.4. </span>Vel2Grid Program<a class="headerlink" href="#vel2grid-program" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.3.1.4. </span>Vel2Grid Program<a class="headerlink" href="#vel2grid-program" title="Link to this heading">¶</a></h2>
 <div class="line-block">
 <div class="line"><strong>VGOUT - Output File Root Name</strong></div>
 <div class="line"><em>required</em>, <em>non-repeatable</em></div>
@@ -392,7 +397,7 @@ indexes defining this polygon</div>
 </div>
 </section>
 <section id="vel2grid3d-program">
-<h2><span class="section-number">1.3.1.5. </span>Vel2Grid3D Program<a class="headerlink" href="#vel2grid3d-program" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.3.1.5. </span>Vel2Grid3D Program<a class="headerlink" href="#vel2grid3d-program" title="Link to this heading">¶</a></h2>
 <div class="line-block">
 <div class="line"><strong>VGINP - Input Velocity Model File</strong></div>
 <div class="line"><em>required</em>, <em>non-repeatable</em></div>
@@ -423,7 +428,7 @@ deepest overlying input node with velocity &lt; Vmax.</div>
 </div>
 </section>
 <section id="grid2time-program">
-<h2><span class="section-number">1.3.1.6. </span>Grid2Time Program<a class="headerlink" href="#grid2time-program" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.3.1.6. </span>Grid2Time Program<a class="headerlink" href="#grid2time-program" title="Link to this heading">¶</a></h2>
 <div class="line-block">
 <div class="line"><strong>GTFILES - Input and Output File Root Name</strong></div>
 <div class="line"><em>required</em>, <em>non-repeatable</em></div>
@@ -527,7 +532,7 @@ and Lecomte, 1991 for more information.</div>
 </div>
 </section>
 <section id="time2eq-program">
-<h2><span class="section-number">1.3.1.7. </span>Time2EQ Program<a class="headerlink" href="#time2eq-program" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.3.1.7. </span>Time2EQ Program<a class="headerlink" href="#time2eq-program" title="Link to this heading">¶</a></h2>
 <div class="line-block">
 <div class="line"><strong>EQFILES - Input and Output File Root Name</strong></div>
 <div class="line"><em>required</em>, <em>non-repeatable</em></div>
@@ -700,7 +705,7 @@ travel-times.</div>
 </div>
 </section>
 <section id="nlloc-program">
-<h2><span class="section-number">1.3.1.8. </span>NLLoc Program<a class="headerlink" href="#nlloc-program" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.3.1.8. </span>NLLoc Program<a class="headerlink" href="#nlloc-program" title="Link to this heading">¶</a></h2>
 <div class="line-block">
 <div class="line"><strong>LOCSIG - Signature text</strong></div>
 <div class="line"><em>optional</em>, <em>non-repeatable</em></div>
@@ -746,7 +751,8 @@ standard UNIX “wild-card” characters ( <code class="docutils literal notrans
  format type for phase/observations files (see Phase File Formats)</div>
 <div class="line">   <code class="docutils literal notranslate"><span class="pre">ttimeFileRoot</span></code> (<em>string</em>) full or relative path and file <em>root</em>
 name (no extension) for input time grids (generated by program
-Grid2Time, edu.sc.seis.TauP.TauP_Table_NLL, or other software.</div>
+Grid2Time, edu.sc.seis.TauP.TauP_Table_NLL, or other software.
+Optionally, can be a comma-separated set (no spaces) of <code class="docutils literal notranslate"><span class="pre">ttimeFileRoot</span></code> values; NLLoc uses the first of these for which a valid time grid is found for each station and phase needed for location, allowing, e.g., the use of 3D model grids near a station and 1D model grids (2D time grids) at larger distances.</div>
 <div class="line">   <code class="docutils literal notranslate"><span class="pre">outputFileRoot</span></code> (<em>string</em>) full or relative path and file <em>root</em>
 name (no extension) for output files</div>
 <div class="line">   <code class="docutils literal notranslate"><span class="pre">iSwapBytes</span></code> (<em>integer</em>, min:<code class="docutils literal notranslate"><span class="pre">0</span></code>, max:<code class="docutils literal notranslate"><span class="pre">1</span></code>,
@@ -1342,7 +1348,7 @@ Recommended value is -999, disabled.</div>
 </div>
 </section>
 <section id="loc2ssst-program">
-<h2><span class="section-number">1.3.1.9. </span>Loc2ssst Program<a class="headerlink" href="#loc2ssst-program" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.3.1.9. </span>Loc2ssst Program<a class="headerlink" href="#loc2ssst-program" title="Link to this heading">¶</a></h2>
 <div class="line-block">
 <div class="line"><strong>LSOUT - Output File Root Name</strong></div>
 <div class="line"><em>required</em>, <em>non-repeatable</em></div>
@@ -1504,8 +1510,9 @@ codes, if possible.</div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">1.3.1. NonLinLoc Software Package Control File</a><ul>
 <li><a class="reference internal" href="#overview">1.3.1.1. Overview</a></li>
 <li><a class="reference internal" href="#definitions">1.3.1.2. Definitions</a></li>
@@ -1520,9 +1527,12 @@ codes, if possible.</div>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="core.Loc2ssst.html"
-                        title="previous chapter"><span class="section-number">1.1.8. </span>Loc2ssst - generate SSST corrections on a  to 3D grid for NLLoc locations</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="core.GridCut.html"
+                          title="previous chapter"><span class="section-number">1.1.9. </span>GridCut - extracts a sub-volume from a NLL <cite>3D grid</cite></a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -1530,7 +1540,7 @@ codes, if possible.</div>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -1538,8 +1548,8 @@ codes, if possible.</div>
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
-<script>$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -1551,7 +1561,7 @@ codes, if possible.</div>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="core.Loc2ssst.html" title="1.1.8. Loc2ssst - generate SSST corrections on a to 3D grid for NLLoc locations"
+          <a href="core.GridCut.html" title="1.1.9. GridCut - extracts a sub-volume from a NLL 3D grid"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">NonLinLoc Doc 7.00 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../programs.html" ><span class="section-number">1. </span>NonLinLoc Programs</a> &#187;</li>
@@ -1559,8 +1569,8 @@ codes, if possible.</div>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Anthony Lomax.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+    &#169; Copyright 2020, Anthony Lomax.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

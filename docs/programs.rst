@@ -24,6 +24,7 @@ Core routines of the NonLinLoc project.
    programs/core.LocSum
    programs/core.Grid2GMT
    programs/core.Loc2ssst
+   programs/core.GridCut
 
 
 Utils
