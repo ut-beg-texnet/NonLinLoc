@@ -8886,7 +8886,10 @@ double CalcSolutionQuality_EDT(int num_arrivals, ArrivalDesc *arrival,
         amp_row = arrival[nrow].amplitude;
         obs_minus_pred = arrival[nrow].obs_centered - arrival[nrow].pred_centered;
         no_abs_time_row = !arrival[nrow].abs_time;
-        if (EDT_use_otime_weight == 2 || icalc_otime_default) { // EDT_OT_WT_ML or otime
+        // SP-TEST PATCH: picks without absolute time give no origin-time estimate
+        if (no_abs_time_row) {
+            ;
+        } else if (EDT_use_otime_weight == 2 || icalc_otime_default) { // EDT_OT_WT_ML or otime
             ot_ml_arrival[nrow] = arrival[nrow].obs_time - (long double) arrival[nrow].pred_travel_time;
             //ot_ml_arrival_edt_sum[nrow] = 0.0;
             ot_error_2 += sigma2_row;
@@ -8904,8 +8907,9 @@ double CalcSolutionQuality_EDT(int num_arrivals, ArrivalDesc *arrival,
                 continue; // ignore obs without predicted times
             // END
             // check absolute timing
-            if (no_abs_time_row) {
-                if (arrival[ncol].abs_time) // cannot be same station/inst
+            // SP-TEST PATCH: symmetric - skip mixed pairs whichever pick comes first
+            if (no_abs_time_row || !arrival[ncol].abs_time) {
+                if (!no_abs_time_row || arrival[ncol].abs_time) // mixed pair: one has absolute time, the other not
                     continue;
                 if (strcmp(arrival[nrow].label, arrival[ncol].label) != 0
                         || strcmp(arrival[nrow].inst, arrival[ncol].inst) != 0)
@@ -8982,11 +8986,18 @@ double CalcSolutionQuality_EDT(int num_arrivals, ArrivalDesc *arrival,
                 ot_prob += prob;
             }
         }
-        if (EDT_use_otime_weight == 1) { // EDT_OT_WT or EDT
+        if (EDT_use_otime_weight == 1 && !no_abs_time_row) { // EDT_OT_WT or EDT  (SP-TEST PATCH: abs rows only)
             ot_sum += ot_prob * ot_row;
             ot_2_sum += ot_prob * ot_row_2;
             ot_weight += ot_prob;
         }
+    }
+
+    // SP-TEST PATCH: picks without absolute time are excluded from the origin-time likelihood
+    if (EDT_use_otime_weight == 2 || icalc_otime_default) {
+        for (nrow = 0; nrow < num_arrivals; nrow++)
+            if (!arrival[nrow].abs_time)
+                ot_ml_arrival_edt_sum[nrow] = -1.0;
     }
 
     // OT_WT methods
@@ -13813,7 +13824,8 @@ double CalculateVpVsEstimate(HypoDesc* phypo, ArrivalDesc* arrival, int narrival
             p_time_wt = 0.0;
             s_time_wt = 0.0;
             weight_sum = 0.0;
-            for (narr = 1; narr < npair; narr++) {
+            // 20261026 Bug fix (Julián Olivar & Claude): misses first PS pair //for (narr = 1; narr < npair; narr++) {
+            for (narr = 0; narr < npair; narr++) {
                 weight[narr] = 1.0 /
                         (s_error[narr] * s_error[narr]
                         + Btest * p_error[narr] * p_error[narr]);
@@ -13824,7 +13836,8 @@ double CalculateVpVsEstimate(HypoDesc* phypo, ArrivalDesc* arrival, int narrival
 
             // form centered times and accumulate T
             T = 0.0;
-            for (narr = 1; narr < npair; narr++) {
+            // 20261026 Bug fix (Julián Olivar & Claude): misses first PS pair //for (narr = 1; narr < npair; narr++) {
+            for (narr = 0; narr < npair; narr++) {
                 p_time_cent = p_time[narr] - p_time_wt / weight_sum;
                 s_time_cent = s_time[narr] - s_time_wt / weight_sum;
                 temp = s_time_cent - Btest * p_time_cent;

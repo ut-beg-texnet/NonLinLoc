@@ -42,9 +42,9 @@
 #include "phaseloclist.h"
 
 #ifdef GMT_VER_5
-    #define GMT_COMMAND_PREFIX "gmt "
+#define GMT_COMMAND_PREFIX "gmt "
 #else
-    #define GMT_COMMAND_PREFIX ""
+#define GMT_COMMAND_PREFIX ""
 #endif
 
 /* defines */
@@ -937,7 +937,7 @@ int DoLoc2ssst() {
         fprintf(stdout, "ssstval: mean: %f last: %f\n", ssstval_sum / (double) (pssst_grid->numx * pssst_grid->numy * pssst_grid->numz), ssstval);
 
         // write ssst correction grid to disk
-        char filename[2*MAXLINE_LONG];
+        char filename[2 * MAXLINE_LONG];
         sprintf(filename, "%s.%s.%s", fn_ls_output, phasecode, stacode);
         sprintf(MsgStr, "Finished calculation, SSST grid output files: %s.*", filename);
         nll_putmsg(1, MsgStr);
@@ -947,7 +947,7 @@ int DoLoc2ssst() {
             return (-1);
         }
         // save station coordinates to file
-        char fn_stations[3*FILENAME_MAX];
+        char fn_stations[3 * FILENAME_MAX];
         FILE* fp_stations;
         sprintf(fn_stations, "%s.ssst.stations", filename);
         if ((fp_stations = fopen(fn_stations, "w")) != NULL) {
@@ -980,7 +980,7 @@ int DoLoc2ssst() {
             //sprintf(filename, "%s_ssst_corr.%s.%s", fn_ls_output, phasecode, stacode); // 20201010 AJL - bug fix: adding _ssst_corr to file root makes file management difficult
             sprintf(filename, "%s.%s.%s", fn_ls_output, phasecode, stacode);
             // remove existing files since may be links  // 20201010 AJL - added
-            char fname_remove[3*MAXLINE_LONG];
+            char fname_remove[3 * MAXLINE_LONG];
             sprintf(fname_remove, "%s.%s.hdr", filename, "time");
             remove(fname_remove);
             sprintf(fname_remove, "%s.%s.buf", filename, "time");
@@ -1126,7 +1126,7 @@ int open_traveltime_grid(ArrivalDesc* parr, char *fn_time_grid_input, char *stac
     int istat;
     int DEBUG = 0;
 
-    char filename[2*MAXLINE_LONG];
+    char filename[2 * MAXLINE_LONG];
     //sprintf(filename, "%s.%s.%s", fn_time_grid_input, stacode, phasecode);
 
     //char arrival_phase[PHASE_LABEL_LEN];
@@ -1309,6 +1309,15 @@ int add_ssst_to_traveltime_grid(char *phasecode, char *stacode, GridDesc *pssst_
                         printf("DEBUG ERROR: fabs(ttval * tfact + ssst_corr) < SMALL_FLOAT: %s %s  is3D %d, xval %f, yval %f, zval %f\n",
                                 phasecode, stacode, is3D, xval, yval, zval);
                     }
+                }
+                // 20260924 AJL - Bug fix: TEST check for negative SSST corrected travel-times, set negative SSST corrected travel-times to 0
+                if (ttval * tfact + ssst_corr < SMALL_FLOAT) {
+                    if (debug_count++ < 10) {
+                        printf("DEBUG WARNING: (ttval * tfact + ssst_corr) < SMALL_FLOAT: %s %s  is3D %d, xval %f, yval %f, zval %f\n",
+                                phasecode, stacode, is3D, xval, yval, zval);
+                    }
+                    ttval = 0.0;
+                    ssst_corr = 0.0;
                 }
                 ((GRID_FLOAT_TYPE ***) pssst_time_grid->array)[ix][iy][iz] = (GRID_FLOAT_TYPE) (ttval * tfact + ssst_corr);
                 zval += pssst_time_grid->dz;
