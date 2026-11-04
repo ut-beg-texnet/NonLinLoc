@@ -1040,7 +1040,8 @@ int DoLoc2ssst() {
         }
         char system_str[MAXLINE_LONG];
         sprintf(system_str, GMT_COMMAND_PREFIX"makecpt -Z -Cred2green -T-%f/%f/%f > Grid2GMT_SSST.cpt", cpt_start_stop, cpt_start_stop, cpt_increment);
-        system(system_str);
+        if (system(system_str) != 0)
+            fprintf(stderr, "WARNING: command returned non-zero status: %s\n", system_str);
         sprintf(MsgStr, "Grid2GMT cpt file written to: %s", "Grid2GMT_SSST.cpt");
         nll_putmsg(1, MsgStr);
 

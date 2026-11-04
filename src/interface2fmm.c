@@ -255,7 +255,8 @@ int ReadVelModel(VelModel* vel_model, GridDesc* mod_grid) {
         fprintf(stderr, "ReadVelModel: grid nodes in x-dir\n\t");
         int nread = 0;
         for (i = 0; i < vel_model->numx; i++) {
-            fscanf(inpfile, "%f", &tempfloat);
+            if (fscanf(inpfile, "%f", &tempfloat) != 1)
+                break;
             /*  vel_model->deltax[i]=vel_model->origx+unit*tempfloat; */
             // AJL vel_model->deltax[i] = -unit*tempfloat;
             vel_model->deltax[i] = unit*tempfloat;
@@ -273,7 +274,8 @@ int ReadVelModel(VelModel* vel_model, GridDesc* mod_grid) {
         fprintf(stderr, "ReadVelModel: grid nodes in y-dir\n\t");
         nread = 0;
         for (i = 0; i < vel_model->numy; i++) {
-            fscanf(inpfile, "%f", &tempfloat);
+            if (fscanf(inpfile, "%f", &tempfloat) != 1)
+                break;
             /* vel_model->deltay[i]=vel_model->origy+unit*tempfloat; */
             fprintf(stderr, " %5.1f ", tempfloat);
             vel_model->deltay[i] = unit*tempfloat;
@@ -287,7 +289,8 @@ int ReadVelModel(VelModel* vel_model, GridDesc* mod_grid) {
             return (-4);
         }
 
-        fscanf(inpfile, "%*f %*f %*f");
+        if (fscanf(inpfile, "%*f %*f %*f") == EOF)
+            fprintf(stderr, "WARNING: unexpected end of velocity model file while skipping coordinate line.\n");
 
         for (k = 0; k < vel_model->numz; k++) {
             /*  	for(j=vel_model->numy;j>0;j--) */
@@ -295,7 +298,8 @@ int ReadVelModel(VelModel* vel_model, GridDesc* mod_grid) {
                 //if ((fgets(line, 2 * MAXLINE, inpfile)) && (strlen(line) >= (LENVEL * vel_model->numx))) {
                 nread = 0;
                 for (i = 0; i < vel_model->numx; i++) {
-                    fscanf(inpfile, VEL_FORMAT, &vel_model->array[i][j][k]);
+                    if (fscanf(inpfile, VEL_FORMAT, &vel_model->array[i][j][k]) != 1)
+                        break;
                     nread++;
                 }
                 if (nread < vel_model->numx) {

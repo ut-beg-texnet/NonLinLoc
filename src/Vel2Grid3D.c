@@ -338,7 +338,11 @@ int ReadVelModel(VelModel* vel_model, GridDesc* mod_grid) {
         for (k = 0; k < vel_model->numz; k++) {
             for (j = 0; j < vel_model->numy; j++) {
                 for (i = 0; i < vel_model->numx; i++)
-                    fread(&vel_model->array[i][j][k], sizeof (float), 1, inpfile);
+                    if (fread(&vel_model->array[i][j][k], sizeof (float), 1, inpfile) != 1) {
+                        fprintf(stderr, "ERROR: unexpected end of velocity model file.\n");
+                        fclose(inpfile);
+                        return (-2);
+                    }
             }
         }
     } else if (vel_model->type == TYPEALBERTO) {
@@ -403,7 +407,8 @@ int ReadVelModel(VelModel* vel_model, GridDesc* mod_grid) {
             fprintf(stderr, "ReadVelModel: grid nodes in x-dir\n\t");
             int nread = 0;
             for (i = 0; i < vel_model->numx; i++) {
-                fscanf(inpfile, "%f", &tempfloat);
+                if (fscanf(inpfile, "%f", &tempfloat) != 1)
+                    break;
                 /*  vel_model->deltax[i]=vel_model->origx+unit*tempfloat; */
 #ifdef ZHANG_FORMAT_COORDS_POSX
                 vel_model->deltax[i] = unit*tempfloat;
@@ -428,7 +433,8 @@ int ReadVelModel(VelModel* vel_model, GridDesc* mod_grid) {
             fprintf(stderr, "ReadVelModel: grid nodes in y-dir\n\t");
             nread = 0;
             for (i = 0; i < vel_model->numy; i++) {
-                fscanf(inpfile, "%f", &tempfloat);
+                if (fscanf(inpfile, "%f", &tempfloat) != 1)
+                    break;
                 /* vel_model->deltay[i]=vel_model->origy+unit*tempfloat; */
                 fprintf(stderr, " %5.1f ", tempfloat);
                 vel_model->deltay[i] = unit*tempfloat;
@@ -446,7 +452,8 @@ int ReadVelModel(VelModel* vel_model, GridDesc* mod_grid) {
             fprintf(stderr, "ReadVelModel: grid nodes in z-dir\n\t");
             nread = 0;
             for (i = 0; i < vel_model->numz; i++) {
-                fscanf(inpfile, "%f", &tempfloat);
+                if (fscanf(inpfile, "%f", &tempfloat) != 1)
+                    break;
                 /* vel_model->deltaz[i]=vel_model->origz+unit*tempfloat; */
                 fprintf(stderr, " %5.1f ", tempfloat);
                 vel_model->deltaz[i] = unit*tempfloat;
@@ -462,7 +469,8 @@ int ReadVelModel(VelModel* vel_model, GridDesc* mod_grid) {
 
 #ifdef ZHANG_FORMAT_COORDS_POSX
 #else
-            fscanf(inpfile, "%*f %*f %*f");
+            if (fscanf(inpfile, "%*f %*f %*f") == EOF)
+                fprintf(stderr, "WARNING: unexpected end of velocity model file while skipping coordinate line.\n");
 #endif
 
             int nread_total = 0;
@@ -472,7 +480,8 @@ int ReadVelModel(VelModel* vel_model, GridDesc* mod_grid) {
                     //if ((fgets(line, 2 * MAXLINE, inpfile)) && (strlen(line) >= (LENVEL * vel_model->numx))) {
                     nread = 0;
                     for (i = 0; i < vel_model->numx; i++) {
-                        fscanf(inpfile, VEL_FORMAT, &vel_model->array[i][j][k]);
+                        if (fscanf(inpfile, VEL_FORMAT, &vel_model->array[i][j][k]) != 1)
+                            break;
                         nread++;
                         nread_total++;
                         if (DEBUG) {

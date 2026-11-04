@@ -250,7 +250,11 @@ int ConvertScat(int argc, char** argv) {
 
                 // read header record
                 fseek(fp_scat_in, 0, SEEK_SET);
-                fread(&npoints, sizeof (int), 1, fp_scat_in);
+                if (fread(&npoints, sizeof (int), 1, fp_scat_in) != 1) {
+                    nll_puterr2("ERROR: reading scatter file header", fn_scatter);
+                    fclose(fp_scat_in);
+                    continue;
+                }
 
                 // skip header record
                 fseek(fp_scat_in, 4 * sizeof (float), SEEK_SET);

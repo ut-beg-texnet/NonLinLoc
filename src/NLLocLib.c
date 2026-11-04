@@ -83,6 +83,7 @@ e-mail: anthony@alomax.net  web: http://www.alomax.net
                 201501   AJL - added EW_PTWC_HAWAII obs format
                 20150324 AJL - added L1_NORM
                 20170811 AJL - added HYPO_TYPE_EXPECTATION: support for expectation hypocenter results output
+                20261103 AJL - applied important fixes from ML analysis of code by Mustafa Çomoğlu, see NLL_fixes/NLL_fixes_for_src_20261102
 
 
 
@@ -2765,7 +2766,8 @@ int GetNextObs(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, char* ftype_
         iloop = 0;
         if ((chr = fgetc(fp_obs)) == '!'/* || chr == '#'*/) {
             ungetc(chr, fp_obs);
-            fgets(line, MAXLINE_LONG, fp_obs);
+            if (fgets(line, MAXLINE_LONG, fp_obs) == NULL)
+                return (OBS_FILE_END_OF_INPUT);
             printf("1 %s", line);
             /* read instruction */
             istat = sscanf(line + 1, "%s", instruction);
@@ -2777,7 +2779,8 @@ int GetNextObs(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, char* ftype_
                 } else if (strcmp(instruction, "END_FILE") == 0) {
                     return (OBS_FILE_END_OF_INPUT);
                 } else if (strcmp(instruction, "SKIP_NEXT_LINE") == 0) {
-                    fgets(line, MAXLINE_LONG, fp_obs);
+                    if (fgets(line, MAXLINE_LONG, fp_obs) == NULL)
+                        return (OBS_FILE_END_OF_INPUT);
                     printf("2 %s", line);
 
                     iloop = 1;

@@ -2223,8 +2223,9 @@ int ReadGrid3dHdr(GridDesc* pgrid, SourceDesc* psrce, char* filename, char* file
 
     if (strncmp(file_type, "time", 4) == 0
             || strncmp(file_type, "angle", 4) == 0)
-        fscanf(fpio, "%s %lf %lf %lf\n",
-            psrce->label, &(psrce->x), &(psrce->y), &(psrce->z));
+        if (fscanf(fpio, "%s %lf %lf %lf\n",
+                psrce->label, &(psrce->x), &(psrce->y), &(psrce->z)) != 4)
+            fprintf(stderr, "WARNING: Cannot read source location from grid header file: %s\n", fname);
 
 
     //  check for optional header lines
@@ -2390,8 +2391,9 @@ int OpenGrid3dFile(char *fname, FILE **fp_grid, FILE **fp_hdr,
 
     if (psrce != NULL && (strncmp(file_type, "time", 4) == 0
             || strncmp(file_type, "angle", 4) == 0)) {
-        fscanf(*fp_hdr, "%s %lf %lf %lf\n",
-                psrce->label, &(psrce->x), &(psrce->y), &(psrce->z));
+        if (fscanf(*fp_hdr, "%s %lf %lf %lf\n",
+                psrce->label, &(psrce->x), &(psrce->y), &(psrce->z)) != 4)
+            fprintf(stderr, "WARNING: Cannot read source location from grid header file: %s\n", fname);
         psrce->is_coord_xyz = 1;
     }
 
@@ -5091,7 +5093,8 @@ int ExpandWildCards_OLD(char* fileName, char fileList[][FILENAME_MAX], int maxNu
     /* expand wildcard file names into list of files */
 
     sprintf(system_str, "ls %s > %s", fileName, list_file);
-    system(system_str);
+    if (system(system_str) != 0)
+        fprintf(stderr, "WARNING: command returned non-zero status: %s\n", system_str);
 
     if ((fpio = fopen(list_file, "r")) == NULL) {
         nll_puterr2("ERROR: opening fileList temporary file: ", list_file);

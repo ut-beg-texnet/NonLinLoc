@@ -323,9 +323,11 @@ int main(int argc, char *argv[]) {
     if (chr != NULL)
         strcpy(fname, chr + 1);
     sprintf(sys_command, "cp -p %s %s_%s", fn_control, fn_path_output, fname);
-    system(sys_command);
+    if (system(sys_command) != 0)
+        fprintf(stderr, "WARNING: command returned non-zero status: %s\n", sys_command);
     sprintf(sys_command, "cp -p %s %slast.in", fn_control, f_outpath);
-    system(sys_command);
+    if (system(sys_command) != 0)
+        fprintf(stderr, "WARNING: command returned non-zero status: %s\n", sys_command);
     //printf("sys_command: %s\n", sys_command);
 
 
@@ -772,7 +774,7 @@ int ReadNLDiffLoc_Input(FILE * fp_input) {
 
     /* read each input line */
 
-    while ((fgets_return = fgets(line, 4 * MAXLINE, fp_input)) != NULL
+    while ((fgets_return = fgets(line, sizeof (line), fp_input)) != NULL
             || fp_include != NULL) {
 
 

@@ -528,7 +528,7 @@ New version 7.00 posted to web =================================
 
 20220202 NLLoc - Replaced calls to system() to copy files with src/util.c -> copy_file() function (implemented by Jan Wiszniowski)
 
-20221116 Loc2SSST - Added support in LSPHSTAT for filtering of events (phases) by hypocenter depth
+20221116 Loc2ssst - Added support in LSPHSTAT for filtering of events (phases) by hypocenter depth
 
 20230219 Grid2GMT - Now supports GMT 5 and 6 (thanks to https://github.com/sean0921). See src/CMakeLists.txt for details on how to set GMT version.
 
@@ -578,3 +578,11 @@ QUALITY  Pmax -1 MFmin -1 MFmax -1 RMS -1 Nphs -1 Gap -1 Dist -1 Mamp -9.90 0 Md
     a deep tree does not lead to a SIGSEGV due to stack memory exhaustion.
 
 20260619 NLLoc - Bug fix (src/NLLocLib.c->reset_hypodatetime()): when checking internal origin time for negative seconds, do all time conversions in UTC, not local timezone. Previously the corrected origin time had an hour shift related to local timezone difference from UTC.
+
+20260924 Loc2ssst - Bug fix: check for negative SSST corrected travel-times, set negative SSST corrected travel-times to 0 (PROVISIONAL ?).
+    When SSST corrections are large enough, travel-times near a station can become negative.
+
+20261026 NLLocLib.c - Bug fix (Julián Olivar & Claude): In function CalculateVpVsEstimate(), iteration missed first P-S pick pair when accumulating available S-P difference.
+
+
+20261103 NLL - applied important fixes from ML (Claude) analysis of code by Mustafa Çomoğlu, see NLL_fixes/NLL_fixes_for_src_20261102

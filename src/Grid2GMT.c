@@ -966,8 +966,10 @@ int GenGMTCommands(char cplotmode, char cdatatype,
 
     fprintf(stdout, "\n\nRunning GMT script %s ...\n", fn_gmt);
     snprintf(sys_string, sizeof (sys_string), "chmod a+x %s", fn_gmt);
-    system(sys_string);
-    system(fn_gmt);
+    if (system(sys_string) != 0)
+        fprintf(stderr, "WARNING: command returned non-zero status: %s\n", sys_string);
+    if (system(fn_gmt) != 0)
+        fprintf(stderr, "WARNING: GMT script returned non-zero status: %s\n", fn_gmt);
 
 
     return (0);
@@ -2546,12 +2548,22 @@ int Scat2GMT(char* fnroot_in, char* orientation, int ilonglat, char* fnscat_out)
 
     /* read header information */
     fseek(fp_scat_in, 0, SEEK_SET);
-    fread(&tot_npoints, sizeof (int), 1, fp_scat_in);
+    if (fread(&tot_npoints, sizeof (int), 1, fp_scat_in) != 1) {
+        fprintf(stderr, "ERROR: cannot read scatter file header.\n");
+        fclose(fp_scat_in);
+        fclose(fp_scat_out);
+        return (-1);
+    }
 
     /* skip header record */
     fseek(fp_scat_in, 4 * sizeof (float), SEEK_SET);
     for (npt = 0; npt < tot_npoints; npt++) {
-        fread(fdata, sizeof (float), 4, fp_scat_in);
+        if (fread(fdata, sizeof (float), 4, fp_scat_in) != 4) {
+            fprintf(stderr, "ERROR: cannot read scatter point %d.\n", npt);
+            fclose(fp_scat_in);
+            fclose(fp_scat_out);
+            return (-1);
+        }
         convertCoordsRect(proj_index_input, proj_index_output,
                 fdata[0], fdata[1], &hypox, &hypoy);
         fdata[0] = hypox;

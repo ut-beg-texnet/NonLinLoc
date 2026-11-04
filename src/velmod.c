@@ -2156,11 +2156,16 @@ void read_fdiff_vel(char* fname) {
     if ((fp_grid = fopen(fname, "r")) == NULL) {
         fprintf(stderr, "ERROR: Cannot open velocity grid file:\n");
         fprintf(stderr, "  %s\n", fname);
+        return;
     }
 
     fseek(fp_grid, (long) sizeof (int), SEEK_SET);
-    fread(&fdgrid_numx, sizeof (int), 1, fp_grid);
-    fread(&fdgrid_numz, sizeof (int), 1, fp_grid);
+    if (fread(&fdgrid_numx, sizeof (int), 1, fp_grid) != 1
+            || fread(&fdgrid_numz, sizeof (int), 1, fp_grid) != 1) {
+        fprintf(stderr, "ERROR: Cannot read header of velocity grid file:\n  %s\n", fname);
+        fclose(fp_grid);
+        return;
+    }
     fdgrid_numx++;
     fdgrid_numz++;
     printf("Finite Diff Vel grid:\n  Nx %d  Nz %d\n",
@@ -2169,14 +2174,21 @@ void read_fdiff_vel(char* fname) {
     fdgrid_zstep = (fdgrid_zmax - fdgrid_zmin) / (double) (fdgrid_numz - 1);
 
     gridsize = fdgrid_numx * fdgrid_numz * sizeof (double);
-    if ((fdgrid_array = (float *) malloc((size_t) gridsize)) == NULL)
+    if ((fdgrid_array = (float *) malloc((size_t) gridsize)) == NULL) {
         fprintf(stderr,
             "ERROR: Cannot allocate array for grid velocities.\n");
+        fclose(fp_grid);
+        return;
+    }
 
     fseek(fp_grid, (long) (2 * sizeof (int)), SEEK_CUR);
     for (nz = 0; nz < fdgrid_numz; nz++) {
-        fread(fdgrid_array + (nz * fdgrid_numx), sizeof (float),
-                fdgrid_numx, fp_grid);
+        if (fread(fdgrid_array + (nz * fdgrid_numx), sizeof (float),
+                fdgrid_numx, fp_grid) != (size_t) fdgrid_numx) {
+            fprintf(stderr, "ERROR: Cannot read row %d of velocity grid file:\n  %s\n", nz, fname);
+            fclose(fp_grid);
+            return;
+        }
         if (nz == 0 || nz == (fdgrid_numz - 1))
             printf("  Row nz = %4d: %f  %f  ...  %f  %f\n", nz, *(fdgrid_array + (nz * fdgrid_numx)), *(fdgrid_array + (nz * fdgrid_numx) + 1), *(fdgrid_array + (nz * fdgrid_numx) + fdgrid_numx - 2), *(fdgrid_array + (nz * fdgrid_numx) + fdgrid_numx - 1));
     }

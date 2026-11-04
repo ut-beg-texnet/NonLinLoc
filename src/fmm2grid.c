@@ -297,7 +297,8 @@ int ReadFmmTimes(FILE* fp_fmmtimes, GridDesc* fmm_times) {
 
     int i1, i2, i3;
     char line[2 * MAXLINE];
-    fgets(line, 2 * MAXLINE, fp_fmmtimes); // source line (ignored)
+    if (fgets(line, 2 * MAXLINE, fp_fmmtimes) == NULL) // source line (ignored)
+        line[0] = '\0';
     if (sscanf(line, "%d %d %d", &i1, &i2, &i3) != 3) {
         sprintf(MsgStr, "ERROR: reading arrival times first line (source/path): %s\n", line);
         nll_puterr(MsgStr);

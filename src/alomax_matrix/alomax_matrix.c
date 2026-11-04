@@ -211,7 +211,7 @@ int matrix_double_inverse(MatrixDouble dmtx, int num_rows, int num_cols) {
 
     //clone the matrix and append the identity matrix
     MatrixDouble augmented_mtx;
-    if ((augmented_mtx = matrix_double(num_rows, 2 * num_cols)) < 0) {
+    if ((augmented_mtx = matrix_double(num_rows, 2 * num_cols)) == NULL) {
         snprintf(error_message, sizeof (error_message), "ERROR: in matrix_double_inverse(): allocating matrix: augmented_mtx.");
         return (-1);
     }
@@ -286,7 +286,7 @@ int matrix_double_check_diagonal_non_zero_inverse(MatrixDouble mtx_original, int
     MatrixDouble mtx_checked = mtx_original;
     // load original matrix to checked matrix
     if (i_checked_size != i_original_size) {
-        if ((mtx_checked = matrix_double(i_checked_size, i_checked_size)) < 0) {
+        if ((mtx_checked = matrix_double(i_checked_size, i_checked_size)) == NULL) {
             snprintf(error_message, sizeof (error_message), "ERROR: in matrix_double_check_diagonal_non_zero_inverse(): allocating matrix: mtx_checked.");
             return (-1);
         }

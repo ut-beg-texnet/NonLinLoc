@@ -435,7 +435,13 @@ int SumLocations(int argc, char** argv) {
 
                 /* read header record */
                 fseek(fp_scat_in, 0, SEEK_SET);
-                fread(&npoints, sizeof (int), 1, fp_scat_in);
+                if (fread(&npoints, sizeof (int), 1, fp_scat_in) != 1) {
+                    nll_puterr2("ERROR: reading scatter file header", fn_scatter);
+                    fprintf(fp_hyp_scat_out, "SCATTER Nsamples %d\n", 0);
+                    fprintf(fp_hyp_scat_out, "END_SCATTER\n\n");
+                    fclose(fp_scat_in);
+                    continue;
+                }
 
                 fprintf(fp_hyp_scat_out, "SCATTER Nsamples %d\n", npoints / num_decim);
 
