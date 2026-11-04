@@ -1,19 +1,17 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>NonLinLoc &#8212; NonLinLoc Doc 7.00 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b76e3c8a" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=def86cc0" />
     
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
+    <script src="_static/documentation_options.js?v=b489f74c"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -40,14 +38,14 @@
             
   <a class="reference external image-reference" href="https://github.com/alomax/NonLinLoc"><img alt="NonLinLocLogo.gif" class="align-left" src="_images/NonLinLocLogo.gif" style="width: 100px;" /></a>
 <section id="nonlinloc">
-<h1>NonLinLoc<a class="headerlink" href="#nonlinloc" title="Permalink to this headline">¶</a></h1>
+<h1>NonLinLoc<a class="headerlink" href="#nonlinloc" title="Link to this heading">¶</a></h1>
 <p>A software package for Probabilistic, Non-Linear, Global-Search Earthquake Location in 3D Media.</p>
 <p>Code is stored on <a href="https://github.com/alomax/NonLinLoc" target="_blank">github</a>, the development branches are <a href="https://github.com/alomax/NonLinLoc/tree/develop" target="_blank">here</a>, or the
 latest stable release can be found <a href="https://github.com/alomax/NonLinLoc/releases" target="_blank">here</a>.</p>
 <p>This package is written by Anthony Lomax and the NonLinLoc developers, and is distributed under the LGPL GNU Licence,
 Copyright (C) 1999-2020 Anthony Lomax and NonLinLoc developers.</p>
 <section id="citation">
-<h2>Citation<a class="headerlink" href="#citation" title="Permalink to this headline">¶</a></h2>
+<h2>Citation<a class="headerlink" href="#citation" title="Link to this heading">¶</a></h2>
 <p>If you use the NonLinLoc package in your work, please cite the following papers:</p>
 <ul class="simple">
 <li><p>Lomax A., Virieux J., Volant P., Berge-Thierry C. (2000) Probabilistic Earthquake Location in 3D and Layered Models. In: Thurber C.H., Rabinowitz N. (eds) Advances in Seismic Event Location. Modern Approaches in Geophysics, vol 18. Springer, Dordrecht. &lt;a href=”<a class="reference external" href="https://doi.org/10.1007/978-94-015-9536-0_5">https://doi.org/10.1007/978-94-015-9536-0_5</a>” target=”_blank”&gt;https://doi.org/10.1007/978-94-015-9536-0_5&lt;/a&gt;</p></li>
@@ -56,7 +54,7 @@ Copyright (C) 1999-2020 Anthony Lomax and NonLinLoc developers.</p>
 <p>For other A. Lomax NonLinLoc publications, see <a class="reference external" href="http://alomax.net/pub_list.html">http://alomax.net/pub_list.html</a></p>
 </section>
 <section id="contents">
-<h2>Contents:<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+<h2>Contents:<a class="headerlink" href="#contents" title="Link to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="programs.html">1. NonLinLoc Programs</a><ul>
@@ -69,6 +67,7 @@ Copyright (C) 1999-2020 Anthony Lomax and NonLinLoc developers.</p>
 <li class="toctree-l3"><a class="reference internal" href="programs/core.LocSum.html">1.1.6. LocSum - combine location results</a></li>
 <li class="toctree-l3"><a class="reference internal" href="programs/core.Grid2GMT.html">1.1.7. Grid2GMT - location results or 3D grid data to GMT command script</a></li>
 <li class="toctree-l3"><a class="reference internal" href="programs/core.Loc2ssst.html">1.1.8. Loc2ssst - generate SSST corrections on a  to 3D grid for NLLoc locations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="programs/core.GridCut.html">1.1.9. GridCut - extracts a sub-volume from a NLL <cite>3D grid</cite></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="programs.html#utils">1.2. Utils</a><ul class="simple">
@@ -84,7 +83,7 @@ Copyright (C) 1999-2020 Anthony Lomax and NonLinLoc developers.</p>
 </div>
 </section>
 <section id="indices-and-tables">
-<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
@@ -99,8 +98,9 @@ Copyright (C) 1999-2020 Anthony Lomax and NonLinLoc developers.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="#">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">NonLinLoc</a><ul>
 <li><a class="reference internal" href="#citation">Citation</a></li>
 <li><a class="reference internal" href="#contents">Contents:</a></li>
@@ -109,9 +109,12 @@ Copyright (C) 1999-2020 Anthony Lomax and NonLinLoc developers.</p>
 </li>
 </ul>
 
-  <h4>Next topic</h4>
-  <p class="topless"><a href="programs.html"
-                        title="next chapter"><span class="section-number">1. </span>NonLinLoc Programs</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="programs.html"
+                          title="next chapter"><span class="section-number">1. </span>NonLinLoc Programs</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -119,7 +122,7 @@ Copyright (C) 1999-2020 Anthony Lomax and NonLinLoc developers.</p>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -127,8 +130,8 @@ Copyright (C) 1999-2020 Anthony Lomax and NonLinLoc developers.</p>
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
-<script>$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -147,8 +150,8 @@ Copyright (C) 1999-2020 Anthony Lomax and NonLinLoc developers.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Anthony Lomax.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+    &#169; Copyright 2020, Anthony Lomax.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

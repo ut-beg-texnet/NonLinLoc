@@ -1,0 +1,22 @@
+#
+# property defaults file for Seismicity Viewer
+#
+
+seismicity.title = 2018-11-30 Mww7.0 Southern Alaska
+
+seismicity.lines.0 = data_geog/alaska_rivers.xy;SOLID;0,63,127;1.0;Rivers
+seismicity.lines.1 = data_geog/alaska.xy;SOLID;127,127,127;1.0;Boundaries
+seismicity.lines.2 = data_geog/alaska_coasts.xy;SOLID;127,127,127;1.0;Coasts
+
+seismicity.event.colormap=DEPTH;-2.0,255,255,0;0.0,255,255,0;10.0,0,255,0;20.0,0,0,255;30.0,255,0,255;40.0,255,0,0
+
+seismicity.init.zoom=-3
+
+seismicity.show.probability = YES
+
+seismicity.show.residual.all = NO
+seismicity.show.residual.p = YES
+seismicity.show.residual.s = NO
+seismicity.show.residual.label=YES
+
+seismicity.text.sizefactor=3.0

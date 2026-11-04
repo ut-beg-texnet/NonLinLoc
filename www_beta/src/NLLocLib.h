@@ -220,7 +220,7 @@ EXTERN_TXT char fn_loc_obs[MAX_NUM_OBS_FILES][FILENAME_MAX];
 EXTERN_TXT char ftype_obs[MAXLINE];
 
 /* filenames */
-EXTERN_TXT char fn_loc_grids[FILENAME_MAX], fn_path_output[FILENAME_MAX];
+EXTERN_TXT char fn_time_grids[FILENAME_MAX], fn_path_output[FILENAME_MAX];
 EXTERN_TXT int iSwapBytesOnInput;
 
 // model files

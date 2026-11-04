@@ -711,7 +711,7 @@ Ellipse2D CalcHorizontalErrorEllipse(Mtrx3D *pcov, double del_chi_2) {
         }
 
 
-        /* calculate ellipsoid axes */
+        /* calculate ellipse axes */
         /* length: w in Num Rec, 2nd ed, fig 15.6.5 must be replaced
                 by 1/sqrt(w) since we are using SVD of Cov mtrx and not
                 SVD of A mtrx (compare eqns 2.6.1  & 15.6.10) */

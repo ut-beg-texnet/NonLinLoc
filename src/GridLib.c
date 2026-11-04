@@ -954,6 +954,22 @@ void setCascadingGrid(GridDesc* pgrid) {
 
 }
 
+
+/** function to determine grid registration type
+ *
+ * in Gridlib.h use ≤ 999 for pixel center grid data (e.g. vel/slow) and ≥ 1000 for gridline (pixel corner w/ floor xyz values; e.g. travel-time) grid data in NLL
+ *
+ * 20260226 AJL - added
+ */
+
+int isPixelCenterDataGrid(GridDesc* pgrid) {
+
+    return (pgrid->type > 0 && pgrid->type < 1000);
+
+}
+
+
+
 /** function to write grid buffer and header to disk ***/
 
 int WriteGrid3dBuf(GridDesc* pgrid, SourceDesc* psrce, char* filename, char* file_type) {
@@ -1702,7 +1718,7 @@ int IsGridInside(GridDesc* pgrid_inside, GridDesc* pgrid, int iShiftFlag) {
                 and if station is within dist_horiz_min -> dist_horiz_max of grid location
                 xcent, ycent */
 
-/* return 1 if yes, return 0 otherwise */
+/* return 1 if yes, return -2 otherwise */
 
 int IsDistStaGridOK(GridDesc* pgrid_3D, SourceDesc* station,
         double dist_horiz_min, double dist_horiz_max, double xcent, double ycent) {
@@ -2298,6 +2314,8 @@ int ReadGrid3dHdr_grid_description(FILE *fpio, GridDesc *pgrid, char *fname) {
 int OpenGrid3dFile(char *fname, FILE **fp_grid, FILE **fp_hdr,
         GridDesc* pgrid, char* file_type, SourceDesc* psrce, int iSwapBytes) {
 
+    //printf("DEBUG: GridLib.c: OpenGrid3dFile: fpgrid %p fname %s\n", *fp_grid, fname);
+
     char fn_grid[FILENAME_MAX], fn_hdr[FILENAME_MAX];
 
     /* open grid file and header file */
@@ -2333,6 +2351,13 @@ int OpenGrid3dFile(char *fname, FILE **fp_grid, FILE **fp_hdr,
     }
     NumGridHdrFilesOpen++;
     NumFilesOpen++;
+
+    /* DEBUG
+    if (message_flag >= 4) {
+        sprintf(MsgStr, "INFO: NumGridBufFilesOpen: %d, NumGridHdrFilesOpen: %d, NumFilesOpen: %d",
+                NumGridBufFilesOpen, NumGridHdrFilesOpen, NumFilesOpen);
+        nll_putmsg(4, MsgStr);
+    }*/
 
     // initialize key fields
     pgrid->array = NULL;
@@ -2426,6 +2451,8 @@ int OpenGrid3dFile(char *fname, FILE **fp_grid, FILE **fp_hdr,
 /** function to close grid file and header ***/
 
 void CloseGrid3dFile(GridDesc* pgrid, FILE **fp_grid, FILE **fp_hdr) {
+
+    //printf("DEBUG: GridLib.c: CloseGrid3dFiles:\n");
 
     // 20170207 AJL - z_merge_depths moved to fixed array to ease memory management
     /*if (pgrid != NULL) {
@@ -3303,7 +3330,7 @@ DOUBLE InterpSquareLagrange(DOUBLE xdiff, DOUBLE zdiff,
 }
 
 /** function to write hypocenter to output in CSV format */
- // 20240826 AJL - added
+// 20240826 AJL - added
 
 void WriteLocationCSVheader(FILE *fpio) {
 
@@ -3312,7 +3339,7 @@ void WriteLocationCSVheader(FILE *fpio) {
 }
 
 /** function to write hypocenter to output in CSV format */
- // 20240826 AJL - added
+// 20240826 AJL - added
 
 int WriteLocationCSV(FILE *fpio, HypoDesc* phypo, char* filename) {
 

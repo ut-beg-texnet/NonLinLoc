@@ -134,7 +134,12 @@ int NumArrivalsRead;
 int NumArrivalsLocation;
 char fn_loc_obs[MAX_NUM_OBS_FILES][FILENAME_MAX];
 char ftype_obs[MAXLINE];
-char fn_loc_grids[FILENAME_MAX], fn_path_output[FILENAME_MAX];
+
+// 20251027 add support for alternative travel-time grid path/root
+char fn_time_grids[MAX_NUM_TIME_GRID_PATHS][FILENAME_MAX];
+int NumTimeGridPaths;
+
+char fn_path_output[FILENAME_MAX];
 int iSwapBytesOnInput;
 FILE *fp_model_grid_P;
 FILE *fp_model_hdr_P;
@@ -1364,7 +1369,7 @@ int WriteHypoFmampSearchPosterior(SearchPdfGridDesc *searchPdfGrid, FILE *fpio, 
         // set take-off angles at search posterior hypocenter
         // try to open time grid file using original phase ID
         EvaluateArrivalAlias(pfmarr);
-        sprintf(fileroot, "%s.%s.%s.angle", fn_loc_grids, pfmarr->phase, pfmarr->time_grid_label);
+        sprintf(fileroot, "%s.%s.%s.angle", fn_time_grids[0], pfmarr->phase, pfmarr->time_grid_label);
         int iavailable;
         // need to get grid type from file on disk  TODO: this could be integrated into ReadTakeOffAnglesFile function
         FILE *fp_grid, *fp_hdr;
@@ -1521,7 +1526,7 @@ int checkObs(ArrivalDesc *arrival, int nobs) {
 
 /** function read observation file and open station grid files */
 
-int GetObservations(FILE* fp_obs, char* ftype_obs, char* fn_grids,
+int GetObservations(FILE* fp_obs, char* ftype_obs, char fn_ttgrids[MAX_NUM_TIME_GRID_PATHS][FILENAME_MAX],
         ArrivalDesc *arrival, int *pi_end_of_input,
         int* pnignore, int* pnreject, int maxNumArrivals, HypoDesc* phypo,
         int* pMaxArrExceeded, int *pnumSArrivals, int nobs_prev) {
@@ -1773,214 +1778,244 @@ int GetObservations(FILE* fp_obs, char* ftype_obs, char* fn_grids,
         /* no previously initialized companion phase */
         if (arrival[nobs].n_companion < 0) {
 
-            // try to open time grid file using original phase ID
-            sprintf(arrival[nobs].fileroot, "%s.%s.%s", fn_grids,
-                    arrival_phase, arrival[nobs].time_grid_label);
-            sprintf(filename, "%s.time", arrival[nobs].fileroot);
-            // try opening time grid file for this phase
-            istat = OpenGrid3dFile(filename,
-                    &(arrival[nobs].fpgrid),
-                    &(arrival[nobs].fphdr),
-                    &(arrival[nobs].gdesc), "time",
-                    &(arrival[nobs].station),
-                    arrival[nobs].gdesc.iSwapBytes);
+            for (int n_ttgrid = 0; n_ttgrid < NumTimeGridPaths; n_ttgrid++) { // 20251027 add support for alternative travel-time grid path/root
 
-            if (istat < 0) {
-                // try to open time grid file using LOCPHASEID mapped phase ID
-                EvalPhaseID(eval_phase, arrival_phase);
-                sprintf(arrival[nobs].fileroot, "%s.%s.%s", fn_grids,
-                        eval_phase, arrival[nobs].time_grid_label);
+                // DEBUG
+                /*sprintf(MsgStr, "INFO: n_ttgrid: %d, NumGridBufFilesOpen: %d, NumGridHdrFilesOpen: %d, NumFilesOpen: %d",
+                        n_ttgrid, NumGridBufFilesOpen, NumGridHdrFilesOpen, NumFilesOpen);
+                nll_putmsg(0, MsgStr);*/
+
+                // try to open time grid file using original phase ID
+                sprintf(arrival[nobs].fileroot, "%s.%s.%s", fn_ttgrids[n_ttgrid],
+                        arrival_phase, arrival[nobs].time_grid_label);
                 sprintf(filename, "%s.time", arrival[nobs].fileroot);
-                /* try opening time grid file for this phase */
+                // try opening time grid file for this phase
                 istat = OpenGrid3dFile(filename,
                         &(arrival[nobs].fpgrid),
                         &(arrival[nobs].fphdr),
                         &(arrival[nobs].gdesc), "time",
                         &(arrival[nobs].station),
                         arrival[nobs].gdesc.iSwapBytes);
-            }
 
-            /* try opening P time grid file for S if no P companion phase */
-            if (istat < 0 && VpVsRatio > 0.0 && IsPhaseID(arrival_phase, "S")) {
-                arrival[nobs].tfact = VpVsRatio;
-                sprintf(arrival[nobs].fileroot, "%s.%s.%s", fn_grids,
-                        "P", arrival[nobs].time_grid_label);
-                sprintf(filename, "%s.time", arrival[nobs].fileroot);
-                istat = OpenGrid3dFile(filename,
-                        &(arrival[nobs].fpgrid),
-                        &(arrival[nobs].fphdr),
-                        &(arrival[nobs].gdesc), "time",
-                        &(arrival[nobs].station),
-                        arrival[nobs].gdesc.iSwapBytes);
-                if (message_flag >= 3) {
-                    sprintf(MsgStr,
-                            "INFO: S phase: using P phase travel time grid file: %s", filename);
-                    nll_putmsg(3, MsgStr);
+                if (istat < 0) {
+                    // try to open time grid file using LOCPHASEID mapped phase ID
+                    EvalPhaseID(eval_phase, arrival_phase);
+                    sprintf(arrival[nobs].fileroot, "%s.%s.%s", fn_ttgrids[n_ttgrid],
+                            eval_phase, arrival[nobs].time_grid_label);
+                    sprintf(filename, "%s.time", arrival[nobs].fileroot);
+                    /* try opening time grid file for this phase */
+                    istat = OpenGrid3dFile(filename,
+                            &(arrival[nobs].fpgrid),
+                            &(arrival[nobs].fphdr),
+                            &(arrival[nobs].gdesc), "time",
+                            &(arrival[nobs].station),
+                            arrival[nobs].gdesc.iSwapBytes);
                 }
-            }
 
-            // check if station/source in grid hdr file was DEFAULT
-            if (istat >= 0 && strcmp(arrival[nobs].station.label, "DEFAULT") == 0) {
-                // get station/source coordinates, etc
-                pstation = FindSource(arrival[nobs].time_grid_label);
-                if (pstation != NULL) {
-                    arrival[nobs].station = *pstation;
-                    i_need_elev_corr = 1;
-                } else
-                    istat = -1;
-            }
+                /* try opening P time grid file for S if no P companion phase */
+                if (istat < 0 && VpVsRatio > 0.0 && IsPhaseID(arrival_phase, "S")) {
+                    arrival[nobs].tfact = VpVsRatio;
+                    sprintf(arrival[nobs].fileroot, "%s.%s.%s", fn_ttgrids[n_ttgrid],
+                            "P", arrival[nobs].time_grid_label);
+                    sprintf(filename, "%s.time", arrival[nobs].fileroot);
+                    istat = OpenGrid3dFile(filename,
+                            &(arrival[nobs].fpgrid),
+                            &(arrival[nobs].fphdr),
+                            &(arrival[nobs].gdesc), "time",
+                            &(arrival[nobs].station),
+                            arrival[nobs].gdesc.iSwapBytes);
+                    if (message_flag >= 3) {
+                        sprintf(MsgStr,
+                                "INFO: S phase: using P phase travel time grid file: %s", filename);
+                        nll_putmsg(3, MsgStr);
+                    }
+                }
 
-            // try opening DEFAULT time grid file
-            if (istat < 0) {
-                pstation = FindSource(arrival[nobs].time_grid_label);
-                if (pstation != NULL) {
-                    // open DEFAULT time grid for this phase
-                    n_phs_try = 0;
-                    while (istat < 0 && n_phs_try < 2) {
-                        n_phs_try++;
-                        if (n_phs_try == 1) // try to open time grid file using original phase ID
-                            strcpy(eval_phase, arrival_phase);
-                        else // try to open time grid file using LOCPHASEID mapped phase ID
-                            EvalPhaseID(eval_phase, arrival_phase);
-                        sprintf(arrival[nobs].fileroot, "%s.%s.%s", fn_grids, eval_phase, "DEFAULT");
-                        sprintf(filename, "%s.time", arrival[nobs].fileroot);
+                // check if station/source in grid hdr file was DEFAULT
+                if (istat >= 0 && strcmp(arrival[nobs].station.label, "DEFAULT") == 0) {
+                    // get station/source coordinates, etc
+                    pstation = FindSource(arrival[nobs].time_grid_label);
+                    if (pstation != NULL) {
+                        arrival[nobs].station = *pstation;
+                        i_need_elev_corr = 1;
+                    } else
+                        istat = -1;
+                }
 
-                        //#define LOC2SSST_CLUGE
+                // try opening DEFAULT time grid file
+                if (istat < 0) {
+                    pstation = FindSource(arrival[nobs].time_grid_label);
+                    if (pstation != NULL) {
+                        // open DEFAULT time grid for this phase
+                        n_phs_try = 0;
+                        while (istat < 0 && n_phs_try < 2) {
+                            n_phs_try++;
+                            if (n_phs_try == 1) // try to open time grid file using original phase ID
+                                strcpy(eval_phase, arrival_phase);
+                            else // try to open time grid file using LOCPHASEID mapped phase ID
+                                EvalPhaseID(eval_phase, arrival_phase);
+                            sprintf(arrival[nobs].fileroot, "%s.%s.%s", fn_ttgrids[n_ttgrid], eval_phase, "DEFAULT");
+                            sprintf(filename, "%s.time", arrival[nobs].fileroot);
+
+                            //#define LOC2SSST_CLUGE
 #ifdef LOC2SSST_CLUGE
-                        // 20201022 AJL - Cluge, assume need to byte swap if DEFAULT  // TODO: make this automatic or configurable
-                        arrival[nobs].gdesc.iSwapBytes = 1;
-                        //
+                            // 20201022 AJL - Cluge, assume need to byte swap if DEFAULT  // TODO: make this automatic or configurable
+                            arrival[nobs].gdesc.iSwapBytes = 1;
+                            //
 #endif
 
-                        /* check if time grid already read */
-                        if ((n_time_grid = FindDuplicateTimeGrid(arrival, nobs, nobs)) >= 0 && arrival[n_time_grid].flag_ignore == 0) {
-                            arrival[nobs].gdesc.type = arrival[n_time_grid].gdesc.type;
-                            arrival[nobs].sheetdesc = arrival[n_time_grid].sheetdesc;
-                            arrival[nobs].station = *pstation;
-                            arrival[nobs].n_time_grid = n_time_grid;
-                            if (message_flag >= 3) {
-                                sprintf(MsgStr,
-                                        "INFO: DEFAULT travel time: %d %s %s using previous phase %d travel time grids.",
-                                        nobs, arrival[nobs].label, arrival[nobs].phase, arrival[nobs].n_time_grid);
-                                nll_putmsg(3, MsgStr);
+                            /* check if time grid already read */
+                            if ((n_time_grid = FindDuplicateTimeGrid(arrival, nobs, nobs)) >= 0 && arrival[n_time_grid].flag_ignore == 0) {
+                                arrival[nobs].gdesc.type = arrival[n_time_grid].gdesc.type;
+                                arrival[nobs].sheetdesc = arrival[n_time_grid].sheetdesc;
+                                arrival[nobs].station = *pstation;
+                                arrival[nobs].n_time_grid = n_time_grid;
+                                if (message_flag >= 3) {
+                                    sprintf(MsgStr,
+                                            "INFO: DEFAULT travel time: %d %s %s using previous phase %d travel time grids.",
+                                            nobs, arrival[nobs].label, arrival[nobs].phase, arrival[nobs].n_time_grid);
+                                    nll_putmsg(3, MsgStr);
+                                }
+                                // save filename as grid identifier (needed for GridMemList)
+                                strcpy(arrival[nobs].gdesc.title, arrival[n_time_grid].gdesc.title);
+                                istat = 1;
+                            } else {
+                                istat = OpenGrid3dFile(filename,
+                                        &(arrival[nobs].fpgrid),
+                                        &(arrival[nobs].fphdr),
+                                        &(arrival[nobs].gdesc), "time",
+                                        &(arrival[nobs].station),
+                                        arrival[nobs].gdesc.iSwapBytes);
+                                if (istat >= 0 && message_flag >= 3) {
+                                    sprintf(MsgStr,
+                                            "INFO: using DEFAULT travel time grid file: %s", filename);
+                                    nll_putmsg(3, MsgStr);
+                                }
+                                arrival[nobs].station = *pstation;
                             }
-                            // save filename as grid identifier (needed for GridMemList)
-                            strcpy(arrival[nobs].gdesc.title, arrival[n_time_grid].gdesc.title);
-                            istat = 1;
-                        } else {
-                            istat = OpenGrid3dFile(filename,
-                                    &(arrival[nobs].fpgrid),
-                                    &(arrival[nobs].fphdr),
-                                    &(arrival[nobs].gdesc), "time",
-                                    &(arrival[nobs].station),
-                                    arrival[nobs].gdesc.iSwapBytes);
-                            if (istat >= 0 && message_flag >= 3) {
-                                sprintf(MsgStr,
-                                        "INFO: using DEFAULT travel time grid file: %s", filename);
-                                nll_putmsg(3, MsgStr);
-                            }
-                            arrival[nobs].station = *pstation;
                         }
+                        i_need_elev_corr = 1;
+                        //read_2d_sheets = 0; // too slow!
                     }
-                    i_need_elev_corr = 1;
-                    //read_2d_sheets = 0; // too slow!
                 }
-            }
 
-            // save filename as grid identifier (needed for GridMemList)
-            strcpy(arrival[nobs].gdesc.title, filename);
+                // save filename as grid identifier (needed for GridMemList)
+                strcpy(arrival[nobs].gdesc.title, filename);
 
-            if (istat < 0) {
-                sprintf(MsgStr,
-                        "WARNING: cannot open time grid file: %s: rejecting observation: %s %s",
-                        filename, arrival[nobs].label, arrival[nobs].phase);
-                nll_putmsg(2, MsgStr);
-                CloseGrid3dFile(&(Arrival[nobs].gdesc), &(Arrival[nobs].fpgrid), &(arrival[nobs].fphdr));
-                strcpy(arrival[nobs].fileroot, "\0");
-                goto RejectArrival;
-            }
-
-
-            /* check that search grid is inside time grid (3D grids) */
-
-            if (arrival[nobs].gdesc.type == GRID_TIME &&
-                    !IsGridInside(LocGrid + 0, &(arrival[nobs].gdesc), 0)) {
-                sprintf(MsgStr,
-                        "WARNING: initial location search grid not contained inside arrival time grid, rejecting observation: %s %s", arrival[nobs].label, arrival[nobs].phase);
-                nll_putmsg(1, MsgStr);
-                CloseGrid3dFile(&(Arrival[nobs].gdesc), &(Arrival[nobs].fpgrid), &(arrival[nobs].fphdr));
-                goto RejectArrival;
-            }
-
-            /* (3D grids) check that
-                                     (1) distance from center of search grid to station
-                                     is greater than DistStaGridMin (if DistStaGridMin > 0)
-                                     is less than DistStaGridMax (if DistStaGridMax > 0) */
-            // 20190522 AJL - added to support LOCMETH maxDistStaGrid and minDistStaGrid with 3D grids
-
-            if (arrival[nobs].gdesc.type == GRID_TIME &&
-                    (istat = IsDistStaGridOK(LocGrid + 0,
-                    &(arrival[nobs].station),
-                    DistStaGridMin, DistStaGridMax,
-                    LocGrid[0].origx + (LocGrid[0].dx
-                    * (double) (LocGrid[0].numx - 1)) / 2.0,
-                    LocGrid[0].origy + (LocGrid[0].dy
-                    * (double) (LocGrid[0].numy - 1)) / 2.0)
-                    ) != 1) {
-                CloseGrid3dFile(&(Arrival[nobs].gdesc), &(Arrival[nobs].fpgrid), &(arrival[nobs].fphdr));
-                if (istat == -2) {
+                if (istat < 0) {
+                    CloseGrid3dFile(&(Arrival[nobs].gdesc), &(Arrival[nobs].fpgrid), &(arrival[nobs].fphdr));
+                    strcpy(arrival[nobs].fileroot, "\0");
+                    if (n_ttgrid < NumTimeGridPaths - 1) { // 20251027 add support for alternative travel-time grid path/root
+                        continue;
+                    }
                     sprintf(MsgStr,
-                            "WARNING: distance from grid center to station \n\texceeds maximum station distance, ignoring observation in misfit calculation: %s %s",
-                            arrival[nobs].label, arrival[nobs].phase);
-                    nll_putmsg(2, MsgStr);
-                    arrival[nobs].flag_ignore = 1;
-                    goto IgnoreArrival;
-                }
-            }
-
-
-            /* (2D grids) check that
-                                     (1) greatest distance from search grid to station
-                                     is inside time grid, and
-                                     (2) distance from center of search grid to station
-                                     is greater than DistStaGridMin (if DistStaGridMin > 0)
-                                     is less than DistStaGridMax (if DistStaGridMax > 0) */
-
-            if (arrival[nobs].gdesc.type == GRID_TIME_2D &&
-                    (istat = IsGrid2DBigEnough(LocGrid + 0,
-                    &(arrival[nobs].gdesc),
-                    &(arrival[nobs].station),
-                    DistStaGridMin, DistStaGridMax,
-                    LocGrid[0].origx + (LocGrid[0].dx
-                    * (double) (LocGrid[0].numx - 1)) / 2.0,
-                    LocGrid[0].origy + (LocGrid[0].dy
-                    * (double) (LocGrid[0].numy - 1)) / 2.0)
-                    ) != 1) {
-                CloseGrid3dFile(&(Arrival[nobs].gdesc), &(Arrival[nobs].fpgrid), &(arrival[nobs].fphdr));
-                if (istat == -1) {
-                    sprintf(MsgStr,
-                            "WARNING: greatest distance from initial 3D location search grid to station \n\texceeds 2D time grid size, rejecting observation: %s %s",
-                            arrival[nobs].label, arrival[nobs].phase);
-                    nll_putmsg(2, MsgStr);
-                    goto RejectArrival;
-                } else if (istat == -2) {
-                    sprintf(MsgStr,
-                            "WARNING: distance from grid center to station \n\texceeds maximum station distance, ignoring observation in misfit calculation: %s %s",
-                            arrival[nobs].label, arrival[nobs].phase);
-                    nll_putmsg(2, MsgStr);
-                    arrival[nobs].flag_ignore = 1;
-                    goto IgnoreArrival;
-                }
-                if (istat == -3) {
-                    sprintf(MsgStr,
-                            "WARNING: depth range of initial 3D location search grid exceeds that of 2D time grid size, rejecting observation: %s %s",
-                            arrival[nobs].label, arrival[nobs].phase);
+                            "WARNING: cannot open time grid file: %s: rejecting grid for: %s %s",
+                            filename, arrival[nobs].label, arrival[nobs].phase);
                     nll_putmsg(2, MsgStr);
                     goto RejectArrival;
                 }
-            }
 
-        } /* if (arrival[nobs].n_companion < 0) */
+
+                /* check that search grid is inside time grid (3D grids) */
+
+                if (arrival[nobs].gdesc.type == GRID_TIME &&
+                        !IsGridInside(LocGrid + 0, &(arrival[nobs].gdesc), 0)) {
+                    CloseGrid3dFile(&(Arrival[nobs].gdesc), &(Arrival[nobs].fpgrid), &(arrival[nobs].fphdr));
+                    if (n_ttgrid < NumTimeGridPaths - 1) { // 20251027 add support for alternative travel-time grid path/root
+                        continue;
+                    }
+                    sprintf(MsgStr,
+                            "WARNING: initial location search grid not contained inside arrival time grid, rejecting grid for: %s %s", arrival[nobs].label, arrival[nobs].phase);
+                    nll_putmsg(1, MsgStr);
+                    goto RejectArrival;
+                }
+
+                /* (3D grids) check that
+                                         (1) distance from center of search grid to station
+                                         is greater than DistStaGridMin (if DistStaGridMin > 0)
+                                         is less than DistStaGridMax (if DistStaGridMax > 0) */
+                // 20190522 AJL - added to support LOCMETH maxDistStaGrid and minDistStaGrid with 3D grids
+
+                if (arrival[nobs].gdesc.type == GRID_TIME &&
+                        (istat = IsDistStaGridOK(LocGrid + 0,
+                        &(arrival[nobs].station),
+                        DistStaGridMin, DistStaGridMax,
+                        LocGrid[0].origx + (LocGrid[0].dx
+                        * (double) (LocGrid[0].numx - 1)) / 2.0,
+                        LocGrid[0].origy + (LocGrid[0].dy
+                        * (double) (LocGrid[0].numy - 1)) / 2.0)
+                        ) != 1) {
+                    CloseGrid3dFile(&(Arrival[nobs].gdesc), &(Arrival[nobs].fpgrid), &(arrival[nobs].fphdr));
+                    if (istat == -2) {
+                        if (n_ttgrid < NumTimeGridPaths - 1) { // 20251027 add support for alternative travel-time grid path/root
+                            continue;
+                        }
+                        sprintf(MsgStr,
+                                "WARNING: distance from grid center to station \n\texceeds maximum station distance, ignoring observation in misfit calculation: %s %s",
+                                arrival[nobs].label, arrival[nobs].phase);
+                        nll_putmsg(2, MsgStr);
+                        arrival[nobs].flag_ignore = 1;
+                        goto IgnoreArrival;
+                    }
+                }
+
+
+                /* (2D grids) check that
+                                         (1) greatest distance from search grid to station
+                                         is inside time grid, and
+                                         (2) distance from center of search grid to station
+                                         is greater than DistStaGridMin (if DistStaGridMin > 0)
+                                         is less than DistStaGridMax (if DistStaGridMax > 0) */
+
+                if (arrival[nobs].gdesc.type == GRID_TIME_2D &&
+                        (istat = IsGrid2DBigEnough(LocGrid + 0,
+                        &(arrival[nobs].gdesc),
+                        &(arrival[nobs].station),
+                        DistStaGridMin, DistStaGridMax,
+                        LocGrid[0].origx + (LocGrid[0].dx
+                        * (double) (LocGrid[0].numx - 1)) / 2.0,
+                        LocGrid[0].origy + (LocGrid[0].dy
+                        * (double) (LocGrid[0].numy - 1)) / 2.0)
+                        ) != 1) {
+                    CloseGrid3dFile(&(Arrival[nobs].gdesc), &(Arrival[nobs].fpgrid), &(arrival[nobs].fphdr));
+                    if (istat == -1) {
+                        if (n_ttgrid < NumTimeGridPaths - 1) { // 20251027 add support for alternative travel-time grid path/root
+                            continue;
+                        }
+                        sprintf(MsgStr,
+                                "WARNING: greatest distance from initial 3D location search grid to station \n\texceeds 2D time grid size, rejecting grid for: %s %s",
+                                arrival[nobs].label, arrival[nobs].phase);
+                        nll_putmsg(2, MsgStr);
+                        goto RejectArrival;
+                    } else if (istat == -2) {
+                        if (n_ttgrid < NumTimeGridPaths - 1) { // 20251027 add support for alternative travel-time grid path/root
+                            continue;
+                        }
+                        sprintf(MsgStr,
+                                "WARNING: distance from grid center to station \n\texceeds maximum station distance, ignoring observation in misfit calculation: %s %s",
+                                arrival[nobs].label, arrival[nobs].phase);
+                        nll_putmsg(2, MsgStr);
+                        arrival[nobs].flag_ignore = 1;
+                        goto IgnoreArrival;
+                    }
+                    if (istat == -3) {
+                        if (n_ttgrid < NumTimeGridPaths - 1) { // 20251027 add support for alternative travel-time grid path/root
+                            continue;
+                        }
+                        sprintf(MsgStr,
+                                "WARNING: depth range of initial 3D location search grid exceeds that of 2D time grid size, rejecting grid for: %s %s",
+                                arrival[nobs].label, arrival[nobs].phase);
+                        nll_putmsg(2, MsgStr);
+                        goto RejectArrival;
+                    }
+                }
+
+                // 20251027 add support for alternative travel-time grid path/root
+                // made it this far, so have valid travel-time grid
+                break;
+
+            } // for (int n_ttgrid = 0; n_ttgrid < NumTimeGridPaths; n_ttgrid++) {
+        } // if (arrival[nobs].n_companion < 0)
 
 
         /* check for time delays */
@@ -3824,6 +3859,161 @@ int GetNextObs(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, char* ftype_
             return (OBS_FILE_SKIP_INPUT_LINE);
 
         return (istat);
+
+    } else if (strcmp(ftype_obs, "NCSN_Y2K_5_SCSN") == 0) // 20251103 - support 9 char station labels from E Hauksson
+    {
+        /* read next line */
+        cstat = fgets(line, MAXLINE_LONG, fp_obs);
+        if (cstat == NULL)
+            return (OBS_FILE_END_OF_INPUT);
+        if (strcmp(line, "    ") == 0) {
+            line[0] = '\0';
+            return (OBS_FILE_END_OF_EVENT);
+        }
+
+        // check if event line and parse desired fields
+        //printf("DEBUG: line %s\n", line);
+        istat = ReadFortranString(line, 139, 8, phypo->public_id);
+        if (istat > 0) { // success, must be event line (assume all other lines in file are < 139 char
+            printf("DEBUG: phypo->public_id %s istat %d\n", phypo->public_id, istat);
+            // add additional reads of NLL supported fields here, e.g.
+            //istat += ReadFortranReal(line, 5, 4, &phypo->amp_mag); 	// arbitrary columns, not correct
+            //printf("DEBUG: phypo->amp_mag %f istat %d\n", phypo->amp_mag, istat);
+            return (OBS_FILE_SKIP_INPUT_LINE); // return so next phase file line will be read
+        }
+
+        // NCSN_Y2K_5_SCSN has S on separate line, always check
+        // check for S phase input
+
+        /* check for zero or blank S phase time */
+        istat = ReadFortranString(line, 48, 1, chrtmp);
+        //printf("DEBUG: istat %d chrtmp %s\n", istat, chrtmp);
+        if (istat > 0 && (strncmp(chrtmp, "S", 1) == 0 || strncmp(chrtmp, "s", 1) == 0)) {
+            /* read S phase input in last input line read */
+            // 20251103 - support 9 char station labels from E Hauksson
+            istat = ReadFortranString(line, 1, 9, arrival->label);
+            TrimString(arrival->label);
+            istat += 2; // skipping network and comp
+            istat += ReadFortranString(line, 10, 3, arrival->inst);
+            TrimString(arrival->inst);
+            // END - 20120928 AJL - added
+            istat += ReadFortranInt(line, 18, 4, &arrival->year);
+            istat += ReadFortranInt(line, 22, 2, &arrival->month);
+            istat += ReadFortranInt(line, 24, 2, &arrival->day);
+            istat += ReadFortranInt(line, 26, 2, &arrival->hour);
+            istat += ReadFortranInt(line, 28, 2, &arrival->min);
+            istat += ReadFortranReal(line, 42, 5, &arrival->sec);
+            /* check for integer sec format */
+            //				if (arrival->sec > 99.999)
+            arrival->sec /= 100.0;
+            istat += ReadFortranReal(line, 30, 5, &psec);
+            psec /= 100.0;
+            /* check for P second >= 60.0 */
+            if (psec >= 60.0 && arrival->sec < 60.0)
+                arrival->sec += 60.0;
+            arrival->phase[0] = '\0';
+            istat += ReadFortranString(line, 48, 1, arrival->phase);
+            TrimString(arrival->phase);
+            istat += ReadFortranString(line, 47, 1, arrival->onset);
+            TrimString(arrival->onset);
+            istat += ReadFortranInt(line, 50, 1, &arrival->quality);
+            //printf("DEBUG: istat %d  arrival->phase %s\n", istat, arrival->phase);
+        }
+
+        /* check for S arrival input found */
+        if (istat >= 12
+                && IsPhaseID(arrival->phase, "S")
+                && IsGoodDate(arrival->year, arrival->month, arrival->day)) {
+
+            /* set error fields */
+            strcpy(arrival->error_type, "GAU");
+            if (arrival->quality >= 0 && arrival->quality < NumQuality2ErrorLevels) {
+                arrival->error = Quality2Error[arrival->quality];
+            } else {
+                arrival->error = Quality2Error[NumQuality2ErrorLevels - 1];
+                nll_puterr("WARNING: invalid arrival weight.");
+            }
+            //printf("DEBUG: arrival->quality %d  arrival->error %f\n", arrival->quality, arrival->error);
+
+            line[0] = '\0';
+
+            // AJL 20070608 - this format may have multiple entries for each phase, need to reject
+            // earlier phases with large error so that later entries will be used
+            if (arrival->error > 999.0)
+                return (OBS_FILE_SKIP_INPUT_LINE);
+
+            return (istat);
+        }
+
+        /* read formatted P (or S) arrival input */
+        // 20251103 - support 9 char station labels from E Hauksson
+        istat = ReadFortranString(line, 1, 9, arrival->label);
+        TrimString(arrival->label);
+        istat += 2; // skipping network and comp
+        istat += ReadFortranString(line, 10, 3, arrival->inst);
+        TrimString(arrival->inst);
+        istat += ReadFortranString(line, 14, 1, arrival->onset);
+        TrimString(arrival->onset);
+        if (strpbrk(arrival->onset, "XYZ") != NULL) { // skip RTP (phases with X,Y,Z onset)
+            return (OBS_FILE_SKIP_INPUT_LINE);
+        }
+        istat += ReadFortranString(line, 15, 1, arrival->phase);
+        TrimString(arrival->phase);
+        istat += ReadFortranString(line, 16, 1, arrival->first_mot);
+        TrimString(arrival->first_mot);
+        istat += ReadFortranInt(line, 17, 1, &arrival->quality);
+        /*
+                        if (arrival->quality > 3) {			// skip phases with quality > 4
+                        return(OBS_FILE_SKIP_INPUT_LINE);
+        }
+         */
+        istat += ReadFortranInt(line, 18, 4, &arrival->year);
+        istat += ReadFortranInt(line, 22, 2, &arrival->month);
+        istat += ReadFortranInt(line, 24, 2, &arrival->day);
+
+        if (!IsGoodDate(arrival->year, arrival->month, arrival->day))
+            return (OBS_FILE_END_OF_EVENT);
+
+        istat += ReadFortranInt(line, 26, 2, &arrival->hour);
+        istat += ReadFortranInt(line, 28, 2, &arrival->min);
+        istat += ReadFortranReal(line, 30, 5, &arrival->sec);
+        /* check for integer sec format */
+        //		if (arrival->sec > 99.999)
+        arrival->sec /= 100.0;
+
+        if (istat != 14) {
+            line[0] = '\0';
+            return (OBS_FILE_END_OF_EVENT);
+        }
+
+        /* read optional amplitude/period fields */
+        istat += ReadFortranReal(line, 55, 7, &arrival->amplitude);
+        arrival->amplitude /= 100.0;
+        istat += ReadFortranReal(line, 84, 3, &arrival->period);
+        arrival->period /= 100.0;
+
+
+        /* check for valid phase code */
+        if (IsPhaseID(arrival->phase, "P")) {
+            //strcpy(arrival->phase, "P");
+            ;
+
+        } else if (IsPhaseID(arrival->phase, "S")) {
+            //strcpy(arrival->phase, "S");
+            ;
+        } else
+            return (OBS_FILE_SKIP_INPUT_LINE);
+
+        /* convert quality to error */
+        Qual2Err(arrival);
+
+        // AJL 20070608 - this format may have muliple entries for each phase, need to reject
+        // earlier phases with large error so that later entries will be used
+        if (arrival->error > 999.0)
+            return (OBS_FILE_SKIP_INPUT_LINE);
+
+        return (istat);
+
 
     } else if (strcmp(ftype_obs, "PAOLO_OV") == 0 ||
             strcmp(ftype_obs, "ALBERTO_3D") == 0 ||
@@ -5987,8 +6177,8 @@ KO.SVRC,2023-02-01T03:38:53.860000Z,2023-02-01T03:38:54.960000Z,1.10811060369646
         /* read event hypocenter line */
         if (!in_hypocenter_event) {
             /* read hypocenter time */
-// DATE, TIME, LAT, LON, DEP, MAG, EH, EV, RMS, ID
-// 2025  02  28   23    59    33.212    36.6105    25.6038    0.00     0.768     0.0     0.0    0.0    34423
+            // DATE, TIME, LAT, LON, DEP, MAG, EH, EV, RMS, ID
+            // 2025  02  28   23    59    33.212    36.6105    25.6038    0.00     0.768     0.0     0.0    0.0    34423
             // 20250314 AJL - added reading of MAG to hypo
             istat = sscanf(line, "# %d %d %d %d %d %lf %*f %*f %*f %lf %*f %*f %*f %ld",
                     &EventTime.year, &EventTime.month, &EventTime.day,
@@ -6859,8 +7049,12 @@ int reset_hypodatetime(long double phypo_time, HypoDesc *phypo) {
         hypo_time.tm_min = phypo->min;
         hypo_time.tm_sec = 0;
 
-        time_t time_seconds = mktime(&hypo_time);
-        time_seconds += 3600 - int_sec_offset;
+        // 20260619 AJL - Bug fix: do time conversion in UTC, not local timezone
+        //20260619 time_t time_seconds = mktime(&hypo_time);
+        time_t time_seconds = timegm(&hypo_time);
+        // 20260619 AJL - Bug fix: do not add 1 hour
+        //20260619time_seconds += 3600 - int_sec_offset;
+        time_seconds -= int_sec_offset;
 
         struct tm *new_hypo_time = gmtime(&time_seconds);
 
@@ -7678,14 +7872,16 @@ int SaveBestLocation(OctNode* poct_node, int num_arr_total, int num_arr_loc, Arr
                 snprintf(filename, sizeof (filename), "%s.time", arrival[n_compan].fileroot);
             else
                 snprintf(filename, sizeof (filename), "%s.time", arrival[narr].fileroot);
-
-            if ((istat = OpenGrid3dFile(filename,
-                    &(arrival[narr].fpgrid),
-                    &(arrival[narr].fphdr),
-                    &(arrival[narr].gdesc), "time",
-                    &(arrival[narr].station),
-                    iSwapBytesOnInput)) < 0)
-                continue;
+            //  20260106 AJL - Bug Fix: check if time grid already open; prevent orphan open files!
+            if (arrival[narr].fpgrid == NULL) {
+                if ((istat = OpenGrid3dFile(filename,
+                        &(arrival[narr].fpgrid),
+                        &(arrival[narr].fphdr),
+                        &(arrival[narr].gdesc), "time",
+                        &(arrival[narr].station),
+                        iSwapBytesOnInput)) < 0)
+                    continue;
+            }
             arrival[narr].station = station;
             //iopened = 1;
             /* check grid type, read travel time */
@@ -10862,10 +11058,12 @@ patch below fixes this problem.
  */
 
 int GetNLLoc_Files(char* line1) {
+
     int istat, nObsFile;
     char fnobs[FILENAME_MAX];
+    char fn_time_grids_list[MAX_NUM_TIME_GRID_PATHS * (FILENAME_MAX + 2)]; // 20251027 add support for alternative travel-time grid path/root
 
-    istat = sscanf(line1, "%s %s %s %s %d", fnobs, ftype_obs, fn_loc_grids,
+    istat = sscanf(line1, "%s %s %s %s %d", fnobs, ftype_obs, fn_time_grids_list,
             fn_path_output, &iSwapBytesOnInput);
     if (istat < 5)
         iSwapBytesOnInput = 0;
@@ -10879,7 +11077,7 @@ int GetNLLoc_Files(char* line1) {
     if (message_flag >= 3) {
         sprintf(MsgStr,
                 "LOCFILES:  ObsType: %s  InGrids: %s.*  OutPut: %s.* iSwapBytesOnInput: %d",
-                ftype_obs, fn_loc_grids, fn_path_output, iSwapBytesOnInput);
+                ftype_obs, fn_time_grids_list, fn_path_output, iSwapBytesOnInput);
         nll_putmsg(3, MsgStr);
         for (nObsFile = 0; nObsFile < NumObsFiles; nObsFile++) {
             snprintf(MsgStr, sizeof (MsgStr), "   Obs File: %3d  %s", nObsFile, fn_loc_obs[nObsFile]);
@@ -10889,6 +11087,14 @@ int GetNLLoc_Files(char* line1) {
 
     if (NumObsFiles == MAX_NUM_OBS_FILES)
         nll_putmsg(1, "LOCFILES: WARNING: maximum number of files/events reached");
+
+    // parse time grid path/roots
+    NumTimeGridPaths = 0;
+    char* token = strtok(fn_time_grids_list, ",");
+    while (token != NULL) {
+        strncpy(fn_time_grids[NumTimeGridPaths++], token, FILENAME_MAX);
+        token = strtok(NULL, ",");
+    }
 
     return (0);
 }
@@ -12948,7 +13154,7 @@ int WriteHypoInverseArchive(FILE *fpio, HypoDesc *phypo, ArrivalDesc *parrivals,
     else
         fprintf(fpio, "%2.2d", phypo->year % 100);
     // 5 8 4I2 Month, day, hour and minute.
-    // 13 4 F4.2 rigin time seconds.
+    // 13 4 F4.2 origin time seconds.
     // 17 2 F2.0 Latitude (deg). First character must not be blank.
     // 19 1 A1 S for south, blank otherwise.
     // 20 4 F4.2 Latitude (min).
@@ -13035,7 +13241,7 @@ int WriteHypoInverseArchive(FILE *fpio, HypoDesc *phypo, ArrivalDesc *parrivals,
     // 86 4 F4.2 Horizontal error (km).
     // 90 4 F4.2 Vertical error (km).
     if (writeY2000) {
-        // TODO this is largest princiapl error !!
+        // TODO this is largest principal error !!
         dtemp = 100.0 * phypo->ellipsoid.len3;
         fprintf(fpio, "%3.3s%4.0lf", loc_remark, dtemp < 9999.0 ? dtemp : 9999.0);
         fprintf(fpio, "%1.1s%1.1s%3.3d%4.0lf%4.0lf",

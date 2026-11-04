@@ -23,7 +23,8 @@ Vel2Grid run/nlloc_sample.in
 echo
 echo "Visualize the model grid"
 Grid2GMT run/nlloc_sample.in model/layer.P.mod gmt/ V G 1 0 1 401
-${PS_VIEWER} gmt/layer.P.mod.VG.ps &
+gmt psconvert gmt/layer.P.mod.VG.ps -A -Tg
+${PS_VIEWER} gmt/layer.P.mod.VG.png &
 echo
 echo "Generate and view the travel-time and take-off angle grids "
 mkdir time
@@ -31,15 +32,17 @@ Grid2Time run/nlloc_sample.in
 echo
 echo "Visualize P travel-time grid"
 Grid2GMT run/nlloc_sample.in time/layer.P.AK_RC01_--.time gmt/ V G 0 0 0 401
-${PS_VIEWER} gmt/layer.P.AK_RC01_--.time.VG.ps &
+gmt psconvert gmt/layer.P.AK_RC01_--.time.VG.ps -A -Tg
+${PS_VIEWER} gmt/layer.P.AK_RC01_--.time.VG.png &
 echo "Visualize P take-off angles grid"
 Grid2GMT run/nlloc_sample.in time/layer.P.AK_RC01_--.angle gmt/ V G 0 0 0 401
-${PS_VIEWER} gmt/layer.P.AK_RC01_--.angle.VG.ps &
+gmt psconvert gmt/layer.P.AK_RC01_--.angle.VG.ps -A -Tg
+${PS_VIEWER} gmt/layer.P.AK_RC01_--.angle.VG.png &
 echo
 echo "Generate some synthetic arrival times "
 mkdir obs_synth
 Time2EQ run/nlloc_sample.in
-more obs_synth/synth.obs
+head obs_synth/synth.obs
 echo
 echo "Do the event Location "
 mkdir loc
@@ -47,11 +50,13 @@ NLLoc run/nlloc_sample.in
 echo "Plot the first event location with GMT"
 mkdir gmt
 Grid2GMT run/nlloc_sample.in loc/alaska.20181130.172935.grid0.loc gmt/ L S
-${PS_VIEWER} gmt/alaska.20181130.172935.grid0.loc.LS.ps &
+gmt psconvert gmt/alaska.20181130.172935.grid0.loc.LS.ps -A -Tg
+${PS_VIEWER} gmt/alaska.20181130.172935.grid0.loc.LS.png &
 echo "Plot the combined locations with GMT"
 LocSum loc/alaska.sum.grid0.loc 1 loc/alaska "loc/alaska.*.*.grid0.loc"
 Grid2GMT run/nlloc_sample.in loc/alaska gmt/ L E101
-${PS_VIEWER} gmt/alaska.LE_101.ps &
+gmt psconvert gmt/alaska.LE_101.ps -A -Tg
+${PS_VIEWER} gmt/alaska.LE_101.png &
 echo "Visualise the location with Seismicity Viewer (you must have installed Seismicity Viewer, see Seismicity Viewer software guide) "
 java net.alomax.seismicity.Seismicity loc/alaska.*.*.grid0.loc.hyp
 

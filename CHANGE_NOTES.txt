@@ -573,3 +573,8 @@ QUALITY  Pmax -1 MFmin -1 MFmax -1 RMS -1 Nphs -1 Gap -1 Dist -1 Mamp -9.90 0 Md
 
 20250903 GridCut - Added GridCut program to extract a sub-region from a 3D grid and save to disk as new 3D grid. TODO: Document GT_GridCut
 
+20260119 NLLoc octtree/octtree.c - Bug fix:  New function _getScatterSampleResultTreeAtLevels_() added. The purpose of this function
+    is to keep the stack frame of getScatterSampleResultTreeAtLevels() free of local variables, so that excessive recursion caused by
+    a deep tree does not lead to a SIGSEGV due to stack memory exhaustion.
+
+20260619 NLLoc - Bug fix (src/NLLocLib.c->reset_hypodatetime()): when checking internal origin time for negative seconds, do all time conversions in UTC, not local timezone. Previously the corrected origin time had an hour shift related to local timezone difference from UTC.

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>1.1.9. GridCut - extracts a sub-volume from a NLL 3D grid &#8212; NonLinLoc Doc 7.00 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b76e3c8a" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=def86cc0" />
+    
+    <script src="../_static/documentation_options.js?v=b489f74c"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1.3.1. NonLinLoc Software Package Control File" href="control.ControlFile.html" />
+    <link rel="prev" title="1.1.8. Loc2ssst - generate SSST corrections on a to 3D grid for NLLoc locations" href="core.Loc2ssst.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="control.ControlFile.html" title="1.3.1. NonLinLoc Software Package Control File"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="core.Loc2ssst.html" title="1.1.8. Loc2ssst - generate SSST corrections on a to 3D grid for NLLoc locations"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">NonLinLoc Doc 7.00 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../programs.html" accesskey="U"><span class="section-number">1. </span>NonLinLoc Programs</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.1.9. </span>GridCut - extracts a sub-volume from a NLL <cite>3D grid</cite></a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="line-block">
+<div class="line"><br /></div>
+</div>
+<section id="gridcut-extracts-a-sub-volume-from-a-nll-3d-grid">
+<h1><span class="section-number">1.1.9. </span>GridCut - extracts a sub-volume from a NLL <cite>3D grid</cite><a class="headerlink" href="#gridcut-extracts-a-sub-volume-from-a-nll-3d-grid" title="Link to this heading">¶</a></h1>
+<p>Given an existing NLL <cite>3D grid</cite> (.buf and .hdr file pair),  <strong>GridCut</strong> generates a new NLL <cite>3D grid</cite> consisting of a specified sub-volume of the existing grid, or a sub-volume of the existing grid centered in x/y (lat/lon) at a specified station source and with specified extent.</p>
+<section id="overview">
+<h2><span class="section-number">1.1.9.1. </span>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p><strong>GridCut</strong> generates a specified sub-volume of and existing grid based on a standard, NLL grid description, (e.g. <cite>3D grid</cite> Header file first line), describing the size and type of a <cite>3D grid</cite>.</p>
+<p><strong>GridCut</strong> centers the new, sub-volume grid at a specified station source if an optional, NLL <cite>3D grid</cite> Header file second line (describing the label and x, y, z location of a source/station) is present.
+This option is useful for extracting smaller 3D velocity grids around each station from a large 3D velocity grid before calculation of travel-times, greatly improving travel-time calculation and NLLoc location run-time efficiency relative to using velocity and travel-time grids for the full 3D region for each station.</p>
+</section>
+<section id="running-the-program">
+<h2><span class="section-number">1.1.9.2. </span>Running the program<a class="headerlink" href="#running-the-program" title="Link to this heading">¶</a></h2>
+<p>Synopsis: <code class="docutils literal notranslate"><span class="pre">GridCut</span> <span class="pre">inputGridRoot</span> <span class="pre">outputGridRoot</span> <span class="pre">outputGridDescription</span> <span class="pre">[sourceDescription]</span></code></p>
+<p>The <strong>GridCut</strong> program is run on the command line and uses command line arguments, not a NLL <cite>Input Control
+File</cite>.</p>
+<p>Program arguments:</p>
+<p><code class="docutils literal notranslate"><span class="pre">inputGridRoot</span></code> - full or relative path and file root name (no extension) for input NLL <cite>3D grid</cite></p>
+<p><code class="docutils literal notranslate"><span class="pre">outputGridRoot</span></code> - full or relative path and file root name (no extension) for output, sub-volume NLL <cite>3D grid</cite></p>
+<p><code class="docutils literal notranslate"><span class="pre">outputGridDescription</span></code> - NLL grid description (e.g. <code class="docutils literal notranslate"><span class="pre">VGGRID</span></code> Source Description) specifying the sub-volume to extract from the input grid.</p>
+<p><code class="docutils literal notranslate"><span class="pre">sourceDescription</span></code> - optional NLL source description (e.g. <code class="docutils literal notranslate"><span class="pre">GTSRCE</span></code> Source Description as used for <code class="docutils literal notranslate"><span class="pre">Grid2Time</span></code>). If present, the output sub-volume grid will be centered at the specified source, the grid origin in <code class="docutils literal notranslate"><span class="pre">outputGridDescription</span></code> will be ignored, and the output grid extent will be derived from the <code class="docutils literal notranslate"><span class="pre">outputGridDescription</span></code> number and spacing of grid nodes.</p>
+<p>If an <code class="docutils literal notranslate"><span class="pre">outputGridDescription</span></code> source is specified, <strong>GridCut</strong> outputs a profile of grid values (e.g. a 1D, vertical velocity profile) below the source to file <code class="docutils literal notranslate"><span class="pre">outputGridRoot</span></code>.profile.in.
+A 1D model profile can be used to calculate 2D travel-times (travel-time vs distance, depth) for a station source, including for points outside the <cite>3D grid</cite> sub-volume generated by <strong>GridCut</strong> .</p>
+</section>
+<section id="output">
+<h2><span class="section-number">1.1.9.3. </span>Output<a class="headerlink" href="#output" title="Link to this heading">¶</a></h2>
+<p>The extracted, sub-volume <cite>3D Grid</cite> is written to a new <cite>3D Grid</cite> .buf and .hdr file pair with root name <code class="docutils literal notranslate"><span class="pre">outputGridRoot</span></code>.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">1.1.9. GridCut - extracts a sub-volume from a NLL <cite>3D grid</cite></a><ul>
+<li><a class="reference internal" href="#overview">1.1.9.1. Overview</a></li>
+<li><a class="reference internal" href="#running-the-program">1.1.9.2. Running the program</a></li>
+<li><a class="reference internal" href="#output">1.1.9.3. Output</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="core.Loc2ssst.html"
+                          title="previous chapter"><span class="section-number">1.1.8. </span>Loc2ssst - generate SSST corrections on a  to 3D grid for NLLoc locations</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="control.ControlFile.html"
+                          title="next chapter"><span class="section-number">1.3.1. </span>NonLinLoc Software Package Control File</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/programs/core.GridCut.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="control.ControlFile.html" title="1.3.1. NonLinLoc Software Package Control File"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="core.Loc2ssst.html" title="1.1.8. Loc2ssst - generate SSST corrections on a to 3D grid for NLLoc locations"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">NonLinLoc Doc 7.00 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../programs.html" ><span class="section-number">1. </span>NonLinLoc Programs</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.1.9. </span>GridCut - extracts a sub-volume from a NLL <cite>3D grid</cite></a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2020, Anthony Lomax.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    </div>
+  </body>
+</html>
