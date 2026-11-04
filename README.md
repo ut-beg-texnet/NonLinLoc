@@ -1,6 +1,9 @@
 # NonLinLoc
 The NonLinLoc (Non-Linear Location) package is a set of programs for velocity model construction, travel-time calculation and probabilistic, non-linear, global-search earthquake location in 3D structures, and for visualisation of 3D volume data and location results. Many of the programs operate with a 3D Grid structure which defines a specific, gridded, rectangular volume (Non-GLOBAL mode) or spherical section (GLOBAL mode).
 
+## IMPORTANT: The active NonLinLoc repository has been transferred to: [https://github.com/ut-beg-texnet/NonLinLoc](https://github.com/ut-beg-texnet/NonLinLoc)
+Please be aware of this change and the new URL.
+
 ## Citation
 If you use the NonLinLoc package in your work, please cite the following papers:
 
