@@ -1,0 +1,9 @@
+PUBLIC_ID quakeml:NC/Event/NC/30500830
+QUALITY  Pmax -1 MFmin -1 MFmax -1 RMS -1 Nphs -1 Gap -1 Dist -1 Mamp 1.68 4 Mdur -9.90 0
+PHASE ID Ins Cmp On Pha  FM Date     HrMn   Sec     Err  ErrMag    Coda      Amp       Per       PriorWt
+NC_PMC ?    Z    ? P      ? 20040928 1756 42.5800 GAU  1.00e-02 -1.00e+00 -1.00e+00 -1.00e+00  1.00e+00
+NC_PCA ?    Z    ? P      d 20040928 1756 43.3900 GAU  1.00e-02 -1.00e+00 -1.00e+00 -1.00e+00  1.00e+00
+NC_PMR ?    Z    ? P      u 20040928 1756 42.8300 GAU  1.00e-02 -1.00e+00 -1.00e+00 -1.00e+00  1.00e+00
+NC_PAG ?    Z    ? P      u 20040928 1756 43.2200 GAU  1.00e-02 -1.00e+00 -1.00e+00 -1.00e+00  1.00e+00
+NC_PSC ?    Z    ? P      ? 20040928 1756 44.9600 GAU  1.00e-02 -1.00e+00 -1.00e+00 -1.00e+00  1.00e+00
+NC_PHR ?    Z    ? P      ? 20040928 1756 55.2200 GAU  1.00e-02 -1.00e+00 -1.00e+00 -1.00e+00  1.00e+00

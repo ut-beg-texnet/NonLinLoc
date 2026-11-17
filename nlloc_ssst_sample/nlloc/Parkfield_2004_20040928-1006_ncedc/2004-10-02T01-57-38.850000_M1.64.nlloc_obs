@@ -1,0 +1,12 @@
+PUBLIC_ID quakeml:NC/Event/NC/30506493
+QUALITY  Pmax -1 MFmin -1 MFmax -1 RMS -1 Nphs -1 Gap -1 Dist -1 Mamp 1.64 2 Mdur -9.90 0
+PHASE ID Ins Cmp On Pha  FM Date     HrMn   Sec     Err  ErrMag    Coda      Amp       Per       PriorWt
+BP_MMNB ?    ?    ? P      u 20041002 0157 40.4500 GAU  1.00e-02 -1.00e+00 -1.00e+00 -1.00e+00  1.00e+00
+NC_PST ?    Z    ? P      u 20041002 0157 40.1600 GAU  1.00e-02 -1.00e+00 -1.00e+00 -1.00e+00  1.00e+00
+BP_VCAB ?    ?    ? P      d 20041002 0157 40.3000 GAU  1.00e-02 -1.00e+00 -1.00e+00 -1.00e+00  1.00e+00
+BP_JCNB ?    ?    ? P      d 20041002 0157 40.6100 GAU  1.00e-02 -1.00e+00 -1.00e+00 -1.00e+00  1.00e+00
+NC_PVC ?    Z    ? P      u 20041002 0157 40.5000 GAU  1.00e-02 -1.00e+00 -1.00e+00 -1.00e+00  1.00e+00
+BP_LCCB ?    ?    ? P      u 20041002 0157 40.8400 GAU  1.00e-02 -1.00e+00 -1.00e+00 -1.00e+00  1.00e+00
+BP_CCRB ?    ?    ? P      d 20041002 0157 40.5900 GAU  1.00e-02 -1.00e+00 -1.00e+00 -1.00e+00  1.00e+00
+NC_PHOB ?    Z    ? P      d 20041002 0157 40.9900 GAU  1.00e-02 -1.00e+00 -1.00e+00 -1.00e+00  1.00e+00
+BP_SMNB ?    ?    ? P      u 20041002 0157 40.7600 GAU  1.00e-02 -1.00e+00 -1.00e+00 -1.00e+00  1.00e+00

@@ -1,0 +1,174 @@
+# =============================================================================
+#  NonLinLoc programs control file
+# =============================================================================
+
+
+# = comment
+
+# non-nested include files allowed, use:
+# INCLUDE <include_file_name>
+
+
+# =============================================================================
+# =============================================================================
+# General input
+# =============================================================================
+#
+#
+
+# control (CONTROL message_flag (0:silent,1:few messages,2:verbose,...),
+#        RandomNumSeed)
+CONTROL 1 54321
+
+
+
+# -----------------------------------------------------------------------------
+# lat/long to rect grid transformation
+# -----------------------------------------------------------------------------
+
+# map projection / transformation
+# (TRANS type <params>)
+#    (char[])   search_type (SIMPLE, LAMBERT)
+#    <params>:
+#   SIMPLE LatOrig  LongOrig  RotCW
+#   LAMBERT  RefEllipsoid LatOrig  LongOrig
+#                   FirstStdParal  SecondStdParal   RotCW
+#   TRANS_MERC  RefEllipsoid  LatOrig LongOrig  RotCW
+#
+#    RefEllipsoid choices:
+#                   WGS-84, GRS-80, WGS-72, Australian, Krasovsky,
+#                   International, Hayford-1909, Clarke-1880, Clarke-1866,
+#                   Airy, Bessel, Hayford-1830, Sphere
+#
+#
+# Lambert III France - IGN (except that origin is arbitrary)
+# TRANS  LAMBERT  Clarke-1880  43.75 7.5  43.1993 44.9961  0.0
+#
+TRANS AZIMUTHAL_EQUIDIST WGS-84 35.96 -120.5047 0
+
+#MAPGRID  99 54 26  0.0 0.0 0.0  1.0 1.0 1.0 XXX FLOAT
+# maplines (MAPLINE format, name, red, green, blue,
+#   linestyle (SOLID, DASHED, DOTTED, DASHDOT))
+#MAPLINE  1 maps/calif_faults.xy  0.0 1.0 0.0  SOLID
+
+
+#
+#
+# =============================================================================
+# END of General input
+# =============================================================================
+# =============================================================================
+
+
+
+
+
+# =============================================================================
+# =============================================================================
+# Loc2ssst input
+# =============================================================================
+#
+#
+
+# location grids description
+# (LSPARAMS  CharDist WeightCutoff)
+#    (float) CharDist : Characteristic event-station distance for weighting contribution of an event to SSST correction for a station
+#    (float) WeightFloor : (0.0-1.0); small value added to events-node weights so ssst values at large event-node distance remain non-zero (station static).
+#LSPARAMS 5.0 0.0000001
+#LSPARAMS 10.0 0.0000001
+
+
+
+# ssst grid description
+# (LSGRID  num_grid_x  num_grid_y  num_grid_z
+#    orig_grid_x  orig_grid_y  orig_grid_z
+#    d_grid_x d_grid_y d_grid_z
+#       type save_flag
+#    (float) num_grid_x/y/z : number of nodes along x/y/z axis
+#    (float)    orig_grid_x : x location of grid origin (0,0,0) in km pos east
+#    (float)    orig_grid_y : y location of grid origin (0,0,0) in km pos north
+#    (float)    orig_grid_z : z location of grid origin (0,0,0) in km pos down
+#    (float)   d_grid_x/y/x : grid spacing along  x/y/z axis
+#    (char[])  type : (PROB_DENSITY, MISFIT)
+#    (char[])  save_flag : (SAVE, NO_SAVE)
+#
+LSGRID  201 201 81  -50.0 -50.0 -5.0  0.5 0.5 0.5  SSST_TIMECORR FLOAT
+
+# output travel-time grid description
+LSOUTGRID 201 201 81  -50.0 -50.0 -5.0  0.5 0.5 0.5 TIME FLOAT
+
+# grid mode
+# (LSMODE angle_mode)
+#    (char[])   angle_mode (ANGLES_YES, ANGLES_NO)
+#
+#LSMODE ANGLES_NO
+
+
+# location/phase filter (see also LOCPHSTAT)
+# (LSPHSTAT RMS_Max, NRdgs_Min, Gap_Max, P_ResMax, S_ResMax, Ell_Len3_Max)
+#    (float)   RMS_Max : max hypocenter RMS to include in SSST's
+#    (float)   NRdgs_Min : min hypocenter num readings to include in SSST's
+#    (float)   Gap_Max : max hypocenter gap (deg) to include in SSST's
+#    (float)   P_ResMax : max abs(P res) to include in SSST's
+#    (float)   S_ResMax : max abs(S res) to include in SSST's
+#    (float)   Ell_Len3_Max : max ellipsoid semi-major axis length to include in SSST's
+#
+LSPHSTAT 0.35 12 135.0 1.0 2.0 5.0
+
+
+# output filename
+# (LSOUT <output file path/root>)
+#
+##LSOUT /temp/nlloc_tmp/PuertoRico_2020/20200126/PuertoRico_LinHuerfano2011_z1km_SSST/ssst/M1.0_20190101-20200119/LinHuerfano2011_z1km
+# input  location filenames
+# (LSLOCFILES <NLLoc output files>)
+#
+#LSLOCFILES /temp/nlloc_tmp/PuertoRico_2020/20200126/PuertoRico_LinHuerfano2011_z1km_SSST/loc/M1.0_20190101-20200119/PuertoRico_2020.20200118.*.grid0.loc.hyp
+##LSLOCFILES /temp/nlloc_tmp/PuertoRico_2020/20200126/PuertoRico_LinHuerfano2011_z1km_SSST/loc/M1.0_20190101-20200119/PuertoRico_2020.*.*.grid0.loc.hyp
+#
+# NLLoc LOCFILES statement.  If present and LSOUTGRID present, ssst corrections will be added to original time grids and output to LSOUT path/root.
+# LOCFILES <travel-time grid files path/root> only is read and used
+##LOCFILES USGS_QuakeML/nlloc/M1.0_20190101-20200119/*.nlloc_obs NLLOC_OBS  /temp/nlloc_tmp/PuertoRico_2020/PuertoRico_LinHuerfano2011_z1km_SSST/time/LinHuerfano2011_z1km  /temp/nlloc_tmp/PuertoRico_2020/20200126/PuertoRico_LinHuerfano2011_z1km_SSST/loc/M1.0_20190101-20200119/PuertoRico_2020  0
+##LOCMETH EDT_OT_WT 9999.0 2 -1 -1 1.71 0 -1 1
+#
+# output filename
+# (LSOUT <output file path/root>)
+#
+##LSOUT /temp/nlloc_tmp/PuertoRico_2020/20200126/PuertoRico_LinHuerfano2011_z1km_SSST/ssst_corr1/M1.0_20190101-20200119/LinHuerfano2011_z1km
+# input  location filenames
+# (LSLOCFILES <NLLoc output files>)
+#
+##LSLOCFILES /temp/nlloc_tmp/PuertoRico_2020/20200126/PuertoRico_LinHuerfano2011_z1km_SSST/loc_ssst_corr1/M1.0_20190101-20200119/PuertoRico_2020.*.*.grid0.loc.hyp
+#
+# NLLoc LOCFILES statement.  If present and LSOUTGRID present, ssst corrections will be added to original time grids and output to LSOUT path/root.
+# LOCFILES <travel-time grid files path/root> only is read and used
+##LOCFILES USGS_QuakeML/nlloc/M1.0_20190101-20200119/*.nlloc_obs NLLOC_OBS  /temp/nlloc_tmp/PuertoRico_2020/20200126/PuertoRico_LinHuerfano2011_z1km_SSST/ssst/M1.0_20190101-20200119/LinHuerfano2011_z1km_ssst_corr  /temp/nlloc_tmp/PuertoRico_2020/20200126/PuertoRico_LinHuerfano2011_z1km_SSST/loc_ssst_corr1/M1.0_20190101-20200119/PuertoRico_2020  0
+##LOCMETH EDT_OT_WT 9999.0 2 -1 -1 -1.71 0 -1 1
+
+
+# NLLoc LOCMETH statement.  If present, Vp/Vs ratio will be available to find original time grids.
+# method
+# LOCMETH <Vp/Vs ratio> only is read and used
+#LOCMETH EDT_OT_WT 9999.0 2 -1 -1 1.71 0 -1 1
+
+
+# phase identifier mapping
+# (LOCPHASEID phase  phase_id0 phase_id1 ...)
+#
+# examples for P and S
+#
+LOCPHASEID  P   P Pg Pn
+LOCPHASEID  S   S Sg Sn
+
+
+
+# =============================================================================
+
+
+#
+#
+# =============================================================================
+# END of NLLoc control file statements
+# =============================================================================
+# =============================================================================
+
