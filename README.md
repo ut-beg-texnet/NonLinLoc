@@ -16,7 +16,11 @@ If you use NLL-SSST-coherence or any of its components, please cite:
 - Lomax, A. & Savvaidis, A. (2022) High-Precision Earthquake Location Using Source-Specific Station Terms and Inter-Event Waveform Similarity. Journal of Geophysical Research: Solid Earth, 127, e2021JB023190. [https://doi.org/10.1029/2021JB023190](https://doi.org/10.1029/2021JB023190)
 
 
-For other A. Lomax NonLinLoc publications, see [http://alomax.net/pub_list.html](http://alomax.net/pub_list.html)
+For other A. Lomax NonLinLoc publications, see:
+[https://scholar.google.com/citations?user=o6P12QEAAAAJ&view_op=list_works&sortby=pubdate](Google Scholar: scholar.google.com)
+[https://zenodo.org/search?q=metadata.creators.person_or_org.name%3A%22Lomax%2C%20Anthony%22&l=list&p=1&s=10&sort=bestmatch] (Zenodo: zenodo.org)
+[http://alomax.net/pub_list.html](http://alomax.net/pub_list.html)
+[https://orcid.org/0000-0002-7747-5990](ORCID: orcid.org)
 
 
 ## Install complete NonLinLoc distribution software package

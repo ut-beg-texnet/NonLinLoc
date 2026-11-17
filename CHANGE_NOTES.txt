@@ -585,3 +585,5 @@ QUALITY  Pmax -1 MFmin -1 MFmax -1 RMS -1 Nphs -1 Gap -1 Dist -1 Mamp -9.90 0 Md
 20261026 NLLocLib.c - Bug fix (Julián Olivar & Claude): In function CalculateVpVsEstimate(), iteration missed first P-S pick pair when accumulating available S-P difference.
 
 20261103 NLL - applied important fixes from ML (Claude) analysis of code by Mustafa Çomoğlu, see NLL_fixes/NLL_fixes_for_src_20261102
+
+20261117 NLL - added NonLinLoc regression tests by Mustafa Çomoğlu, see tests/README.md
