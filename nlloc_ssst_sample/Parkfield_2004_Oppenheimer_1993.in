@@ -1,0 +1,394 @@
+# =============================================================================
+#  NonLinLoc programs control file
+#
+#  See "Control File" and "Running the Sample Location" pages
+#     in the NonLicLoc on-line documentation:
+#     http://www.alomax.net/nlloc
+# =============================================================================
+
+
+# = comment
+
+# non-nested include files allowed, use:
+# INCLUDE <include_file_name>
+
+
+# =============================================================================
+# =============================================================================
+# Generic control file statements
+# =============================================================================
+#
+#
+
+# control (CONTROL message_flag (0:silent,1:few messages,2:verbose,...),
+#  RandomNumSeed)
+CONTROL 1 54321
+
+# -----------------------------------------------------------------------------
+# lat/long to rect grid transformation
+# -----------------------------------------------------------------------------
+
+# map projection / transformation
+# (TRANS type <params>)
+#    (char[])   search_type (SIMPLE, LAMBERT)
+#    <params>:
+# SIMPLE LatOrig  LongOrig  RotCW
+# LAMBERT  RefEllipsoid LatOrig  LongOrig
+#                   FirstStdParal  SecondStdParal   RotCW
+#
+#    RefEllipsoid choices:
+#                   WGS-84, GRS-80, WGS-72, Australian, Krasovsky,
+#                   International, Hayford-1909, Clarke-1880, Clarke-1866,
+#                   Airy, Bessel, Hayford-1830, Sphere
+#
+#
+# center is 35.96 -120.5047 (Thurber et al 2006)
+TRANS AZIMUTHAL_EQUIDIST WGS-84 35.96 -120.5047 0
+
+
+
+# maplines (MAPLINE id_num, name, red, green, blue,
+# linestyle (SOLID, DASHED, DOTTED, DASHDOT))
+#MAPLINE  GMT_LONLAT maps/map.sfbaycoast.ascii.latlon  0.0 1.0 0.0  SOLID
+#MAPLINE  GMT_LONLAT maps/calif_faults.xy  0.0 1.0 0.0  SOLID
+
+#
+#
+# =============================================================================
+# END of Generic control file statements
+# =============================================================================
+# =============================================================================
+
+
+
+# =============================================================================
+# =============================================================================
+# Vel2Grid input
+# =============================================================================
+#
+#
+
+# output filename root
+# (VGOUT <output file root>)
+VGOUT out/Oppenheimer1993/model/Oppenheimer1993
+
+# grid description
+# (GRID  num_grid_x  num_grid_y  num_grid_z
+# orig_grid_x  orig_grid_y  orig_grid_z
+# d_grid_x d_grid_y d_grid_z
+#       type
+#    (float) num_grid_x/y/z : number of nodes along x/y/z axis
+#    (float)    orig_grid_x : x location of grid origin (0,0,0) in km pos east
+#    (float)    orig_grid_y : y location of grid origin (0,0,0) in km pos north
+#    (float)    orig_grid_z : z location of grid origin (0,0,0) in km pos down
+#    (float)   d_grid_x/y/x : grid spacing along  x/y/z axis
+#    (char[])  type : (VELOCITY, SLOWNESS, VEL2 = vel**2, SLOW2 = slow**2
+#   SLOW_LEN = slow*d_grid)
+#
+VGGRID  2 5001 501 0.0 0.0 -5.0 0.1 0.1 0.1  SLOW_LEN
+
+# wave type
+# (VGTYPE wave_type (P, S))
+VGTYPE P
+##VGTYPE S
+
+# -----------------------------------------------------------------------------
+# layer model definitions
+# -----------------------------------------------------------------------------
+
+# 1993__Oppenheimer_et__The_Northern_California_Seismic_Network_Bulletin_January-December_1992__USGS_Open-File_Report_93-578.pdf
+# https://pubs.er.usgs.gov/publication/ofr93578
+# Parkfield - Middle Mountain (PMM)2 K. Poley and J. Eaton (pers. comm.)‡ 
+# Z (km)   0.00 2.60 9.40 23.30 27.00 
+# V (km/s) 2.25 5.30 6.10  6.70 8.00
+# VP/VS = 1.78
+# models.ods
+LAYER -5.000 2.250 0.0000 9.9 0.0 9.9 0.0
+LAYER 0.000 2.250 1.1731 9.9 0.0 9.9 0.0
+LAYER 2.600 5.300 0.1176 9.9 0.0 9.9 0.0
+LAYER 9.400 6.100 0.0432 9.9 0.0 9.9 0.0
+LAYER 23.300 6.700 0.3514 9.9 0.0 9.9 0.0
+LAYER 27.000 8.000 0.0000 9.9 0.0 9.9 0.0
+
+
+
+
+# =============================================================================
+# =============================================================================
+# Grid2Time input
+# =============================================================================
+#
+#
+
+
+# input, output filename root
+# (GTFILES <input file root> <output file root> wave_type (P, S)
+# iSwapBytes (0=no,1=yes))
+#
+GTFILES  out/Oppenheimer1993/model/Oppenheimer1993 out/Oppenheimer1993/time/Oppenheimer1993 P 0
+INCLUDE Parkfield_2004_GTSRCE_Stations.in
+
+
+# time grid modes
+# (GTMODE grid_mode, angle_mode)
+#    (char[])   grid_mode (GRID3D, GRID2D)
+#    (char[])   angle_mode (ANGLES_YES, ANGLES_NO)
+#
+#GTMODE  GRID3D ANGLES_YES
+GTMODE GRID2D ANGLES_YES
+
+
+# source description (multiple sources can be specified)
+# (#$#GTSRCE  label  x_srce  y_srce   z_srce
+#    (char[])   label
+#    (char[])   loc type (XYZ, LATLON (+/-dec deg), LATLONDM (deg, dec min))
+#  XYZ---------------      LATLON/LATLONDM--------
+#  x_srce : km pos E   or  lat   : pos N
+#  y_srce : km pos N   or  long  : pos E
+#  z_srce : km pos DN  or  depth : pos DN
+#    elev : km pos UP
+#
+# Examples:
+#
+###$#GTSRCE  STA   XYZ   27.25  -67.78  0.0  1.242
+###$#GTSRCE  CALF  LATLON   43.753  6.922  0.0  1.242
+###$#GTSRCE  JOU  LATLONDM  43 38.00 N  05 39.52 E   0.0   0.300
+#
+INCLUDE Parkfield_2004_GTSRCE_Stations.in
+
+
+# Podvin & Lecomte FD params
+# Podvin and Lemcomte, 1991, GJI, 105, 271-284.
+# (PLFD  hs_eps_init  message_flag)
+#    (float) hs_eps_init : fraction (typically 1.0E-3) defining the toler-
+#                          ated model inhomogeneity for exact initialization.
+#                          A tolerance larger than 0.01 will potentially
+#                          create errors larger than those involved by the
+#                          F.D. scheme without any exact initialization.
+#    (int)  message_flag : Message flag (0:silent,1:few messages,2:verbose)
+#                          A negative value inhibits "clever"
+#                          initialization.
+#
+GT_PLFD  1.0e-3 0
+
+
+#
+#
+# =============================================================================
+# END of Grid2Time input
+# =============================================================================
+# =============================================================================
+
+
+
+
+
+
+# =============================================================================
+# =============================================================================
+# NLLoc control file statements
+# =============================================================================
+#
+#
+
+# signature
+# (LOCSIG signature)
+LOCSIG NLL-SSST-coherence_example_Parkfield_2004
+
+# comment
+# (LOCCOM comment)
+LOCCOM Parkfiled 2004 example
+
+# input  grid filenames root, output filename
+# (LOCFILES <obs file> obs_type  <travel-time grid files path/root> <output file path/root> [iSwapBytes])
+#    (char[])  obs_type : (NLLOC_OBS, HYPO71, HYPOELLIPSE, RENASS_DEP, SEISAN)
+#
+#
+LOCFILES nlloc/Parkfield_2004_20040928-1006_ncedc/*.nlloc_obs NLLOC_OBS  out/Oppenheimer1993/time/Oppenheimer1993  out/Oppenheimer1993/loc/Parkfield_2004 0
+
+
+# output hypocenter file types
+# (LOCHYPOUT type1, type2, ...)
+#    (char[])   typeN (SAVE_NLLOC_ALL, SAVE_NLLOC_SUM,
+#  SAVE_HYPO71_ALL, SAVE_HYPO71_SUM, SAVE_HYPOELL_ALL, SAVE_HYPOELL_SUM,
+#  SAVE_HYPOINV_SUM FILENAME_DEC_SEC)
+LOCHYPOUT SAVE_NLLOC_ALL  NLL_FORMAT_VER_2  SAVE_NLLOC_OCTREE SAVE_FMAMP
+
+# search type
+# (LOCSEARCH search_type <params>)
+#    (char[])   search_type (GRID, MET (Metropolis), SA (Simulated Annealing))
+#    <params>:
+# GRID NumScatterSamples
+# MET  NumSamples NumLearn NumEquil BeginSave NumSkip
+#               StepInit StepMin StepFact ProbMin
+# OCT init_num_cells_x, init_num_cells_y, init_num_cells_z,
+#  min_node_size, max_num_nodes, num_scatter
+
+# location grids description
+# (LOCGRID  num_grid_x  num_grid_y  num_grid_z
+#    orig_grid_x  orig_grid_y  orig_grid_z
+#    d_grid_x d_grid_y d_grid_z
+#       type save_flag
+#    (float) num_grid_x/y/z : number of nodes along x/y/z axis
+#    (float)    orig_grid_x : x location of grid origin (0,0,0) in km pos east
+#    (float)    orig_grid_y : y location of grid origin (0,0,0) in km pos north
+#    (float)    orig_grid_z : z location of grid origin (0,0,0) in km pos down
+#    (float)   d_grid_x/y/x : grid spacing along  x/y/z axis
+#    (char[])  type : (PROB_DENSITY, MISFIT)
+#    (char[])  save_flag : (SAVE, NO_SAVE)
+# For Grid search, first grid is used for initial search.  Subsequent grids are
+# shifted in x/y/z so that they are centered on the minimum misfit hypocenter
+# x/y/z of the previous grid if x/y/z < -1.0e20.
+#
+# no zLim 
+LOCGRID  201 201 81  -50.0 -50.0 -5.0  0.5 0.5 0.5  PROB_DENSITY SAVE
+LOCSEARCH OCT 20 20 8 0.001 50000 1000 0 0
+
+
+# method
+# (LOCMETH method)
+#    (char[])   method (GAU_ANALYTIC)
+#    (float)   maximum_dist_sta_to_grid
+#    (int)   minimum_number_phases for location
+#    (int)   maximum_number_phases for location (-1 for no max)
+#    (int)   minimum_number_S_phases for location (-1 for no min)
+#    (float)   Vp/Vs ratio (< 0.0 to use S travel time grids)
+#    (int)   maximum_number_3D_grids to attempt to read into memory (-1 for no max)
+#    (float)  DistStaGridMin
+#    (int)   iRejectDuplicateArrivals (0=No, 1=YES)
+#
+LOCMETH EDT_OT_WT 9999.0 2 -1 -1 1.78 -1 -1 0
+
+# fixed origin time
+# (LOCFIXOTIME year month day hour min sec)
+#    (int)   year month day hour min
+#    (float)   sec
+#LOCFIXOTIME 1995 04 21 08 02 57.09
+
+# gaussian model error parameters
+# (LOCGAU Sigma_T (s), CorrLen (km))
+#AJL#LOCGAU 0.25 10.0
+#LOCGAU 0.25 0.0
+LOCGAU 0.05 0.0
+
+# travel-time dependent gaussian model error parameters
+# (LOCGAU2 SigmaTfraction,  SigmaTmin (s),  SigmaTmax (s))
+# travel time error is travel_time*SigmaTfraction, with max/min value = SigmaTmin/SigmaTmax
+# 20130521 Lomax / Cros  ???
+#LOCGAU2 0.05 0.05 2.0
+# 20130625 AJL
+LOCGAU2 0.02 0.02 1.0
+
+# station distribution weighting parameters
+# (LOCSTAWT Flag(1=yes), CutoffLength (km,-1.0=auto))
+LOCSTAWT 0 1.0
+
+
+# phase identifier mapping
+# (LOCPHASEID phase  phase_id0 phase_id1 ...)
+#
+# examples for P and S
+#
+LOCPHASEID  P   P Pg Pn
+LOCPHASEID  S   S Sg Sn
+#ToIgnoreS#LOCPHASEID  $   S Sg Sn
+
+# quality to error mapping (for HYPO71, etc)
+# (LOCQUAL2ERR Err0 Err1 Err2 ... )
+#
+# the following quality mapping is default from Hypoellipse documentation
+LOCQUAL2ERR 0.1 0.4 1.0 99999.9 99999.9
+
+
+# fixed origin time
+# (LOCFIXOTIME year month day hour min sec)
+#    (int)   year month day hour min
+#    (float)   sec
+#LOCFIXOTIME 1995 04 21 08 02 57.09
+
+# phase statistics parameters
+# (LOCPHSTAT RMS_Max, NRdgs_Min, Gap_Max, P_ResMax, S_ResMax, Ell_Len3_Max, Hypo_Depth_min, Hypo_Depth_max, Hypo_Dist_Max)
+#    (float)   RMS_Max : max hypocenter RMS to include in ave res
+#    (float)   NRdgs_Min : min hypocenter num readings to include in ave res
+#    (float)   Gap_Max : max hypocenter gap (deg) to include in ave res
+#    (float)   P_ResMax : max abs(P res) to include in ave res
+#    (float)   S_ResMax : max abs(S res) to include in ave res
+#
+LOCPHSTAT 0.35 12 135.0 1.0 1.0 5.0
+
+# take-off angles mode & minimum quality
+# (LOCANGLES angles_mode, min_quality)
+#    (char[])   angles_mode (ANGLES_YES, ANGLES_NO)
+#    (integer)   min_quality : minimum quality to use take-off angles
+LOCANGLES ANGLES_YES 5
+
+
+# magnitude calculation method
+# (LOCMAG magnitude_type <params>)
+#    (char[])   magnitude_type (ML_HB (ML, Hutton Boore))
+#    <params>:
+# ML_HB  amp_fact n K
+#LOCMAG ML_HB 1.0 1.110 0.00189
+
+# station/inst/comp parameters (for specifying component specific parameters, i.e. constants for magnitude calculation)
+# (LOCCMP name inst comp amp_fact sta_corr)
+#    (char[])   name  : station identifier (after alias evaluation, without trailing underscore "_")
+#    (char[])   name  : inst identifier (use '?' for don't care)
+#    (char[])   name  : comp identifier (use '?' for don't care)
+#    (float)    amp_fact: amplitude factor, will be multiplied by amplitude
+#    (float)    sta_corr: mganitude correction
+#
+# example:
+#
+#LOCCMP CDR ? ? 1.0 0.0
+#
+
+# station name alias (for aliasing sta names, for date validation and for
+#    phase time delays)
+# (LOCALIAS name alias year mo day year mo day)
+#    (char[])   name  : station identifier on input
+#    (char[])   alias : station identifier for travel time grid on output
+#                    NOTE: a trailing underscore "_" in aliases will only be
+#                          used for time grid identification, not for output
+#    (ints)    year mo day : start date of validity (0 0 0 = no start date)
+#    (ints)    year mo day : end date of validity  (9999 99 99 = no end date)
+#
+#   Note:
+#       Alias evaluation is applied recursively, beware of infinite recursion!
+#  P and S delays from last alias only are used!
+#
+# example:
+#
+#LOCALIAS ART ART_ 1996 05 29 1996 09 18   0.03  0.08
+#
+
+# phase exclude
+# (LOCEXCLUDE name phase)
+#    (char[])   name  : station identifier after any alias
+#    (char[])   phase : phase identifier on input
+#LOCEXCLUDE NEGI S
+
+# time delays
+# (LOCDELAY name phase n_readings p_delay s_delay)
+#    (char[])   name  : station identifier on control file statements
+#    (char[])   phase : phase identifier
+#    (int)  n_readings : number of residuals used to calc delay
+#    (float)     delay : delay in seconds, subtracted from obs time
+#  station identifiers are evaluated after aliases has been evaluated!
+#
+# example:
+#
+#LOCDELAY NEGI P  1  0.04
+#
+# time corrections
+#LOCDELAY NEGI P  1  0.04
+#LOCDELAY NEGI S  1  0.04
+
+#INCLUDE obs/Picks_P0_sm_bdsn_cit.sum.grid0.loc.stat_totcorr
+
+#
+#
+# =============================================================================
+# END of NLLoc control file statements
+# =============================================================================
+# =============================================================================
