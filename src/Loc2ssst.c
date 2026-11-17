@@ -153,7 +153,7 @@ int main(int argc, char** argv) {
     // initializations before reading input
     Params.char_dist = LARGE_FLOAT;
     Params.weight_floor = 0.0;
-    strcpy(Params.stations, "");
+    snprintf(Params.stations, sizeof(Params.stations), "%s", "");
     Params.use_rejected = 0;
 
     PhsStat.RMSMax = 1.0e6;
@@ -221,7 +221,7 @@ int get_ls_phstat(char* line1) {
     int istat = sscanf(line1, "%lf %d %lf %lf %lf %lf %lf %lf",
             &PhsStat.RMSMax, &PhsStat.NRdgsMin, &PhsStat.GapMax, &PhsStat.PResidualMax, &PhsStat.SResidualMax, &PhsStat.EllLen3Max, &PhsStat.DepthMin, &PhsStat.DepthMax);
 
-    sprintf(MsgStr,
+    snprintf(MsgStr, sizeof(MsgStr),
             "LSPHSTAT:  RMSMax: %f  NRdgsMin: %d  GapMax: %.3g  PResidualMax: %.3g SResidualMax: %.3g EllLen3Max %.3g DepthMin %.3g DepthMax %.3g",
             PhsStat.RMSMax, PhsStat.NRdgsMin, PhsStat.GapMax, PhsStat.PResidualMax, PhsStat.SResidualMax, PhsStat.EllLen3Max, PhsStat.DepthMin, PhsStat.DepthMax);
     nll_putmsg(1, MsgStr);
@@ -245,7 +245,7 @@ int get_ls_params(char* line1) {
         nll_puterr(MsgStr);
     }
 
-    sprintf(MsgStr,
+    snprintf(MsgStr, sizeof(MsgStr),
             "LSPARAMS:  CharDist: %f  WeightFloor:%f  UseRejected:%d",
             Params.char_dist, Params.weight_floor, Params.use_rejected);
     nll_putmsg(1, MsgStr);
@@ -263,7 +263,7 @@ int get_ls_stations(char* line1) {
 
     int istat = sscanf(line1, "%s", Params.stations);
 
-    sprintf(MsgStr, "LSSTATIONS:  %s", Params.stations);
+    snprintf(MsgStr, sizeof(MsgStr), "LSSTATIONS:  %s", Params.stations);
     nll_putmsg(1, MsgStr);
 
     if (istat < 1)
@@ -282,7 +282,7 @@ int get_ls_mode(char* line1) {
 
     sscanf(line1, "%s", str_angle_mode);
 
-    sprintf(MsgStr, "LSMODE:  %s", str_angle_mode);
+    snprintf(MsgStr, sizeof(MsgStr), "LSMODE:  %s", str_angle_mode);
     nll_putmsg(1, MsgStr);
 
     if (strcmp(str_angle_mode, "ANGLES_YES") == 0)
@@ -317,7 +317,7 @@ int GetNLLoc_Files(char* line1) {
     if (istat < 2)
         iSwapBytesOnInput = 0;
 
-    sprintf(MsgStr, "LOCFILES:  InputTimeGrids: %s.* iSwapBytesOnInput: %d", fn_time_input, iSwapBytesOnInput);
+    snprintf(MsgStr, sizeof(MsgStr), "LOCFILES:  InputTimeGrids: %s.* iSwapBytesOnInput: %d", fn_time_input, iSwapBytesOnInput);
     nll_putmsg(1, MsgStr);
 
     return (0);
@@ -337,7 +337,7 @@ int GetNLLoc_Method(char* line1) {
     //        &VpVsRatio, &MaxNum3DGridMemory, &DistStaGridMin, &iRejectDuplicateArrivals);
     sscanf(line1, "%*s %*f %*d %*d %*d %lf", &VpVsRatio);
 
-    sprintf(MsgStr, "LOCMETHOD:  VpVsRatio: %lf", VpVsRatio);
+    snprintf(MsgStr, sizeof(MsgStr), "LOCMETHOD:  VpVsRatio: %lf", VpVsRatio);
     nll_putmsg(1, MsgStr);
 
     // 20200203 AJL - not sure if this is correct, may be OK?  TODO:
@@ -744,9 +744,9 @@ int DoLoc2ssst() {
                     printf("DEBUG: PB07 %s found in arrival list res=%f hyp=%s\n", Arrival[i].phase, Arrival[i].residual, fn_hyp_in_list[nFile]);
                 }
                  */
-                strcpy(arrival_phase, Arrival[i].phase);
+                snprintf(arrival_phase, sizeof(arrival_phase), "%s", Arrival[i].phase);
                 EvalPhaseID(Arrival[i].phase, sizeof(Arrival[i].phase), arrival_phase);
-                strcpy(Arrival[i].time_grid_label, Arrival[i].label);
+                snprintf(Arrival[i].time_grid_label, sizeof(Arrival[i].time_grid_label), "%s", Arrival[i].label);
                 // update swap bytes
                 Arrival[i].gdesc.iSwapBytes = iSwapBytesOnInput;
             }
@@ -826,11 +826,11 @@ int DoLoc2ssst() {
 
         // initialize ssst grid for this station/phase
         station_phase = StationPhaseList + n;
-        strcpy(stacode, station_phase->label);
+        snprintf(stacode, sizeof(stacode), "%s", station_phase->label);
         *strchr(stacode, '#') = '\0';
-        strcpy(phasecode, strchr(station_phase->label, '#') + 1);
+        snprintf(phasecode, sizeof(phasecode), "%s", strchr(station_phase->label, '#') + 1);
         // rename to station code only
-        strcpy(station_phase->label, stacode);
+        snprintf(station_phase->label, sizeof(station_phase->label), "%s", stacode);
         if (0) {
             // DEBUG
             if (strcmp(stacode, "PRSN") != 0 || strcmp(phasecode, "P") != 0) {
@@ -938,8 +938,8 @@ int DoLoc2ssst() {
 
         // write ssst correction grid to disk
         char filename[2 * MAXLINE_LONG];
-        sprintf(filename, "%s.%s.%s", fn_ls_output, phasecode, stacode);
-        sprintf(MsgStr, "Finished calculation, SSST grid output files: %s.*", filename);
+        snprintf(filename, sizeof(filename), "%s.%s.%s", fn_ls_output, phasecode, stacode);
+        snprintf(MsgStr, sizeof(MsgStr), "Finished calculation, SSST grid output files: %s.*", filename);
         nll_putmsg(1, MsgStr);
         istat = WriteGrid3dBuf(pssst_grid, station_phase, filename, "ssst");
         if (istat < 0) {
@@ -949,7 +949,7 @@ int DoLoc2ssst() {
         // save station coordinates to file
         char fn_stations[3 * FILENAME_MAX];
         FILE* fp_stations;
-        sprintf(fn_stations, "%s.ssst.stations", filename);
+        snprintf(fn_stations, sizeof(fn_stations), "%s.ssst.stations", filename);
         if ((fp_stations = fopen(fn_stations, "w")) != NULL) {
             fprintf(fp_stations, "%s_%s %f %f %f", stacode, phasecode, station_phase->x, station_phase->y, station_phase->z);
             fclose(fp_stations);
@@ -978,12 +978,12 @@ int DoLoc2ssst() {
             // reset ssst grid type to TIME
             add_ssst_to_traveltime_grid(phasecode, stacode, pssst_grid, &(parr_tmp->gdesc), pssst_time_grid, station_phase, tfact);
             //sprintf(filename, "%s_ssst_corr.%s.%s", fn_ls_output, phasecode, stacode); // 20201010 AJL - bug fix: adding _ssst_corr to file root makes file management difficult
-            sprintf(filename, "%s.%s.%s", fn_ls_output, phasecode, stacode);
+            snprintf(filename, sizeof(filename), "%s.%s.%s", fn_ls_output, phasecode, stacode);
             // remove existing files since may be links  // 20201010 AJL - added
             char fname_remove[3 * MAXLINE_LONG];
-            sprintf(fname_remove, "%s.%s.hdr", filename, "time");
+            snprintf(fname_remove, sizeof(fname_remove), "%s.%s.hdr", filename, "time");
             remove(fname_remove);
-            sprintf(fname_remove, "%s.%s.buf", filename, "time");
+            snprintf(fname_remove, sizeof(fname_remove), "%s.%s.buf", filename, "time");
             remove(fname_remove);
             istat = WriteGrid3dBuf(pssst_time_grid, station_phase, filename, "time");
             if (istat < 0) {
@@ -1039,10 +1039,10 @@ int DoLoc2ssst() {
             cpt_increment = 2.0;
         }
         char system_str[MAXLINE_LONG];
-        sprintf(system_str, GMT_COMMAND_PREFIX"makecpt -Z -Cred2green -T-%f/%f/%f > Grid2GMT_SSST.cpt", cpt_start_stop, cpt_start_stop, cpt_increment);
+        snprintf(system_str, sizeof(system_str), GMT_COMMAND_PREFIX"makecpt -Z -Cred2green -T-%f/%f/%f > Grid2GMT_SSST.cpt", cpt_start_stop, cpt_start_stop, cpt_increment);
         if (system(system_str) != 0)
             fprintf(stderr, "WARNING: command returned non-zero status: %s\n", system_str);
-        sprintf(MsgStr, "Grid2GMT cpt file written to: %s", "Grid2GMT_SSST.cpt");
+        snprintf(MsgStr, sizeof(MsgStr), "Grid2GMT cpt file written to: %s", "Grid2GMT_SSST.cpt");
         nll_putmsg(1, MsgStr);
 
         // clean up
@@ -1137,8 +1137,8 @@ int open_traveltime_grid(ArrivalDesc* parr, char *fn_time_grid_input, char *stac
 
     // try to open time grid file using original phase ID
     //sprintf(parr->fileroot, "%s.%s.%s", fn_time_grid_input, phasecode, parr->time_grid_label);
-    sprintf(parr->fileroot, "%s.%s.%s", fn_time_grid_input, phasecode, stacode);
-    sprintf(filename, "%s.time", parr->fileroot);
+    snprintf(parr->fileroot, sizeof(parr->fileroot), "%s.%s.%s", fn_time_grid_input, phasecode, stacode);
+    snprintf(filename, sizeof(filename), "%s.time", parr->fileroot);
     if (DEBUG) {
         printf("DEBUG: parr->fileroot <%s>\n", parr->fileroot);
         printf("DEBUG: filename <%s>\n", filename);
@@ -1160,7 +1160,7 @@ int open_traveltime_grid(ArrivalDesc* parr, char *fn_time_grid_input, char *stac
         // try to open time grid file using LOCPHASEID mapped phase ID
         EvalPhaseID(eval_phase, arrival_phase);
         sprintf(parr->fileroot, "%s.%s.%s", fn_grids, eval_phase, parr->time_grid_label);
-        sprintf(filename, "%s.time", parr->fileroot);
+        snprintf(filename, sizeof(filename), "%s.time", parr->fileroot);
         // try opening time grid file for this phase
         istat = OpenGrid3dFile(filename,
                 &(parr->fpgrid),
@@ -1173,8 +1173,8 @@ int open_traveltime_grid(ArrivalDesc* parr, char *fn_time_grid_input, char *stac
     /* try opening P time grid file for S if no P companion phase */
     if (istat < 0 && vp_vs_ratio > 0.0 && IsPhaseID(phasecode, "S")) {
         *ptfact = vp_vs_ratio;
-        sprintf(parr->fileroot, "%s.%s.%s", fn_time_grid_input, "P", stacode);
-        sprintf(filename, "%s.time", parr->fileroot);
+        snprintf(parr->fileroot, sizeof(parr->fileroot), "%s.%s.%s", fn_time_grid_input, "P", stacode);
+        snprintf(filename, sizeof(filename), "%s.time", parr->fileroot);
         if (DEBUG && istat < 0) {
             nll_puterr2("INFO: Opening existing time grid: ", filename);
         }
@@ -1188,7 +1188,7 @@ int open_traveltime_grid(ArrivalDesc* parr, char *fn_time_grid_input, char *stac
             nll_puterr2("WARNING: Cannot open existing time grid: ", filename);
         }
         if (message_flag >= 3) {
-            sprintf(MsgStr,
+            snprintf(MsgStr, sizeof(MsgStr),
                     "INFO: S phase: using P phase travel time grid file: %s", filename);
             nll_putmsg(3, MsgStr);
         }
@@ -1207,7 +1207,7 @@ int open_traveltime_grid(ArrivalDesc* parr, char *fn_time_grid_input, char *stac
             iSwapBytes = 1;
             //
 #endif
-            sprintf(filename, "%s.%s.%s.time", fn_time_grid_input, phasecode, "DEFAULT");
+            snprintf(filename, sizeof(filename), "%s.%s.%s.time", fn_time_grid_input, phasecode, "DEFAULT");
             if (DEBUG && istat < 0) {
                 nll_puterr2("INFO: Opening existing time grid: ", filename);
             }
@@ -1221,7 +1221,7 @@ int open_traveltime_grid(ArrivalDesc* parr, char *fn_time_grid_input, char *stac
                 nll_puterr2("WARNING: Cannot open existing time grid: ", filename);
             }
             if (istat >= 0 && message_flag >= 3) {
-                sprintf(MsgStr,
+                snprintf(MsgStr, sizeof(MsgStr),
                         "INFO: using DEFAULT travel time grid file: %s", filename);
                 nll_putmsg(3, MsgStr);
             }
@@ -1370,7 +1370,7 @@ int GenAngleGrid(GridDesc* ptgrid, SourceDesc* psource, char *filename, GridDesc
 
     /* save angle grid to disk */
 
-    sprintf(MsgStr,
+    snprintf(MsgStr, sizeof(MsgStr),
             "Finished calculation, take-off angles grid output files: %s.*",
             filename);
     nll_putmsg(1, MsgStr);
