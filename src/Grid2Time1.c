@@ -372,7 +372,7 @@ int main(int argc, char *argv[]) {
     // save copy of model file in time output directory
     char fn_test[MAXLINE_LONG];
     snprintf(fn_test, sizeof(fn_test), "%s", fn_gt_output);
-    strcat(fn_test, ".mod.buf");
+    strncat(fn_test, ".mod.buf", sizeof(fn_test) - strlen(fn_test) - 1);
     if (access(fn_test, F_OK) == -1) {
         // file doesn't exist
         snprintf(MsgStr, sizeof(MsgStr), "INFO: Saving model file to out directory: %s", fn_test);
@@ -1322,8 +1322,10 @@ int get_gt_files(char* line1) {
     if (istat < 4)
         iSwapBytesOnInput = 0;
 
-    strcat(strcat(fn_gt_input, "."), waveType);
-    strcat(strcat(fn_gt_output, "."), waveType);
+    strncat(fn_gt_input, ".", sizeof(fn_gt_input) - strlen(fn_gt_input) - 1);
+    strncat(fn_gt_input, waveType, sizeof(fn_gt_input) - strlen(fn_gt_input) - 1);
+    strncat(fn_gt_output, ".", sizeof(fn_gt_output) - strlen(fn_gt_output) - 1);
+    strncat(fn_gt_output, waveType, sizeof(fn_gt_output) - strlen(fn_gt_output) - 1);
 
     snprintf(MsgStr, sizeof(MsgStr),
             "Grid2Time GTFILES:  Input: %s.*  Output: %s.*  wavetype: %s  iSwapBytesOnInput: %d",

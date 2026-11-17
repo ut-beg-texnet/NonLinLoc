@@ -490,8 +490,8 @@ int WritePhaseArrival(double arrival_time, int ipolarity,
         snprintf(parr->label, sizeof(parr->label), "%s", pevent->label);
 
     snprintf(parr->inst, sizeof(parr->inst), "%s", "?");
-    strcpy(parr->comp, "?"),
-            strcpy(parr->onset, "?"),
+    snprintf(parr->comp, sizeof(parr->comp), "%s", "?"),
+            snprintf(parr->onset, sizeof(parr->onset), "%s", "?"),
             snprintf(parr->phase, sizeof(parr->phase), "%s", psta->phs[0].label);
     if (ipolarity == 1)
         snprintf(parr->first_mot, sizeof(parr->first_mot), "%s", "U");

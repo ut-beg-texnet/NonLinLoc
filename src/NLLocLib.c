@@ -307,7 +307,7 @@ int Locate(int ngrid, char* fn_loc_obs, char* fn_root_out, int numArrivalsReject
 
 
     /* set output name */
-    sprintf(fnout, "%s.grid%d", fn_root_out, ngrid);
+    snprintf(fnout, sizeof(fnout), "%s.grid%d", fn_root_out, ngrid);
     snprintf(Hypocenter.fileroot, sizeof(Hypocenter.fileroot), "%s", fnout);
 
     /* initialize hypocenter fields */
@@ -1789,7 +1789,7 @@ int GetObservations(FILE* fp_obs, char* ftype_obs, char fn_ttgrids[MAX_NUM_TIME_
                 // try to open time grid file using original phase ID
                 snprintf(arrival[nobs].fileroot, sizeof(arrival[nobs].fileroot), "%s.%s.%s", fn_ttgrids[n_ttgrid],
                         arrival_phase, arrival[nobs].time_grid_label);
-                sprintf(filename, "%s.time", arrival[nobs].fileroot);
+                snprintf(filename, sizeof(filename), "%s.time", arrival[nobs].fileroot);
                 // try opening time grid file for this phase
                 istat = OpenGrid3dFile(filename,
                         &(arrival[nobs].fpgrid),
@@ -1803,7 +1803,7 @@ int GetObservations(FILE* fp_obs, char* ftype_obs, char fn_ttgrids[MAX_NUM_TIME_
                     EvalPhaseID(eval_phase, arrival_phase);
                     snprintf(arrival[nobs].fileroot, sizeof(arrival[nobs].fileroot), "%s.%s.%s", fn_ttgrids[n_ttgrid],
                             eval_phase, arrival[nobs].time_grid_label);
-                    sprintf(filename, "%s.time", arrival[nobs].fileroot);
+                    snprintf(filename, sizeof(filename), "%s.time", arrival[nobs].fileroot);
                     /* try opening time grid file for this phase */
                     istat = OpenGrid3dFile(filename,
                             &(arrival[nobs].fpgrid),
@@ -1818,7 +1818,7 @@ int GetObservations(FILE* fp_obs, char* ftype_obs, char fn_ttgrids[MAX_NUM_TIME_
                     arrival[nobs].tfact = VpVsRatio;
                     snprintf(arrival[nobs].fileroot, sizeof(arrival[nobs].fileroot), "%s.%s.%s", fn_ttgrids[n_ttgrid],
                             "P", arrival[nobs].time_grid_label);
-                    sprintf(filename, "%s.time", arrival[nobs].fileroot);
+                    snprintf(filename, sizeof(filename), "%s.time", arrival[nobs].fileroot);
                     istat = OpenGrid3dFile(filename,
                             &(arrival[nobs].fpgrid),
                             &(arrival[nobs].fphdr),
@@ -1856,7 +1856,7 @@ int GetObservations(FILE* fp_obs, char* ftype_obs, char fn_ttgrids[MAX_NUM_TIME_
                             else // try to open time grid file using LOCPHASEID mapped phase ID
                                 EvalPhaseID(eval_phase, arrival_phase);
                             snprintf(arrival[nobs].fileroot, sizeof(arrival[nobs].fileroot), "%s.%s.%s", fn_ttgrids[n_ttgrid], eval_phase, "DEFAULT");
-                            sprintf(filename, "%s.time", arrival[nobs].fileroot);
+                            snprintf(filename, sizeof(filename), "%s.time", arrival[nobs].fileroot);
 
                             //#define LOC2SSST_CLUGE
 #ifdef LOC2SSST_CLUGE
@@ -3314,8 +3314,8 @@ int GetNextObs(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, char* ftype_
                 if (clen_net > 0 && strcmp(ftype_obs, "HYPOINVERSE_Y2000_ARC_NET") == 0) {
                     snprintf(chrtmp, sizeof(chrtmp), "%s", arrival->label);
                     snprintf(arrival->label, sizeof(arrival->label), "%s", arrival->network);
-                    strcat(arrival->label, "_");
-                    strcat(arrival->label, chrtmp);
+                    strncat(arrival->label, "_", sizeof(arrival->label) - strlen(arrival->label) - 1);
+                    strncat(arrival->label, chrtmp, sizeof(arrival->label) - strlen(arrival->label) - 1);
                 }
                 istat += ReadFortranString(line, 9, 1, arrival->comp);
                 TrimString(arrival->comp);
@@ -3451,8 +3451,8 @@ int GetNextObs(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, char* ftype_
             if (clen_net > 0 && strcmp(ftype_obs, "HYPOINVERSE_Y2000_ARC_NET") == 0) {
                 snprintf(chrtmp, sizeof(chrtmp), "%s", arrival->label);
                 snprintf(arrival->label, sizeof(arrival->label), "%s", arrival->network);
-                strcat(arrival->label, "_");
-                strcat(arrival->label, chrtmp);
+                strncat(arrival->label, "_", sizeof(arrival->label) - strlen(arrival->label) - 1);
+                strncat(arrival->label, chrtmp, sizeof(arrival->label) - strlen(arrival->label) - 1);
             }
             istat += ReadFortranString(line, 9, 1, arrival->comp);
             TrimString(arrival->comp);
@@ -7869,7 +7869,7 @@ int SaveBestLocation(OctNode* poct_node, int num_arr_total, int num_arr_loc, Arr
             // temporarily open time grid file and read time for ignored arrivals
             // save station information (will be overwritten in OpenGrid3dFile()
             station = arrival[narr].station;
-            sprintf(filename, "%s.time", arrival[narr].fileroot);
+            snprintf(filename, sizeof(filename), "%s.time", arrival[narr].fileroot);
             // 20250215 AJL - Bug fix, check if need to open companion time grid file
             if (n_compan >= 0)
                 snprintf(filename, sizeof (filename), "%s.time", arrival[n_compan].fileroot);
@@ -11353,7 +11353,7 @@ int GetNLLoc_PdfGrid(char* line1, int prior_type) {
                         // include self if posterior
                         if (prior_type == PDF_GRID_POSTERIOR && file_coherence >= searchPdfGrid->coherence_min) {
                             snprintf(fn_pdf_grid[numPdfGridFiles], sizeof(fn_pdf_grid[numPdfGridFiles]), "%s", file_line);
-                            strcat(fn_pdf_grid[numPdfGridFiles], ".octree");
+                            strncat(fn_pdf_grid[numPdfGridFiles], ".octree", sizeof(fn_pdf_grid[numPdfGridFiles]) - strlen(fn_pdf_grid[numPdfGridFiles]) - 1);
                             coherence[numPdfGridFiles] = file_coherence;
                             numPdfGridFiles++;
                         }
@@ -11389,7 +11389,7 @@ int GetNLLoc_PdfGrid(char* line1, int prior_type) {
                             // check coherence min
                             if (coherence[numPdfGridFiles] >= searchPdfGrid->coherence_min) {
                                 snprintf(fn_pdf_grid[numPdfGridFiles], sizeof(fn_pdf_grid[numPdfGridFiles]), "%s", file_line);
-                                strcat(fn_pdf_grid[numPdfGridFiles], ".octree");
+                                strncat(fn_pdf_grid[numPdfGridFiles], ".octree", sizeof(fn_pdf_grid[numPdfGridFiles]) - strlen(fn_pdf_grid[numPdfGridFiles]) - 1);
                                 numPdfGridFiles++;
                                 if (numPdfGridFiles >= MAX_NUM_PDF_GRID_FILES) {
                                     snprintf(MsgStr, sizeof(MsgStr),
@@ -11690,8 +11690,8 @@ int GetNLLoc_HypOutTypes(char* line1) {
         } else
             return (-1);
 
-        strcat(MsgStr, hyp_type);
-        strcat(MsgStr, " ");
+        strncat(MsgStr, hyp_type, sizeof(MsgStr) - strlen(MsgStr) - 1);
+        strncat(MsgStr, " ", sizeof(MsgStr) - strlen(MsgStr) - 1);
 
     } while ((pchr = strchr(pchr + 1, ' ')) != NULL);
 
@@ -12271,7 +12271,7 @@ int GetTopoSurface(char* line1) {
     if (idump_decimation) {
 
         snprintf(dump_file, sizeof(dump_file), "%s", topo_surface->grd_file);
-        strcat(dump_file, ".bin");
+        strncat(dump_file, ".bin", sizeof(dump_file) - strlen(dump_file) - 1);
         dump_grd(topo_surface_index, idump_decimation, 1.0, 1.0, -0.001, dump_file);
         snprintf(MsgStr, sizeof(MsgStr), "LOCTOPO_SURFACE:  Grid dumped to: %s", dump_file);
         nll_putmsg(1, MsgStr);
@@ -15457,7 +15457,7 @@ int GenEventScatterOcttree(OcttreeParams* pParams, double oct_node_value_max, fl
 
     // update hypocenter searchInfo
     snprintf(scatter_volume_text, sizeof(scatter_volume_text), " scatter_volume %le", oct_tree_scatter_volume);
-    strcat(phypo->searchInfo, scatter_volume_text);
+    strncat(phypo->searchInfo, scatter_volume_text, sizeof(phypo->searchInfo) - strlen(phypo->searchInfo) - 1);
     // set values in hypo
     phypo->oct_tree_scatter_volume = oct_tree_scatter_volume;
 
