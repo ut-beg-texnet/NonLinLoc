@@ -745,7 +745,7 @@ int DoLoc2ssst() {
                 }
                  */
                 strcpy(arrival_phase, Arrival[i].phase);
-                EvalPhaseID(Arrival[i].phase, arrival_phase);
+                EvalPhaseID(Arrival[i].phase, sizeof(Arrival[i].phase), arrival_phase);
                 strcpy(Arrival[i].time_grid_label, Arrival[i].label);
                 // update swap bytes
                 Arrival[i].gdesc.iSwapBytes = iSwapBytesOnInput;

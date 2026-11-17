@@ -463,7 +463,7 @@ int NLLoc
 
             nll_putmsg(2, "");
             // AJL 20040720 SetOutName(Arrival + 0, fn_path_output, fn_root_out, fn_root_out_last, 1);
-            SetOutName(Arrival + 0, fn_path_output, fn_root_out, fn_root_out_last, iSaveDecSec, iSavePublicID, Hypocenter.public_id, &n_file_root_count);
+            SetOutName(Arrival + 0, fn_path_output, fn_root_out, sizeof(fn_root_out), fn_root_out_last, sizeof(fn_root_out_last), iSaveDecSec, iSavePublicID, Hypocenter.public_id, &n_file_root_count);
             //snprintf(fn_root_out_last, sizeof(fn_root_out_last), "%s", fn_root_out); /* save filename */
             snprintf(MsgStr, sizeof(MsgStr),
                     "... %d observations read, %d will be used for location (%s).",

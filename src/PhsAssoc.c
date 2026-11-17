@@ -344,7 +344,7 @@ int AssociatePhases(int argc, char** argv) {
                 // check if arrival phase is same as time grid phase
                 i_same_phase = 0;
                 if (strcmp(DEBUG_STATION, Arrival[nArr].label) == 0) {
-                    EvalPhaseID(eval_phase, arrival_phase_id);
+                    EvalPhaseID(eval_phase, sizeof(eval_phase), arrival_phase_id);
                     fprintf(stdout, "DEBUG: %s %s %s %s sec=%f time_grid_phase_id %s arrival_phase_id %s eval_phase %s ",
                             Arrival[nArr].label, Arrival[nArr].inst, Arrival[nArr].comp, prev_phase_id, Arrival[nArr].sec, time_grid_phase_id, arrival_phase_id, eval_phase);
                 }
@@ -355,7 +355,7 @@ int AssociatePhases(int argc, char** argv) {
                 } else {
                     // apply LOCPHASEID
                     // TODO: does nothing, because LOCPHASEID not available to PhsAssoc !
-                    /*EvalPhaseID(eval_phase, arrival_phase_id);
+                    /*EvalPhaseID(eval_phase, sizeof(eval_phase), arrival_phase_id);
                     if (strcmp(eval_phase, time_grid_phase_id) == 0) {
                         i_same_phase = 1;
                         if (strcmp(DEBUG_STATION, Arrival[nArr].label) == 0)
@@ -377,7 +377,7 @@ int AssociatePhases(int argc, char** argv) {
                     } else {
                         // apply LOCPHASEID
                         // TODO: does nothing, because LOCPHASEID not available to PhsAssoc !
-                        /*EvalPhaseID(eval_phase, arrival_phase_id);
+                        /*EvalPhaseID(eval_phase, sizeof(eval_phase), arrival_phase_id);
                         if (strcmp(eval_phase, original_arrival_phase_id) == 0) {
                             i_same_phase = 1;
                             if (strcmp(DEBUG_STATION, Arrival[nArr].label) == 0)

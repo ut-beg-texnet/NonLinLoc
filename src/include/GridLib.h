@@ -870,7 +870,7 @@ void Qual2Err(ArrivalDesc *);
 int Err2Qual(ArrivalDesc *);
 int GetQuality2Err(char*);
 int IsPhaseID(char *phase_in, char *phase_check);
-int EvalPhaseID(char *, char *);
+int EvalPhaseID(char *, size_t, char *);
 void removeSpace(char *str);
 
 /* strucutre utility functions */
@@ -972,8 +972,8 @@ int WriteStationList(FILE*, SourceDesc*, int);
 int GetPhaseID(char*);
 
 // 20230428 AJL - following function moved here from NLLocLib.h
-int SetOutName(ArrivalDesc *arrival, char* out_file_root, char* out_file,
-        char* lastfile, int isec, int ipublic_id, char* public_id, int *pncount);
+int SetOutName(ArrivalDesc *arrival, char* out_file_root, char* out_file, size_t out_file_size,
+        char* lastfile, size_t lastfile_size, int isec, int ipublic_id, char* public_id, int *pncount);
 
 
 /* */

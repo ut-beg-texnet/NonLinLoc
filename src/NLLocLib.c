@@ -1800,7 +1800,7 @@ int GetObservations(FILE* fp_obs, char* ftype_obs, char fn_ttgrids[MAX_NUM_TIME_
 
                 if (istat < 0) {
                     // try to open time grid file using LOCPHASEID mapped phase ID
-                    EvalPhaseID(eval_phase, arrival_phase);
+                    EvalPhaseID(eval_phase, sizeof(eval_phase), arrival_phase);
                     snprintf(arrival[nobs].fileroot, sizeof(arrival[nobs].fileroot), "%s.%s.%s", fn_ttgrids[n_ttgrid],
                             eval_phase, arrival[nobs].time_grid_label);
                     snprintf(filename, sizeof(filename), "%s.time", arrival[nobs].fileroot);
@@ -1854,7 +1854,7 @@ int GetObservations(FILE* fp_obs, char* ftype_obs, char fn_ttgrids[MAX_NUM_TIME_
                             if (n_phs_try == 1) // try to open time grid file using original phase ID
                                 snprintf(eval_phase, sizeof(eval_phase), "%s", arrival_phase);
                             else // try to open time grid file using LOCPHASEID mapped phase ID
-                                EvalPhaseID(eval_phase, arrival_phase);
+                                EvalPhaseID(eval_phase, sizeof(eval_phase), arrival_phase);
                             snprintf(arrival[nobs].fileroot, sizeof(arrival[nobs].fileroot), "%s.%s.%s", fn_ttgrids[n_ttgrid], eval_phase, "DEFAULT");
                             snprintf(filename, sizeof(filename), "%s.time", arrival[nobs].fileroot);
 
@@ -2544,7 +2544,7 @@ int ApplyTimeDelays(ArrivalDesc * arrival) {
 
     // SH 23.10.2007 do phase mapping before checking for time delays
     snprintf(arrival_phase, sizeof(arrival_phase), "%s", arrival->phase);
-    EvalPhaseID(eval_phase, arrival_phase);
+    EvalPhaseID(eval_phase, sizeof(eval_phase), arrival_phase);
 
     //*/
 
@@ -2888,7 +2888,7 @@ int GetNextObs(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, char* ftype_
         // 20200812 AJL - added
         if (strstr(ftype_obs, "_LOCPHASEID") != NULL) {
             //printf("DEBUG: arrival->phase %s", arrival->phase);
-            EvalPhaseID(eval_phase_tmp, arrival->phase);
+            EvalPhaseID(eval_phase_tmp, sizeof(eval_phase_tmp), arrival->phase);
             snprintf(arrival->phase, sizeof(arrival->phase), "%s", eval_phase_tmp);
             //printf(" -> arrival->phase %s\n", arrival->phase);
         }
@@ -5343,7 +5343,7 @@ KO.SVRC,2023-02-01T03:38:53.860000Z,2023-02-01T03:38:54.960000Z,1.10811060369646
         // convert phase name using LOCPHASEID if requested (homogenizes names for LOCDELAY accumulation)
         // 20190822 AJL - added
         if (strstr(ftype_obs, "_LOCPHASEID") != NULL) {
-            EvalPhaseID(eval_phase_tmp, arrival->phase);
+            EvalPhaseID(eval_phase_tmp, sizeof(eval_phase_tmp), arrival->phase);
             snprintf(arrival->phase, sizeof(arrival->phase), "%s", eval_phase_tmp);
         }
 

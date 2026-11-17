@@ -6113,19 +6113,19 @@ int IsPhaseID(char *phase_in, char *phase_check) {
 /** function to evaluate phase ID from phase ID lists */
 // 20161004 AJL - moved here from NLLocLib.c
 
-int EvalPhaseID(char *phase_out, char *phase_in) {
+int EvalPhaseID(char *phase_out, size_t phase_out_size, char *phase_in) {
     int npha_id;
 
     for (npha_id = 0; npha_id < NumPhaseID; npha_id++) {
         if (IsPhaseID(phase_in, PhaseID[npha_id].phase)) {
             if (phase_out != NULL)
-                strcpy(phase_out, PhaseID[npha_id].phase);
+                snprintf(phase_out, phase_out_size, "%s", PhaseID[npha_id].phase);
             return (1);
         }
     }
 
     if (phase_out != NULL)
-        strcpy(phase_out, phase_in);
+        snprintf(phase_out, phase_out_size, "%s", phase_in);
 
     return (0); // returned unchanged
 }
@@ -6974,8 +6974,8 @@ int GetPhaseID(char* line1) {
 
 /** function to set output file root name using arrival time or public_id */
 
-int SetOutName(ArrivalDesc *arrival, char* out_file_root, char* out_file,
-        char* lastfile, int isec, int ipublic_id, char* public_id, int *pncount) {
+int SetOutName(ArrivalDesc *arrival, char* out_file_root, char* out_file, size_t out_file_size,
+        char* lastfile, size_t lastfile_size, int isec, int ipublic_id, char* public_id, int *pncount) {
 
     char filename_ctr[10];
 
@@ -6989,15 +6989,15 @@ int SetOutName(ArrivalDesc *arrival, char* out_file_root, char* out_file,
             arrival->hour, arrival->min);  */
     /* SH 03/28/02 change to include digits of sec to construct filename */
     if (isec) {
-        sprintf(out_file, "%s.%4.4d%2.2d%2.2d.%2.2d%2.2d%05.2f",
+        snprintf(out_file, out_file_size, "%s.%4.4d%2.2d%2.2d.%2.2d%2.2d%05.2f",
                 out_file_root, arrival->year, arrival->month, arrival->day,
                 arrival->hour, arrival->min, arrival->sec);
     } else if (ipublic_id) {
-        sprintf(out_file, "%s.%4.4d%2.2d%2.2d.%2.2d%2.2d%2.2d_%s",
+        snprintf(out_file, out_file_size, "%s.%4.4d%2.2d%2.2d.%2.2d%2.2d%2.2d_%s",
                 out_file_root, arrival->year, arrival->month, arrival->day,
                 arrival->hour, arrival->min, (int) arrival->sec, public_id);
     } else {
-        sprintf(out_file, "%s.%4.4d%2.2d%2.2d.%2.2d%2.2d%2.2d",
+        snprintf(out_file, out_file_size, "%s.%4.4d%2.2d%2.2d.%2.2d%2.2d%2.2d",
                 out_file_root, arrival->year, arrival->month, arrival->day,
                 arrival->hour, arrival->min, (int) arrival->sec);
     }
@@ -7008,13 +7008,13 @@ int SetOutName(ArrivalDesc *arrival, char* out_file_root, char* out_file,
     //if (ncount++ > 0 || strcmp(out_file, lastfile) == 0) {
     // AJL 20060615 bug fix!  Following line added
     if (strcmp(out_file, lastfile) == 0) {
-        strcpy(lastfile, out_file); /* save filename */
+        snprintf(lastfile, lastfile_size, "%s", out_file); /* save filename */
         snprintf(filename_ctr, sizeof(filename_ctr), "_%3.3d", *pncount);
-        strcat(out_file, filename_ctr);
+        strncat(out_file, filename_ctr, out_file_size - strlen(out_file) - 1);
         (*pncount)++;
     } else {
 
-        strcpy(lastfile, out_file); /* save filename */
+        snprintf(lastfile, lastfile_size, "%s", out_file); /* save filename */
         *pncount = 1;
     }
     return (0);
