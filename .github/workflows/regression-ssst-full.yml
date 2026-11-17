@@ -1,0 +1,35 @@
+name: regression-ssst-full
+
+# Full iterative NLL-SSST regression test (Parkfield 2004): runs the complete
+# Source-Specific Station Term procedure and compares the final loc_ssst_corr4
+# locations against the frozen macOS reference within tolerance.
+#
+# This is SLOW (~20-40 min on a CI runner: 383 events x ~4 iterations) and
+# stochastic (run_ssst.bash shuffles station order), so it is NOT part of the
+# per-push gate in regression.yml. Trigger it manually from the Actions tab
+# ("Run workflow") to validate SSST-affecting changes without a local run.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  ssst-full:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends cmake build-essential
+
+      - name: Build
+        working-directory: src
+        run: |
+          mkdir -p bin
+          cmake .
+          make -j"$(nproc)"
+
+      - name: Full iterative NLL-SSST regression (Parkfield 2004)
+        run: tests/run_regression_ssst_full.sh

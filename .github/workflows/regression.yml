@@ -1,0 +1,53 @@
+name: regression
+
+# Build NonLinLoc and verify that the core location pipeline still reproduces
+# the frozen reference output. See tests/README.md.
+
+on:
+  push:
+    branches: [ "**" ]
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "nlloc_sample/**"
+      - "nlloc_sample_test_frozen_20260625/**"
+      - "nlloc_global_sample/**"
+      - "nlloc_ssst_sample/**"
+      - ".github/workflows/regression.yml"
+  pull_request:
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "nlloc_sample/**"
+      - "nlloc_sample_test_frozen_20260625/**"
+      - "nlloc_global_sample/**"
+      - "nlloc_ssst_sample/**"
+      - ".github/workflows/regression.yml"
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends cmake build-essential
+
+      - name: Build
+        working-directory: src
+        run: |
+          mkdir -p bin
+          cmake .
+          make -j"$(nproc)"
+
+      - name: Regression test (alaska / non-GLOBAL)
+        run: tests/run_regression.sh
+
+      - name: Regression test (neic / GLOBAL teleseismic)
+        run: tests/run_regression_global.sh
+
+      - name: Regression test (NLL-SSST Parkfield, tolerance)
+        run: tests/run_regression_ssst.sh

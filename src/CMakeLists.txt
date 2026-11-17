@@ -6,6 +6,12 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.15)
 
 PROJECT(NonLinLoc)
 set(CMAKE_BUILD_TYPE Release)
+
+# Compile as C11 with GNU extensions (-std=gnu11). GCC 15 and later default to
+# C23, where an old-style declaration such as "int getpar()" means "takes no
+# arguments", so sphfd_SWR_NLL.c no longer compiles.
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_EXTENSIONS ON)
 ###DEBUG#set(CMAKE_BUILD_TYPE Debug)
 
 # If you want to build the library in ${CMAKE_CURRENT_SOURCE_DIR}/lib
