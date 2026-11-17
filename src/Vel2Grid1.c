@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
 
 
 	/* set program name */
-	strcpy(prog_name, PNAME);
+	snprintf(prog_name, sizeof(prog_name), "%s", PNAME);
 
 	/* check command line for correct usage */
 
@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
 
 	/* read control file */
 
-	strcpy(fn_control, argv[1]);
+	snprintf(fn_control, sizeof(fn_control), "%s", argv[1]);
 	if ((fp_control = fopen(fn_control, "r")) == NULL) {
 		nll_puterr("ERROR: opening control file.");
 		exit(EXIT_ERROR_FILEIO);
@@ -146,8 +146,8 @@ int main(int argc, char *argv[])
 
 	for (nWaveType = 0; nWaveType < NumWaveTypes; nWaveType++) {
 
-		sprintf(fileRoot, "%s.mod", WaveType[nWaveType]);
-		sprintf(MsgStr, "Creating model grid files: %s.%s.*",
+		snprintf(fileRoot, sizeof(fileRoot), "%s.mod", WaveType[nWaveType]);
+		snprintf(MsgStr, sizeof(MsgStr), "Creating model grid files: %s.%s.*",
 			fn_vg_output, fileRoot);
 		nll_putmsg(1, MsgStr);
 
@@ -290,7 +290,7 @@ int ReadVel2GridInput(FILE* fp_input)
 		if (istat < 0) {
 			if ((pchr = strchr(line, '\n')) != NULL)
 				*pchr = '\0';
-			sprintf(MsgStr, "Skipping input: %s", line);
+			snprintf(MsgStr, sizeof(MsgStr), "Skipping input: %s", line);
 			nll_putmsg(4, MsgStr);
 		}
 
@@ -310,7 +310,7 @@ int ReadVel2GridInput(FILE* fp_input)
 		nll_puterr("ERROR: no grid (VGGRID) params read.");
 
 	if (!flag_trans) {
-		sprintf(MsgStr, "INFO: no transformation (TRANS) params read.");
+		snprintf(MsgStr, sizeof(MsgStr), "INFO: no transformation (TRANS) params read.");
 		nll_putmsg(1, MsgStr);
 		Hypocenter.comment[0] = '\0';
 	}
@@ -328,7 +328,7 @@ int get_vg_outfile(char* line1)
 
 	sscanf(line1, "%s", fn_vg_output);
 
-	sprintf(MsgStr, "Vel2Grid files:  Output: %s.*",
+	snprintf(MsgStr, sizeof(MsgStr), "Vel2Grid files:  Output: %s.*",
 		 fn_vg_output);
 	nll_putmsg(3, MsgStr);
 
@@ -352,7 +352,7 @@ int get_vg_type(char* line1)
 
 	sscanf(line1, " %s", WaveType[NumWaveTypes]);
 
-	sprintf(MsgStr, "Vel2Grid wave type:  %s", WaveType[NumWaveTypes]);
+	snprintf(MsgStr, sizeof(MsgStr), "Vel2Grid wave type:  %s", WaveType[NumWaveTypes]);
 	nll_putmsg(3, MsgStr);
 
 	NumWaveTypes++;

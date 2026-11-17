@@ -117,7 +117,7 @@ int NLLoc
 
 
     /* set program name */
-    strcpy(prog_name, PNAME);
+    snprintf(prog_name, sizeof(prog_name), "%s", PNAME);
 
 
     // DD
@@ -149,7 +149,7 @@ int NLLoc
     NumTimeDelaySurface = 0;
     topo_surface_index = -1;
     iRejectDuplicateArrivals = 1;
-    strcpy(fn_root_out_last, "");
+    snprintf(fn_root_out_last, sizeof(fn_root_out_last), "%s", "");
     ;
 
     // Search prior or posteriour PDF
@@ -211,7 +211,7 @@ int NLLoc
     /* open control file */
 
     if (fn_control_main != NULL) {
-        strcpy(fn_control, fn_control_main);
+        snprintf(fn_control, sizeof(fn_control), "%s", fn_control_main);
         if ((fp_control = fopen(fn_control, "r")) == NULL) {
             nll_puterr("FATAL ERROR: opening control file.");
             return_value = EXIT_ERROR_FILEIO;
@@ -244,13 +244,13 @@ int NLLoc
 #ifdef CUSTOM_ETH
     /* SH 02/27/2004
     added snap_pid   */
-    strcpy(snap_pid, pid_main);
+    snprintf(snap_pid, sizeof(snap_pid), "%s", pid_main);
     /* SH 02AUG2004 not needed any more
     // AJL 20040527 added snap param file
     if (argc > 3)
-    strcpy(snap_param_file, argv[3]);
+    snprintf(snap_param_file, sizeof(snap_param_file), "%s", argv[3]);
     else
-    strcpy(snap_param_file, "snap_param.txt");
+    snprintf(snap_param_file, sizeof(snap_param_file), "%s", "snap_param.txt");
      */
 #endif
 
@@ -300,12 +300,12 @@ int NLLoc
 
 
     // get path to output files
-    strcpy(f_outpath, fn_path_output);
+    snprintf(f_outpath, sizeof(f_outpath), "%s", fn_path_output);
     if ((ppath = strrchr(f_outpath, '/')) != NULL
             || (ppath = strrchr(f_outpath, '\\')) != NULL)
         *(ppath + 1) = '\0';
     else
-        strcpy(f_outpath, "");
+        snprintf(f_outpath, sizeof(f_outpath), "%s", "");
 
 
     // copy control file to output directory
@@ -313,22 +313,22 @@ int NLLoc
     if (!iSaveNone && fp_control != NULL) {
         chr = strrchr(fn_control, '/');
         if (chr != NULL)
-            strcpy(fname, chr + 1);
+            snprintf(fname, sizeof(fname), "%s", chr + 1);
         else
-            strcpy(fname, fn_control);
+            snprintf(fname, sizeof(fname), "%s", fn_control);
         /* Modified Jan Wiszniowski 2022-02-02
-        sprintf(sys_command, "cp -p %s %s_%s", fn_control, fn_path_output, fname);
+        snprintf(sys_command, sizeof(sys_command), "cp -p %s %s_%s", fn_control, fn_path_output, fname);
         system(sys_command);
          */
-        sprintf(targetfname, "%s_%s", fn_path_output, fname);
+        snprintf(targetfname, sizeof(targetfname), "%s_%s", fn_path_output, fname);
         copy_file(fn_control, targetfname);
         /**/
         //printf("sys_command: %s\n", sys_command);
         /* Modified Jan Wiszniowski 2022-02-02
-        sprintf(sys_command, "cp -p %s %slast.in", fn_control, f_outpath);
+        snprintf(sys_command, sizeof(sys_command), "cp -p %s %slast.in", fn_control, f_outpath);
         system(sys_command);
          */
-        sprintf(targetfname, "%slast.in", f_outpath);
+        snprintf(targetfname, sizeof(targetfname), "%slast.in", f_outpath);
         copy_file(fn_control, targetfname);
         /**/
         //printf("sys_command: %s\n", sys_command);
@@ -364,20 +364,20 @@ int NLLoc
         snprintf(fname, sizeof (fname), "%s.%s", fn_time_grids[0], "P.mod");
         if ((istat = OpenGrid3dFile(fname, &fp_model_grid_P, &fp_model_hdr_P,
                 &model_grid_P, " ", NULL, iSwapBytesOnInput)) < 0) {
-            sprintf(MsgStr, "WARNING: LocMethod == OT_STACK, but cannot open velocity model file %s.*", fname);
+            snprintf(MsgStr, sizeof(MsgStr), "WARNING: LocMethod == OT_STACK, but cannot open velocity model file %s.*", fname);
             nll_putmsg(1, MsgStr);
         } else {
-            sprintf(MsgStr, "INFO: LocMethod == OT_STACK, sucessfully opened velocity model file %s.*", fname);
+            snprintf(MsgStr, sizeof(MsgStr), "INFO: LocMethod == OT_STACK, sucessfully opened velocity model file %s.*", fname);
             nll_putmsg(1, MsgStr);
 
         }
         snprintf(fname, sizeof (fname), "%s.%s", fn_time_grids[0], "S.mod");
         if ((istat = OpenGrid3dFile(fname, &fp_model_grid_S, &fp_model_hdr_S,
                 &model_grid_S, " ", NULL, iSwapBytesOnInput)) < 0) {
-            sprintf(MsgStr, "WARNING: LocMethod == OT_STACK, but cannot open velocity model file %s.*", fname);
+            snprintf(MsgStr, sizeof(MsgStr), "WARNING: LocMethod == OT_STACK, but cannot open velocity model file %s.*", fname);
             nll_putmsg(1, MsgStr);
         } else {
-            sprintf(MsgStr, "INFO: LocMethod == OT_STACK, sucessfully opened velocity model file %s.*", fname);
+            snprintf(MsgStr, sizeof(MsgStr), "INFO: LocMethod == OT_STACK, sucessfully opened velocity model file %s.*", fname);
             nll_putmsg(1, MsgStr);
 
         }
@@ -423,7 +423,7 @@ int NLLoc
 
             if (NumArrivals != OBS_FILE_SKIP_INPUT_LINE) {
                 nll_putmsg(2, "");
-                sprintf(MsgStr,
+                snprintf(MsgStr, sizeof(MsgStr),
                         "Reading next set of observations (Files open: Tot:%d Buf:%d Hdr:%d  Alloc: %d) ...",
                         NumFilesOpen, NumGridBufFilesOpen, NumGridHdrFilesOpen, NumAllocations);
                 nll_putmsg(1, MsgStr);
@@ -434,7 +434,7 @@ int NLLoc
             Hypocenter.num_amp_mag = 0;
             Hypocenter.dur_mag = MAGNITUDE_NULL;
             Hypocenter.num_dur_mag = 0;
-            strcpy(Hypocenter.public_id, "None");
+            snprintf(Hypocenter.public_id, sizeof(Hypocenter.public_id), "%s", "None");
             Hypocenter.focMech.dipDir = 0.0;
             Hypocenter.focMech.dipAng = 0.0;
             Hypocenter.focMech.rake = 0.0;
@@ -464,8 +464,8 @@ int NLLoc
             nll_putmsg(2, "");
             // AJL 20040720 SetOutName(Arrival + 0, fn_path_output, fn_root_out, fn_root_out_last, 1);
             SetOutName(Arrival + 0, fn_path_output, fn_root_out, fn_root_out_last, iSaveDecSec, iSavePublicID, Hypocenter.public_id, &n_file_root_count);
-            //strcpy(fn_root_out_last, fn_root_out); /* save filename */
-            sprintf(MsgStr,
+            //snprintf(fn_root_out_last, sizeof(fn_root_out_last), "%s", fn_root_out); /* save filename */
+            snprintf(MsgStr, sizeof(MsgStr),
                     "... %d observations read, %d will be used for location (%s).",
                     NumArrivalsRead, NumArrivalsLocation, fn_root_out);
             nll_putmsg(1, MsgStr);
@@ -483,10 +483,10 @@ int NLLoc
             /* check for minimum number of arrivals */
 
             if (NumArrivalsLocation < MinNumArrLoc) {
-                sprintf(MsgStr,
+                snprintf(MsgStr, sizeof(MsgStr),
                         "WARNING: too few observations to locate (%d available, %d needed), skipping event.", NumArrivalsLocation, MinNumArrLoc);
                 nll_putmsg(1, MsgStr);
-                sprintf(MsgStr,
+                snprintf(MsgStr, sizeof(MsgStr),
                         "INFO: %d observations needed (specified in control file entry LOCMETH).",
                         MinNumArrLoc);
                 nll_putmsg(2, MsgStr);
@@ -497,10 +497,10 @@ int NLLoc
             /* check for minimum number of S arrivals */
 
             if (numSArrivalsLocation < MinNumSArrLoc) {
-                sprintf(MsgStr,
+                snprintf(MsgStr, sizeof(MsgStr),
                         "WARNING: too few S observations to locate (%d available, %d needed), skipping event.", numSArrivalsLocation, MinNumSArrLoc);
                 nll_putmsg(1, MsgStr);
-                sprintf(MsgStr,
+                snprintf(MsgStr, sizeof(MsgStr),
                         "INFO: %d S observations needed (specified in control file entry LOCMETH).",
                         MinNumSArrLoc);
                 nll_putmsg(2, MsgStr);
@@ -551,7 +551,7 @@ int NLLoc
 
             /* preform location for each grid */
 
-            sprintf(MsgStr,
+            snprintf(MsgStr, sizeof(MsgStr),
                     "Locating... (Files open: Tot:%d Buf:%d Hdr:%d  Alloc: %d  3DMem: used:%d/avail:%d/load:%d) ...",
                     NumFilesOpen, NumGridBufFilesOpen, NumGridHdrFilesOpen, NumAllocations, Num3DGridReadToMemory, GridMemListSize, GridMemListTotalNumElementsAdded);
             nll_putmsg(1, MsgStr);
@@ -611,8 +611,8 @@ cleanup:
 
             if (iLocated) {
                 nll_putmsg(1, "");
-                //20231114 AJL //sprintf(MsgStr, "Finished event location, output files: %s.* <%s.grid0.loc.hyp>", fn_root_out, fn_root_out);
-                sprintf(MsgStr, "Finished location: %s.grid0.loc.hyp", fn_root_out);
+                //20231114 AJL //snprintf(MsgStr, sizeof(MsgStr), "Finished event location, output files: %s.* <%s.grid0.loc.hyp>", fn_root_out, fn_root_out);
+                snprintf(MsgStr, sizeof(MsgStr), "Finished location: %s.grid0.loc.hyp", fn_root_out);
                 nll_putmsg(0, MsgStr);
             } else
                 nll_putmsg(0, "");
@@ -625,7 +625,7 @@ cleanup:
         } /* next event */
 
         nll_putmsg(2, "");
-        sprintf(MsgStr, "...end of observation file detected.");
+        snprintf(MsgStr, sizeof(MsgStr), "...end of observation file detected.");
         nll_putmsg(1, MsgStr);
 
         if ((n_obs_lines <= 0)) { // observations are read from file(s)
@@ -639,7 +639,7 @@ cleanup:
     } /* next observation file */
 
     nll_putmsg(2, "");
-    sprintf(MsgStr,
+    snprintf(MsgStr, sizeof(MsgStr),
             "No more observation files.  %d events read,  %d events located,  %d locations completed.",
             NumEvents, NumEventsLocated, NumLocationsCompleted);
     nll_putmsg(1, MsgStr);
@@ -650,7 +650,7 @@ cleanup:
     if (!iSaveNone) {
         for (ngrid = 0; ngrid < NumLocGrids; ngrid++) {
             if (LocGridSave[ngrid]) {
-                sprintf(fname, "%s.sum.grid%d.loc.stat", fn_path_output, ngrid);
+                snprintf(fname, sizeof(fname), "%s.sum.grid%d.loc.stat", fn_path_output, ngrid);
                 if ((fpio = fopen(fname, "w")) == NULL) {
                     nll_puterr2(
                             "ERROR: opening cumulative phase statistics output file", fname);
@@ -674,14 +674,14 @@ cleanup:
                 fclose(fpio);
                 // save to last
                 /* Modified Jan Wiszniowski 2022-02-02
-                sprintf(sys_command, "cp %s %slast.stat", fname, f_outpath);
+                snprintf(sys_command, sizeof(sys_command), "cp %s %slast.stat", fname, f_outpath);
                 system(sys_command);
                  */
-                sprintf(targetfname, "%slast.stat", f_outpath);
+                snprintf(targetfname, sizeof(targetfname), "%slast.stat", f_outpath);
                 copy_file(fname, targetfname);
                 /**/
                 // write delays only
-                sprintf(fname, "%s.sum.grid%d.loc.stat_totcorr", fn_path_output, ngrid);
+                snprintf(fname, sizeof(fname), "%s.sum.grid%d.loc.stat_totcorr", fn_path_output, ngrid);
                 if ((fpio = fopen(fname, "w")) == NULL) {
                     nll_puterr2(
                             "ERROR: opening total phase corrections output file", fname);
@@ -696,10 +696,10 @@ cleanup:
                 fclose(fpio);
                 // save to last
                 /* Modified Jan Wiszniowski 2022-02-02
-                sprintf(sys_command, "cp %s %slast.stat_totcorr", fname, f_outpath);
+                snprintf(sys_command, sizeof(sys_command), "cp %s %slast.stat_totcorr", fname, f_outpath);
                 system(sys_command);
                  */
-                sprintf(targetfname, "%slast.stat_totcorr", f_outpath);
+                snprintf(targetfname, sizeof(targetfname), "%slast.stat_totcorr", f_outpath);
                 copy_file(fname, targetfname);
                 /**/
             }
@@ -710,7 +710,7 @@ cleanup:
     if (!iSaveNone) {
         for (ngrid = 0; ngrid < NumLocGrids; ngrid++)
             if (LocGridSave[ngrid]) {
-                sprintf(fname, "%s.sum.grid%d.loc.stations", fn_path_output, ngrid);
+                snprintf(fname, sizeof(fname), "%s.sum.grid%d.loc.stations", fn_path_output, ngrid);
                 if ((fpio = fopen(fname, "w")) == NULL) {
                     nll_puterr2(
                             "ERROR: opening station list output file", fname);
@@ -723,10 +723,10 @@ cleanup:
                 fclose(fpio);
                 // save to last
                 /* Modified Jan Wiszniowski 2022-02-02
-                sprintf(sys_command, "cp %s %slast.stations", fname, f_outpath);
+                snprintf(sys_command, sizeof(sys_command), "cp %s %slast.stations", fname, f_outpath);
                 system(sys_command);
                  */
-                sprintf(targetfname, "%slast.stations", f_outpath);
+                snprintf(targetfname, sizeof(targetfname), "%slast.stations", f_outpath);
                 copy_file(fname, targetfname);
                 /**/
             }

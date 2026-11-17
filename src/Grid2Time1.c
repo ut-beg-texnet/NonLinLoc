@@ -236,7 +236,7 @@ int main(int argc, char *argv[]) {
 
 
     /* set program name */
-    strcpy(prog_name, PNAME);
+    snprintf(prog_name, sizeof(prog_name), "%s", PNAME);
 
     /* check command line for correct usage */
 
@@ -257,7 +257,7 @@ int main(int argc, char *argv[]) {
 
     /* read control file */
 
-    strcpy(fn_control, argv[1]);
+    snprintf(fn_control, sizeof(fn_control), "%s", argv[1]);
     if ((fp_control = fopen(fn_control, "r")) == NULL) {
         nll_puterr("ERROR: opening control file.");
         exit(EXIT_ERROR_FILEIO);
@@ -291,7 +291,7 @@ int main(int argc, char *argv[]) {
                 "ERROR: grid xNum must be 2 for gridMode GRID2D");
         exit(EXIT_ERROR_TTIME);
     } else if (grid_mode == GRID_TIME && mod_grid.numx <= 2) {
-        sprintf(MsgStr,
+        snprintf(MsgStr, sizeof(MsgStr),
                 "WARNING: grid xNum = %d is very small for gridMode GRID3D",
                 mod_grid.numx);
         nll_putmsg(1, MsgStr);
@@ -350,7 +350,7 @@ int main(int argc, char *argv[]) {
         izmax = mod_grid.numz - 1;
         izstep = izmax / 10;
         if (izstep < 1) izstep = 1;
-        sprintf(MsgStr, "Sample of Model Grid: X=%d  Y=0,%d,%d  Z=0,%d,%d",
+        snprintf(MsgStr, sizeof(MsgStr), "Sample of Model Grid: X=%d  Y=0,%d,%d  Z=0,%d,%d",
                 ix, iymax, iystep, izmax, izstep);
         nll_putmsg(2, MsgStr);
         if (message_flag >= 2) {
@@ -371,18 +371,18 @@ int main(int argc, char *argv[]) {
     // 20101005 AJL - added to allow retrieval of model velocity at a point (for NLL OT_STACK etc.)
     // save copy of model file in time output directory
     char fn_test[MAXLINE_LONG];
-    strcpy(fn_test, fn_gt_output);
+    snprintf(fn_test, sizeof(fn_test), "%s", fn_gt_output);
     strcat(fn_test, ".mod.buf");
     if (access(fn_test, F_OK) == -1) {
         // file doesn't exist
-        sprintf(MsgStr, "INFO: Saving model file to out directory: %s", fn_test);
+        snprintf(MsgStr, sizeof(MsgStr), "INFO: Saving model file to out directory: %s", fn_test);
         nll_putmsg(1, MsgStr);
         if ((istat = WriteGrid3dBuf(&mod_grid, NULL, fn_gt_output, "mod")) < 0) {
             nll_puterr2("ERROR: writing slowness grid to disk", fn_gt_output);
             exit(EXIT_ERROR_IO);
         }
     } else {
-        sprintf(MsgStr, "INFO: Model file already exists in out directory, will not overwrite: %s", fn_test);
+        snprintf(MsgStr, sizeof(MsgStr), "INFO: Model file already exists in out directory, will not overwrite: %s", fn_test);
         nll_putmsg(1, MsgStr);
     }
 
@@ -390,7 +390,7 @@ int main(int argc, char *argv[]) {
     /* generate travel time and take-off angle grids for each source */
 
     for (nsrce = 0; nsrce < NumSources; nsrce++) {
-        sprintf(MsgStr,
+        snprintf(MsgStr, sizeof(MsgStr),
                 "\nCalculating travel times for source: %s  X %.4lf  Y %.4lf  Z %.4lf (lat/lon/depth  %f  %f  %f) ...",
                 (Source + nsrce)->label, (Source + nsrce)->x,
                 (Source + nsrce)->y, (Source + nsrce)->z,
@@ -425,9 +425,9 @@ void InitTimeGrid(GridDesc* ptime_grid, GridDesc* pmod_grid) {
 
     /* set grid type */
     if (grid_mode == GRID_TIME_2D)
-        strcpy(chr_type, "TIME2D");
+        snprintf(chr_type, sizeof(chr_type), "%s", "TIME2D");
     else
-        strcpy(chr_type, "TIME");
+        snprintf(chr_type, sizeof(chr_type), "%s", "TIME");
 
 
 
@@ -498,7 +498,7 @@ int GenTimeGrid(GridDesc* pmgrid, SourceDesc* psource, int nsrce, GridDesc* ptt_
     if (!IsPointInsideGrid(pmgrid, xsource, ysource, zsource)) {
         nll_puterr(
                 "ERROR: Source point is not inside model grid.");
-        sprintf(MsgStr,
+        snprintf(MsgStr, sizeof(MsgStr),
                 "Source:  GridLoc: ix=%lf iy=%lf iz=%lf",
                 xsource_igrid, ysource_igrid, zsource_igrid);
         nll_putmsg(0, MsgStr);
@@ -522,7 +522,7 @@ int GenTimeGrid(GridDesc* pmgrid, SourceDesc* psource, int nsrce, GridDesc* ptt_
         vel_source = sqrt(1.0 / vel_source);
     else if (pmgrid->type == GRID_SLOW2_METERS)
         vel_source = sqrt(1.0 / vel_source) / 1000.0;
-    sprintf(MsgStr,
+    snprintf(MsgStr, sizeof(MsgStr),
             "Source:  Velocity: %lf km/sec  GridLoc: ix=%lf iy=%lf iz=%lf",
             vel_source, xsource_igrid, ysource_igrid, zsource_igrid);
     nll_putmsg(1, MsgStr);
@@ -707,11 +707,11 @@ int GenTimeGrid(GridDesc* pmgrid, SourceDesc* psource, int nsrce, GridDesc* ptt_
 
         // run mainFTeik3d_NLL.exe
         char system_str[MAXLINE_LONG];
-        sprintf(system_str, "mainFTeik3d_NLL.exe %s", fn_fteik3d_config);
-        sprintf(MsgStr, "Calling mainFTeik3d_NLL.exe [%s] ...", system_str);
+        snprintf(system_str, sizeof(system_str), "mainFTeik3d_NLL.exe %s", fn_fteik3d_config);
+        snprintf(MsgStr, sizeof(MsgStr), "Calling mainFTeik3d_NLL.exe [%s] ...", system_str);
         nll_putmsg(2, MsgStr);
         istat = system(system_str);
-        sprintf(MsgStr, "Return from mainFTeik3d_NLL.exe - return val is %d", istat);
+        snprintf(MsgStr, sizeof(MsgStr), "Return from mainFTeik3d_NLL.exe - return val is %d", istat);
         nll_putmsg(2, MsgStr);
 
         // read FTeik travel time grid
@@ -771,7 +771,7 @@ int GenTimeGrid(GridDesc* pmgrid, SourceDesc* psource, int nsrce, GridDesc* ptt_
         izmax = ptt_grid->numz - 1;
         izstep = izmax / 10;
         if (izstep < 1) izstep = 1;
-        sprintf(MsgStr, "Sample of Time Grid: X=%d  Y=0,%d,%d  Z=0,%d,%d",
+        snprintf(MsgStr, sizeof(MsgStr), "Sample of Time Grid: X=%d  Y=0,%d,%d  Z=0,%d,%d",
                 ix, iymax, iystep, izmax, izstep);
         nll_putmsg(2, MsgStr);
         if (message_flag >= 2) {
@@ -793,7 +793,7 @@ int GenTimeGrid(GridDesc* pmgrid, SourceDesc* psource, int nsrce, GridDesc* ptt_
 #define WRITE_ASCII_GRID 0
 #define USE_COORDS_LATLON 1
     if (WRITE_ASCII_GRID) {
-        sprintf(filename, "%s.%s.time.csv", fn_gt_output, psource->label);
+        snprintf(filename, sizeof(filename), "%s.%s.time.csv", fn_gt_output, psource->label);
         FILE *fp_ascii_grid = NULL;
         if ((fp_ascii_grid = fopen(filename, "w")) == NULL) {
             nll_puterr2("ERROR: opening ascii grid output file: %s", filename);
@@ -827,7 +827,7 @@ int GenTimeGrid(GridDesc* pmgrid, SourceDesc* psource, int nsrce, GridDesc* ptt_
                 xval += ptt_grid->dx;
             }
             fclose(fp_ascii_grid);
-            sprintf(MsgStr, "Ascii grid output written to file: %s", filename);
+            snprintf(MsgStr, sizeof(MsgStr), "Ascii grid output written to file: %s", filename);
             nll_putmsg(1, MsgStr);
         }
     }
@@ -836,7 +836,7 @@ int GenTimeGrid(GridDesc* pmgrid, SourceDesc* psource, int nsrce, GridDesc* ptt_
     /* save time grid to disk */
 
     snprintf(filename, sizeof (filename), "%s.%s", fn_gt_output, psource->label);
-    sprintf(MsgStr,
+    snprintf(MsgStr, sizeof(MsgStr),
             "Finished calculation, time grid output files: %s.*", filename);
     nll_putmsg(1, MsgStr);
     /* need only ix=0 sheet for 2D grids */
@@ -979,11 +979,11 @@ int RunGreen3d(GridDesc* pmgrid, SourceDesc* psource, GridDesc* ptt_grid,
 
     /* run green3d */
 
-    sprintf(system_str, "green3 < %s", fn_green_in);
-    sprintf(MsgStr, "Calling green3d [%s] ...", system_str);
+    snprintf(system_str, sizeof(system_str), "green3 < %s", fn_green_in);
+    snprintf(MsgStr, sizeof(MsgStr), "Calling green3d [%s] ...", system_str);
     nll_putmsg(2, MsgStr);
     istat = system(system_str);
-    sprintf(MsgStr, "Return from green3d - return val is %d", istat);
+    snprintf(MsgStr, sizeof(MsgStr), "Return from green3d - return val is %d", istat);
     nll_putmsg(2, MsgStr);
 
 
@@ -1078,7 +1078,7 @@ int GetNextLineSource(char* in_line) {
 
     istat = sscanf(in_line, "%s %[^\n]s", fn_gt_linesrce, gtsrce_text);
 
-    sprintf(MsgStr,
+    snprintf(MsgStr, sizeof(MsgStr),
             "Grid2Time GTLINESRCE:  LineFile: %s  Ref_GTSRCE: %s", fn_gt_linesrce, gtsrce_text);
     nll_putmsg(3, MsgStr);
 
@@ -1100,7 +1100,7 @@ int GetNextLineSource(char* in_line) {
     // check if duplicate
     if (FindSource(srce_in->label) != NULL) {
         if (message_flag >= 2) {
-            sprintf(MsgStr, "WARNING: duplicated source, ignoring source: %s", srce_in->label);
+            snprintf(MsgStr, sizeof(MsgStr), "WARNING: duplicated source, ignoring source: %s", srce_in->label);
             nll_putmsg(2, MsgStr);
             return (istat);
         }
@@ -1274,7 +1274,7 @@ int ReadGrid2TimeInput(FILE* fp_input) {
         if (istat < 0) {
             if ((pchr = strchr(line, '\n')) != NULL)
                 *pchr = '\0';
-            sprintf(MsgStr, "Skipping input: %s", line);
+            snprintf(MsgStr, sizeof(MsgStr), "Skipping input: %s", line);
             nll_putmsg(4, MsgStr);
         }
 
@@ -1325,7 +1325,7 @@ int get_gt_files(char* line1) {
     strcat(strcat(fn_gt_input, "."), waveType);
     strcat(strcat(fn_gt_output, "."), waveType);
 
-    sprintf(MsgStr,
+    snprintf(MsgStr, sizeof(MsgStr),
             "Grid2Time GTFILES:  Input: %s.*  Output: %s.*  wavetype: %s  iSwapBytesOnInput: %d",
             fn_gt_input, fn_gt_output, waveType, iSwapBytesOnInput);
     nll_putmsg(3, MsgStr);
@@ -1342,7 +1342,7 @@ int get_grid_mode(char* line1) {
 
     sscanf(line1, "%s %s", str_grid_mode, str_angle_mode);
 
-    sprintf(MsgStr, "Grid2Time GTMODE:  %s  %s",
+    snprintf(MsgStr, sizeof(MsgStr), "Grid2Time GTMODE:  %s  %s",
             str_grid_mode, str_angle_mode);
     nll_putmsg(3, MsgStr);
 
@@ -1379,7 +1379,7 @@ int get_gt_plfd(char* line1) {
 
     istat = sscanf(line1, "%lf %d", &plfd_hs_eps_init, &plfd_message);
 
-    sprintf(MsgStr, "Grid2Time GT_PLFD: hs_eps_init %f  message_flag %d",
+    snprintf(MsgStr, sizeof(MsgStr), "Grid2Time GT_PLFD: hs_eps_init %f  message_flag %d",
             plfd_hs_eps_init, plfd_message);
     nll_putmsg(3, MsgStr);
 
@@ -1390,7 +1390,7 @@ int get_gt_plfd(char* line1) {
         ierr = -1;
 
     tt_calc_meth = METHOD_PODLECFD;
-    sprintf(MsgStr,
+    snprintf(MsgStr, sizeof(MsgStr),
             "  (Method is Podvin-Lecompte Finite-Differences)");
     nll_putmsg(3, MsgStr);
 
@@ -1424,23 +1424,23 @@ int get_gt_wavefront(char* line1) {
                 "WARNING: number_parameter_maps invalid, reset to 3");
     }
 
-    sprintf(MsgStr,
+    snprintf(MsgStr, sizeof(MsgStr),
             "Grid2Time GT_WAVEFRONT_RAY: Max_number_stored_arrivals %d  Number_parameter_maps %d",
             wvfrnt_nir, wvfrnt_npr);
     nll_putmsg(3, MsgStr);
 
-    sprintf(MsgStr,
+    snprintf(MsgStr, sizeof(MsgStr),
             "  Initial_angular_aperture:  fi1min %f  fi2min %f  fi1max %f fi2max %lf",
             wvfrnt_fi1min, wvfrnt_fi2min, wvfrnt_fi1max, wvfrnt_fi2max);
     nll_putmsg(3, MsgStr);
-    sprintf(MsgStr,
+    snprintf(MsgStr, sizeof(MsgStr),
             "  Precision of ray field sampling:  dxmax**2 %f  dpmax**2 %f  Travel_time_step %f",
             wvfrnt_dxmin2, wvfrnt_dpmin2, wvfrnt_dtemps);
     nll_putmsg(3, MsgStr);
 
 
     tt_calc_meth = METHOD_WAVEFRONT_RAY;
-    sprintf(MsgStr,
+    snprintf(MsgStr, sizeof(MsgStr),
             "  (Method is wavefront ray tracing - green3d)");
     nll_putmsg(3, MsgStr);
 
@@ -1471,7 +1471,7 @@ int get_gt_fteik3d(char* line1) {
 
     istat = sscanf(line1, "%d %d %d", &fteik_eps, &fteik_nsweep, &fteik_message);
 
-    sprintf(MsgStr, "Grid2Time GT_FTEIK: fteik_eps %d  fteik_nsweep %d  message_flag %d",
+    snprintf(MsgStr, sizeof(MsgStr), "Grid2Time GT_FTEIK: fteik_eps %d  fteik_nsweep %d  message_flag %d",
             fteik_eps, fteik_nsweep, fteik_message);
     nll_putmsg(3, MsgStr);
 
@@ -1486,7 +1486,7 @@ int get_gt_fteik3d(char* line1) {
 
 
     tt_calc_meth = METHOD_FTEIK3D;
-    sprintf(MsgStr,
+    snprintf(MsgStr, sizeof(MsgStr),
             "  (Method is FTeik-Eikonal-Solver)");
     nll_putmsg(3, MsgStr);
 
@@ -1532,7 +1532,7 @@ int GenAngleGrid(GridDesc* ptgrid, SourceDesc* psource, GridDesc* pagrid, int an
     /* save angle grid to disk */
 
     snprintf(filename, sizeof (filename), "%s.%s", fn_gt_output, psource->label);
-    sprintf(MsgStr,
+    snprintf(MsgStr, sizeof(MsgStr),
             "Finished calculation, take-off angles grid output files: %s.*",
             filename);
     nll_putmsg(1, MsgStr);

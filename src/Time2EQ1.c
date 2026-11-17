@@ -131,7 +131,7 @@ int main(int argc, char *argv[]) {
 
 
     /* set program name */
-    strcpy(prog_name, PNAME);
+    snprintf(prog_name, sizeof(prog_name), "%s", PNAME);
 
     /* check command line for correct usage */
 
@@ -156,7 +156,7 @@ int main(int argc, char *argv[]) {
 
     /* read control file */
 
-    strcpy(fn_control, argv[1]);
+    snprintf(fn_control, sizeof(fn_control), "%s", argv[1]);
     if ((fp_control = fopen(fn_control, "r")) == NULL) {
         nll_puterr("ERROR: opening control file.");
         exit(EXIT_ERROR_FILEIO);
@@ -229,7 +229,7 @@ int main(int argc, char *argv[]) {
 
         Event = Source + nsource;
 
-        sprintf(MsgStr_srce,
+        snprintf(MsgStr_srce, sizeof(MsgStr_srce),
                 "Calculating travel time for Source: %s  X %.2lf  Y %.2lf  Z %.2lf  OT %.2lf",
                 Event->label, Event->x, Event->y, Event->z, Event->otime);
         if (time2eq_mode == MODE_STA_TO_SRCE)
@@ -237,7 +237,7 @@ int main(int argc, char *argv[]) {
         else
             nll_putmsg(2, MsgStr_srce);
 
-        sprintf(EventStr,
+        snprintf(EventStr, sizeof(EventStr),
                 "EQEVENT:  Label: %s  Loc:  X %.2lf  Y %.2lf  Z %.2lf  OT %.2lf",
                 Event->label, Event->x, Event->y, Event->z, Event->otime);
         fprintf(fp_eq_output, "# %s\n", EventStr);
@@ -294,14 +294,14 @@ int main(int argc, char *argv[]) {
                         (Station + nsta)->z);
             }
 
-            strcpy(last_label, (Station + nsta)->label);
-            strcpy(last_phs_label, (Station + nsta)->phs[0].label);
+            snprintf(last_label, sizeof(last_label), "%s", (Station + nsta)->label);
+            snprintf(last_phs_label, sizeof(last_phs_label), "%s", (Station + nsta)->phs[0].label);
             last_arrival_time = arrival_time;
 
             if (arrival_time < 0.0) {
                 nll_puterr(MsgStr_srce);
                 nll_puterr(MsgStr_sta);
-                sprintf(MsgStr,
+                snprintf(MsgStr, sizeof(MsgStr),
                         "ERROR: calculating travel time: t = %lf", arrival_time);
                 nll_puterr(MsgStr);
                 continue;
@@ -413,7 +413,7 @@ double AddNoise(double arrival_time, StationDesc* psta) {
     else
         nll_puterr2("ERROR: unrecognized error type:", psta->phs[0].error_type);
 
-    sprintf(MsgStr, "Station %s  Phase %s  Error Type %s  Error %f  ->  Noise %f + ArrivalTime %f = Sum %f", psta->label, psta->phs[0].label, psta->phs[0].error_type, error, noise, arrival_time, noise + arrival_time
+    snprintf(MsgStr, sizeof(MsgStr), "Station %s  Phase %s  Error Type %s  Error %f  ->  Noise %f + ArrivalTime %f = Sum %f", psta->label, psta->phs[0].label, psta->phs[0].error_type, error, noise, arrival_time, noise + arrival_time
             );
     nll_putmsg(2, MsgStr);
 
@@ -456,7 +456,7 @@ int CalcFirstMotion(char *filename, GridDesc* ptgrid, SourceDesc* pevent, Statio
         ipolarity = radamp < 0.0 ? -1 : 1;
     }
 
-    sprintf(MsgStr, "FM: Sta: %s  Pha: %s  ray_dip %.1lf  ray_azim %.1lf  radamp %.2le  ipol %d\n",
+    snprintf(MsgStr, sizeof(MsgStr), "FM: Sta: %s  Pha: %s  ray_dip %.1lf  ray_azim %.1lf  radamp %.2le  ipol %d\n",
             psta->label, psta->phs[0].label, ray_dip, ray_azim, radamp, ipolarity);
     nll_putmsg(2, MsgStr);
 
@@ -485,20 +485,20 @@ int WritePhaseArrival(double arrival_time, int ipolarity,
     /* determine label */
 
     if (time2eq_mode == MODE_SRCE_TO_STA)
-        strcpy(parr->label, psta->label);
+        snprintf(parr->label, sizeof(parr->label), "%s", psta->label);
     else if (time2eq_mode == MODE_STA_TO_SRCE)
-        strcpy(parr->label, pevent->label);
+        snprintf(parr->label, sizeof(parr->label), "%s", pevent->label);
 
-    strcpy(parr->inst, "?");
+    snprintf(parr->inst, sizeof(parr->inst), "%s", "?");
     strcpy(parr->comp, "?"),
             strcpy(parr->onset, "?"),
-            strcpy(parr->phase, psta->phs[0].label);
+            snprintf(parr->phase, sizeof(parr->phase), "%s", psta->phs[0].label);
     if (ipolarity == 1)
-        strcpy(parr->first_mot, "U");
+        snprintf(parr->first_mot, sizeof(parr->first_mot), "%s", "U");
     else if (ipolarity == -1)
-        strcpy(parr->first_mot, "D");
+        snprintf(parr->first_mot, sizeof(parr->first_mot), "%s", "D");
     else
-        strcpy(parr->first_mot, "?");
+        snprintf(parr->first_mot, sizeof(parr->first_mot), "%s", "?");
     parr->quality = -1;
     parr->year = 1900;
     parr->month = 01;
@@ -509,7 +509,7 @@ int WritePhaseArrival(double arrival_time, int ipolarity,
     parr->min = (int) (osec / 60.0);
     parr->sec = osec - 60.0 * (double) parr->min;
 
-    strcpy(parr->error_type, psta->phs[0].error_report_type);
+    snprintf(parr->error_type, sizeof(parr->error_type), "%s", psta->phs[0].error_report_type);
     parr->error = psta->phs[0].error_report;
     parr->coda_dur = 0.0;
     parr->amplitude = 0.0;
@@ -762,7 +762,7 @@ int ReadTime2EQ_Input(FILE* fp_input) {
         /* unrecognized input */
 
         if (istat < 0) {
-            sprintf(MsgStr, "Skipping input: %s", line);
+            snprintf(MsgStr, sizeof(MsgStr), "Skipping input: %s", line);
             nll_putmsg(4, MsgStr);
         }
 
@@ -776,9 +776,9 @@ int ReadTime2EQ_Input(FILE* fp_input) {
     if (!flag_trans)
         nll_puterr("INFO: no transformation (TRANS) params read.");
     if (!flag_mode) {
-        sprintf(MsgStr, "INFO: no mode (EQMODE) params read.");
+        snprintf(MsgStr, sizeof(MsgStr), "INFO: no mode (EQMODE) params read.");
         nll_putmsg(1, MsgStr);
-        sprintf(MsgStr, "INFO: DEFAULT: \"SRCE_TO_STA\"");
+        snprintf(MsgStr, sizeof(MsgStr), "INFO: DEFAULT: \"SRCE_TO_STA\"");
         nll_putmsg(1, MsgStr);
     }
     if (!flag_outfile)
@@ -806,7 +806,7 @@ int GetTime2EQ_Files(char* line1) {
 
     sscanf(line1, "%s %s", fn_eq_input, fn_eq_output);
 
-    sprintf(MsgStr, "Time2EQ FILES:  Input: %s.*  Output: %s",
+    snprintf(MsgStr, sizeof(MsgStr), "Time2EQ FILES:  Input: %s.*  Output: %s",
             fn_eq_input, fn_eq_output);
     nll_putmsg(2, MsgStr);
 
@@ -821,7 +821,7 @@ int GetTime2EQ_Mode(char* line1) {
 
     sscanf(line1, "%s", str_mode);
 
-    sprintf(MsgStr, "Time2EQ EQMODE:  %s", str_mode);
+    snprintf(MsgStr, sizeof(MsgStr), "Time2EQ EQMODE:  %s", str_mode);
     nll_putmsg(2, MsgStr);
 
     if (strcmp(str_mode, "SRCE_TO_STA") == 0)
@@ -857,7 +857,7 @@ int GetTime2EQ_Event(char* in_line) {
             Event->label, &(Event->x), &(Event->y), &(Event->z),
             &(Event->otime));
 
-    sprintf(EventStr,
+    snprintf(EventStr, sizeof(EventStr),
             "EQEVENT:  Label: %s  Loc:  X %.2lf  Y %.2lf  Z %.2lf  OT %.2lf",
             Event->label, Event->x, Event->y, Event->z, Event->otime);
     nll_putmsg(2, EventStr);
@@ -897,7 +897,7 @@ int GetTime2EQ_Stations(char* in_line) {
             sta_in->phs[0].error_report_type,
             &(sta_in->phs[0].error_report), &(sta_in->prob_active), &(sta_in->phs[0].prob_outlier), &(sta_in->phs[0].outlier_err_factor));
 
-    sprintf(MsgStr,
+    snprintf(MsgStr, sizeof(MsgStr),
             "STATION:  %d  Name: %s  Phase: %s  ErrorCalc: %s +/- %.2le  ErrorReport: %s +/- %.2le  ProbActive: %.2lf"
             "  ProbOutlier: %.2lf  OutlierErrorFactor: %.2lf",
             NumStationPhases - 1, sta_in->label, sta_in->phs[0].label,
@@ -943,18 +943,18 @@ int get_mech(char* line1) {
     if (strncmp(mech_type, "double", 6) == 0 ||
             strncmp(mech_type, "DOUBLE", 6) == 0) {
         imech = MECH_DOUBLE;
-        strcpy(mstr, "DC");
+        snprintf(mstr, sizeof(mstr), "%s", "DC");
     } else if (strncmp(mech_type, "iso", 3) == 0 ||
             strncmp(mech_type, "ISO", 3) == 0) {
         imech = MECH_ISOTROPIC;
-        strcpy(mstr, "Iso");
+        snprintf(mstr, sizeof(mstr), "%s", "Iso");
     } else if (strncmp(mech_type, "none", 4) == 0 ||
             strncmp(mech_type, "NONE", 4) == 0) {
         imech = MECH_NONE;
-        strcpy(mstr, "None");
+        snprintf(mstr, sizeof(mstr), "%s", "None");
     } else {
         imech = MECH_NONE;
-        strcpy(mstr, "None");
+        snprintf(mstr, sizeof(mstr), "%s", "None");
         nll_puterr2("ERROR: unrecognized mechanism:", mech_type);
         return (-1);
     }
@@ -975,7 +975,7 @@ int get_mech(char* line1) {
         return (-1);
 
 
-    sprintf(mech_str, "%s(s%.0fd%.0fr%.0f)", mstr, mech_phi, mech_del, mech_lam);
+    snprintf(mech_str, sizeof(mech_str), "%s(s%.0fd%.0fr%.0f)", mstr, mech_phi, mech_del, mech_lam);
 
     /* adjust azimuth  for projection azimuth */
     mech_phi = latlon2rectAngle(0, mech_phi);
@@ -1032,7 +1032,7 @@ double calc_rad(double ray_vert_ang, double ray_horiz_ang, char orig_wave) {
                 * sin(2.0 * (ray_horiz_ang - mech_phi))
                 ;
     } else {
-        sprintf(MsgStr,
+        snprintf(MsgStr, sizeof(MsgStr),
                 "WARNING: Mechanism: unrecognized original wave type: %c", orig_wave);
         nll_putmsg(2, MsgStr);
     }

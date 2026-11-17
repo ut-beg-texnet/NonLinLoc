@@ -249,8 +249,8 @@ GridMemStruct* GridMemList_AddGridDesc(GridDesc* pgrid) {
     pnewGridMemStruct = (GridMemStruct*) malloc(sizeof (GridMemStruct));
     pnewGridMemStruct->pgrid = (GridDesc*) malloc(sizeof (GridDesc));
     *(pnewGridMemStruct->pgrid) = *pgrid;
-    strcpy(pnewGridMemStruct->pgrid->chr_type, pgrid->chr_type);
-    strcpy(pnewGridMemStruct->pgrid->title, pgrid->title);
+    snprintf(pnewGridMemStruct->pgrid->chr_type, sizeof(pnewGridMemStruct->pgrid->chr_type), "%s", pgrid->chr_type);
+    snprintf(pnewGridMemStruct->pgrid->title, sizeof(pnewGridMemStruct->pgrid->title), "%s", pgrid->title);
     pnewGridMemStruct->buffer = AllocateGrid(pnewGridMemStruct->pgrid);
     pnewGridMemStruct->array = CreateGridArray(pnewGridMemStruct->pgrid);
     pnewGridMemStruct->active = 1;
@@ -414,8 +414,8 @@ GridMemStruct* GridMemList_TryToReplaceElementAt(GridMemStruct* pGridMemStruct, 
     pGridMemStruct->pgrid->buffer = pGridMemStruct->buffer;
     pGridMemStruct->pgrid->buffer_size = buffer_size;
     pGridMemStruct->pgrid->array = pGridMemStruct->array;
-    strcpy(pGridMemStruct->pgrid->chr_type, pgrid->chr_type);
-    strcpy(pGridMemStruct->pgrid->title, pgrid->title);
+    snprintf(pGridMemStruct->pgrid->chr_type, sizeof(pGridMemStruct->pgrid->chr_type), "%s", pgrid->chr_type);
+    snprintf(pGridMemStruct->pgrid->title, sizeof(pGridMemStruct->pgrid->title), "%s", pgrid->title);
     pGridMemStruct->active = 1;
     pGridMemStruct->grid_read = 0;
 

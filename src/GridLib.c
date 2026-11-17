@@ -147,10 +147,10 @@ void SetConstants(void) {
     }
 
 
-    strcpy(package_name, PACKAGE);
-    strcpy(prog_ver, PVER);
-    strcpy(prog_date, PDATE);
-    strcpy(prog_copyright, PCOPYRIGHT);
+    snprintf(package_name, sizeof(package_name), "%s", PACKAGE);
+    snprintf(prog_ver, sizeof(prog_ver), "%s", PVER);
+    snprintf(prog_date, sizeof(prog_date), "%s", PDATE);
+    snprintf(prog_copyright, sizeof(prog_copyright), "%s", PCOPYRIGHT);
     message_flag = 0;
 
     // 20171122 AJL  cPI = 4. * atan(1.); /* PI */
@@ -197,7 +197,7 @@ int get_control(char* line1) {
     /* display program information */
     DispProgInfo();
 
-    sprintf(MsgStr, "CONTROL:  MessageFlag: %d  RandomNumSeed: %d", message_flag, RandomNumSeed);
+    snprintf(MsgStr, sizeof(MsgStr), "CONTROL:  MessageFlag: %d  RandomNumSeed: %d", message_flag, RandomNumSeed);
     nll_putmsg(3, MsgStr);
 
     if (checkRangeInt("CONTROL", "MessageFlag", message_flag, 1, -1, 0, 0) != 0)
@@ -218,7 +218,7 @@ int get_outfile(char* line1) {
 
     istat = sscanf(line1, "%s", fn_output);
 
-    sprintf(MsgStr, "OUTPUT FILES: %s.*", fn_output);
+    snprintf(MsgStr, sizeof(MsgStr), "OUTPUT FILES: %s.*", fn_output);
     nll_putmsg(3, MsgStr);
 
     if (istat != 1)
@@ -235,7 +235,7 @@ int GetIncludeFile(char* line1, FILE **fp_io) {
 
     sscanf(line1, "%s", fn_include);
 
-    sprintf(MsgStr, "Reading from INCLUDE FILE: %s", fn_include);
+    snprintf(MsgStr, sizeof(MsgStr), "Reading from INCLUDE FILE: %s", fn_include);
     nll_putmsg(3, MsgStr);
 
 
@@ -273,7 +273,7 @@ void SwapBackIncludeFP(FILE **fp_io) {
         fp_include = NULL;
     }
 
-    sprintf(MsgStr, "Returning from INCLUDE FILE: %s.*", fn_include);
+    snprintf(MsgStr, sizeof(MsgStr), "Returning from INCLUDE FILE: %s.*", fn_include);
     nll_putmsg(3, MsgStr);
 
 }
@@ -299,7 +299,7 @@ int GetNextSource(char* in_line) {
     // check if duplicate
     if (FindSource(srce_in->label) != NULL) {
         if (message_flag >= 2) {
-            sprintf(MsgStr, "WARNING: duplicated source, ignoring source: %s", srce_in->label);
+            snprintf(MsgStr, sizeof(MsgStr), "WARNING: duplicated source, ignoring source: %s", srce_in->label);
             nll_putmsg(2, MsgStr);
             return (istat);
         }
@@ -343,7 +343,7 @@ int GetSource(char* in_line, SourceDesc *srce_in, int num_sources) {
         srce_in->z = val3 - val4;
         srce_in->is_coord_xyz = 1;
         if (message_flag >= 5) {
-            sprintf(MsgStr,
+            snprintf(MsgStr, sizeof(MsgStr),
                     "SOURCE: %3d  Name: %s  Loc:  type: %s  X(east) %lg  Y(north) %lg  Z(pos DOWN) %lg",
                     num_sources, srce_in->label,
                     coord_type, srce_in->x, srce_in->y, srce_in->z);
@@ -367,7 +367,7 @@ int GetSource(char* in_line, SourceDesc *srce_in, int num_sources) {
                 "Long", srce_in->dlong, 1, -180.0, 1, 180.0) != 0)
             ierr = -1;
         if (message_flag >= 5) {
-            sprintf(MsgStr,
+            snprintf(MsgStr, sizeof(MsgStr),
                     "SOURCE:  %d  Name: %s  Loc:  type: %s  Lat %lg  Long %lg  Depth %lg",
                     num_sources, srce_in->label,
                     coord_type, srce_in->dlat, srce_in->dlong,
@@ -399,7 +399,7 @@ int GetSource(char* in_line, SourceDesc *srce_in, int num_sources) {
                 "Long", srce_in->dlong, 1, -180.0, 1, 180.0) != 0)
             ierr = -1;
         if (message_flag >= 5) {
-            sprintf(MsgStr,
+            snprintf(MsgStr, sizeof(MsgStr),
                     "SOURCE:  %d  Name: %s  Loc:  type: %s  Lat %lg  Long %lg  Depth %lg",
                     num_sources, srce_in->label,
                     coord_type, srce_in->dlat, srce_in->dlong,
@@ -432,7 +432,7 @@ int GetSource(char* in_line, SourceDesc *srce_in, int num_sources) {
                 "Long", srce_in->dlong, 1, -180.0, 1, 180.0) != 0)
             ierr = -1;
         if (message_flag >= 5) {
-            sprintf(MsgStr,
+            snprintf(MsgStr, sizeof(MsgStr),
                     "SOURCE:  %d  Name: %s  Loc:  type: %s  Lat %lg  Long %lg  Depth %lg",
                     num_sources, srce_in->label,
                     coord_type, srce_in->dlat, srce_in->dlong,
@@ -545,7 +545,7 @@ int get_transform(int n_proj, char* in_line) {
         map_cosang[n_proj] = cos(angle);
         map_sinang[n_proj] = sin(angle);
 
-        sprintf(MapProjStr[n_proj],
+        snprintf(MapProjStr[n_proj], sizeof(MapProjStr[n_proj]),
                 "TRANSFORM  %s",
                 map_trans_type[n_proj]);
         nll_putmsg(3, MapProjStr[n_proj]);
@@ -566,7 +566,7 @@ int get_transform(int n_proj, char* in_line) {
         map_cosang[n_proj] = cos(angle);
         map_sinang[n_proj] = sin(angle);
 
-        sprintf(MapProjStr[n_proj],
+        snprintf(MapProjStr[n_proj], sizeof(MapProjStr[n_proj]),
                 "TRANSFORM  %s",
                 map_trans_type[n_proj]);
         nll_putmsg(3, MapProjStr[n_proj]);
@@ -589,7 +589,7 @@ int get_transform(int n_proj, char* in_line) {
         map_cosang[n_proj] = cos(angle);
         map_sinang[n_proj] = sin(angle);
 
-        sprintf(MapProjStr[n_proj],
+        snprintf(MapProjStr[n_proj], sizeof(MapProjStr[n_proj]),
                 "TRANSFORM  %s LatOrig %lf  LongOrig %lf  RotCW %lf",
                 map_trans_type[n_proj], map_orig_lat[n_proj], map_orig_long[n_proj], map_rot[n_proj]);
         nll_putmsg(3, MapProjStr[n_proj]);
@@ -622,7 +622,7 @@ int get_transform(int n_proj, char* in_line) {
         map_sinang[n_proj] = sin(angle);
 
 
-        sprintf(MapProjStr[n_proj],
+        snprintf(MapProjStr[n_proj], sizeof(MapProjStr[n_proj]),
                 "TRANSFORM  %s LatOrig %lf  LongOrig %lf  RotCW %lf",
                 map_trans_type[n_proj], map_orig_lat[n_proj], map_orig_long[n_proj], map_rot[n_proj]);
         nll_putmsg(3, MapProjStr[n_proj]);
@@ -697,7 +697,7 @@ int get_transform(int n_proj, char* in_line) {
         vlamb(n_proj, map_orig_long[n_proj], map_orig_lat[n_proj],
                 map_lambert_1st_std_paral[n_proj], map_lambert_2nd_std_paral[n_proj]);
 
-        sprintf(MapProjStr[n_proj],
+        snprintf(MapProjStr[n_proj], sizeof(MapProjStr[n_proj]),
                 "TRANSFORM  %s RefEllipsoid %s  LatOrig %lf  LongOrig %lf  FirstStdParal %lf  SecondStdParal %lf  RotCW %lf",
                 map_trans_type[n_proj], map_ref_ellipsoid[n_proj],
                 map_orig_lat[n_proj], map_orig_long[n_proj],
@@ -752,7 +752,7 @@ int get_transform(int n_proj, char* in_line) {
         vtm(n_proj, map_orig_long[n_proj], map_orig_lat[n_proj], use_false_easting,
                 map_false_easting[n_proj], map_scale_factor[n_proj]);
 
-        sprintf(MapProjStr[n_proj],
+        snprintf(MapProjStr[n_proj], sizeof(MapProjStr[n_proj]),
                 "TRANSFORM  %s RefEllipsoid %s  LatOrig %lf  LongOrig %lf  RotCW %lf  UseFalseEasting %d  FalseEasting %ld  ScaleFactor %lf",
                 map_trans_type[n_proj], map_ref_ellipsoid[n_proj],
                 map_orig_lat[n_proj], map_orig_long[n_proj],
@@ -804,7 +804,7 @@ int get_transform(int n_proj, char* in_line) {
         // initialize projection
         vazeqdist(n_proj, map_orig_long[n_proj], map_orig_lat[n_proj]);
 
-        sprintf(MapProjStr[n_proj],
+        snprintf(MapProjStr[n_proj], sizeof(MapProjStr[n_proj]),
                 "TRANSFORM  %s RefEllipsoid %s  LatOrig %lf  LongOrig %lf  RotCW %lf",
                 map_trans_type[n_proj], map_ref_ellipsoid[n_proj],
                 map_orig_lat[n_proj], map_orig_long[n_proj],
@@ -904,7 +904,7 @@ int convert_grid_type(GridDesc* pgrid, int char2numeric) {
     } else {
         for (i = 0; i < ntypes; i++) {
             if (pgrid->type == types[i]) {
-                strcpy(pgrid->chr_type, char_types[i]);
+                snprintf(pgrid->chr_type, sizeof(pgrid->chr_type), "%s", char_types[i]);
                 return (pgrid->type);
             }
         }
@@ -983,9 +983,9 @@ int WriteGrid3dBuf(GridDesc* pgrid, SourceDesc* psrce, char* filename, char* fil
     /* write buffer file */
 
     if (file_type != NULL) {
-        sprintf(fname, "%s.%s.buf", filename, file_type);
+        snprintf(fname, sizeof(fname), "%s.%s.buf", filename, file_type);
     } else {
-        sprintf(fname, "%s.buf", filename);
+        snprintf(fname, sizeof(fname), "%s.buf", filename);
     }
     if ((fpio = fopen(fname, "w")) == NULL) {
         nll_puterr("ERROR: opening buffer output file.");
@@ -1021,9 +1021,9 @@ int WriteGrid3dHdr(GridDesc* pgrid, SourceDesc* psrce,
     /* write header file */
 
     if (file_type != NULL) {
-        sprintf(fname, "%s.%s.hdr", filename, file_type);
+        snprintf(fname, sizeof(fname), "%s.%s.hdr", filename, file_type);
     } else {
-        sprintf(fname, "%s.hdr", filename);
+        snprintf(fname, sizeof(fname), "%s.hdr", filename);
     }
 
     if ((fpio = fopen(fname, "w")) == NULL) {
@@ -1138,7 +1138,7 @@ void* AllocateGrid_Cascading(GridDesc* pgrid, int allocate_buffer) {
             reg_grid_depth += pgrid->dz;
         }
         if (!below_deepest_merge_depth && reg_grid_z_index >= pgrid->numz) {
-            sprintf(MsgStr, "WARNING: AllocateGrid_Cascading: z merge depth: %f below grid bottom: %f",
+            snprintf(MsgStr, sizeof(MsgStr), "WARNING: AllocateGrid_Cascading: z merge depth: %f below grid bottom: %f",
                     pgrid->gridDesc_Cascading.z_merge_depths[n], pgrid->origz + (double) (pgrid->numz - 1) * pgrid->dz);
             nll_puterr(MsgStr);
             //return (NULL);
@@ -1220,7 +1220,7 @@ void*** CreateGridArray_Cascading(GridDesc* pgrid) {
             //buf_ptr += numz * sizeof (GRID_FLOAT_TYPE);
             buf_ptr += numz * bfactor;
             if (buf_ptr - (GRID_FLOAT_TYPE *) pgrid->buffer > 2 * pgrid->buffer_size / sizeof (GRID_FLOAT_TYPE)) {
-                sprintf(MsgStr, "ERROR: CreateGridArray_Cascading: buf_ptr > buffer_size: x%d y%d numz%d (offset %ld buf_size %ld diff %ld) in: %s",
+                snprintf(MsgStr, sizeof(MsgStr), "ERROR: CreateGridArray_Cascading: buf_ptr > buffer_size: x%d y%d numz%d (offset %ld buf_size %ld diff %ld) in: %s",
                         ix_casc, iy_casc, numz, (buf_ptr - (GRID_FLOAT_TYPE *) pgrid->buffer), 2 * pgrid->buffer_size / sizeof (GRID_FLOAT_TYPE), (buf_ptr - (GRID_FLOAT_TYPE *) pgrid->buffer) - 2 * pgrid->buffer_size / sizeof (GRID_FLOAT_TYPE), pgrid->title);
                 nll_puterr(MsgStr);
             }
@@ -1377,7 +1377,7 @@ void DuplicateGrid(GridDesc* pnew_grid, GridDesc* pold_grid, char *new_chr_type)
     *pnew_grid = *pold_grid;
 
     /* set grid type */
-    strcpy(pnew_grid->chr_type, new_chr_type);
+    snprintf(pnew_grid->chr_type, sizeof(pnew_grid->chr_type), "%s", new_chr_type);
     convert_grid_type(pnew_grid, 1);
 
 
@@ -1430,13 +1430,13 @@ int CheckGridArray(GridDesc* pgrid, double gridMax, double gridMaxReplace,
     }
 
     if (inegative) {
-        sprintf(MsgStr,
+        snprintf(MsgStr, sizeof(MsgStr),
                 "WARNING: %d negative values in grid.", inegative);
         nll_putmsg(1, MsgStr);
         ierror = -1;
     }
     if (imax) {
-        sprintf(MsgStr,
+        snprintf(MsgStr, sizeof(MsgStr),
                 "WARNING: %d values > %e in grid replaced with %e",
                 imax, gridMax, gridMaxReplace);
         nll_putmsg(1, MsgStr);
@@ -1444,7 +1444,7 @@ int CheckGridArray(GridDesc* pgrid, double gridMax, double gridMaxReplace,
     }
     if (imin) {
 
-        sprintf(MsgStr,
+        snprintf(MsgStr, sizeof(MsgStr),
                 "WARNING: %d values < %e in grid replaced with %e",
                 imin, gridMin, gridMinReplace);
         nll_putmsg(1, MsgStr);
@@ -2011,7 +2011,7 @@ int ConvertOctTree2Grid(Tree3D* tree, double dx, double dy, double dz, char *gri
     pgrid_out->dy = dy;
     pgrid_out->dz = dz;
     if (grid_type != NULL) {
-        strcpy(pgrid_out->chr_type, grid_type);
+        snprintf(pgrid_out->chr_type, sizeof(pgrid_out->chr_type), "%s", grid_type);
         convert_grid_type(pgrid_out, 1);
     } else {
         pgrid_out->type = tree->data_code;
@@ -2164,7 +2164,7 @@ int ReadGrid3dBufSheet(GRID_FLOAT_TYPE* sheetbuf, GridDesc* pgrid_disk,
     /* check indexes in range */
 
     if (ix < 0 || ix >= pgrid_disk->numx) {
-        sprintf(MsgStr,
+        snprintf(MsgStr, sizeof(MsgStr),
                 "WARNING: grid file x-sheet index %d out of range (%d,%d)",
                 ix, 0, pgrid_disk->numx - 1);
         return (-1);
@@ -2206,7 +2206,7 @@ int ReadGrid3dHdr(GridDesc* pgrid, SourceDesc* psrce, char* filename, char* file
 
     /* read header file */
 
-    sprintf(fname, "%s.%s.hdr", filename, file_type);
+    snprintf(fname, sizeof(fname), "%s.%s.hdr", filename, file_type);
     if ((fpio = fopen(fname, "r")) == NULL) {
         if (message_flag >= 1)
             nll_puterr2("ERROR: opening grid header file: %s", fname);
@@ -2233,12 +2233,12 @@ int ReadGrid3dHdr(GridDesc* pgrid, SourceDesc* psrce, char* filename, char* file
     char tag[MAXLINE_LONG];
 
     // check for map projection
-    strcpy(pgrid->mapProjStr, "");
+    snprintf(pgrid->mapProjStr, sizeof(pgrid->mapProjStr), "%s", "");
     rewind(fpio);
     while (fgets(line, MAXLINE_LONG, fpio) != NULL) {
         int istat = sscanf(line, "%s", tag);
         if (istat == 1 && strcmp(tag, "TRANSFORM") == 0) {
-            strcpy(pgrid->mapProjStr, line);
+            snprintf(pgrid->mapProjStr, sizeof(pgrid->mapProjStr), "%s", line);
         }
     }
 
@@ -2253,7 +2253,7 @@ int ReadGrid3dHdr(GridDesc* pgrid, SourceDesc* psrce, char* filename, char* file
             pgrid->gridDesc_Cascading.num_z_merge_depths = num_z_merge_depths;
             if (pgrid->gridDesc_Cascading.num_z_merge_depths > MAX_NUM_Z_MERGE_DEPTHS) {
                 pgrid->gridDesc_Cascading.num_z_merge_depths = MAX_NUM_Z_MERGE_DEPTHS;
-                sprintf(MsgStr, "ERROR: too many cascading grid Z merge depths, only using first %d depths.",
+                snprintf(MsgStr, sizeof(MsgStr), "ERROR: too many cascading grid Z merge depths, only using first %d depths.",
                         pgrid->gridDesc_Cascading.num_z_merge_depths);
                 nll_puterr(MsgStr);
             }
@@ -2287,7 +2287,7 @@ int ReadGrid3dHdr_grid_description(FILE *fpio, GridDesc *pgrid, char *fname) {
         nll_puterr2("ERROR: reading grid header file: ", fname);
         return (-1);
     }
-    strcpy(pgrid->float_type, "FLOAT");
+    snprintf(pgrid->float_type, sizeof(pgrid->float_type), "%s", "FLOAT");
     sscanf(line, "%d %d %d  %lf %lf %lf  %lf %lf %lf %s %s",
             &(pgrid->numx), &(pgrid->numy), &(pgrid->numz),
             &(pgrid->origx), &(pgrid->origy), &(pgrid->origz),
@@ -2321,14 +2321,14 @@ int OpenGrid3dFile(char *fname, FILE **fp_grid, FILE **fp_hdr,
 
     /* open grid file and header file */
 
-    sprintf(fn_grid, "%s.buf", fname);
+    snprintf(fn_grid, sizeof(fn_grid), "%s.buf", fname);
     if (message_flag >= 3) {
-        sprintf(MsgStr, "Opening Grid File: %s", fn_grid);
+        snprintf(MsgStr, sizeof(MsgStr), "Opening Grid File: %s", fn_grid);
         nll_putmsg(3, MsgStr);
     }
     if ((*fp_grid = fopen(fn_grid, "r")) == NULL) {
         if (message_flag >= 3) {
-            sprintf(MsgStr, "WARNING: cannot open grid buffer file: %s", fn_grid);
+            snprintf(MsgStr, sizeof(MsgStr), "WARNING: cannot open grid buffer file: %s", fn_grid);
             nll_putmsg(3, MsgStr);
         }
         //return(-1);	// sometimes only header is wanted
@@ -2336,10 +2336,10 @@ int OpenGrid3dFile(char *fname, FILE **fp_grid, FILE **fp_hdr,
         NumGridBufFilesOpen++;
         NumFilesOpen++;
     }
-    sprintf(fn_hdr, "%s.hdr", fname);
+    snprintf(fn_hdr, sizeof(fn_hdr), "%s.hdr", fname);
     if ((*fp_hdr = fopen(fn_hdr, "r")) == NULL) {
         if (message_flag >= 3) {
-            sprintf(MsgStr,
+            snprintf(MsgStr, sizeof(MsgStr),
                     "WARNING: cannot open grid header file: %s", fn_hdr);
             nll_putmsg(3, MsgStr);
         }
@@ -2355,7 +2355,7 @@ int OpenGrid3dFile(char *fname, FILE **fp_grid, FILE **fp_hdr,
 
     /* DEBUG
     if (message_flag >= 4) {
-        sprintf(MsgStr, "INFO: NumGridBufFilesOpen: %d, NumGridHdrFilesOpen: %d, NumFilesOpen: %d",
+        snprintf(MsgStr, sizeof(MsgStr), "INFO: NumGridBufFilesOpen: %d, NumGridHdrFilesOpen: %d, NumFilesOpen: %d",
                 NumGridBufFilesOpen, NumGridHdrFilesOpen, NumFilesOpen);
         nll_putmsg(4, MsgStr);
     }*/
@@ -2398,19 +2398,19 @@ int OpenGrid3dFile(char *fname, FILE **fp_grid, FILE **fp_hdr,
     }
 
     // save filename as grid identifier
-    strcpy(pgrid->title, fname);
+    snprintf(pgrid->title, sizeof(pgrid->title), "%s", fname);
 
     //  check for optional header lines
     char line[MAXLINE_LONG];
     char tag[MAXLINE_LONG];
 
     // check for map projection
-    strcpy(pgrid->mapProjStr, "");
+    snprintf(pgrid->mapProjStr, sizeof(pgrid->mapProjStr), "%s", "");
     rewind(*fp_hdr);
     while (fgets(line, MAXLINE_LONG, *fp_hdr) != NULL) {
         int istat = sscanf(line, "%s", tag);
         if (istat == 1 && strcmp(tag, "TRANSFORM") == 0) {
-            strcpy(pgrid->mapProjStr, line);
+            snprintf(pgrid->mapProjStr, sizeof(pgrid->mapProjStr), "%s", line);
         }
     }
 
@@ -2425,7 +2425,7 @@ int OpenGrid3dFile(char *fname, FILE **fp_grid, FILE **fp_hdr,
             pgrid->gridDesc_Cascading.num_z_merge_depths = num_z_merge_depths;
             if (pgrid->gridDesc_Cascading.num_z_merge_depths > MAX_NUM_Z_MERGE_DEPTHS) {
                 pgrid->gridDesc_Cascading.num_z_merge_depths = MAX_NUM_Z_MERGE_DEPTHS;
-                sprintf(MsgStr, "ERROR: too many cascading grid Z merge depths, only using first %d depths.",
+                snprintf(MsgStr, sizeof(MsgStr), "ERROR: too many cascading grid Z merge depths, only using first %d depths.",
                         pgrid->gridDesc_Cascading.num_z_merge_depths);
                 nll_puterr(MsgStr);
             }
@@ -2516,7 +2516,7 @@ GRID_FLOAT_TYPE * ReadGridFile
     // open grid file
     if ((istat = OpenGrid3dFile(fname, &fp_grid, &fp_hdr, &gdesc, file_type, &srce, iSwapBytes)) < 0) {
         if (message_flag >= 3) {
-            sprintf(MsgStr, "WARNING: cannot open grid file: %s", fname);
+            snprintf(MsgStr, sizeof(MsgStr), "WARNING: cannot open grid file: %s", fname);
             nll_putmsg(3, MsgStr);
         }
         return (values);
@@ -2580,7 +2580,7 @@ GRID_FLOAT_TYPE ReadCascadingGrid3dValue(FILE *fpgrid, int ix_casc, int iy_casc,
         fseek(fpgrid, offset, SEEK_SET);
         // read fvalue
         if (fread(&fvalue, sizeof (GRID_FLOAT_TYPE), 1, fpgrid) != 1) {
-            sprintf(MsgStr, "ERROR: reading cascading grid value at: x%d y%d z%d (offset %ld buf_size %ld diff %ld) in: %s",
+            snprintf(MsgStr, sizeof(MsgStr), "ERROR: reading cascading grid value at: x%d y%d z%d (offset %ld buf_size %ld diff %ld) in: %s",
                     ix_casc, iy_casc, iz_casc, offset, pgrid->buffer_size, offset - pgrid->buffer_size, pgrid->title);
             nll_puterr(MsgStr);
             return (-VERY_LARGE_FLOAT);
@@ -2872,7 +2872,7 @@ GRID_FLOAT_TYPE ReadGrid3dValue(FILE *fpgrid, int ix, int iy, int iz, GridDesc *
         fseek(fpgrid, offset, SEEK_SET);
         /* read fvalue */
         if (fread(&fvalue, sizeof (GRID_FLOAT_TYPE), 1, fpgrid) != 1) {
-            sprintf(MsgStr,
+            snprintf(MsgStr, sizeof(MsgStr),
                     "ERROR: reading grid value: %s: ix%d iy=%d iz=%d", pgrid->title, ix, iy, iz);
             nll_puterr(MsgStr);
             return (-VERY_LARGE_FLOAT);
@@ -3730,9 +3730,9 @@ int GetHypLoc(FILE *fpio, const char* filein, HypoDesc* phypo,
     if (fpio == NULL) {
         if ((pstr = strstr(filein, ".hyp")) == NULL
                 || ((pstr - filein) < strlen(filein) - 4))
-            sprintf(fn_in, "%s.hyp", filein);
+            snprintf(fn_in, sizeof(fn_in), "%s.hyp", filein);
         else
-            sprintf(fn_in, "%s", filein);
+            snprintf(fn_in, sizeof(fn_in), "%s", filein);
         if ((fpio = fopen(fn_in, "r")) == NULL) {
             nll_puterr2("ERROR: opening hypocenter file", fn_in);
             return (-2);
@@ -3799,11 +3799,11 @@ int GetHypLoc(FILE *fpio, const char* filein, HypoDesc* phypo,
                 goto eof_exit;
         } else if (strncmp(line, "SIGNATURE", 9) == 0) {
             /* SIGNATURE */
-            strcpy(phypo->signature, strchr(line, '"') + 1);
+            snprintf(phypo->signature, sizeof(phypo->signature), "%s", strchr(line, '"') + 1);
             *(strchr(phypo->signature, '"')) = '\0';
         } else if (strncmp(line, "COMMENT", 7) == 0) {
             /* COMMENT */
-            strcpy(phypo->comment, strchr(line, '"') + 1);
+            snprintf(phypo->comment, sizeof(phypo->comment), "%s", strchr(line, '"') + 1);
             *(strchr(phypo->comment, '"')) = '\0';
         } else if (strncmp(line, "GRID", 4) == 0) {
             /* GRID */
@@ -3820,7 +3820,7 @@ int GetHypLoc(FILE *fpio, const char* filein, HypoDesc* phypo,
         } else if (strncmp(line, "SEARCH", 6) == 0) {
             /* SEARCH */
             line[MAXLINE_LONG - 1] = '\0';
-            strcpy(phypo->searchInfo, strchr(line, ' ') + 1);
+            snprintf(phypo->searchInfo, sizeof(phypo->searchInfo), "%s", strchr(line, ' ') + 1);
         } else if (strncmp(line, "HYPOCENTER", 10) == 0) {
             /* HYPOCENTER */
             if (sscanf(line,
@@ -3932,7 +3932,7 @@ int GetHypLoc(FILE *fpio, const char* filein, HypoDesc* phypo,
             /* TRANSFORM */
             if (n_proj >= 0)
                 line[MAXLINE_LONG - 1] = '\0';
-            strcpy(MapProjStr[n_proj], line);
+            snprintf(MapProjStr[n_proj], sizeof(MapProjStr[n_proj]), "%s", line);
         } else if (strncmp(line, "DIFFERENTIAL", 12) == 0) {
 
             /* DIFFERENTIAL */
@@ -3979,7 +3979,7 @@ int GetHypLoc(FILE *fpio, const char* filein, HypoDesc* phypo,
                         != NULL
                         && strncmp("END_PHASE", line, 9)) {
                     if (*pnarrivals >= MAX_NUM_ARRIVALS) {
-                        sprintf(MsgStr, "WARNING: maximum number of arrivals (%d) exceeded.", MAX_NUM_ARRIVALS);
+                        snprintf(MsgStr, sizeof(MsgStr), "WARNING: maximum number of arrivals (%d) exceeded.", MAX_NUM_ARRIVALS);
                         nll_puterr(MsgStr);
                         (*pnarrivals)--;
                         break;
@@ -4014,7 +4014,7 @@ int GetHypLoc(FILE *fpio, const char* filein, HypoDesc* phypo,
 
             nll_putmsg(1,
                     "WARNING: unrecognized line in NLLOC hypocenter description:");
-            sprintf(MsgStr, "   <%s>", line);
+            snprintf(MsgStr, sizeof(MsgStr), "   <%s>", line);
             nll_putmsg(1, MsgStr);
         }
 
@@ -4068,7 +4068,7 @@ int ReadArrival(char* line, ArrivalDesc* parr, int iReadType) {
 
 
     /* dummy values for unsupported fields */
-    strcpy(parr->network, ARRIVAL_NULL_STR);
+    snprintf(parr->network, sizeof(parr->network), "%s", ARRIVAL_NULL_STR);
 
     /* read observation part of phase line */
 
@@ -4997,7 +4997,7 @@ int ExpandWildCards(char* fileFilter, char fileList[][FILENAME_MAX], int maxNumF
     /* check for no '*' or '?' character */
 
     if ((pchr = strchr(fileFilter, '*')) == NULL && (pchr = strchr(fileFilter, '?')) == NULL) {
-        strcpy(fileList[0], fileFilter);
+        snprintf(fileList[0], sizeof(fileList[0]), "%s", fileFilter);
         nfiles = 1;
         return (nfiles);
     }
@@ -5008,10 +5008,10 @@ int ExpandWildCards(char* fileFilter, char fileList[][FILENAME_MAX], int maxNumF
     if ((pchr = strrchr(fileFilter, '/')) != NULL) {
         strncpy(directory, fileFilter, pchr - fileFilter);
         directory[pchr - fileFilter] = '\0';
-        strcpy(ExpandWildCards_pattern, pchr + 1);
+        snprintf(ExpandWildCards_pattern, sizeof(ExpandWildCards_pattern), "%s", pchr + 1);
     } else {
-        strcpy(directory, ".");
-        strcpy(ExpandWildCards_pattern, fileFilter);
+        snprintf(directory, sizeof(directory), "%s", ".");
+        snprintf(ExpandWildCards_pattern, sizeof(ExpandWildCards_pattern), "%s", fileFilter);
     }
     /*DEBUG*///printf("directory: <%s>\n", directory);
     /*DEBUG*///printf("filename: <%s>\n", ExpandWildCards_pattern);
@@ -5032,7 +5032,7 @@ int ExpandWildCards(char* fileFilter, char fileList[][FILENAME_MAX], int maxNumF
         nll_puterr2("ERROR: empty directory: expanding wildcard filenames in: ", fileFilter);
         return (-1);
     } else if (n > maxNumFiles) { // 20111011 AJL - added this block to catch excess number of wildcard files
-        sprintf(MsgStr,
+        snprintf(MsgStr, sizeof(MsgStr),
                 "ERROR: too many files: expanding wildcard filenames in: %s, max number of files = %d",
                 fileFilter, maxNumFiles);
         nll_puterr(MsgStr);
@@ -5040,7 +5040,7 @@ int ExpandWildCards(char* fileFilter, char fileList[][FILENAME_MAX], int maxNumF
     } else {
         while (--n >= 0) {
 
-            sprintf(fileList[n], "%s/%s", directory, namelist[n]->d_name);
+            snprintf(fileList[n], sizeof(fileList[n]), "%s/%s", directory, namelist[n]->d_name);
             /*DEBUG*///printf("%s -> %s\n", namelist[n]->d_name,fileList[n]);
             nfiles++;
             free(namelist[n]);
@@ -5084,7 +5084,7 @@ int ExpandWildCards_OLD(char* fileName, char fileList[][FILENAME_MAX], int maxNu
 
     if ((pchr = strchr(fileName, '*')) == NULL
             && (pchr = strchr(fileName, '?')) == NULL) {
-        strcpy(fileList[0], fileName);
+        snprintf(fileList[0], sizeof(fileList[0]), "%s", fileName);
         nfiles = 1;
         return (nfiles);
     }
@@ -5092,7 +5092,7 @@ int ExpandWildCards_OLD(char* fileName, char fileList[][FILENAME_MAX], int maxNu
 
     /* expand wildcard file names into list of files */
 
-    sprintf(system_str, "ls %s > %s", fileName, list_file);
+    snprintf(system_str, sizeof(system_str), "ls %s > %s", fileName, list_file);
     if (system(system_str) != 0)
         fprintf(stderr, "WARNING: command returned non-zero status: %s\n", system_str);
 
@@ -5268,7 +5268,7 @@ int ReadTakeOffAnglesFile(char *fname, double xloc, double yloc, double zloc,
     /* open angle grid file */
     if ((istat = OpenGrid3dFile(fname, &fp_grid, &fp_hdr, &gdesc, "angle", NULL, iSwapBytes)) < 0) {
         if (message_flag >= 3) {
-            sprintf(MsgStr, "WARNING: cannot open angle grid file, ignoring angles: %s", fname);
+            snprintf(MsgStr, sizeof(MsgStr), "WARNING: cannot open angle grid file, ignoring angles: %s", fname);
             nll_putmsg(3, MsgStr);
             //printf("DEBUG: ReadTakeOffAnglesFile: WARNING: cannot open angle grid file, ignoring angles: %s", fname);
         }
@@ -5418,7 +5418,7 @@ int GenTraditionStats(GridDesc *pgrid, Vect3D *pexpect, Mtrx3D *pcov,
 
     *pexpect = CalcExpectation(pgrid, NULL);
     if (message_flag >= 3) {
-        sprintf(MsgStr, "EXPECTATION { x %lf  y %lf  z %lf }",
+        snprintf(MsgStr, sizeof(MsgStr), "EXPECTATION { x %lf  y %lf  z %lf }",
                 pexpect->x, pexpect->y, pexpect->z);
         nll_putmsg(3, MsgStr);
     }
@@ -5427,18 +5427,18 @@ int GenTraditionStats(GridDesc *pgrid, Vect3D *pexpect, Mtrx3D *pcov,
 
     *pcov = CalcCovariance(pgrid, pexpect, NULL);
     if (message_flag >= 3) {
-        sprintf(MsgStr, "COVARIANCE: {");
+        snprintf(MsgStr, sizeof(MsgStr), "COVARIANCE: {");
         nll_putmsg(3, MsgStr);
-        sprintf(MsgStr, "   xx: %lf  xy: %lf  xz: %lf",
+        snprintf(MsgStr, sizeof(MsgStr), "   xx: %lf  xy: %lf  xz: %lf",
                 pcov->xx, pcov->xy, pcov->xz);
         nll_putmsg(3, MsgStr);
-        sprintf(MsgStr, "   yx: %lf  yy: %lf  yz: %lf",
+        snprintf(MsgStr, sizeof(MsgStr), "   yx: %lf  yy: %lf  yz: %lf",
                 pcov->yx, pcov->yy, pcov->yz);
         nll_putmsg(3, MsgStr);
-        sprintf(MsgStr, "   zx: %lf  zy: %lf  zz: %lf",
+        snprintf(MsgStr, sizeof(MsgStr), "   zx: %lf  zy: %lf  zz: %lf",
                 pcov->zx, pcov->zy, pcov->zz);
         nll_putmsg(3, MsgStr);
-        sprintf(MsgStr, "}");
+        snprintf(MsgStr, sizeof(MsgStr), "}");
         nll_putmsg(3, MsgStr);
     }
 
@@ -5694,7 +5694,7 @@ int ReadHypStatistics(FILE **pfpio, char* fnroot_in,
     /* open hypocenter file if necessary */
 
     if (*pfpio == NULL) {
-        sprintf(fn_in, "%s.hyp", fnroot_in);
+        snprintf(fn_in, sizeof(fn_in), "%s.hyp", fnroot_in);
         if ((*pfpio = fopen(fn_in, "r")) == NULL) {
             nll_puterr("ERROR: opening hypocenter file.");
             return (EOF);
@@ -5734,7 +5734,7 @@ int ReadHypoDesc(char* fnroot_in, HypoDesc *phypo) {
 
     /* open hypocenter file if necessary */
 
-    sprintf(fn_in, "%s.hyp", fnroot_in);
+    snprintf(fn_in, sizeof(fn_in), "%s.hyp", fnroot_in);
     if ((fp_io = fopen(fn_in, "r")) == NULL) {
         nll_puterr2("ERROR: opening hypocenter file:", fnroot_in);
         return (-1);
@@ -5767,7 +5767,7 @@ int ReadFocalMech(FILE **pfpio, char* fnroot_in,
     /* open hypocenter file if necessary */
 
     if (*pfpio == NULL) {
-        sprintf(fn_in, "%s.hyp", fnroot_in);
+        snprintf(fn_in, sizeof(fn_in), "%s.hyp", fnroot_in);
         if ((*pfpio = fopen(fn_in, "r")) == NULL) {
             nll_puterr("ERROR: opening hypocenter file.");
             return (EOF);
@@ -5808,7 +5808,7 @@ int ReadFirstMotionArrivals(FILE **pfpio, char* fnroot_in, ArrivalDesc* parrival
     // open hypocenter file if necessary
 
     if (*pfpio == NULL) {
-        sprintf(fn_in, "%s.hyp", fnroot_in);
+        snprintf(fn_in, sizeof(fn_in), "%s.hyp", fnroot_in);
         if ((*pfpio = fopen(fn_in, "r")) == NULL) {
             nll_puterr("ERROR: opening hypocenter file.");
             return (EOF);
@@ -5825,11 +5825,11 @@ int ReadFirstMotionArrivals(FILE **pfpio, char* fnroot_in, ArrivalDesc* parrival
         ArrivalDesc* parr = parrivals;
         for (int narr = 0; narr < *pnarrivals; narr++) {
             if (strstr("CcUu+", parr->first_mot)) { // follows fmamp conventions in fmamp/read_input.c
-                strcpy(parr->first_mot, "+");
+                snprintf(parr->first_mot, sizeof(parr->first_mot), "%s", "+");
                 parrivals[naccept] = *parr;
                 naccept++;
             } else if (strstr("DdRr-", parr->first_mot)) { // follows fmamp conventions in fmamp/read_input.c
-                strcpy(parr->first_mot, "-");
+                snprintf(parr->first_mot, sizeof(parr->first_mot), "%s", "-");
                 parrivals[naccept] = *parr;
                 naccept++;
             }
@@ -6020,7 +6020,7 @@ int Err2Qual(ArrivalDesc * arrival) {
 void Qual2Err(ArrivalDesc * arrival) {
 
     /* set error fields */
-    strcpy(arrival->error_type, "GAU");
+    snprintf(arrival->error_type, sizeof(arrival->error_type), "%s", "GAU");
     if (arrival->quality >= 0 &&
             arrival->quality < NumQuality2ErrorLevels) {
         arrival->error = Quality2Error[arrival->quality];
@@ -6044,19 +6044,19 @@ int GetQuality2Err(char* line1) {
 
     while ((istat = sscanf(line1, frmt, &qual2err)) == 1) {
         Quality2Error[NumQuality2ErrorLevels++] = qual2err;
-        sprintf(frmttmp, "%%*f %s", frmt);
-        strcpy(frmt, frmttmp);
+        snprintf(frmttmp, sizeof(frmttmp), "%%*f %s", frmt);
+        snprintf(frmt, sizeof(frmt), "%s", frmttmp);
     }
 
 
     if (message_flag >= 2) {
-        sprintf(MsgStr, "NLLoc LOCQUAL2ERR:");
+        snprintf(MsgStr, sizeof(MsgStr), "NLLoc LOCQUAL2ERR:");
         nll_putmsg(2, MsgStr);
     }
     ierr = 0;
     for (nlev = 0; nlev < NumQuality2ErrorLevels; nlev++) {
         if (message_flag >= 2) {
-            sprintf(MsgStr, " %d ->  %lf", nlev, Quality2Error[nlev]);
+            snprintf(MsgStr, sizeof(MsgStr), " %d ->  %lf", nlev, Quality2Error[nlev]);
             nll_putmsg(2, MsgStr);
         }
         if ((istat = checkRangeDouble("QUAL2ERR", "Quality2Error",
@@ -6094,7 +6094,7 @@ int IsPhaseID(char *phase_in, char *phase_check) {
 
     // check if phase_in is in phase ID list for phase_check
     removeSpace(phase_in);
-    sprintf(test_str, " %s ", phase_in);
+    snprintf(test_str, sizeof(test_str), " %s ", phase_in);
     for (npha_id = 0; npha_id < NumPhaseID; npha_id++) {
         //printf(" compare (<%s> <%s>)\n", PhaseID[npha_id].id_string, test_str);
         if (strcmp(PhaseID[npha_id].phase, phase_check) == 0) {
@@ -6494,7 +6494,7 @@ int CalcAnglesGradient(GridDesc* ptgrid, GridDesc* pagrid, int angle_mode, int g
 
 
     /* write message */
-    sprintf(MsgStr, "Generating take-off angle grid...");
+    snprintf(MsgStr, sizeof(MsgStr), "Generating take-off angle grid...");
     nll_putmsg(1, MsgStr);
 
 
@@ -6712,7 +6712,7 @@ int GenEventScatterGrid(GridDesc* ptgrid, HypoDesc* phypo, ScatterParams* pscat,
     if (pscat->npts < 1)
         return (0);
 
-    sprintf(fname, "%s.scat", filename);
+    snprintf(fname, sizeof(fname), "%s.scat", filename);
 
     /* write message */
     if (message_flag >= 3) {
@@ -6722,7 +6722,7 @@ int GenEventScatterGrid(GridDesc* ptgrid, HypoDesc* phypo, ScatterParams* pscat,
 
     /* open scatter file */
 
-    // 20190509 AJL  sprintf(fname, "%s.loc.scat", filename);
+    // 20190509 AJL  snprintf(fname, sizeof(fname), "%s.loc.scat", filename);
     if ((fpio = fopen(fname, "w")) == NULL) {
         nll_puterr("ERROR: opening scatter output file.");
         return (-1);
@@ -6789,9 +6789,9 @@ int GenEventScatterGrid(GridDesc* ptgrid, HypoDesc* phypo, ScatterParams* pscat,
     /* write message */
     if (message_flag >= 3) {
 
-        sprintf(MsgStr, "  %d points generated.", tot_npoints);
+        snprintf(MsgStr, sizeof(MsgStr), "  %d points generated.", tot_npoints);
         nll_putmsg(3, MsgStr);
-        sprintf(MsgStr, "  (%d points requested, dvol= %lf, probmax=%lf)",
+        snprintf(MsgStr, sizeof(MsgStr), "  (%d points requested, dvol= %lf, probmax=%lf)",
                 pscat->npts, dvol, probmax);
         nll_putmsg(3, MsgStr);
     }
@@ -6859,9 +6859,9 @@ int addToStationList(SourceDesc *stations, int numStations, ArrivalDesc *arrival
 
         // 20200122 AJL - added
         if (iuse_phaseid_in_label) {
-            sprintf(arrival_label, "%s#%s", (arrival + i)->label, (arrival + i)->phase);
+            snprintf(arrival_label, sizeof(arrival_label), "%s#%s", (arrival + i)->label, (arrival + i)->phase);
         } else {
-            strcpy(arrival_label, (arrival + i)->label);
+            snprintf(arrival_label, sizeof(arrival_label), "%s", (arrival + i)->label);
         }
         // find station in list
         n = 0;
@@ -6873,10 +6873,10 @@ int addToStationList(SourceDesc *stations, int numStations, ArrivalDesc *arrival
         // check arrival station has xyz coordinates
         if (i_check_station_has_XYZ_coords) {
             if (((arrival + i)->station).x < -LARGE_DOUBLE / 2.0 || ((arrival + i)->station).y < -LARGE_DOUBLE / 2.0 || ((arrival + i)->station).z < -LARGE_DOUBLE / 2.0) {
-                //sprintf(MsgStr, "ERROR: addToStationList: No xyz station coordinates available: cannot add station %s ", arrival_label);
+                //snprintf(MsgStr, sizeof(MsgStr), "ERROR: addToStationList: No xyz station coordinates available: cannot add station %s ", arrival_label);
                 //nll_puterr(MsgStr);
                 // 20230718 AJL - change to WARNING to avoid excessive console output
-                sprintf(MsgStr, "WARNING: addToStationList: No xyz station coordinates available: cannot add station %s ", arrival_label);
+                snprintf(MsgStr, sizeof(MsgStr), "WARNING: addToStationList: No xyz station coordinates available: cannot add station %s ", arrival_label);
                 nll_putmsg(2, MsgStr);
                 continue;
             }
@@ -6885,18 +6885,18 @@ int addToStationList(SourceDesc *stations, int numStations, ArrivalDesc *arrival
         // not found, add station to list
         if (n == numStations) {
             if (numStations >= MAX_NUM_ARRIVALS) {
-                sprintf(MsgStr, "ERROR: addToStationList: numStations (%d) >= MAX_NUM_ARRIVALS (%d): cannot add station %s ",
+                snprintf(MsgStr, sizeof(MsgStr), "ERROR: addToStationList: numStations (%d) >= MAX_NUM_ARRIVALS (%d): cannot add station %s ",
                         numStations, MAX_NUM_ARRIVALS, arrival_label);
                 nll_puterr(MsgStr);
                 //return (0); // 20101209 AJL - bug fix
                 continue;
             }
             *(stations + n) = (arrival + i)->station;
-            strcpy((stations + n)->label, arrival_label);
+            snprintf((stations + n)->label, sizeof((stations + n)->label), "%s", arrival_label);
             nAdded++;
             numStations++;
             if (message_flag >= 4) {
-                sprintf(MsgStr, "Added to station list: %s (%lf,%lf,%lf)",
+                snprintf(MsgStr, sizeof(MsgStr), "Added to station list: %s (%lf,%lf,%lf)",
                         (stations + n)->label, (stations + n)->x, (stations + n)->y, (stations + n)->z);
                 nll_putmsg(4, MsgStr);
             }
@@ -6951,14 +6951,14 @@ int GetPhaseID(char* line1) {
     /* save phase id values with spaces at each end */
     if ((cpos = strchr(substr, '\n')) != NULL)
         *cpos = '\0';
-    sprintf(PhaseID[NumPhaseID].id_string, " %s ", substr + 1);
+    snprintf(PhaseID[NumPhaseID].id_string, sizeof(PhaseID[NumPhaseID].id_string), " %s ", substr + 1);
 
     if ((ilen = strlen(PhaseID[NumPhaseID].id_string)) == 0)
         return (-1);
 
-    sprintf(MsgStr, "LOCPHASEID:");
+    snprintf(MsgStr, sizeof(MsgStr), "LOCPHASEID:");
     nll_putmsg(3, MsgStr);
-    sprintf(MsgStr, "  Phase: %s  PhaseID: <%s>",
+    snprintf(MsgStr, sizeof(MsgStr), "  Phase: %s  PhaseID: <%s>",
             PhaseID[NumPhaseID].phase,
             PhaseID[NumPhaseID].id_string);
     nll_putmsg(3, MsgStr);
@@ -7009,7 +7009,7 @@ int SetOutName(ArrivalDesc *arrival, char* out_file_root, char* out_file,
     // AJL 20060615 bug fix!  Following line added
     if (strcmp(out_file, lastfile) == 0) {
         strcpy(lastfile, out_file); /* save filename */
-        sprintf(filename_ctr, "_%3.3d", *pncount);
+        snprintf(filename_ctr, sizeof(filename_ctr), "_%3.3d", *pncount);
         strcat(out_file, filename_ctr);
         (*pncount)++;
     } else {
