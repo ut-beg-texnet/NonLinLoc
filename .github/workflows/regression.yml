@@ -1,7 +1,7 @@
 name: regression
 
 # Build NonLinLoc and verify that the core location pipeline still reproduces
-# the frozen reference output. See tests/README.md and docs/MODERNIZATION.md.
+# the frozen reference output. See tests/README.md.
 
 on:
   push:
