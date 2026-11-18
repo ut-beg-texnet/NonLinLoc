@@ -99,7 +99,7 @@ add_compile_options("-D GMT_VER_5")
 add_library(GRID_LIB_OBJS OBJECT GridLib.c util.c geo.c octtree/octtree.c io/json_io.c io/jReadWrite/source/jRead.c io/jReadWrite/source/jWrite.c alomax_matrix/alomax_matrix.c alomax_matrix/eigv.c alomax_matrix/alomax_matrix_svd.c matrix_statistics/matrix_statistics.c vector/vector.c ran1/ran1.c map_project.c)
 
 ### Simplify by just creating the NLLOC_LIB_OBJS .o object file
-add_library(NLLOC_LIB_OBJS OBJECT calc_crust_corr.c velmod.c NLLocLib.c NLLocStaStat.c NLLocInput.c NLLocOutput.c NLLocDerived.c NLLocQuality.c NLLocOctree.c NLLocSearch.c GridMemLib.c phaselist.c loclist.c otime_limit.c)
+add_library(NLLOC_LIB_OBJS OBJECT calc_crust_corr.c velmod.c NLLocLib.c NLLocStaStat.c NLLocInput.c NLLocOutput.c NLLocDerived.c NLLocQuality.c NLLocOctree.c NLLocSearch.c NLLocObs.c GridMemLib.c phaselist.c loclist.c otime_limit.c)
 
 #
 add_library(LOC_PHS_LIST OBJECT phaselist.c loclist.c)
