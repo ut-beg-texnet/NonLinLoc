@@ -564,7 +564,7 @@ int read_grd_surface(struct surface *ps, int imessage, int force_km) {
         return (-1);
     psubstr = strrchr(hline, ':');
     if (psubstr != NULL)
-        strcpy((ps->hdr)->title, psubstr + 1);
+        snprintf((ps->hdr)->title, sizeof((ps->hdr)->title), "%s", psubstr + 1);
     if ((pchr = strchr((ps->hdr)->title, '\n')) != NULL)
         *pchr = '\0';
     if (imessage)
@@ -574,7 +574,7 @@ int read_grd_surface(struct surface *ps, int imessage, int force_km) {
         return (-1);
     psubstr = strrchr(hline, ':');
     if (psubstr != NULL)
-        strcpy((ps->hdr)->command, psubstr + 1);
+        snprintf((ps->hdr)->command, sizeof((ps->hdr)->command), "%s", psubstr + 1);
     if ((pchr = strchr((ps->hdr)->command, '\n')) != NULL)
         *pchr = '\0';
     if (imessage)
@@ -585,7 +585,7 @@ int read_grd_surface(struct surface *ps, int imessage, int force_km) {
         return (-1);
     psubstr = strrchr(hline, ':');
     if (psubstr != NULL)
-        strcpy((ps->hdr)->remark, psubstr + 1);
+        snprintf((ps->hdr)->remark, sizeof((ps->hdr)->remark), "%s", psubstr + 1);
     if ((pchr = strchr((ps->hdr)->remark, '\n')) != NULL)
         *pchr = '\0';
     if (imessage)
@@ -743,9 +743,9 @@ int read_grd(struct surface *ps, int imessage) {
     /* open grd file */
 
     if (ps->isHdrBinaryPair) { // 20170911 AJL - added to support compact binary surface files
-        sprintf(grdfilename, "%s.hdr", ps->grd_file);
+        snprintf(grdfilename, sizeof(grdfilename), "%s.hdr", ps->grd_file);
     } else {
-        sprintf(grdfilename, "%s", ps->grd_file);
+        snprintf(grdfilename, sizeof(grdfilename), "%s", ps->grd_file);
     }
 
     if ((fp_grd = fopen(grdfilename, "r")) == NULL) {
@@ -773,7 +773,7 @@ int read_grd(struct surface *ps, int imessage) {
         printf("phline: \"%s\"\n", phline);
     psubstr = strrchr(hline, ':');
     if (psubstr != NULL)
-        strcpy((ps->hdr)->title, psubstr + 1);
+        snprintf((ps->hdr)->title, sizeof((ps->hdr)->title), "%s", psubstr + 1);
     if ((pchr = strchr((ps->hdr)->title, '\n')) != NULL)
         *pchr = '\0';
     if (imessage)
@@ -787,7 +787,7 @@ int read_grd(struct surface *ps, int imessage) {
         printf("phline: \"%s\"\n", phline);
     psubstr = strrchr(hline, ':');
     if (psubstr != NULL)
-        strcpy((ps->hdr)->command, psubstr + 1);
+        snprintf((ps->hdr)->command, sizeof((ps->hdr)->command), "%s", psubstr + 1);
     if ((pchr = strchr((ps->hdr)->command, '\n')) != NULL)
         *pchr = '\0';
     if (imessage)
@@ -802,7 +802,7 @@ int read_grd(struct surface *ps, int imessage) {
         printf("phline: \"%s\"\n", phline);
     psubstr = strrchr(hline, ':');
     if (psubstr != NULL)
-        strcpy((ps->hdr)->remark, psubstr + 1);
+        snprintf((ps->hdr)->remark, sizeof((ps->hdr)->remark), "%s", psubstr + 1);
     if ((pchr = strchr((ps->hdr)->remark, '\n')) != NULL)
         *pchr = '\0';
     if (imessage)
@@ -926,7 +926,7 @@ int read_grd(struct surface *ps, int imessage) {
 
     if (ps->isHdrBinaryPair) { // 20170911 AJL - added to support compact binary surface files
         fclose(fp_grd);
-        sprintf(grdfilename, "%s", ps->grd_file);
+        snprintf(grdfilename, sizeof(grdfilename), "%s", ps->grd_file);
         if ((fp_grd = fopen(grdfilename, "r")) == NULL) {
             fprintf(stderr, "ERROR: Cannot open binary surface grd file:\n");
             fprintf(stderr, "  %s\n", grdfilename);
@@ -1052,7 +1052,7 @@ int convGridTokm(struct surface *ps, int imessage) {
         (ps->hdr)->x_min /= 1000.0;
         (ps->hdr)->x_max /= 1000.0;
         (ps->hdr)->x_inc /= 1000.0;
-        strcpy((ps->hdr)->x_units, "km");
+        snprintf((ps->hdr)->x_units, sizeof((ps->hdr)->x_units), "%s", "km");
     } else {
         fprintf(stderr, "ERROR: unrecognized grid x units: %s.\n",
                 (ps->hdr)->x_units);
@@ -1065,7 +1065,7 @@ int convGridTokm(struct surface *ps, int imessage) {
         (ps->hdr)->y_min /= 1000.0;
         (ps->hdr)->y_max /= 1000.0;
         (ps->hdr)->y_inc /= 1000.0;
-        strcpy((ps->hdr)->y_units, "km");
+        snprintf((ps->hdr)->y_units, sizeof((ps->hdr)->y_units), "%s", "km");
     } else {
         fprintf(stderr, "ERROR: unrecognized grid y units: %s.\n",
                 (ps->hdr)->y_units);
