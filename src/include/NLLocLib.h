@@ -336,6 +336,16 @@ extern int iSaveNLLocEvent, iSaveNLLocSum, iSaveNLLocSumCSV, iSaveNLLocOctree,
     iSaveHypoEllEvent, iSaveHypoEllSum,
     iSaveHypoInvSum, iSaveHypoInvY2KArc, iSaveAlberto4Sum, iSaveFmamp,
     iSaveSnapSum, iCalcSedOrigin, iSaveDecSec, iSavePublicID, iSaveNone;
+
+// Phase 3 (modularization): shared EDT / origin-time working state.
+// Definitions live in NLLocLib.c; declared extern here so NLLocQuality.c
+// (CalcSolutionQuality* etc.) can reach them.
+extern double *ot_ml_arrival;
+extern double *ot_ml_arrival_edt_sum;
+extern int isize_ot_ml_array;
+extern MatrixDouble wt_matrix;
+extern MatrixDouble edt_matrix;
+extern int last_matrix_alloc_size;
 // 20170811 AJL - added to allow saving of expectation hypocenter results instead of maximum likelihood
 extern int iSaveNLLocExpectation;
 // 20220131 AJL - added to support JSON output of location results
