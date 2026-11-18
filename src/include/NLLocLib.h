@@ -331,7 +331,7 @@ extern char HypoInverseArchiveSumHdr[MAXLINE_LONG];
 /* hypocenter filetype saving flags */
 /* SH 02/26/2004  added iSaveSnapSum for output to be read
     by SNAP */
-extern int iSaveNLLocEvent, iSaveNLLocSum, iSaveNLLocOctree,
+extern int iSaveNLLocEvent, iSaveNLLocSum, iSaveNLLocSumCSV, iSaveNLLocOctree,
     iSaveHypo71Event, iSaveHypo71Sum,
     iSaveHypoEllEvent, iSaveHypoEllSum,
     iSaveHypoInvSum, iSaveHypoInvY2KArc, iSaveAlberto4Sum, iSaveFmamp,
