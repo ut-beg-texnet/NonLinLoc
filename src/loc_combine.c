@@ -474,7 +474,7 @@ int Doloc_combine() {
                         // write primary location and merged arrivals to hyp file
                         int iSaveDecSec = 0;
                         int iSavePublicID = 0;
-                        SetOutName(Arrival + 0, fn_hypos_combined_out, fn_root_out, fn_root_out_last, iSaveDecSec,
+                        SetOutName(Arrival + 0, fn_hypos_combined_out, fn_root_out, sizeof(fn_root_out), fn_root_out_last, sizeof(fn_root_out_last), iSaveDecSec,
                                 iSavePublicID, phypo_primary->public_id, &n_file_root_count);
                         sprintf(fname, "%s.grid0.loc.hyp", fn_root_out);
                         int iWriteArrivals = 1;
@@ -518,7 +518,7 @@ int Doloc_combine() {
         }
         int iSaveDecSec = 0;
         int iSavePublicID = 0;
-        SetOutName(Arrival + 0, fn_hypos_combined_out, fn_root_out, fn_root_out_last, iSaveDecSec,
+        SetOutName(Arrival + 0, fn_hypos_combined_out, fn_root_out, sizeof(fn_root_out), fn_root_out_last, sizeof(fn_root_out_last), iSaveDecSec,
                 iSavePublicID, phypo_primary->public_id, &n_file_root_count);
         sprintf(fname, "%s.grid0.loc.hyp", fn_root_out);
         int iWriteArrivals = 1;
