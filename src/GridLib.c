@@ -3888,6 +3888,8 @@ int GetHypLoc(FILE *fpio, const char* filein, HypoDesc* phypo,
             phypo->cov.yx = phypo->cov.xy;
             phypo->cov.zx = phypo->cov.xz;
             phypo->cov.zy = phypo->cov.yz;
+            // 20261120 Bug fix (Mustafa Comoglu & Claude): set semi-major axis az3/dip3, not in file, needed for QML_ConfidenceEllipsoid
+            SetEllipsoidMajorAxis(&phypo->ellipsoid, &phypo->cov);
         } else if (strncmp(line, "STAT_GEOG", 9) == 0) {
             /* STATISTICS */
             if (sscanf(line,
@@ -3916,6 +3918,8 @@ int GetHypLoc(FILE *fpio, const char* filein, HypoDesc* phypo,
                 goto eof_exit;
             latlon2rect(0, templat, templong,
                     &phypo->expect.x, &phypo->expect.y);
+            // 20261120 Bug fix (Mustafa Comoglu & Claude): set semi-major axis az3/dip3, not in file (no covariance on this line)
+            SetEllipsoidMajorAxis(&phypo->ellipsoid, NULL);
         } else if (strncmp(line, "FOCALMECH", 9) == 0) {
             /* FOCALMECH */
             /* Hyp dlat dlong depth Mech dipDir dipAng rake mf misfit nObs nObs */

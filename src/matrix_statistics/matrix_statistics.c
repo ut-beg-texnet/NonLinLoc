@@ -846,6 +846,49 @@ Ellipsoid3D CalcErrorEllipsoid(Mtrx3D *pcov, double del_chi_2) {
 }
 
 
+/** method to set the semi-major axis direction (az3, dip3) of an ellipsoid read from a file
+ *
+ * Hypocenter files give only az/dip of axes 1 and 2, so az3/dip3 are 0 after reading,
+ * which gives wrong QML_ConfidenceEllipsoid values when the hypocenter is written again (e.g. by LocSum).
+ * If pcov is not NULL and has positive variances, az3/dip3 are taken from the ellipsoid recalculated
+ * from the covariance (same calculation as in NLLoc); otherwise axis 3 is the cross product of axes 1 and 2.
+ * Other ellipsoid fields are not changed.
+ *
+ * 20261120 Mustafa Comoglu & Claude - added
+ */
+
+void SetEllipsoidMajorAxis(Ellipsoid3D *pellipsoid, Mtrx3D *pcov) {
+
+    if (pcov != NULL && pcov->xx > 0.0 && pcov->yy > 0.0 && pcov->zz > 0.0) {
+        Ellipsoid3D ell = CalcErrorEllipsoid(pcov, DELTA_CHI_SQR_68_3);
+        if (ell.len3 > 0.0) {
+            pellipsoid->az3 = ell.az3;
+            pellipsoid->dip3 = ell.dip3;
+            return;
+        }
+    }
+
+    // axis vectors: x east, y north, z down (az clockwise from north, dip positive down), as in CalcErrorEllipsoid
+    double x1 = sin(DE2RA * pellipsoid->az1) * cos(DE2RA * pellipsoid->dip1);
+    double y1 = cos(DE2RA * pellipsoid->az1) * cos(DE2RA * pellipsoid->dip1);
+    double z1 = sin(DE2RA * pellipsoid->dip1);
+    double x2 = sin(DE2RA * pellipsoid->az2) * cos(DE2RA * pellipsoid->dip2);
+    double y2 = cos(DE2RA * pellipsoid->az2) * cos(DE2RA * pellipsoid->dip2);
+    double z2 = sin(DE2RA * pellipsoid->dip2);
+    double x3 = y1 * z2 - z1 * y2;
+    double y3 = z1 * x2 - x1 * z2;
+    double z3 = x1 * y2 - y1 * x2;
+    double len = sqrt(x3 * x3 + y3 * y3 + z3 * z3);
+    if (len < SMALL_DOUBLE)
+        return; // axes 1 and 2 not defined
+    pellipsoid->az3 = atan2(x3, y3) * RA2DE;
+    if (pellipsoid->az3 < 0.0)
+        pellipsoid->az3 += 360.0;
+    pellipsoid->dip3 = asin(z3 / len) * RA2DE;
+
+}
+
+
 /** method to convert ellipsoid axes in az/dip/se to vector axes */
 
 /* converted from method init in Java class Ellipsoid3D (04DEC1998) */
