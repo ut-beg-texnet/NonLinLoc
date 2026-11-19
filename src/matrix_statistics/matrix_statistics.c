@@ -1083,7 +1083,7 @@ int nllEllipsiod2QMLConfidenceEllipsoid(Ellipsoid3D *pellipsoid,
     double RPHI[3][3] = {
         {cos(DE2RA * PHI), 0, sin(DE2RA * PHI)},
         {0, 1, 0},
-        {sin(DE2RA * PHI), 0, cos(DE2RA * PHI)}
+        {-sin(DE2RA * PHI), 0, cos(DE2RA * PHI)} // 20261120 Bug fix (Mustafa Comoglu & Claude): sign was lost in conversion from libcomcat ellipse.py, gave wrong majorAxisRotation unless major axis near horizontal
     };
     double RPSI[3][3] = {
         {cos(DE2RA * PSI), sin(DE2RA * PSI), 0},
