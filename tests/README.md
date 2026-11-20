@@ -106,8 +106,8 @@ HTOL_M=150 ZTOL_M=300 tests/run_regression_ssst.sh
 The four scripts share the location-comparison helpers in
 [`lib_compare.sh`](lib_compare.sh), and each builds its parallel `make` job count
 portably (`nproc` on Linux, `sysctl` on macOS). The first three run in CI via
-`.github/workflows/regression.yml`; the full-SSST test below is opt-in (too slow
-for CI).
+`.github/workflows/regression.yml`, together with `run_test_qml_ellipsoid.sh`;
+the full-SSST test below is opt-in (too slow for CI).
 
 ## `run_regression_ssst_full.sh`
 
@@ -138,6 +138,30 @@ SeismicityViewer launch so the test runs headless.
 ```bash
 tests/run_regression_ssst_full.sh                  # default H=250 m, Z=700 m
 NLL_BIN=/path/to/bin tests/run_regression_ssst_full.sh
+```
+
+## `run_test_qml_ellipsoid.sh`
+
+Checks the `QML_ConfidenceEllipsoid` line of the `.hyp` output against the
+ellipsoid on the `STATISTICS` line of the same event. Runs the Alaska sample
+(`Vel2Grid` → `Grid2Time` → `Time2EQ` → `NLLoc`) and then `LocSum`, which reads
+the per-event `.hyp` files and writes them again into the summary
+`loc/alaska.hyp`. For every event, in the per-event files and in the summary,
+it rebuilds the major and minor axes from `majorAxisAzimuth`,
+`majorAxisPlunge` and `majorAxisRotation` and compares them with the
+`STATISTICS` axes (major = axis 1 × axis 2, minor = axis 1), within 1 degree,
+ignoring the sign of an axis. It also checks the semi-minor and semi-major
+lengths.
+
+It was added with the fixes for two bugs it detects: a sign error in the
+rotation matrix that gave a wrong `majorAxisRotation` unless the major axis was
+near horizontal, and `majorAxisAzimuth` / `majorAxisPlunge` = 0 in files
+written by `LocSum` (the major axis direction was not set when a `.hyp` file
+was read). It takes a few seconds.
+
+```bash
+tests/run_test_qml_ellipsoid.sh
+TOL_DEG=0.5 tests/run_test_qml_ellipsoid.sh
 ```
 
 ### Roadmap

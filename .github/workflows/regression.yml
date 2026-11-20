@@ -51,3 +51,6 @@ jobs:
 
       - name: Regression test (NLL-SSST Parkfield, tolerance)
         run: tests/run_regression_ssst.sh
+
+      - name: QML confidence ellipsoid test (alaska, NLLoc + LocSum)
+        run: tests/run_test_qml_ellipsoid.sh

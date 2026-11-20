@@ -48,6 +48,7 @@ Mtrx3D CalcCovarianceSamplesRect(float* fdata, int nSamples, Vect3D* pexpect);
 Mtrx3D CalcCovarianceSamplesGlobal(float* fdata, int nSamples, Vect3D* pexpect);
 Mtrx3D CalcCovarianceSamplesGlobalWeighted(float* fdata, int nSamples, Vect3D* pexpect);
 Ellipsoid3D CalcErrorEllipsoid(Mtrx3D *, double);
+void SetEllipsoidMajorAxis(Ellipsoid3D *pellipsoid, Mtrx3D *pcov);
 Ellipse2D CalcHorizontalErrorEllipse(Mtrx3D *pcov, double del_chi_2);
 void ellipsiod2Axes(Ellipsoid3D *, Vect3D *, Vect3D *, Vect3D *);
 void nllEllipsiod2XMLConfidenceEllipsoid(Ellipsoid3D *pellipsoid,
