@@ -591,3 +591,5 @@ QUALITY  Pmax -1 MFmin -1 MFmax -1 RMS -1 Nphs -1 Gap -1 Dist -1 Mamp -9.90 0 Md
 20261118 NLL - added fix by Mustafa Çomoğlu (ML Claude): Replaces unbounded sprintf, strcpy and strcat with bounded versions (snprintf, strncat) in the code. See https://github.com/ut-beg-texnet/NonLinLoc/pull/94
 
 20261119 NLL - Split NLLocLib.c into smaller files, by Mustafa Çomoğlu (ML Claude). See https://github.com/ut-beg-texnet/NonLinLoc/pull/95
+
+20261120 NLL - Fix QML_ConfidenceEllipsoid rotation and LocSum major axis; add test, by Mustafa Çomoğlu (ML Claude). See https://github.com/ut-beg-texnet/NonLinLoc/pull/96⁠
