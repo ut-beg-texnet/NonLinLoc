@@ -3549,10 +3549,12 @@ KO.SVRC,2023-02-01T03:38:53.860000Z,2023-02-01T03:38:54.960000Z,1.10811060369646
             *pchr = ARRIVAL_NULL_CHR;
         }
         // check for first motion
-        pchr = &(arrival->phase[strlen(arrival->phase) - 1]);
-        if (*pchr == 'c' || *pchr == 'd') {
-            arrival->first_mot[0] = *pchr;
-            *pchr = '\0';
+        if (strlen(arrival->phase) > 0) { // 20261122 Bug fix (Mustafa Comoglu & Claude): empty phase read arrival->phase[-1]
+            pchr = &(arrival->phase[strlen(arrival->phase) - 1]);
+            if (*pchr == 'c' || *pchr == 'd') {
+                arrival->first_mot[0] = *pchr;
+                *pchr = '\0';
+            }
         }
         // set weight, check for P - reset weight
         if (arrival->onset[0] == 'i')
