@@ -1321,7 +1321,8 @@ int GetNextObs(HypoDesc* phypo, FILE* fp_obs, ArrivalDesc *arrival, char* ftype_
 
     int istat = 0, iloop;
     char *cstat;
-    char chr, instruction[MAXSTRING];
+    int chr; // 20261122 Bug fix (Mustafa Comoglu & Claude): was char, holds fgetc() result; with unsigned char (Linux ARM) EOF never matched and NLLoc hung at end of obs file
+    char instruction[MAXSTRING];
     char chrtmp[MAXSTRING];
     char eval_phase_tmp[PHASE_LABEL_LEN];
 

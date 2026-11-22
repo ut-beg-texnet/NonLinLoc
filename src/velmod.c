@@ -948,7 +948,7 @@ int read_grd(struct surface *ps, int imessage) {
             printf("%ld/%ld Z-level binary data points read.\n", npt_read, idatasize);
     } else { // single GMT ASCII file
         long npt_read = 0;
-        char cchr;
+        int cchr; // 20261122 Bug fix (Mustafa Comoglu & Claude): was char, holds fgetc() result; with unsigned char (Linux ARM) EOF never matched
         while (npt_read < idatasize) {
             if ((istat = fscanf(fp_grd, "%lf ", &zval)) == 0) { // 20170807 AJL - Added for case of additional header lines
                 //printf("istat=%d\n", istat);
