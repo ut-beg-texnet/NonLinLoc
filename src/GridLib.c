@@ -287,7 +287,7 @@ int GetNextSource(char* in_line) {
 
     /* check number of sources */
     if (NumSources >= MAX_NUM_SOURCES) {
-        nll_puterr2("ERROR: to many sources, ignoring source", srce_in->label);
+        nll_puterr2("ERROR: to many sources, ignoring source", in_line); // 20261122 Bug fix (Mustafa Comoglu & Claude): was srce_in->label with srce_in == NULL (segfault)
         return (0);
     }
 
