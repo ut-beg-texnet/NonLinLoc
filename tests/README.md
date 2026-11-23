@@ -109,6 +109,20 @@ portably (`nproc` on Linux, `sysctl` on macOS). The first three run in CI via
 `.github/workflows/regression.yml`, together with `run_test_qml_ellipsoid.sh`;
 the full-SSST test below is opt-in (too slow for CI).
 
+CI also builds a second time with `-funsigned-char` and runs the Alaska,
+global and QML ellipsoid tests on that build. On Linux ARM (aarch64) `char` is
+unsigned, so this catches code that only works when `char` is signed. An
+example is storing the result of `fgetc()` in a `char` and comparing it with
+`EOF`, which made `NLLoc` hang at the end of the observation file on ARM. To do
+the same locally:
+
+```bash
+mkdir -p /tmp/bin-uchar
+MYBIN=/tmp/bin-uchar cmake -S src -B /tmp/build-uchar -DCMAKE_C_FLAGS="-funsigned-char"
+make -C /tmp/build-uchar -j4
+NLL_BIN=/tmp/bin-uchar tests/run_regression.sh
+```
+
 ## `run_regression_ssst_full.sh`
 
 The **full** NLL-SSST test: the complete iterative Source-Specific Station Term
