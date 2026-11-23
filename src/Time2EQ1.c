@@ -126,7 +126,7 @@ int main(int argc, char *argv[]) {
 
     char MsgStr_sta[2 * MAXLINE], MsgStr_srce[2 * MAXLINE];
 
-    char last_label[MAXLINE], last_phs_label[ARRIVAL_LABEL_LEN];
+    char last_label[MAXLINE] = "", last_phs_label[ARRIVAL_LABEL_LEN] = ""; // 20261122 Bug fix (Mustafa Comoglu & Claude): were compared before being set
     double last_arrival_time = -1.0;
 
 
