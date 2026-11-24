@@ -593,3 +593,7 @@ QUALITY  Pmax -1 MFmin -1 MFmax -1 RMS -1 Nphs -1 Gap -1 Dist -1 Mamp -9.90 0 Md
 20261119 NLL - Split NLLocLib.c into smaller files, by Mustafa Çomoğlu (ML Claude). See https://github.com/ut-beg-texnet/NonLinLoc/pull/95
 
 20261120 NLL - Fix QML_ConfidenceEllipsoid rotation and LocSum major axis; add test, by Mustafa Çomoğlu (ML Claude). See https://github.com/ut-beg-texnet/NonLinLoc/pull/96⁠
+
+20261123 NLL - Misc bug fixes, by Mustafa Çomoğlu (ML Claude). See https://github.com/ut-beg-texnet/NonLinLoc/pull/97
+
+20261124 NLL - GetHypLoc: do not write MapProjStr[-1] when n_proj = -1 fixes, by Mustafa Çomoğlu (ML Claude). See https://github.com/ut-beg-texnet/NonLinLoc/pull/98
