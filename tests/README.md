@@ -178,6 +178,40 @@ tests/run_test_qml_ellipsoid.sh
 TOL_DEG=0.5 tests/run_test_qml_ellipsoid.sh
 ```
 
+## `run_test_projection_roundtrip.sh`
+
+Round-trip test of the map projections: lat,lon → x,y → lat,lon, with the NLL
+functions `get_transform()`, `latlon2rect()` and `rect2latlon()`. It compiles
+[`test_projection_roundtrip.c`](test_projection_roundtrip.c) with the NLL
+source files it needs, so it requires only a C compiler, and takes a few
+seconds.
+
+It checks all seven `TRANS` types: `GLOBAL`, `NONE`, `SIMPLE`, `SDC`, `LAMBERT`,
+`TRANS_MERC` and `AZIMUTHAL_EQUIDIST`. The last five are checked at seven
+origins (both hemispheres, across 180 and 0 degrees longitude) with four
+rotations, within ±2 degrees (about 220 km) of the origin, with longitude in
+the ±180 and the 0-360 convention. `TRANS_MERC` is checked with and without
+false easting and scale factor, and the types that use an ellipsoid with all 15
+ellipsoids. The returned position must agree with the input within 0.01 m, and
+the returned longitude must be between -180 and 180 degrees. `NONE` is checked
+with x,y up to ±1000 km, which must come back unchanged.
+
+Limits:
+- An error made the same way in both directions cancels. The test shows that the
+  two directions agree, not that x,y are correct.
+- Each transform is checked on its own. Mixing of two transforms is not checked.
+- `TRANS_MERC` is a series expansion that loses accuracy away from the central
+  meridian. At ±2 degrees the largest difference here is 3 mm, but at latitude
+  61 it is about 2 m at ±5 degrees and about 330 m at ±10 degrees (widths in
+  longitude are the same in km). `LAMBERT`, `AZIMUTHAL_EQUIDIST`, `SIMPLE` and
+  `SDC` stay below 1 mm at ±10 degrees at all seven origins.
+
+```bash
+tests/run_test_projection_roundtrip.sh
+tests/run_test_projection_roundtrip.sh -v          # print every case
+TOL_M=0.001 tests/run_test_projection_roundtrip.sh
+```
+
 ### Roadmap
 
 Planned extensions:

@@ -55,6 +55,9 @@ jobs:
       - name: QML confidence ellipsoid test (alaska, NLLoc + LocSum)
         run: tests/run_test_qml_ellipsoid.sh
 
+      - name: Map projection round-trip test (lat,lon -> x,y -> lat,lon)
+        run: tests/run_test_projection_roundtrip.sh
+
       # On Linux ARM (aarch64) char is unsigned. Build with -funsigned-char so
       # that code which depends on char being signed (e.g. storing fgetc() in a
       # char and comparing with EOF, which made NLLoc hang at the end of the
