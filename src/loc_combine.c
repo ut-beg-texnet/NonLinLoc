@@ -412,9 +412,11 @@ int Doloc_combine() {
 
     // read input locations
     LocNode *loc_list_primary_head = NULL; // root node of primary locations list
-    //int n_hypos_primary_read = read_input_locations(&loc_list_primary_head, fn_hypos_primary_in);
+    int n_hypos_primary_read = read_input_locations(&loc_list_primary_head, fn_hypos_primary_in);
+    printf("%d primary location files read.\n", n_hypos_primary_read);
     LocNode *loc_list_secondary_head = NULL; // root node of secondary locations list
-    //int n_hypos_secondary_read = read_input_locations(&loc_list_secondary_head, fn_hypos_secondary_in);
+    int n_hypos_secondary_read = read_input_locations(&loc_list_secondary_head, fn_hypos_secondary_in);
+    printf("%d secondary location files read.\n", n_hypos_secondary_read);
 
     // set some variables
     char fn_root_out[FILENAME_MAX], fname[2 * FILENAME_MAX], fn_root_out_last[FILENAME_MAX];
