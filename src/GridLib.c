@@ -3934,9 +3934,10 @@ int GetHypLoc(FILE *fpio, const char* filein, HypoDesc* phypo,
                 goto eof_exit;
         } else if (strncmp(line, "TRANSFORM", 9) == 0) {
             /* TRANSFORM */
-            if (n_proj >= 0)
+            if (n_proj >= 0) { // 20261124 Bug fix (Mustafa Comoglu & Claude): braces were missing, wrote to MapProjStr[-1] when n_proj = -1 (NLDiffLoc)
                 line[MAXLINE_LONG - 1] = '\0';
-            snprintf(MapProjStr[n_proj], sizeof(MapProjStr[n_proj]), "%s", line);
+                snprintf(MapProjStr[n_proj], sizeof(MapProjStr[n_proj]), "%s", line);
+            }
         } else if (strncmp(line, "DIFFERENTIAL", 12) == 0) {
 
             /* DIFFERENTIAL */
