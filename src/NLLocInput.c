@@ -146,7 +146,12 @@ int ReadNLLoc_Input(FILE* fp_input, char** param_line_array, int n_param_lines) 
 
         /*read parameter line */
 
-        if ((iscan = sscanf(line, "%s", param)) < 0)
+        // 20261127 Bug fix (Mustafa Comoglu & Claude): read word into buffer as long as line, then copy with cut and warning
+        char param_word[strlen(line) + 1];
+        param_word[0] = '\0';
+        iscan = sscanf(line, "%s", param_word);
+        CopyWordCut(param, sizeof(param), param_word, "control statement keyword");
+        if (iscan < 0)
             continue;
 
         /* skip comment line or white space */
@@ -675,8 +680,16 @@ int GetNLLoc_Files(char* line1) {
     char fnobs[FILENAME_MAX];
     char fn_time_grids_list[MAX_NUM_TIME_GRID_PATHS * (FILENAME_MAX + 2)]; // 20251027 add support for alternative travel-time grid path/root
 
-    istat = sscanf(line1, "%s %s %s %s %d", fnobs, ftype_obs, fn_time_grids_list,
-            fn_path_output, &iSwapBytesOnInput);
+    // 20261127 Bug fix (Mustafa Comoglu & Claude): read words into buffers as long as line1, then copy with cut and warning
+    size_t wlen = strlen(line1) + 1;
+    char w_obs[wlen], w_ftype[wlen], w_grids[wlen], w_out[wlen];
+    w_obs[0] = w_ftype[0] = w_grids[0] = w_out[0] = '\0';
+    istat = sscanf(line1, "%s %s %s %s %d", w_obs, w_ftype, w_grids,
+            w_out, &iSwapBytesOnInput);
+    CopyWordCut(fnobs, sizeof(fnobs), w_obs, "LOCFILES obs file name");
+    CopyWordCut(ftype_obs, sizeof(ftype_obs), w_ftype, "LOCFILES obs file type");
+    CopyWordCut(fn_time_grids_list, sizeof(fn_time_grids_list), w_grids, "LOCFILES travel-time grid root");
+    CopyWordCut(fn_path_output, sizeof(fn_path_output), w_out, "LOCFILES output file root");
     if (istat < 5)
         iSwapBytesOnInput = 0;
 
@@ -719,7 +732,11 @@ int GetNLLoc_SearchType(char* line1) {
     char search_type[MAXLINE];
 
 
-    istat = sscanf(line1, "%s", search_type);
+    // 20261127 Bug fix (Mustafa Comoglu & Claude): read word into buffer as long as line1, then copy with cut and warning
+    char w_search_type[strlen(line1) + 1];
+    w_search_type[0] = '\0';
+    istat = sscanf(line1, "%s", w_search_type);
+    CopyWordCut(search_type, sizeof(search_type), w_search_type, "LOCSEARCH type");
 
     if (istat != 1)
         return (-1);
@@ -781,13 +798,15 @@ int GetNLLoc_SearchType(char* line1) {
     } else if (strcmp(search_type, "OCT") == 0) {
 
         SearchType = SEARCH_OCTTREE;
+        w_search_type[0] = '\0';
         istat = sscanf(line1, "%s %d %d %d %lf %d %d %d %d %lf",
-                search_type, &octtreeParams.init_num_cells_x,
+                w_search_type, &octtreeParams.init_num_cells_x,
                 &octtreeParams.init_num_cells_y, &octtreeParams.init_num_cells_z,
                 &octtreeParams.min_node_size, &octtreeParams.max_num_nodes,
                 &octtreeParams.num_scatter, &octtreeParams.use_stations_density,
                 &octtreeParams.stop_on_min_node_size,
                 &octtreeParams.mean_cell_velocity);
+        CopyWordCut(search_type, sizeof(search_type), w_search_type, "LOCSEARCH type");
 
         if (istat < 8)
             octtreeParams.use_stations_density = 0;
@@ -1231,7 +1250,12 @@ int GetNLLoc_HypOutTypes(char* line1) {
         if (isspace(*pchr))
             break;
 
-        if ((istat = sscanf(pchr, "%s", hyp_type)) != 1)
+        // 20261127 Bug fix (Mustafa Comoglu & Claude): read word into buffer as long as pchr, then copy with cut and warning
+        char w_hyp_type[strlen(pchr) + 1];
+        w_hyp_type[0] = '\0';
+        istat = sscanf(pchr, "%s", w_hyp_type);
+        CopyWordCut(hyp_type, sizeof(hyp_type), w_hyp_type, "LOCHYPOUT type");
+        if (istat != 1)
             return (-1);
 
         if (strcmp(hyp_type, "SAVE_NLLOC_ALL") == 0) {
@@ -1310,9 +1334,13 @@ int GetNLLoc_Method(char* line1) {
     char loc_method[MAXLINE];
 
 
-    istat = sscanf(line1, "%s %lf %d %d %d %lf %d %lf %d", loc_method,
+    // 20261127 Bug fix (Mustafa Comoglu & Claude): read word into buffer as long as line1, then copy with cut and warning
+    char w_loc_method[strlen(line1) + 1];
+    w_loc_method[0] = '\0';
+    istat = sscanf(line1, "%s %lf %d %d %d %lf %d %lf %d", w_loc_method,
             &DistStaGridMax, &MinNumArrLoc, &MaxNumArrLoc, &MinNumSArrLoc,
             &VpVsRatio, &MaxNum3DGridMemory, &DistStaGridMin, &iRejectDuplicateArrivals);
+    CopyWordCut(loc_method, sizeof(loc_method), w_loc_method, "LOCMETH method");
     if (istat < 8)
         DistStaGridMin = -1.0;
     if (istat < 9)
@@ -1418,11 +1446,16 @@ int GetNLLoc_Grid(char* input_line) {
     int istat;
     char str_save[20];
 
+    // 20261127 Bug fix (Mustafa Comoglu & Claude): read words into buffers as long as input_line, then copy with cut and warning
+    char w_type[strlen(input_line) + 1], w_save[strlen(input_line) + 1];
+    w_type[0] = w_save[0] = '\0';
     istat = sscanf(input_line, "%d %d %d %lf %lf %lf %lf %lf %lf %s %s",
             &(grid_in.numx), &(grid_in.numy), &(grid_in.numz),
             &(grid_in.origx), &(grid_in.origy), &(grid_in.origz),
-            &(grid_in.dx), &(grid_in.dy), &(grid_in.dz), grid_in.chr_type,
-            str_save);
+            &(grid_in.dx), &(grid_in.dy), &(grid_in.dz), w_type,
+            w_save);
+    CopyWordCut(grid_in.chr_type, sizeof(grid_in.chr_type), w_type, "LOCGRID type");
+    CopyWordCut(str_save, sizeof(str_save), w_save, "LOCGRID save flag");
 
     convert_grid_type(&grid_in, 1);
     if (message_flag >= 2)
@@ -1642,7 +1675,11 @@ int GetNLLoc_Angles(char* line1) {
     char strAngleMode[MAXLINE];
 
 
-    sscanf(line1, "%s %d", strAngleMode, &iAngleQualityMin);
+    // 20261127 Bug fix (Mustafa Comoglu & Claude): read word into buffer as long as line1, then copy with cut and warning
+    char w_angle_mode[strlen(line1) + 1];
+    w_angle_mode[0] = '\0';
+    sscanf(line1, "%s %d", w_angle_mode, &iAngleQualityMin);
+    CopyWordCut(strAngleMode, sizeof(strAngleMode), w_angle_mode, "LOCANGLES mode");
 
     snprintf(MsgStr, sizeof(MsgStr), "LOCANGLES:  %s  %d", strAngleMode, iAngleQualityMin);
     nll_putmsg(4, MsgStr);

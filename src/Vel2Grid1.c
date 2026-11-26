@@ -207,7 +207,11 @@ int ReadVel2GridInput(FILE* fp_input)
 
 		/*read parmeter line */
 
-		if ((iscan = sscanf(line, "%s", param)) < 0 )
+		char param_word[sizeof(line)]; // 20261127 Bug fix (Mustafa Comoglu & Claude): read word into buffer as long as line, then copy with cut and warning
+		param_word[0] = '\0';
+		iscan = sscanf(line, "%s", param_word);
+		CopyWordCut(param, sizeof(param), param_word, "control statement keyword");
+		if (iscan < 0 )
 			continue;
 
 		/* skip comment line or white space */
@@ -326,7 +330,11 @@ int ReadVel2GridInput(FILE* fp_input)
 int get_vg_outfile(char* line1)
 {
 
-	sscanf(line1, "%s", fn_vg_output);
+	// 20261127 Bug fix (Mustafa Comoglu & Claude): read word into buffer as long as line1, then copy with cut and warning
+	char w_output[strlen(line1) + 1];
+	w_output[0] = '\0';
+	sscanf(line1, "%s", w_output);
+	CopyWordCut(fn_vg_output, sizeof(fn_vg_output), w_output, "VGOUT output file root");
 
 	snprintf(MsgStr, sizeof(MsgStr), "Vel2Grid files:  Output: %s.*",
 		 fn_vg_output);
@@ -350,7 +358,11 @@ int get_vg_type(char* line1)
 	}
 
 
-	sscanf(line1, " %s", WaveType[NumWaveTypes]);
+	// 20261127 Bug fix (Mustafa Comoglu & Claude): read word into buffer as long as line1, then copy with cut and warning
+	char w_wave[strlen(line1) + 1];
+	w_wave[0] = '\0';
+	sscanf(line1, " %s", w_wave);
+	CopyWordCut(WaveType[NumWaveTypes], sizeof(WaveType[NumWaveTypes]), w_wave, "VGTYPE wave type");
 
 	snprintf(MsgStr, sizeof(MsgStr), "Vel2Grid wave type:  %s", WaveType[NumWaveTypes]);
 	nll_putmsg(3, MsgStr);

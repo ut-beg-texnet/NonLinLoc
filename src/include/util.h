@@ -81,6 +81,9 @@ int checkRangeInt(const char * name, const char * param, int val,
 int checkRangeDouble(const char * name, const char * param, double val,
 	int checkMin, double min, int checkMax, double max);
 
+/*** function to copy a word read with scanf "%s" into dest, cut with a warning if too long */
+int CopyWordCut(char *dest, size_t dest_size, const char *word, const char *what);
+
 /* misc structures */
 
 /* 3D vector or point */

@@ -233,7 +233,11 @@ int GetIncludeFile(char* line1, FILE **fp_io) {
 
     /* read include file name */
 
-    sscanf(line1, "%s", fn_include);
+    // 20261127 Bug fix (Mustafa Comoglu & Claude): read word into buffer as long as line1, then copy with cut and warning
+    char w_include[strlen(line1) + 1];
+    w_include[0] = '\0';
+    sscanf(line1, "%s", w_include);
+    CopyWordCut(fn_include, sizeof(fn_include), w_include, "INCLUDE file name");
 
     snprintf(MsgStr, sizeof(MsgStr), "Reading from INCLUDE FILE: %s", fn_include);
     nll_putmsg(3, MsgStr);
@@ -329,7 +333,11 @@ int GetSource(char* in_line, SourceDesc *srce_in, int num_sources) {
 
     /* read coordinate type */
 
-    istat = sscanf(in_line, "%*s %s", coord_type);
+    // 20261127 Bug fix (Mustafa Comoglu & Claude): read word into buffer as long as in_line, then copy with cut and warning
+    char w_coord_type[strlen(in_line) + 1];
+    w_coord_type[0] = '\0';
+    istat = sscanf(in_line, "%*s %s", w_coord_type);
+    CopyWordCut(coord_type, sizeof(coord_type), w_coord_type, "source coordinate type");
 
     /* read coordinate type and coordinates */
 
@@ -352,8 +360,13 @@ int GetSource(char* in_line, SourceDesc *srce_in, int num_sources) {
         if (istat != 6)
             return (-1);
     } else if (strcmp(coord_type, "LATLON") == 0) {
-        istat = sscanf(in_line, "%s %s %lf %lf %lf %lf", label,
-                coord_type, &val1, &val2, &val3, &val4);
+        // 20261127 Bug fix (Mustafa Comoglu & Claude): read words into buffers as long as in_line, then copy with cut and warning
+        char w_label[strlen(in_line) + 1];
+        w_label[0] = w_coord_type[0] = '\0';
+        istat = sscanf(in_line, "%s %s %lf %lf %lf %lf", w_label,
+                w_coord_type, &val1, &val2, &val3, &val4);
+        CopyWordCut(label, sizeof(label), w_label, "source label");
+        CopyWordCut(coord_type, sizeof(coord_type), w_coord_type, "source coordinate type");
         strncpy(srce_in->label, label, ARRIVAL_LABEL_LEN);
         srce_in->dlat = val1;
         srce_in->dlong = val2;
@@ -520,6 +533,8 @@ char* projection_str2transform_str(char* trans_str, char* proj_str) {
 
 int get_transform(int n_proj, char* in_line) {
     int istat, ierr;
+    // 20261127 Bug fix (Mustafa Comoglu & Claude): read words into buffers as long as in_line, then copy with cut and warning
+    char w_trans[strlen(in_line) + 1], w_ellips[strlen(in_line) + 1];
     double angle;
 
     // SDC
@@ -531,7 +546,9 @@ int get_transform(int n_proj, char* in_line) {
 
     /* read transform input line */
 
-    sscanf(in_line, "%s", map_trans_type[n_proj]);
+    w_trans[0] = '\0';
+    sscanf(in_line, "%s", w_trans);
+    CopyWordCut(map_trans_type[n_proj], sizeof(map_trans_type[n_proj]), w_trans, "TRANS type");
 
     if (strcmp(map_trans_type[n_proj], "GLOBAL") == 0) {
 
@@ -539,7 +556,9 @@ int get_transform(int n_proj, char* in_line) {
         GeometryMode = MODE_GLOBAL;
 
         map_itype[n_proj] = MAP_TRANS_GLOBAL;
-        istat = sscanf(in_line, "%s", map_trans_type[n_proj]);
+        w_trans[0] = '\0';
+        istat = sscanf(in_line, "%s", w_trans);
+        CopyWordCut(map_trans_type[n_proj], sizeof(map_trans_type[n_proj]), w_trans, "TRANS type");
 
         angle = 0.0;
         map_cosang[n_proj] = cos(angle);
@@ -560,7 +579,9 @@ int get_transform(int n_proj, char* in_line) {
     } else if (strcmp(map_trans_type[n_proj], "NONE") == 0) {
 
         map_itype[n_proj] = MAP_TRANS_NONE;
-        istat = sscanf(in_line, "%s", map_trans_type[n_proj]);
+        w_trans[0] = '\0';
+        istat = sscanf(in_line, "%s", w_trans);
+        CopyWordCut(map_trans_type[n_proj], sizeof(map_trans_type[n_proj]), w_trans, "TRANS type");
 
         angle = 0.0;
         map_cosang[n_proj] = cos(angle);
@@ -581,9 +602,11 @@ int get_transform(int n_proj, char* in_line) {
     } else if (strcmp(map_trans_type[n_proj], "SIMPLE") == 0) {
 
         map_itype[n_proj] = MAP_TRANS_SIMPLE;
+        w_trans[0] = '\0';
         istat = sscanf(in_line, "%s %lf %lf %lf",
-                map_trans_type[n_proj], &map_orig_lat[n_proj], &map_orig_long[n_proj],
+                w_trans, &map_orig_lat[n_proj], &map_orig_long[n_proj],
                 &map_rot[n_proj]);
+        CopyWordCut(map_trans_type[n_proj], sizeof(map_trans_type[n_proj]), w_trans, "TRANS type");
 
         angle = -cRPD * map_rot[n_proj];
         map_cosang[n_proj] = cos(angle);
@@ -613,9 +636,11 @@ int get_transform(int n_proj, char* in_line) {
     } else if (strcmp(map_trans_type[n_proj], "SDC") == 0) {
 
         map_itype[n_proj] = MAP_TRANS_SDC;
+        w_trans[0] = '\0';
         istat = sscanf(in_line, "%s %lf %lf %lf",
-                map_trans_type[n_proj], &map_orig_lat[n_proj], &map_orig_long[n_proj],
+                w_trans, &map_orig_lat[n_proj], &map_orig_long[n_proj],
                 &map_rot[n_proj]);
+        CopyWordCut(map_trans_type[n_proj], sizeof(map_trans_type[n_proj]), w_trans, "TRANS type");
 
         angle = -cRPD * map_rot[n_proj];
         map_cosang[n_proj] = cos(angle);
@@ -659,11 +684,14 @@ int get_transform(int n_proj, char* in_line) {
     } else if (strcmp(map_trans_type[n_proj], "LAMBERT") == 0) {
 
         map_itype[n_proj] = MAP_TRANS_LAMBERT;
+        w_trans[0] = w_ellips[0] = '\0';
         istat = sscanf(in_line, "%s %s %lf %lf %lf %lf %lf",
-                map_trans_type[n_proj], map_ref_ellipsoid[n_proj],
+                w_trans, w_ellips,
                 &map_orig_lat[n_proj], &map_orig_long[n_proj],
                 &map_lambert_1st_std_paral[n_proj], &map_lambert_2nd_std_paral[n_proj],
                 &map_rot[n_proj]);
+        CopyWordCut(map_trans_type[n_proj], sizeof(map_trans_type[n_proj]), w_trans, "TRANS type");
+        CopyWordCut(map_ref_ellipsoid[n_proj], sizeof(map_ref_ellipsoid[n_proj]), w_ellips, "TRANS reference ellipsoid");
 
         ierr = 0;
         if (checkRangeDouble("TRANS",
@@ -720,11 +748,14 @@ int get_transform(int n_proj, char* in_line) {
         // compatibility, if not given on TRANS line
         map_false_easting[n_proj] = 500000;
         map_scale_factor[n_proj] = 1.0;
+        w_trans[0] = w_ellips[0] = '\0';
         istat = sscanf(in_line, "%s %s %lf %lf %lf %d %ld %lf",
-                map_trans_type[n_proj], map_ref_ellipsoid[n_proj],
+                w_trans, w_ellips,
                 &map_orig_lat[n_proj], &map_orig_long[n_proj],
                 &map_rot[n_proj], &use_false_easting,
                 &map_false_easting[n_proj], &map_scale_factor[n_proj]);
+        CopyWordCut(map_trans_type[n_proj], sizeof(map_trans_type[n_proj]), w_trans, "TRANS type");
+        CopyWordCut(map_ref_ellipsoid[n_proj], sizeof(map_ref_ellipsoid[n_proj]), w_ellips, "TRANS reference ellipsoid");
 
         ierr = 0;
         if (checkRangeDouble("TRANS",
@@ -774,10 +805,13 @@ int get_transform(int n_proj, char* in_line) {
         // 20171120 AJL - added AZIMUTHAL EQUIDISTANT PROJECTION
 
         map_itype[n_proj] = MAP_TRANS_AZ_EQUID;
+        w_trans[0] = w_ellips[0] = '\0';
         istat = sscanf(in_line, "%s %s %lf %lf %lf",
-                map_trans_type[n_proj], map_ref_ellipsoid[n_proj],
+                w_trans, w_ellips,
                 &map_orig_lat[n_proj], &map_orig_long[n_proj],
                 &map_rot[n_proj]);
+        CopyWordCut(map_trans_type[n_proj], sizeof(map_trans_type[n_proj]), w_trans, "TRANS type");
+        CopyWordCut(map_ref_ellipsoid[n_proj], sizeof(map_ref_ellipsoid[n_proj]), w_ellips, "TRANS reference ellipsoid");
 
         ierr = 0;
         if (checkRangeDouble("TRANS",
@@ -830,10 +864,14 @@ int get_transform(int n_proj, char* in_line) {
 int get_grid(char* input_line) {
     int istat, ierr = 0;
 
+    // 20261127 Bug fix (Mustafa Comoglu & Claude): read word into buffer as long as input_line, then copy with cut and warning
+    char w_type[strlen(input_line) + 1];
+    w_type[0] = '\0';
     istat = sscanf(input_line, "%d %d %d %lf %lf %lf %lf %lf %lf %s",
             &(grid_in.numx), &(grid_in.numy), &(grid_in.numz),
             &(grid_in.origx), &(grid_in.origy), &(grid_in.origz),
-            &(grid_in.dx), &(grid_in.dy), &(grid_in.dz), grid_in.chr_type);
+            &(grid_in.dx), &(grid_in.dy), &(grid_in.dz), w_type);
+    CopyWordCut(grid_in.chr_type, sizeof(grid_in.chr_type), w_type, "GRID type");
 
     grid_in.iSwapBytes = 0;
 
@@ -2391,8 +2429,24 @@ int OpenGrid3dFile(char *fname, FILE **fp_grid, FILE **fp_hdr,
 
     if (psrce != NULL && (strncmp(file_type, "time", 4) == 0
             || strncmp(file_type, "angle", 4) == 0)) {
-        if (fscanf(*fp_hdr, "%s %lf %lf %lf\n",
-                psrce->label, &(psrce->x), &(psrce->y), &(psrce->z)) != 4)
+        // 20261127 Bug fix (Mustafa Comoglu & Claude): fscanf "%s" into psrce->label had no limit.
+        //   Read the label with a width, skip the rest of a longer word, then copy with cut and warning.
+        //   Same as the original "%s %lf %lf %lf\n" for any label shorter than w_label.
+        char w_label[MAXLINE_LONG];
+        w_label[0] = '\0';
+        int nread = fscanf(*fp_hdr, "%1023s", w_label);
+        if (nread == 1) {
+            int c;
+            while ((c = getc(*fp_hdr)) != EOF && !isspace(c))
+                ; // skip rest of word longer than w_label
+            if (c != EOF)
+                ungetc(c, *fp_hdr);
+            int nread2 = fscanf(*fp_hdr, "%lf %lf %lf\n", &(psrce->x), &(psrce->y), &(psrce->z));
+            if (nread2 > 0)
+                nread += nread2;
+        }
+        CopyWordCut(psrce->label, sizeof(psrce->label), w_label, "grid header file source label");
+        if (nread != 4)
             fprintf(stderr, "WARNING: Cannot read source location from grid header file: %s\n", fname);
         psrce->is_coord_xyz = 1;
     }
@@ -3823,14 +3877,18 @@ int GetHypLoc(FILE *fpio, const char* filein, HypoDesc* phypo,
             snprintf(phypo->searchInfo, sizeof(phypo->searchInfo), "%s", strchr(line, ' ') + 1);
         } else if (strncmp(line, "HYPOCENTER", 10) == 0) {
             /* HYPOCENTER */
-            if (sscanf(line,
+            // 20261127 Bug fix (Mustafa Comoglu & Claude): read word into buffer as long as line, then copy with cut and warning
+            char w_type[sizeof(line)];
+            w_type[0] = '\0';
+            int nscan = sscanf(line,
                     "%*s %*s %lf %*s %lf %*s %lf %*s %lf %*s %d %*s %d %*s %d %s",
                     &(phypo->x), &(phypo->y), &(phypo->z),
                     &hypo_sec,
                     &(phypo->ix), &(phypo->iy), &(phypo->iz),
-                    phypo->type // 20170811 AJL - added to allow saving of expectation hypocenter results instead of maximum likelihood
-                    )
-                    == EOF)
+                    w_type // 20170811 AJL - added to allow saving of expectation hypocenter results instead of maximum likelihood
+                    );
+            CopyWordCut(phypo->type, sizeof(phypo->type), w_type, "HYPOCENTER type");
+            if (nscan == EOF)
                 goto eof_exit;
             phypo->sec = (long double) hypo_sec;
         } else if (strncmp(line, "GEOGRAPHIC", 10) == 0) {
@@ -3948,11 +4006,16 @@ int GetHypLoc(FILE *fpio, const char* filein, HypoDesc* phypo,
 
         } else if (strncmp(line, "QML_OriginQuality", 12) == 0) { // 20181017 AJL - added
 
-            if (sscanf(line,
+            // 20261127 Bug fix (Mustafa Comoglu & Claude): read word into buffer as long as line, then copy with cut and warning
+            char w_gtLevel[sizeof(line)];
+            w_gtLevel[0] = '\0';
+            int nscan = sscanf(line,
                     "QML_OriginQuality  assocPhCt %d  usedPhCt %*d  assocStaCt %d  usedStaCt %d  depthPhCt %d"
                     "  stdErr %*g  azGap %*g  secAzGap %lg  gtLevel %s  minDist %lg maxDist %lg medDist %lg",
                     &phypo->associatedPhaseCount, &phypo->associatedStationCount, &phypo->usedStationCount, &phypo->depthPhaseCount,
-                    &phypo->gap_secondary, phypo->groundTruthLevel, &phypo->minimumDistance, &phypo->maximumDistance, &phypo->medianDistance) == EOF)
+                    &phypo->gap_secondary, w_gtLevel, &phypo->minimumDistance, &phypo->maximumDistance, &phypo->medianDistance);
+            CopyWordCut(phypo->groundTruthLevel, sizeof(phypo->groundTruthLevel), w_gtLevel, "QML_OriginQuality gtLevel");
+            if (nscan == EOF)
                 goto eof_exit;
 
         } else if (strncmp(line, "QML_OriginUncertainty", 12) == 0) { // 20181017 AJL - added
@@ -4077,17 +4140,21 @@ int ReadArrival(char* line, ArrivalDesc* parr, int iReadType) {
 
     /* read observation part of phase line */
 
+    // 20261127 Bug fix (Mustafa Comoglu & Claude): read words into buffers as long as line, then copy with cut and warning
+    size_t wlen = strlen(line) + 1;
+    char w_label[wlen], w_inst[wlen], w_comp[wlen], w_onset[wlen], w_phase[wlen], w_first_mot[wlen], w_error_type[wlen];
+    w_label[0] = w_inst[0] = w_comp[0] = w_onset[0] = w_phase[0] = w_first_mot[0] = w_error_type[0] = '\0';
     istat = sscanf(line, "%s %s %s %s %s %s %ld %ld %lf %s %lf %lf %lf %lf",
-            label,
-            parr->inst,
-            parr->comp,
-            parr->onset,
-            parr->phase,
-            parr->first_mot,
+            w_label,
+            w_inst,
+            w_comp,
+            w_onset,
+            w_phase,
+            w_first_mot,
             /*&parr->quality, */
             &idate, &ihrmin,
             &(parr->sec),
-            parr->error_type,
+            w_error_type,
             // AJL 2000628 bug fix - replaced following line
             //&parr->error,
             &(parr->error),
@@ -4095,6 +4162,16 @@ int ReadArrival(char* line, ArrivalDesc* parr, int iReadType) {
             &(parr->amplitude),
             &(parr->period)
             );
+    // warn only for a line that will be accepted (all 14 fields read, see below); other lines, e.g. the
+    //   "PHASE ID Ins Cmp On Pha ..." header in NLL Hypocenter-Phase files, are rejected, so cut them silently
+    int warn = (istat == 14);
+    CopyWordCut(label, sizeof(label), w_label, warn ? "phase line station label" : NULL);
+    CopyWordCut(parr->inst, sizeof(parr->inst), w_inst, warn ? "phase line instrument" : NULL);
+    CopyWordCut(parr->comp, sizeof(parr->comp), w_comp, warn ? "phase line component" : NULL);
+    CopyWordCut(parr->onset, sizeof(parr->onset), w_onset, warn ? "phase line onset" : NULL);
+    CopyWordCut(parr->phase, sizeof(parr->phase), w_phase, warn ? "phase line phase" : NULL);
+    CopyWordCut(parr->first_mot, sizeof(parr->first_mot), w_first_mot, warn ? "phase line first motion" : NULL);
+    CopyWordCut(parr->error_type, sizeof(parr->error_type), w_error_type, warn ? "phase line error type" : NULL);
 
     // check for QUAL error type and convert to GAU error using LOCQUAL2ERR
     // 20160727 AJL - added
@@ -6948,7 +7025,12 @@ int GetPhaseID(char* line1) {
         return (-1);
     }
 
-    if ((istat = sscanf(line1, "%s", PhaseID[NumPhaseID].phase)) != 1)
+    // 20261127 Bug fix (Mustafa Comoglu & Claude): read word into buffer as long as line1, then copy with cut and warning
+    char w_phase[strlen(line1) + 1];
+    w_phase[0] = '\0';
+    istat = sscanf(line1, "%s", w_phase);
+    CopyWordCut(PhaseID[NumPhaseID].phase, sizeof(PhaseID[NumPhaseID].phase), w_phase, "LOCPHASEID phase");
+    if (istat != 1)
         return (-1);
 
     substr = strstr(line1, PhaseID[NumPhaseID].phase);
