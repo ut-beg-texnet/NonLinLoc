@@ -376,7 +376,7 @@ typedef struct {
 
     char phase[PHASE_LABEL_LEN]; /* char phase id */
     char onset[2]; /* char onset (ie E I) */
-    char first_mot[2]; /* char first motion id */
+    char first_mot[4]; /* char first motion id */  // 20261127 Bug fix (Mustafa Comoglu & Claude): was [2]; a 2-char first motion such as "-0" (nlloc_sample alaska .obs) put its terminating 0 into first_mot_quality
     double first_mot_quality; // first motion quality weight   // 20200829 AJL - added
     int quality; /* pick quality (ie weight 0 1 2 3 4) */
     int year, month, day; /* observed arrival date */
