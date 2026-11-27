@@ -2434,7 +2434,9 @@ int OpenGrid3dFile(char *fname, FILE **fp_grid, FILE **fp_hdr,
         //   Same as the original "%s %lf %lf %lf\n" for any label shorter than w_label.
         char w_label[MAXLINE_LONG];
         w_label[0] = '\0';
-        int nread = fscanf(*fp_hdr, "%1023s", w_label);
+        char fmt_label[32];
+        snprintf(fmt_label, sizeof(fmt_label), "%%%ds", MAXLINE_LONG - 1); // width follows the size of w_label
+        int nread = fscanf(*fp_hdr, fmt_label, w_label);
         if (nread == 1) {
             int c;
             while ((c = getc(*fp_hdr)) != EOF && !isspace(c))
