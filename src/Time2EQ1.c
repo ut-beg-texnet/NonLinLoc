@@ -638,10 +638,9 @@ int ReadTime2EQ_Input(FILE* fp_input) {
 
         char param_word[sizeof(line)]; // 20261127 Bug fix (Mustafa Comoglu & Claude): read word into buffer as long as line, then copy with cut and warning
         param_word[0] = '\0';
-        iscan = sscanf(line, "%s", param_word);
-        CopyWordCut(param, sizeof(param), param_word, "control statement keyword");
-        if (iscan < 0)
+        if ((iscan = sscanf(line, "%s", param_word)) < 0)
             continue;
+        CopyWordCut(param, sizeof(param), param_word, "control statement keyword");
 
         /* skip comment line or white space */
 

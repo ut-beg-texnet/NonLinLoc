@@ -149,10 +149,9 @@ int ReadNLLoc_Input(FILE* fp_input, char** param_line_array, int n_param_lines) 
         // 20261127 Bug fix (Mustafa Comoglu & Claude): read word into buffer as long as line, then copy with cut and warning
         char param_word[strlen(line) + 1];
         param_word[0] = '\0';
-        iscan = sscanf(line, "%s", param_word);
-        CopyWordCut(param, sizeof(param), param_word, "control statement keyword");
-        if (iscan < 0)
+        if ((iscan = sscanf(line, "%s", param_word)) < 0)
             continue;
+        CopyWordCut(param, sizeof(param), param_word, "control statement keyword");
 
         /* skip comment line or white space */
 
