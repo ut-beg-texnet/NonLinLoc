@@ -636,8 +636,11 @@ int ReadTime2EQ_Input(FILE* fp_input) {
 
         /*read parameter line */
 
-        if ((iscan = sscanf(line, "%s", param)) < 0)
+        char param_word[sizeof(line)]; // 20261127 Bug fix (Mustafa Comoglu & Claude): read word into buffer as long as line, then copy with cut and warning
+        param_word[0] = '\0';
+        if ((iscan = sscanf(line, "%s", param_word)) < 0)
             continue;
+        CopyWordCut(param, sizeof(param), param_word, "control statement keyword");
 
         /* skip comment line or white space */
 
@@ -804,7 +807,12 @@ int ReadTime2EQ_Input(FILE* fp_input) {
 
 int GetTime2EQ_Files(char* line1) {
 
-    sscanf(line1, "%s %s", fn_eq_input, fn_eq_output);
+    // 20261127 Bug fix (Mustafa Comoglu & Claude): read words into buffers as long as line1, then copy with cut and warning
+    char w_input[strlen(line1) + 1], w_output[strlen(line1) + 1];
+    w_input[0] = w_output[0] = '\0';
+    sscanf(line1, "%s %s", w_input, w_output);
+    CopyWordCut(fn_eq_input, sizeof(fn_eq_input), w_input, "EQFILES input file root");
+    CopyWordCut(fn_eq_output, sizeof(fn_eq_output), w_output, "EQFILES output file name");
 
     snprintf(MsgStr, sizeof(MsgStr), "Time2EQ FILES:  Input: %s.*  Output: %s",
             fn_eq_input, fn_eq_output);
@@ -819,7 +827,11 @@ int GetTime2EQ_Mode(char* line1) {
     char str_mode[MAXLINE];
 
 
-    sscanf(line1, "%s", str_mode);
+    // 20261127 Bug fix (Mustafa Comoglu & Claude): read word into buffer as long as line1, then copy with cut and warning
+    char w_mode[strlen(line1) + 1];
+    w_mode[0] = '\0';
+    sscanf(line1, "%s", w_mode);
+    CopyWordCut(str_mode, sizeof(str_mode), w_mode, "EQMODE mode");
 
     snprintf(MsgStr, sizeof(MsgStr), "Time2EQ EQMODE:  %s", str_mode);
     nll_putmsg(2, MsgStr);
@@ -891,11 +903,19 @@ int GetTime2EQ_Stations(char* in_line) {
     sta_in->phs[0].prob_outlier = 0.0;
     sta_in->phs[0].outlier_err_factor = 1.0;
 
+    // 20261127 Bug fix (Mustafa Comoglu & Claude): read words into buffers as long as in_line, then copy with cut and warning
+    size_t wlen = strlen(in_line) + 1;
+    char w_label[wlen], w_phase[wlen], w_error_type[wlen], w_report_type[wlen];
+    w_label[0] = w_phase[0] = w_error_type[0] = w_report_type[0] = '\0';
     istat = sscanf(in_line, "%s %s %s %lf %s %lf %lf %lf %lf",
-            sta_in->label, sta_in->phs[0].label,
-            sta_in->phs[0].error_type, &(sta_in->phs[0].error),
-            sta_in->phs[0].error_report_type,
+            w_label, w_phase,
+            w_error_type, &(sta_in->phs[0].error),
+            w_report_type,
             &(sta_in->phs[0].error_report), &(sta_in->prob_active), &(sta_in->phs[0].prob_outlier), &(sta_in->phs[0].outlier_err_factor));
+    CopyWordCut(sta_in->label, sizeof(sta_in->label), w_label, "EQSTA station label");
+    CopyWordCut(sta_in->phs[0].label, sizeof(sta_in->phs[0].label), w_phase, "EQSTA phase");
+    CopyWordCut(sta_in->phs[0].error_type, sizeof(sta_in->phs[0].error_type), w_error_type, "EQSTA error type");
+    CopyWordCut(sta_in->phs[0].error_report_type, sizeof(sta_in->phs[0].error_report_type), w_report_type, "EQSTA error report type");
 
     snprintf(MsgStr, sizeof(MsgStr),
             "STATION:  %d  Name: %s  Phase: %s  ErrorCalc: %s +/- %.2le  ErrorReport: %s +/- %.2le  ProbActive: %.2lf"
@@ -937,8 +957,12 @@ int get_mech(char* line1) {
     int istat, ierr;
     char mstr[11];
 
+    // 20261127 Bug fix (Mustafa Comoglu & Claude): read word into buffer as long as line1, then copy with cut and warning
+    char w_mech_type[strlen(line1) + 1];
+    w_mech_type[0] = '\0';
     istat = sscanf(line1, "%s %lf %lf %lf",
-            mech_type, &mech_phi, &mech_del, &mech_lam);
+            w_mech_type, &mech_phi, &mech_del, &mech_lam);
+    CopyWordCut(mech_type, sizeof(mech_type), w_mech_type, "EQMECH type");
 
     if (strncmp(mech_type, "double", 6) == 0 ||
             strncmp(mech_type, "DOUBLE", 6) == 0) {

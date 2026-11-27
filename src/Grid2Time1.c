@@ -1147,8 +1147,11 @@ int ReadGrid2TimeInput(FILE* fp_input) {
 
         /*read parameter line */
 
-        if ((iscan = sscanf(line, "%s", param)) < 0)
+        char param_word[sizeof(line)]; // 20261127 Bug fix (Mustafa Comoglu & Claude): read word into buffer as long as line, then copy with cut and warning
+        param_word[0] = '\0';
+        if ((iscan = sscanf(line, "%s", param_word)) < 0)
             continue;
+        CopyWordCut(param, sizeof(param), param_word, "control statement keyword");
 
         /* skip comment line or white space */
 
@@ -1317,8 +1320,14 @@ int get_gt_files(char* line1) {
     int istat;
     char waveType[12];
 
-    istat = sscanf(line1, "%s %s %s %d", fn_gt_input, fn_gt_output,
-            waveType, &iSwapBytesOnInput);
+    // 20261127 Bug fix (Mustafa Comoglu & Claude): read words into buffers as long as line1, then copy with cut and warning
+    char w_input[strlen(line1) + 1], w_output[strlen(line1) + 1], w_wave[strlen(line1) + 1];
+    w_input[0] = w_output[0] = w_wave[0] = '\0';
+    istat = sscanf(line1, "%s %s %s %d", w_input, w_output,
+            w_wave, &iSwapBytesOnInput);
+    CopyWordCut(fn_gt_input, sizeof(fn_gt_input), w_input, "GTFILES input file root");
+    CopyWordCut(fn_gt_output, sizeof(fn_gt_output), w_output, "GTFILES output file root");
+    CopyWordCut(waveType, sizeof(waveType), w_wave, "GTFILES wave type");
     if (istat < 4)
         iSwapBytesOnInput = 0;
 
@@ -1342,7 +1351,12 @@ int get_grid_mode(char* line1) {
     char str_angle_mode[MAXLINE];
 
 
-    sscanf(line1, "%s %s", str_grid_mode, str_angle_mode);
+    // 20261127 Bug fix (Mustafa Comoglu & Claude): read words into buffers as long as line1, then copy with cut and warning
+    char w_grid_mode[strlen(line1) + 1], w_angle_mode[strlen(line1) + 1];
+    w_grid_mode[0] = w_angle_mode[0] = '\0';
+    sscanf(line1, "%s %s", w_grid_mode, w_angle_mode);
+    CopyWordCut(str_grid_mode, sizeof(str_grid_mode), w_grid_mode, "GTMODE grid mode");
+    CopyWordCut(str_angle_mode, sizeof(str_angle_mode), w_angle_mode, "GTMODE angle mode");
 
     snprintf(MsgStr, sizeof(MsgStr), "Grid2Time GTMODE:  %s  %s",
             str_grid_mode, str_angle_mode);

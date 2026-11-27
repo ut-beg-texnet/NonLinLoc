@@ -37,6 +37,8 @@
 
 
 
+#include <string.h>
+
 #include "util.h"
 
 char package_name[MAXLINE];
@@ -197,4 +199,35 @@ int checkRangeDouble(const char * name, const char * param, double val,
 
 	return(stat);
 
+}
+
+
+
+/*** function to copy a word read with scanf "%s" into dest, cut with a warning if too long */
+// 20261127 Bug fix (Mustafa Comoglu & Claude): scanf "%s" has no length limit, so a too-long word
+//   overflowed dest. Callers now read the word into a buffer as long as the input line, then call this.
+// An empty word means "%s" did not read it (it never stores an empty word); dest is then left unchanged, as before.
+// what names the input in the warning; what == NULL cuts without a warning (for lines the caller will reject anyway).
+// Returns 1 if the word was cut, else 0.
+
+int CopyWordCut(char *dest, size_t dest_size, const char *word, const char *what)
+{
+	if (word[0] == '\0')
+		return(0);
+
+	size_t len = strlen(word);
+	if (len < dest_size) {
+		memcpy(dest, word, len + 1);
+		return(0);
+	}
+
+	memcpy(dest, word, dest_size - 1);
+	dest[dest_size - 1] = '\0';
+	if (what != NULL) {
+		fprintf(stderr, "%s: WARNING: %s: \"%s\" is longer than %zu characters, CUT to \"%s\"\n",
+			prog_name, what, word, dest_size - 1, dest);
+		fflush(stderr);
+	}
+
+	return(1);
 }
